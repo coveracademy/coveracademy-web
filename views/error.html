@@ -1,0 +1,12 @@
+<% extends "template.html" %>
+
+<% block title -%><$ statusCode $>&nbsp;- <$ statusMessage $> | Promessa de Político<%- endblock %>
+
+<% block content %>
+<div class="container">
+  <div class="jumbotron align-center" style="background-color: #fff; padding-top: 0px;">
+    <h1><span class="label <$ 'label-info' if statusCode == 404 else 'label-danger' $>"><$ statusCode $></span> <$ statusMessage $></h1>
+    <img src="/img/vote.jpg" class="img-circle" style="width: 400px;">
+  </div>
+</div>
+<% endblock %>

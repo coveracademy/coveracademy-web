@@ -1,0 +1,33 @@
+{
+  "name": "cover-challenge",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "express": "~4.2.0",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4",
+    "nunjucks": "~1.0.5",
+    "passport": "~0.2.0",
+    "passport-facebook": "~1.0.3",
+    "passport-twitter": "~1.0.2",
+    "passport-google-oauth": "~0.1.5",
+    "bookshelf": "~0.7.6",
+    "knex": "~0.6.21",
+    "mysql": "~2.3.2",
+    "slug": "~0.4.2",
+    "underscore": "~1.6.0",
+    "underscore.string": "~2.3.3",
+    "bluebird": "~1.2.4",
+    "request": "~2.37.0",
+    "mime": "~1.2.11",
+    "mailgun-js": "~0.4.13",
+    "newrelic": "~1.7.3",
+    "prerender-node": "~1.0.4"
+  }
+}

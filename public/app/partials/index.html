@@ -1,0 +1,23 @@
+<section>
+  <div class="row" style="padding-bottom: 15px;">
+    <div class="col-md-12">
+      <button class="btn btn-primary" ui-sref="addCover">
+        Add a new Cover Video
+      </button>
+    </div>
+  </div>
+  <div class="row" ng-repeat="row in lastCovers | partition:4">
+    <div ng-repeat="cover in row" class="col-md-3 cover-snippet">
+      <div class="thumbnail">
+        <a ui-sref="viewCover({id: cover.id})">
+          <img ng-src="{{ cover.medium_thumbnail }}">
+        </a>
+        <div class="caption">
+          <a ui-sref="viewCover({id: cover.id})">
+            <b>{{ cover.musicArtist.name }} - {{ cover.musicTitle.name }}</b>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

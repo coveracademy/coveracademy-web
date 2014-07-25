@@ -1,0 +1,14 @@
+<div class="modal-header">
+  <h3>{{ modalScope.headerText }}</h3>
+</div>
+<div class="modal-body">
+  <h4 class="line-height-1-5">{{ modalScope.bodyText }}</h4>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" data-ng-click="modalScope.action()">
+    {{ modalScope.actionButtonText }}
+  </button>
+  <button type="button" class="btn btn-default" data-ng-click="modalScope.close()">
+    {{ modalScope.closeButtonText }}
+  </button>
+</div>

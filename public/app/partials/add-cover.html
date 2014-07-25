@@ -1,0 +1,30 @@
+<section>
+  <form name="coverForm" class="form-horizontal">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form-group" ng-class="{'has-error': coverForm.url.$invalid && !coverForm.url.$pristine}">
+          <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control" placeholder="Paste here the video url" required/>
+        </div>
+        <div ng-show="cover.url">
+          <div class="form-group embed-container">
+            <embed-video ng-href="{{ cover.url }}"></embed-video>
+          </div>
+          <div class="form-group" ng-class="{'has-error': coverForm.music_artist.$invalid && !coverForm.music_artist.$pristine}">
+            <input ng-model="cover.musicArtist" type="text" name="music_artist" typeahead="musicArtist.name for musicArtist in searchMusicArtists($viewValue)" typeahead-min-length="3" typeahead-wait-ms="500" typeahead-on-select="selectMusicArtist($item)" placeholder="The artist or band name" class="form-control" required>
+          </div>
+          <div ng-if="cover.musicArtist" class="form-group" ng-class="{'has-error': coverForm.music_title.$invalid && !coverForm.music_title.$pristine}">
+            <input ng-model="cover.musicTitle" type="text" name="music_title" typeahead="musicTitle.name for musicTitle in searchMusicTitles($viewValue)" typeahead-min-length="3" typeahead-wait-ms="500" typeahead-on-select="selectMusicTitle($item)" placeholder="The music title" class="form-control" required>
+          </div>
+          <div ng-if="cover.musicArtist" class="form-group" ng-class="{'has-error': coverForm.music_genres.$invalid && !coverForm.music_genres.$pristine}">
+            <select nya-selectpicker multiple="" ng-model="cover.musicalGenres" ng-options="musicalGenre.name for musicalGenre in musicalGenres" name="music_genres" data-container="body" data-noneSelectedText="LALAAL" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <button ng-click="addCover()" ng-disabled="coverForm.$invalid" class="btn btn-primary btn-block btn-lg">
+              Add Cover
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
