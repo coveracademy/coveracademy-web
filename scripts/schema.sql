@@ -17,21 +17,27 @@ create table user (
 ) engine = innodb default charset = utf8;
 
 create table musical_genre (
-  id   int(11) not null auto_increment,
-  name varchar(50) not null,
+  id    int(11) not null auto_increment,
+  name  varchar(50) not null,
+  slug  varchar(50) not null,
+  image varchar(50) default null,
   primary key (id)
 ) engine = innodb default charset = utf8;
 
 create table music_artist (
-  id   int(11) not null auto_increment,
-  name varchar(50) not null,
+  id                int(11) not null auto_increment,
+  name              varchar(100) not null,
+  slug              varchar(100) not null,
+  registration_date timestamp default current_timestamp,
   primary key (id)
 ) engine = innodb default charset = utf8;
 
 create table music_title (
-  id              int(11) not null auto_increment,
-  name            varchar(50) not null,
-  music_artist_id int(11) not null,
+  id                int(11) not null auto_increment,
+  name              varchar(255) not null,
+  slug              varchar(255) not null,
+  music_artist_id   int(11) not null,
+  registration_date timestamp default current_timestamp,
   primary key (id),
   key `fk_music_title_music_artist_id` (`music_artist_id`),
   constraint `fk_music_title_music_artist_id` foreign key (`music_artist_id`) references `music_artist` (`id`)

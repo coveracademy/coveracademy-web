@@ -1,8 +1,8 @@
 angular
-.module("coverChallengeApp")
-.filter("partition", function() {
+.module('coverChallengeApp')
+.filter('partition', function() {
   var cache = {};
-  var filter = function(arr, size) {
+  return function(arr, size) {
     if (!arr) { return; }
     var newArray = [];
     for (var i = 0; i < arr.length; i += size) {
@@ -16,5 +16,9 @@ angular
     cache[arrString + size] = newArray;
     return newArray;
   };
-  return filter;
+})
+.filter('inMinutes', function() {
+  return function(str) {
+    return Math.floor(parseInt(str) / 60);
+  };
 });

@@ -22,6 +22,7 @@
   <link href="/lib/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
   <link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
+  <link href="/lib/ngprogress/ngProgress.css" rel="stylesheet">
   <link href="/css/index.css" rel="stylesheet">
 
   <link href="/img/favicon.ico" rel="shortcut icon">
@@ -35,7 +36,6 @@
   <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
-        <img class="navbar-logo" src="/img/logo.jpg">
         <a class="navbar-brand" href="/">
           Cover Challenge
         </a>
@@ -45,9 +45,6 @@
           <li ng-class="{'active': isSectionActive('howItWorksActive')}">
             <a href="/como-funciona">Como funciona</a>
           </li>
-          <li ng-class="{'active': isSectionActive('contributeActive')}">
-            <a href="/contribua">Contribua</a>
-          </li>
           <li ng-class="{'active': isSectionActive('contactActive')}">
             <a href="/contato">Contato</a>
           </li>
@@ -56,6 +53,11 @@
           <input type="search" ng-model="selectedItem" typeahead="item.displayName for items in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for music or artist" class="form-control" style="width: 300px;">
         </form>
         <ul ng-show="user" class="nav navbar-nav navbar-right">
+          <li>
+            <button class="btn btn-primary btn-lg" ui-sref="addCover">
+              Add a new Cover Video
+            </button>
+          </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               {{ user.name }}
@@ -119,6 +121,7 @@
 
   <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
   <script src="/lib/nya-bootstrap-select/src/nya-bootstrap-select.js"></script>
+  <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
   <script src="/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 
   <script src="/app/app.js"></script>

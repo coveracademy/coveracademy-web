@@ -1,13 +1,48 @@
 <section>
   <div class="row">
     <div class="col-md-12 align-center">
-      <h1>{{ cover.title }}</h1>
+      <div class="page-title">
+        <h1>{{ cover.title }}</h1>
+      </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 col-md-offset-3 align-center">
-      <div class="embed-container">
-        <embed-video ng-href="{{ cover.url }}"></embed-video>
+    <div class="col-md-8 col-md-offset-2">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="embed-container">
+            <embed-video ng-href="{{ cover.url }}"></embed-video>
+          </div>
+        </div>
+      </div>
+      <div class="row padding">
+        <div class="col-md-9 font-big">
+          <p>
+            Cover by {{ cover.video_author }}
+          </p>
+          <p>
+            <span am-time-ago="cover.video_date"></span>
+          </p>
+        </div>
+        <div class="col-md-3 align-right">
+          <a ng-href="http://www.facebook.com/sharer/sharer.php?u=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Facebook" class="icon icon-facebook" target="_blank"></a>
+          <a ng-href="http://twitter.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Twitter" class="icon icon-twitter"target="_blank"></a>
+          <a ng-href="https://plus.google.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Google+" class="icon icon-googleplus"target="_blank"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>More covers of {{ cover.musicTitle.name }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>More covers by {{ cover.musicArtist.name }}</h3>
       </div>
     </div>
   </div>

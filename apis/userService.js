@@ -1,6 +1,5 @@
 var User           = require('../models/models').User,
     modelUtils     = require('../utils/modelUtils'),
-    helper         = require('../utils/helper'),
     Promise        = require('bluebird'),
     _              = require('underscore');
 

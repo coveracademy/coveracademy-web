@@ -22,6 +22,26 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/bestWeek', function(req, res, next) {
+    var related = req.param('related');
+    var page = req.param('page');
+    var pageSize = req.param('pageSize');
+    coverService.bestCoversWeek(related, page, pageSize).then(function(covers) {
+      res.json(covers);
+    }).catch(function(err) {
+      console.log(err);
+    });
+  });
+
+  router.get('/top', function(req, res, next) {
+    var related = req.param('related');
+    coverService.topCover(related).then(function(cover) {
+      res.json(cover);
+    }).catch(function(err) {
+      console.log(err);
+    });
+  });
+
   router.get('/:id', function(req, res, next) {
     var related = req.param('related');
     var id = req.param('id');

@@ -1,11 +1,11 @@
 angular
-.module("coverChallengeApp")
-.directive("nullIfEmpty", function() {
+.module('coverChallengeApp')
+.directive('nullIfEmpty', function() {
   return {
-    require: "ngModel",
+    require: 'ngModel',
     link: function(scope, element, attrs, ctrl) {
       ctrl.$parsers.push(function(value) {
-        return angular.isUndefined(value) || value === "" ? null : value;
+        return angular.isUndefined(value) || value === '' ? null : value;
       });
     }
   };
