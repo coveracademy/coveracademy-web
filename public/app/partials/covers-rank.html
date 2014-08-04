@@ -1,0 +1,15 @@
+<section>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h1>
+          {{ pageTitle }}
+        </h1>
+      </div>
+      <cover-list ng-model="coversRank"></cover-list>
+      <div class="align-center">
+        <pagination total-items="totalCoversRank" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+      </div>
+    </div>
+  </div>
+</section>

@@ -35,15 +35,27 @@
   <div class="row">
     <div class="col-md-12">
       <div class="page-title">
-        <h3>More covers of {{ cover.musicTitle.name }}</h3>
+        <h3>
+          More covers of
+          <a ui-sref="viewMusic({music: cover.music.slug})">
+            {{ cover.music.name }}
+          </a>
+        </h3>
       </div>
+      <cover-list ng-model="bestCoversOfMusic"></cover-list>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <div class="page-title">
-        <h3>More covers by {{ cover.musicArtist.name }}</h3>
+        <h3>
+          More covers by
+          <a ui-sref="viewArtist({artist: cover.artist.slug})">
+            {{ cover.artist.name }}
+          </a>
+        </h3>
       </div>
+      <cover-list ng-model="bestCoversByArtist"></cover-list>
     </div>
   </div>
 </section>

@@ -19,28 +19,28 @@ var User = Bookshelf.Model.extend({
   tableName: 'user'
 });
 
-var MusicalGenre = Bookshelf.Model.extend({
-  tableName: 'musical_genre'
+var MusicGenre = Bookshelf.Model.extend({
+  tableName: 'music_genre'
 });
 
-var MusicArtist = Bookshelf.Model.extend({
-  tableName: 'music_artist'
+var Artist = Bookshelf.Model.extend({
+  tableName: 'artist'
 });
 
-var MusicTitle = Bookshelf.Model.extend({
-  tableName: 'music_title'
+var Music = Bookshelf.Model.extend({
+  tableName: 'music'
 });
 
 var Cover = Bookshelf.Model.extend({
   tableName: 'cover',
-  musicArtist: function() {
-    return this.belongsTo(MusicArtist, 'music_artist_id')
+  artist: function() {
+    return this.belongsTo(Artist, 'artist_id')
   },
-  musicTitle: function() {
-    return this.belongsTo(MusicTitle, 'music_title_id')
+  music: function() {
+    return this.belongsTo(Music, 'music_id')
   },
-  musicalGenres: function() {
-    return this.belongsToMany(MusicalGenre, 'cover_musical_genre', 'cover_id', 'musical_genre_id');
+  musicGenres: function() {
+    return this.belongsToMany(MusicGenre, 'cover_music_genre', 'cover_id', 'music_genre_id');
   },
   addedByUser: function() {
     return this.belongsTo(User, 'added_by_user_id')
@@ -50,8 +50,8 @@ var Cover = Bookshelf.Model.extend({
 module.exports = {
   User: User,
   Cover: Cover,
-  MusicalGenre: MusicalGenre,
-  MusicArtist: MusicArtist,
-  MusicTitle: MusicTitle,
+  MusicGenre: MusicGenre,
+  Artist: Artist,
+  Music: Music,
   Bookshelf: Bookshelf
 }

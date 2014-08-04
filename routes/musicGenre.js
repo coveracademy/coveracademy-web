@@ -3,14 +3,13 @@ var coverService = require('../apis/coverService');
 module.exports = function(router, app) {
 
   router.get('/', function(req, res, next) {
-    var query = req.param('query');
-    coverService.searchMusicArtists(query).then(function(musicArtists) {
-      res.json(musicArtists);
+    coverService.allMusicGenres().then(function(musicGenres) {
+      res.json(musicGenres);
     }).catch(function(err) {
       console.log(err);
     });
   });
 
-  app.use('/musicArtist', router);
+  app.use('/api/musicGenre', router);
 
 }

@@ -9,12 +9,12 @@
           <div class="form-group embed-container">
             <embed-video ng-href="{{ cover.url }}"></embed-video>
           </div>
-          <div class="form-group" ng-class="{'has-error': coverForm.music_artist.$invalid && !coverForm.music_artist.$pristine}">
-            <input ng-model="cover.musicArtist" type="text" name="music_artist" typeahead="musicArtist.name for musicArtist in searchMusicArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusicArtist($item)" placeholder="The artist or band name" class="form-control" required>
+          <div class="form-group" ng-class="{'has-error': coverForm.artist.$invalid && !coverForm.artist.$pristine}">
+            <input ng-model="cover.artist" type="text" name="artist" typeahead="artist.name for artist in searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
           </div>
-          <div ng-if="cover.musicArtist">
-            <div class="form-group" ng-class="{'has-error': coverForm.music_title.$invalid && !coverForm.music_title.$pristine}">
-              <input ng-model="cover.musicTitle" type="text" name="music_title" typeahead="musicTitle.name for musicTitle in searchMusicTitles($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusicTitle($item)" placeholder="The music title" class="form-control" required>
+          <div ng-if="cover.artist">
+            <div class="form-group" ng-class="{'has-error': coverForm.music.$invalid && !coverForm.music.$pristine}">
+              <input ng-model="cover.music" type="text" name="music" typeahead="music.name for music in searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusic($item)" placeholder="The music title" class="form-control" required>
             </div>
             <div class="form-group" ng-class="{'has-error': coverForm.video_author.$invalid && !coverForm.video_author.$pristine}">
               <div class="row">
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="form-group" ng-class="{'has-error': coverForm.music_genres.$invalid && !coverForm.music_genres.$pristine}">
-              <select nya-selectpicker multiple="" ng-model="cover.musicalGenres" ng-options="musicalGenre.name for musicalGenre in musicalGenres" name="music_genres" data-container="body" data-noneSelectedText="LALAAL" class="form-control" required></select>
+              <select nya-selectpicker multiple="" ng-model="cover.musicGenres" ng-options="musicGenre.name for musicGenre in musicGenres" name="music_genres" data-container="body" data-noneSelectedText="The cover genre" class="form-control" required></select>
             </div>
           </div>
           <div class="form-group">

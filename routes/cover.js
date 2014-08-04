@@ -11,22 +11,22 @@ module.exports = function(router, app) {
     });
   });
 
-  router.get('/last', function(req, res, next) {
-    var related = req.param('related');
+  router.get('/latest', function(req, res, next) {
+    var period = req.param('period') || 7;
     var page = req.param('page');
     var pageSize = req.param('pageSize');
-    coverService.lastCovers(related, page, pageSize).then(function(covers) {
+    coverService.latestCovers(period, page, pageSize).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       console.log(err);
     });
   });
 
-  router.get('/bestWeek', function(req, res, next) {
-    var related = req.param('related');
-    var page = req.param('page');
-    var pageSize = req.param('pageSize');
-    coverService.bestCoversWeek(related, page, pageSize).then(function(covers) {
+  router.get('/best', function(req, res, next) {
+    var period = req.param('period') || 7;
+    var page = req.param('page') || 1;
+    var pageSize = req.param('pageSize') || 1;
+    coverService.bestCovers(period, page, pageSize).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       console.log(err);
@@ -34,8 +34,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/top', function(req, res, next) {
-    var related = req.param('related');
-    coverService.topCover(related).then(function(cover) {
+    coverService.topCover().then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
       console.log(err);
@@ -43,15 +42,14 @@ module.exports = function(router, app) {
   });
 
   router.get('/:id', function(req, res, next) {
-    var related = req.param('related');
     var id = req.param('id');
-    coverService.getCover(id, related).then(function(cover) {
+    coverService.getCover(id).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
       console.log(err);
     })
   });
 
-  app.use('/cover', router);
+  app.use('/api/cover', router);
 
 }

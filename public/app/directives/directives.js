@@ -9,4 +9,15 @@ angular
       });
     }
   };
+})
+.directive('coverList', function() {
+  return {
+    restrict: 'E',
+    require: 'ngModel',
+    transclude: true,
+    scope: {
+      covers: '=ngModel'
+    },
+    templateUrl: 'app/partials/widgets/cover-list.html'
+  };
 });

@@ -28,7 +28,7 @@ angular
   var modalOptions = {
     backdrop: true,
     keyboard: true,
-    templateUrl: '/partials/login-modal.html',
+    templateUrl: '/app/partials/widgets/login-modal.html',
     controller: function($scope, $modalInstance) {
       $scope.modalScope = {};
       $scope.modalScope.close = function(result) {
@@ -110,29 +110,46 @@ angular
     return $http.get('/oembed', {params: {url: url}});
   };
 }])
+.service('viewService', ['$http', function($http) {
+  this.indexView = function() {
+    return $http.get('/view/index');
+  };
+  this.coverView = function(id) {
+    return $http.get('/view/cover/' + id);
+  };
+  this.coversRankView = function(rank, pageSize) {
+    return $http.get('/view/covers/' + rank, {params: {pageSize: pageSize}});
+  };
+  this.artistView = function(artist) {
+    return $http.get('/view/artist/' + artist);
+  };
+  this.musicView = function(music) {
+    return $http.get('/view/music/' + music);
+  };
+}])
 .service('coverService', ['$http', function($http) {
-  this.allMusicalGenres = function() {
-    return $http.get('/musicalGenre');
+  this.allMusicGenres = function() {
+    return $http.get('/api/musicGenre');
   };
-  this.searchMusicArtists = function(query) {
-    return $http.get('/musicArtist', {params: {query: query}});
+  this.searchArtists = function(query) {
+    return $http.get('/api/artist', {params: {query: query}});
   };
-  this.searchMusicTitles = function(music_artist_id, query) {
-    return $http.get('/musicTitle', {params: {music_artist_id: music_artist_id, query: query}});
+  this.searchMusics = function(artist_id, query) {
+    return $http.get('/api/music', {params: {artist_id: artist_id, query: query}});
   };
   this.getCover = function(id, related) {
-    return $http.get('/cover/' + id, {params: {related: ['musicArtist', 'musicTitle', 'musicalGenres']}});
+    return $http.get('/api/cover/' + id);
   };
   this.addCover = function(cover) {
-    return $http.post('/cover', {cover: cover});
+    return $http.post('/api/cover', {cover: cover});
   };
-  this.lastCovers = function(page, pageSize) {
-    return $http.get('/cover/last', {params: {related: ['musicArtist', 'musicTitle', 'musicalGenres'], page: page, pageSize: pageSize}});
+  this.latestCovers = function(period, page, pageSize) {
+    return $http.get('/api/cover/latest', {params: {period: period, page: page, pageSize: pageSize}});
   };
-  this.bestCoversWeek = function(page, pageSize) {
-    return $http.get('/cover/bestWeek', {params: {related: ['musicArtist', 'musicTitle', 'musicalGenres'], page: page, pageSize: pageSize}});
+  this.bestCovers = function(period, page, pageSize) {
+    return $http.get('/api/cover/best', {params: {period: period, page: page, pageSize: pageSize}});
   };
   this.topCover = function(page, pageSize) {
-    return $http.get('/cover/top', {params: {related: ['musicArtist', 'musicTitle', 'musicalGenres']}});
+    return $http.get('/api/cover/top');
   };
 }]);

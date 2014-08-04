@@ -1,5 +1,14 @@
 angular
 .module('coverChallengeApp')
+.controller('headerController', ['$scope', '$window', 'authenticationService', function($scope, $window, authenticationService) {
+  $scope.user = authenticationService.getUser();
+  $scope.authenticate = function() {
+    authenticationService.ensureAuth();
+  };
+  $scope.isSectionActive = function(section) {
+    return true === $scope[section];
+  };
+}])
 .controller('alertController', ['$scope', 'alertService', function($scope, alertService) {
   $scope.alerts = alertService.getAlerts();
   $scope.closeAlert = alertService.closeAlert;
@@ -19,11 +28,5 @@ angular
     }).finally(function() {
       NProgress.done();
     });
-  };
-}])
-.controller('headerController', ['$scope', '$window', 'authenticationService', function($scope, $window, authenticationService) {
-  $scope.user = authenticationService.getUser();
-  $scope.isSectionActive = function(section) {
-    return true === $scope[section];
   };
 }]);

@@ -5,6 +5,8 @@ var path = require('path'),
     _publicPath = path.join(__dirname, '../public'),
     _viewsPath = path.join(__dirname, '../views'),
     _oembedApiKey = '1e9d27d76b02e60bc0afdf',
+    _lastfmKey = '33623b4ad36e7ce8591b5247c2c51f72',
+    _lastfmSecret = '06bb829a0c65fdd087fc0d89f1f7e9f3',
     _envs = {
       dev: {
         email: {
@@ -81,6 +83,8 @@ exports.nodeIP = _nodeIP;
 exports.publicPath = _publicPath;
 exports.viewsPath = _viewsPath;
 exports.oembedApiKey = _oembedApiKey;
+exports.lastfmKey = _lastfmKey;
+exports.lastfmSecret = _lastfmSecret;
 
 var env = _envs[_nodeEnv];
 for(property in env) {
