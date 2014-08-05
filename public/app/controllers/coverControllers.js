@@ -27,7 +27,7 @@ angular
     });
   };
   $scope.selectArtist = function(artist) {
-    $scope.cover.artist = artist;
+    $scope.cover.artist = artist.name;
   };
   $scope.searchMusics = function(query) {
     return coverService.searchMusics($scope.cover.artist.id, query).then(function(response) {
@@ -35,7 +35,7 @@ angular
     });
   };
   $scope.selectMusic = function(music) {
-    $scope.cover.music = music;
+    $scope.cover.music = music.name;
   };
   $scope.addCover = function() {
     coverService.addCover($scope.cover).then(function(response) {
@@ -64,4 +64,7 @@ angular
 }])
 .controller('viewArtistController', ['$scope', 'dataResponse', function($scope, dataResponse) {
   $scope.artist = dataResponse.data.artist;
+  $scope.totalMusicsByArtist = dataResponse.data.totalMusicsByArtist;
+  $scope.musicsByArtist = dataResponse.data.musicsByArtist;
+  $scope.coversOfMusics = dataResponse.data.coversOfMusics;
 }]);

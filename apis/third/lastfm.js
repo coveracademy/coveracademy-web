@@ -10,11 +10,12 @@ var lastfm = new LastFmNode({
 });
 
 var genres = {
+  'Pop': ['.*pop'],
   'Rock': ['.*rock', '.*metal', '.*core', '.*punk', 'indie', 'alternative', 'emo', 'grunge', 'screamo', 'progressive'],
   'Rhythm and blues': ['rhythm and blues', 'rnb', 'r and b', 'r&b', '.*soul', 'disco'],
-  'Pop': ['.*pop'],
-  'Hip-hop/Rap': ['.*hip-hop', '.*hip hop', '.*hiphop', '.*rap'],
   'Country': ['.*country'],
+  'Hip-hop': ['.*hip-hop', '.*hip hop', '.*hiphop'],
+  'Rap': ['.*rap'],
   'Blues': ['.*blues'],
   'Jazz': ['.*jazz'],
   'Electronic': ['.*electronic', '.*electronica', '.*trance', '.*techno', '.*electro', 'dubstep', 'dub step', '.*dub']
@@ -31,15 +32,15 @@ function createGenresRegexps() {
 var genresRegexps = createGenresRegexps();
 
 function findGenre(tags) {
-  _.forEach(tags, function(tag) {
-    _.forEach(_.keys(genresRegexps), function(genre) {
-      if(genresRegexps[genre].test(tag.name)) {
-        console.log(genre)
-        return genre;
-      }
+  var genre = _.find(_.keys(genresRegexps), function(genre) {
+    var tag = _.find(tags, function(tag) {
+      return genresRegexps[genre].test(tag.name);
     });
+    if(tag) {
+      return true;
+    }
   });
-  return null;
+  return genre;
 }
 
 exports.getArtistInfos = function(artistName) {
@@ -87,7 +88,3 @@ exports.getMusicInfos = function(artistName, musicName) {
     });
   });
 }
-
-this.getArtistInfos('Papa Roach').then(function(artistInfos) {
-  console.log(artistInfos);
-});

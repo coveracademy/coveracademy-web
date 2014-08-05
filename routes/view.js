@@ -53,8 +53,24 @@ module.exports = function(router, app) {
 
   router.get('/artist/:slug', function(req, res, next) {
     var slug = req.param('slug');
-    coverService.getArtist(slug).then(function(artist) {
-      res.json({artist: artist});
+    coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
+      if(!artist) {
+
+      } else {
+        Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, 1, 5)])
+        .spread(function(totalMusicsByArtist, musicsByArtist) {
+          this.totalMusicsByArtist = totalMusicsByArtist;
+          this.musicsByArtist = musicsByArtist;
+          return coverService.latestCoversOfMusics(musicsByArtist, 12);
+        }).then(function(coversOfMusics) {
+          res.json({
+            artist: artist,
+            totalMusicsByArtist: this.totalMusicsByArtist,
+            musicsByArtist: this.musicsByArtist,
+            coversOfMusics: coversOfMusics
+          });
+        });
+      }
     }).catch(function(err) {
       console.log(err);
     });

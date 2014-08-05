@@ -24,7 +24,10 @@ var MusicGenre = Bookshelf.Model.extend({
 });
 
 var Artist = Bookshelf.Model.extend({
-  tableName: 'artist'
+  tableName: 'artist',
+  musicGenre: function() {
+    return this.belongsTo(MusicGenre, 'music_genre_id');
+  }
 });
 
 var Music = Bookshelf.Model.extend({
@@ -34,16 +37,16 @@ var Music = Bookshelf.Model.extend({
 var Cover = Bookshelf.Model.extend({
   tableName: 'cover',
   artist: function() {
-    return this.belongsTo(Artist, 'artist_id')
+    return this.belongsTo(Artist, 'artist_id');
   },
   music: function() {
-    return this.belongsTo(Music, 'music_id')
+    return this.belongsTo(Music, 'music_id');
   },
   musicGenres: function() {
     return this.belongsToMany(MusicGenre, 'cover_music_genre', 'cover_id', 'music_genre_id');
   },
   addedByUser: function() {
-    return this.belongsTo(User, 'added_by_user_id')
+    return this.belongsTo(User, 'added_by_user_id');
   }
 });
 

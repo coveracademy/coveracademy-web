@@ -1,0 +1,36 @@
+<section>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <div class="media">
+          <div class="pull-left">
+            <img ng-src="{{ artist.small_thumbnail }}">
+          </div>
+          <div class="media-body">
+            <h1 class="media-heading">{{ artist.name }}</h1>
+            <p class="font-biggest">
+              <span class="label label-success">{{ artist.musicGenre.name }}</span>
+              <span class="label label-info">{{ totalMusicsByArtist }} Musics</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-repeat="musicByArtist in musicsByArtist">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            <a ui-sref="viewMusic({music: musicByArtist.slug})">{{ musicByArtist.name }}</a>
+          </h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <cover-list ng-model="coversOfMusics[musicByArtist.id]" thumb-size="small"></cover-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

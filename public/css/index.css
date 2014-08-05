@@ -70,14 +70,6 @@ a:hover {
   margin: 10px;
 }
 
-.grey-text {
-  color: #555;
-}
-
-.grey-text a {
-  color: #555;
-}
-
 .overflow-hidden {
   overflow: hidden;
 }
@@ -267,7 +259,7 @@ input.big {
   margin-bottom: 20px;
 }
 
-.page-title h1 {
+.page-title .title {
   font-size: 28px;
 }
 

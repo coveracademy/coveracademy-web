@@ -69,7 +69,7 @@ angular
     })
     .state('viewArtist', {
       url: '/artist/:artist',
-      templateUrl: '/app/partials/view-music-artist.html',
+      templateUrl: '/app/partials/view-artist.html',
       controller: 'viewArtistController',
       resolve: {
         viewService: 'viewService',
@@ -80,11 +80,11 @@ angular
     })
     .state('viewMusic', {
       url: '/music/:music',
-      templateUrl: '/app/partials/view-music-title.html',
+      templateUrl: '/app/partials/view-music.html',
       controller: 'viewMusicController'
     })
     .state('viewMusicGenre', {
-      url: '/genre/:slug',
+      url: '/genre/:genre',
       templateUrl: '/app/partials/music-genre.html',
       controller: 'viewMusicGenreController'
     })

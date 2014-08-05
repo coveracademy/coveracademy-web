@@ -8,7 +8,7 @@ create table user (
   facebook_account  varchar(255) default null,
   twitter_account   varchar(255) default null,
   google_account    varchar(255) default null,
-  registration_date timestamp default current_timestamp,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_email` (`email`),
   unique key `uq_user_facebook_account` (`facebook_account`),
@@ -32,7 +32,7 @@ create table artist (
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
-  registration_date timestamp default current_timestamp,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
   key `fk_artist_music_genre_id` (`music_genre_id`),
   constraint `fk_artist_music_genre_id` foreign key (`music_genre_id`) references `music_genre` (`id`)
@@ -46,7 +46,8 @@ create table music (
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
-  registration_date timestamp default current_timestamp,
+  last_cover_date   timestamp null,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
   key `fk_music_artist_id` (`artist_id`),
   constraint `fk_music_artist_id` foreign key (`artist_id`) references `artist` (`id`)
@@ -69,7 +70,7 @@ create table cover (
   small_thumbnail  varchar(255) default null,
   medium_thumbnail varchar(255) default null,
   large_thumbnail  varchar(255) default null,
-  registration_date timestamp default current_timestamp,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
   key `fk_cover_artist_id` (`artist_id`),
   key `fk_cover_music_id` (`music_id`),
@@ -78,9 +79,10 @@ create table cover (
 ) engine = innodb default charset = utf8;
 
 create table cover_music_genre (
-  id               int(11) not null auto_increment,
-  cover_id         int(11) not null,
-  music_genre_id int(11) not null,
+  id                int(11) not null auto_increment,
+  cover_id          int(11) not null,
+  music_genre_id    int(11) not null,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
   key `fk_cover_music_genre_cover_id` (`cover_id`),
   key `fk_cover_music_genre_music_genre_id` (`music_genre_id`),
