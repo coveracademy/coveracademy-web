@@ -1,18 +1,35 @@
 <section>
-  <div class="row">
-    <div ng-repeat="musicGenre in musicGenres" class="col-md-2 cover-snippet">
-      <div class="thumbnail">
-        <div class="video-thumb">
-          <a ui-sref="musicGenre({slug: musicGenre.slug})">
-            <img ng-src="/img/genres/{{ musicGenre.image }}">
-          </a>
-          <div class="video-duration">
-            <span class="label label-black">{{ musicGenre.name }}</span>
+  <carousel interval="carouselSlidesInterval">
+    <slide ng-repeat="carouselSlide in carouselSlides" active="carouselSlide.active">
+      <img src="https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-xfp1/t1.0-9/734143_426916150711835_12986040_n.jpg">
+    </slide>
+  </carousel>
+  <!-- <div id="carousel-genres" class="carousel-genres carousel slide">
+    <div class="carousel-inner">
+      <div class="item" ng-repeat="slide in carouselSlides" ng-class="{'active': isFirstCarouselSlide($index)}">
+        <div class="row text-center">
+          <div ng-repeat="musicGenre in slide" class="col-md-2 cover-snippet">
+            <div class="thumbnail">
+              <div class="video-thumb">
+                <a ui-sref="viewMusicGenre({genre: musicGenre.slug})">
+                  <img ng-src="/img/genres/{{ musicGenre.image }}">
+                </a>
+                <div class="video-duration">
+                  <span class="label label-black">{{ musicGenre.name }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <a class="left carousel-control" href="#carousel-genres" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-genres" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+  </div> -->
   <div class="row">
     <div class="col-md-7">
       <div class="thumbnail">

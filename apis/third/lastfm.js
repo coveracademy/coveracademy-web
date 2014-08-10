@@ -47,6 +47,7 @@ exports.getArtistInfos = function(artistName) {
   return new Promise(function(resolve, reject) {
     lastfm.info("artist", {
       artist: artistName,
+      autocorrect: 1,
       handlers: {
         success: function(data) {
           var artistInfos = {};
@@ -77,9 +78,25 @@ exports.getMusicInfos = function(artistName, musicName) {
     lastfm.info("track", {
       artist: artistName,
       track: musicName,
+      autocorrect: 1,
       handlers: {
         success: function(data) {
-          resolve(data);
+          var musicInfos = {};
+          musicInfos.name = data.name;
+          musicInfos.artist = data.artist.name;
+          musicInfos.thumbnails = {};
+          if(data.album) {
+            _.forEach(data.album.image, function(image) {
+              if('medium' == image.size) {
+                musicInfos.thumbnails.small = image['#text'];
+              } else if('large' == image.size) {
+                musicInfos.thumbnails.medium = image['#text'];
+              } else if('extralarge' == image.size) {
+                musicInfos.thumbnails.large = image['#text'];
+              }
+            });
+          }
+          resolve(musicInfos);
         },
         error: function(error) {
           reject(error);

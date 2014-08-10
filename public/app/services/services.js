@@ -120,11 +120,14 @@ angular
   this.coversRankView = function(rank, pageSize) {
     return $http.get('/view/covers/' + rank, {params: {pageSize: pageSize}});
   };
-  this.artistView = function(artist) {
-    return $http.get('/view/artist/' + artist);
+  this.artistView = function(artist, sort) {
+    return $http.get('/view/artist/' + artist + (sort ? '?sort=' + sort : ''));
   };
-  this.musicView = function(music) {
-    return $http.get('/view/music/' + music);
+  this.musicView = function(music, sort) {
+    return $http.get('/view/music/' + music + (sort ? '?sort=' + sort : ''));
+  };
+  this.musicGenreView = function(genre, sort) {
+    return $http.get('/view/genre/' + genre + (sort ? '?sort=' + sort : ''));
   };
 }])
 .service('coverService', ['$http', function($http) {

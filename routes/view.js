@@ -53,6 +53,7 @@ module.exports = function(router, app) {
 
   router.get('/artist/:slug', function(req, res, next) {
     var slug = req.param('slug');
+    var sort = req.param('sort') || 'best';
     coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
       if(!artist) {
 
@@ -61,7 +62,13 @@ module.exports = function(router, app) {
         .spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
-          return coverService.latestCoversOfMusics(musicsByArtist, 12);
+          var coversOfMusics;
+          if(sort === 'best') {
+            coversOfMusics = coverService.bestCoversOfMusics;
+          } else {
+            coversOfMusics = coverService.latestCoversOfMusics;
+          }
+          return coversOfMusics(musicsByArtist, 12);
         }).then(function(coversOfMusics) {
           res.json({
             artist: artist,
@@ -77,9 +84,52 @@ module.exports = function(router, app) {
   });
 
   router.get('/music/:slug', function(req, res, next) {
+    var slug = req.param('slug');
+    var sort = req.param('sort') || 'best';
+    coverService.getMusicBySlug(slug).bind({}).then(function(music) {
+      if(!music) {
+
+      } else {
+        var coversOfMusic;
+        if(sort === 'best') {
+          coversOfMusic = coverService.bestCoversOfMusic;
+        } else {
+          coversOfMusic = coverService.latestCoversOfMusic;
+        }
+        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusic(music, 1, 5)])
+        .spread(function(totalCoversOfMusic, coversOfMusic) {
+          res.json({
+            music: music,
+            totalCoversOfMusic: totalCoversOfMusic,
+            coversOfMusic: coversOfMusic
+          });
+        });
+      }
+    }).catch(function(err) {
+      console.log(err);
+    });
   });
 
   router.get('/genre/:slug', function(req, res, next) {
+    var slug = req.param('slug');
+    var sort = req.param('sort') || 'best';
+    coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
+      if(!musicGenre) {
+
+      } else {
+        Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, 1, 8), coverService.bestCoversOfMusicGenre(musicGenre, 1, 8), coverService.latestCoversOfMusicGenre(musicGenre, 1, 8)]).bind({})
+        .spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
+          res.json({
+            musicGenre: musicGenre,
+            bestArtistsOfMusicGenre: bestArtistsOfMusicGenre,
+            bestCoversOfMusicGenre: bestCoversOfMusicGenre,
+            latestCoversOfMusicGenre: latestCoversOfMusicGenre
+          });
+        });
+      }
+    }).catch(function(err) {
+      console.log(err);
+    });
   });
 
   app.use('/view', router);

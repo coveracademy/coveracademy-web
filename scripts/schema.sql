@@ -78,18 +78,6 @@ create table cover (
   constraint `fk_cover_music_id` foreign key (`music_id`) references `music` (`id`)
 ) engine = innodb default charset = utf8;
 
-create table cover_music_genre (
-  id                int(11) not null auto_increment,
-  cover_id          int(11) not null,
-  music_genre_id    int(11) not null,
-  registration_date timestamp not null default current_timestamp,
-  primary key (id),
-  key `fk_cover_music_genre_cover_id` (`cover_id`),
-  key `fk_cover_music_genre_music_genre_id` (`music_genre_id`),
-  constraint `fk_cover_music_genre_cover_id` foreign key (`cover_id`) references `cover` (`id`),
-  constraint `fk_cover_music_genre_music_genre_id` foreign key (`music_genre_id`) references `music_genre` (`id`)
-) engine = innodb default charset = utf8;
-
 create table potential_cover (
   id           int(11) not null auto_increment,
   artist       varchar(255) not null,

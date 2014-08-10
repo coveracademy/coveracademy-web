@@ -6,7 +6,7 @@
           <img class="medium-thumbnail" ng-src="{{ artist.small_thumbnail }}">
         </div>
         <div class="media-body">
-          <h1 class="media-heading">{{ artist.name }}</h1>
+          <h1 class="media-heading">{{ musicGenre.name }}</h1>
           <p class="font-biggest">
             <span class="label label-success">{{ artist.musicGenre.name }}</span>
             <span class="label label-info">{{ totalMusicsByArtist }} Musics</span>
@@ -25,21 +25,24 @@
       </div>
     </div>
   </div>
-  <div class="page-section">
-    <div class="panel panel-default" ng-repeat="musicByArtist in musicsByArtist">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a ui-sref="viewMusic({music: musicByArtist.slug})">
-            <img class="small-thumbnail" ng-if="musicByArtist.small_thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
-          </a>
-          <a class="default-link" ui-sref="viewMusic({music: musicByArtist.slug})">
-            {{ musicByArtist.name }}
-          </a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>
+          The best {{ musicGenre.name }} covers
         </h3>
       </div>
-      <div class="panel-body">
-        <cover-list ng-model="coversOfMusics[musicByArtist.id]" thumb-size="small"></cover-list>
+      <cover-list ng-model="bestCoversOfMusicGenre"></cover-list>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>
+          The latest {{ musicGenre.name }} covers
+        </h3>
       </div>
+      <cover-list ng-model="latestCoversOfMusicGenre"></cover-list>
     </div>
   </div>
 </section>

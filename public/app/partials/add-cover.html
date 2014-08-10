@@ -30,9 +30,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-group" ng-class="{'has-error': coverForm.music_genres.$invalid && !coverForm.music_genres.$pristine}">
-              <select nya-selectpicker multiple="" ng-model="cover.musicGenres" ng-options="musicGenre.name for musicGenre in musicGenres" name="music_genres" data-container="body" data-noneSelectedText="The cover genre" class="form-control" required></select>
-            </div>
           </div>
           <div class="form-group">
             <button ng-click="addCover()" ng-disabled="coverForm.$invalid" class="btn btn-primary btn-block btn-lg">

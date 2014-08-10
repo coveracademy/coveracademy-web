@@ -2,9 +2,25 @@
   <div class="row">
     <div class="col-md-12">
       <div class="page-title">
-        <h1>
-          {{ pageTitle }}
-        </h1>
+        <div class="row">
+          <div class="col-md-8">
+            <h1>
+              {{ pageTitle }}
+            </h1>
+          </div>
+          <div class="col-md-4 align-right" style="padding-top: 36px;">
+            <h4>
+              <a ng-if="isRank('best')" ui-sref="coversRank({rank: 'latest'})">
+                See the latest covers
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+              <a ng-if="isRank('latest')" ui-sref="coversRank({rank: 'best'})">
+                See the best covers
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </h4>
+          </div>
+        </div>
       </div>
       <cover-list ng-model="coversRank"></cover-list>
       <div class="align-center">

@@ -68,25 +68,37 @@ angular
       }
     })
     .state('viewArtist', {
-      url: '/artist/:artist',
+      url: '/artist/:artist?sort',
       templateUrl: '/app/partials/view-artist.html',
       controller: 'viewArtistController',
       resolve: {
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
-          return viewService.artistView($stateParams.artist);
+          return viewService.artistView($stateParams.artist, $stateParams.sort);
         }
       }
     })
     .state('viewMusic', {
-      url: '/music/:music',
+      url: '/music/:music?sort',
       templateUrl: '/app/partials/view-music.html',
-      controller: 'viewMusicController'
+      controller: 'viewMusicController',
+      resolve: {
+        viewService: 'viewService',
+        dataResponse: function($stateParams, viewService) {
+          return viewService.musicView($stateParams.music, $stateParams.sort);
+        }
+      }
     })
     .state('viewMusicGenre', {
-      url: '/genre/:genre',
-      templateUrl: '/app/partials/music-genre.html',
-      controller: 'viewMusicGenreController'
+      url: '/genre/:genre?sort',
+      templateUrl: '/app/partials/view-music-genre.html',
+      controller: 'viewMusicGenreController',
+      resolve: {
+        viewService: 'viewService',
+        dataResponse: function($stateParams, viewService) {
+          return viewService.musicGenreView($stateParams.genre, $stateParams.sort);
+        }
+      }
     })
     .state('contact', {
       url: '/contact',
