@@ -1,0 +1,85 @@
+<section>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="media">
+        <div class="pull-left">
+          <img class="medium-thumbnail" ng-src="/img/genres/{{ musicGenre.image }}">
+        </div>
+        <div class="media-body">
+          <h1 class="media-heading">{{ musicGenre.name }}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="artists({genre: musicGenre.slug})">
+              See all {{ musicGenre.name }} artists
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div ng-repeat="artist in bestArtistsOfMusicGenre" class="col-md-2">
+      <div class="thumbnail">
+        <div class="cover">
+          <a ui-sref="artist({artist: artist.slug})">
+            <img ng-src="{{ artist.medium_thumbnail }}">
+          </a>
+          <div class="legend">
+            <span class="label label-black">{{ artist.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          The best {{ musicGenre.name }} covers
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'best'})">
+              More covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <cover-list ng-model="bestCoversOfMusicGenre"></cover-list>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          The latest {{ musicGenre.name }} covers
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'latest'})">
+              More covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <cover-list ng-model="latestCoversOfMusicGenre"></cover-list>
+</section>

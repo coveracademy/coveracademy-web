@@ -6,21 +6,13 @@ angular
   $scope.topCover = dataResponse.data.topCover;
   $scope.musicGenres = dataResponse.data.musicGenres;
   $scope.carouselSlidesInterval = 5000;
-
-  $scope.carouselSlides = [{}, {}, {}];
-  // $scope.carouselSlides = $filter('partition')($scope.musicGenres, 6);
-  // for(index in $scope.carouselSlides) {
-  //   $scope.carouselSlides[index] = {item: $scope.carouselSlides[index], active: false};
-  // }
+  $scope.carouselSlides = $filter('partition')($scope.musicGenres, 6);
+  for(index in $scope.carouselSlides) {
+    $scope.carouselSlides[index] = {item: $scope.carouselSlides[index], active: false};
+  }
   $scope.viewCover = function(cover) {
-    $state.go('viewCover', {id : cover.id});
+    $state.go('cover', {id : cover.id});
   };
-  // $scope.carouselSlidesSize = function() {
-  //   return carouselSlides.length
-  // };
-  // $scope.isFirstCarouselSlide = function(index) {
-  //   return index === 0;
-  // };
 }])
 .controller('addCoverController', ['$scope', '$state', 'dataResponse', 'alertService', 'coverService', function($scope, $state, dataResponse, alertService, coverService) {
   $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
@@ -52,34 +44,34 @@ angular
   };
   $scope.addCover = function() {
     coverService.addCover($scope.cover).then(function(response) {
-      $state.go('viewCover', {id : response.data.id});
+      $state.go('cover', {id : response.data.id});
     });
   };
 }])
-.controller('viewCoverController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
+.controller('coverController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
   $scope.cover = dataResponse.data.cover;
   $scope.bestCoversOfMusic = dataResponse.data.bestCoversOfMusic;
   $scope.bestCoversByArtist = dataResponse.data.bestCoversByArtist;
 }])
-.controller('coversRankController', ['$scope', '$stateParams', 'settings', 'dataResponse', 'coverService', function($scope, $stateParams, settings, dataResponse, coverService) {
+.controller('coversRankController', ['$scope', '$stateParams', 'dataResponse', 'coverService', function($scope, $stateParams, dataResponse, coverService) {
   $scope.rankType = $stateParams.rank;
-  $scope.pageTitle = $scope.rankType === 'best' ? 'Best covers from this Week' : 'Latest covers songs from this Week';
-  $scope.currentPage = settings.defaultCurrentPage;
-  $scope.currentPeriod = settings.defaultCurrentPeriod;
-  $scope.coversPerPage = settings.coversRankView.coversPerPage;
   $scope.coversRank = dataResponse.data.coversRank;
   $scope.totalCoversRank = dataResponse.data.totalCoversRank;
+
+  $scope.currentPage = 1;
+  $scope.coversPerPage = 20;
+
   $scope.pageChanged = function() {
-    var nextPage = $scope.rankType === 'best' ? coverService.bestCovers($scope.currentPeriod, $scope.currentPage, $scope.coversPerPage) : coverService.latestCovers($scope.currentPeriod, $scope.currentPage, $scope.coversPerPage);
+    var nextPage = $scope.rankType === 'best' ? coverService.bestCovers($scope.currentPage) : coverService.latestCovers($scope.currentPage);
     nextPage.then(function(response) {
       $scope.coversRank = response.data;
     });
   };
-  $scope.isRank = function(type) {
+  $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
 }])
-.controller('viewArtistController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
+.controller('artistController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
   $scope.sortType = $stateParams.sort ? $stateParams.sort : 'best';
   $scope.artist = dataResponse.data.artist;
   $scope.totalMusicsByArtist = dataResponse.data.totalMusicsByArtist;
@@ -89,7 +81,16 @@ angular
     return $scope.sortType === type;
   };
 }])
-.controller('viewMusicController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
+.controller('artistsController', ['$scope', 'dataResponse', function($scope, dataResponse) {
+  $scope.musicGenre = dataResponse.data.musicGenre;
+  $scope.artists = dataResponse.data.artists;
+  $scope.totalArtists = dataResponse.data.totalArtists;
+  $scope.currentPage = 1;
+  $scope.nextPage = function() {
+    $scope.currentPage++;
+  };
+}])
+.controller('musicController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
   $scope.sortType = $stateParams.sort ? $stateParams.sort : 'best';
   $scope.music = dataResponse.data.music;
   $scope.totalCoversOfMusic = dataResponse.data.totalCoversOfMusic;
@@ -98,13 +99,22 @@ angular
     return $scope.sortType === type;
   };
 }])
-.controller('viewMusicGenreController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
-  $scope.sortType = $stateParams.sort ? $stateParams.sort : 'best';
+.controller('musicGenreController', ['$scope', 'dataResponse', function($scope, dataResponse) {
   $scope.musicGenre = dataResponse.data.musicGenre;
   $scope.bestArtistsOfMusicGenre = dataResponse.data.bestArtistsOfMusicGenre;
   $scope.bestCoversOfMusicGenre = dataResponse.data.bestCoversOfMusicGenre;
   $scope.latestCoversOfMusicGenre = dataResponse.data.latestCoversOfMusicGenre;
-  $scope.isSorted = function(type) {
-    return $scope.sortType === type;
+}])
+.controller('musicGenreRankController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
+  $scope.rankType = $stateParams.rank;
+  $scope.musicGenre = dataResponse.data.musicGenre;
+  $scope.coversOfMusicGenre = dataResponse.data.coversOfMusicGenre;
+  $scope.totalCoversOfMusicGenre = dataResponse.data.totalCoversOfMusicGenre;
+
+  $scope.coversPerPage = 20;
+  $scope.currentPage = 1;
+
+  $scope.isRanked = function(type) {
+    return $scope.rankType === type;
   };
 }]);

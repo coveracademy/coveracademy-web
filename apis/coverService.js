@@ -43,6 +43,18 @@ var coversOfMusics = function(rankType, musics, pageSize) {
   });
 }
 
+var coversOfMusic = function(rankType, music, page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
+  return Cover.collection().query(function(qb) {
+    qb.where('music_id', music.id)
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
+
+    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+  }).fetch({withRelated: defaultCoverRelated});
+}
+
 var coversByArtists = function(rankType, artists, pageSize) {
   return new Promise(function(resolve, reject) {
     var promises = [];
@@ -62,46 +74,6 @@ var coversByArtists = function(rankType, artists, pageSize) {
       reject(err);
     });
   });
-}
-
-var listCovers = function(rankType, period, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
-  return Cover.collection().query(function(qb) {
-    qb.whereBetween('registration_date', calculatePeriod(period))
-    .offset((page - 1) * pageSize)
-    .limit(pageSize);
-
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
-}
-
-var totalCovers = function(rankType, period) {
-  return new Promise(function(resolve, reject) {
-    var qb = Bookshelf.knex('cover')
-    .count('id as total_covers')
-    .whereBetween('registration_date', calculatePeriod(period));
-
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
-
-    qb.then(function(rows) {
-      resolve(rows[0].total_covers);
-    }).catch(function(err) {
-      reject(err);
-    });
-  });
-}
-
-var coversOfMusic = function(rankType, music, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
-  return Cover.collection().query(function(qb) {
-    qb.where('music_id', music.id)
-    .offset((page - 1) * pageSize)
-    .limit(pageSize);
-
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
 }
 
 var coversByArtist = function(rankType, artist, page, pageSize) {
@@ -142,6 +114,18 @@ var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.video_views', 'desc');
   }).fetch();
+}
+
+var listCovers = function(rankType, period, page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
+  return Cover.collection().query(function(qb) {
+    qb.whereBetween('registration_date', calculatePeriod(period))
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
+
+    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+  }).fetch({withRelated: defaultCoverRelated});
 }
 
 exports.addCover = function(coverData) {
@@ -194,12 +178,17 @@ exports.bestCovers = function(period, page, pageSize) {
   return listCovers('best', period, page, pageSize);
 }
 
-exports.totalLatestCovers = function(period) {
-  return totalCovers('latest', period);
-}
-
-exports.totalBestCovers = function(period) {
-  return totalCovers('best', period);
+exports.totalCovers = function(period) {
+  return new Promise(function(resolve, reject) {
+    var qb = Bookshelf.knex('cover')
+    .count('id as total_covers')
+    .whereBetween('registration_date', calculatePeriod(period))
+    .then(function(rows) {
+      resolve(rows[0].total_covers);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
 }
 
 exports.latestCoversOfMusic = function(music, page, pageSize) {
@@ -255,6 +244,20 @@ exports.bestCoversOfMusicGenre = function(musicGenre, page, pageSize) {
   return coversOfMusicGenre('best', musicGenre, page, pageSize);
 }
 
+exports.totalCoversOfMusicGenre = function(musicGenre) {
+  return new Promise(function(resolve, reject) {
+    Bookshelf.knex('cover')
+    .join('artist', 'cover.artist_id', 'artist.id')
+    .where('artist.music_genre_id', musicGenre.id)
+    .count('cover.id as total_covers')
+    .then(function(rows) {
+      resolve(rows[0].total_covers)
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
 exports.getMusicGenre = function(name) {
   if('Rap' === name || 'Hip-hop' == name) {
     name = 'Rap or Hip-hop';
@@ -265,6 +268,11 @@ exports.getMusicGenre = function(name) {
 }
 
 exports.getMusicGenreBySlug = function(slug) {
+  if(!slug) {
+    return new Promise(function(resolve, reject) {
+      resolve();
+    });
+  }
   return MusicGenre.forge({slug: slug}).fetch();
 }
 
@@ -354,6 +362,30 @@ exports.discoverArtist = function(name) {
           resolve(artist);
         });
       }
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
+exports.listArtists = function(musicGenre, page, pageSize) {
+  return Artist.collection().query(function(qb) {
+    if(musicGenre) {
+      qb.where('music_genre_id', musicGenre.id);
+    }
+    qb.orderBy('name', 'asc');
+    qb.limit(pageSize).offset((page - 1) * pageSize);
+  }).fetch({withRelated: defaultArtistRelated});
+}
+
+exports.totalArtists = function(musicGenre) {
+  return new Promise(function(resolve, reject) {
+    var qb = Bookshelf.knex('artist').count('id as total_artists');
+    if(musicGenre) {
+      qb.where('music_genre_id', musicGenre.id);
+    }
+    qb.then(function(rows) {
+      resolve(rows[0].total_artists);
     }).catch(function(err) {
       reject(err);
     });

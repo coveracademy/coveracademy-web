@@ -11,13 +11,6 @@ angular
     'ngProgress'
   ]
 )
-.constant('settings', {
-  defaultCurrentPage: 1,
-  defaultCurrentPeriod: 7,
-  coversRankView: {
-    coversPerPage: 20
-  }
-})
 .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   // $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/');
@@ -44,10 +37,10 @@ angular
         }
       }
     })
-    .state('viewCover', {
+    .state('cover', {
       url: '/cover/:id',
-      templateUrl: '/app/partials/view-cover.html',
-      controller: 'viewCoverController',
+      templateUrl: '/app/partials/cover.html',
+      controller: 'coverController',
       resolve: {
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
@@ -60,17 +53,16 @@ angular
       templateUrl: '/app/partials/covers-rank.html',
       controller: 'coversRankController',
       resolve: {
-        settings: 'settings',
         viewService: 'viewService',
-        dataResponse: function($stateParams, settings, viewService) {
-          return viewService.coversRankView($stateParams.rank, settings.coversRankView.coversPerPage);
+        dataResponse: function($stateParams, viewService) {
+          return viewService.coversRankView($stateParams.rank);
         }
       }
     })
-    .state('viewArtist', {
+    .state('artist', {
       url: '/artist/:artist?sort',
-      templateUrl: '/app/partials/view-artist.html',
-      controller: 'viewArtistController',
+      templateUrl: '/app/partials/artist.html',
+      controller: 'artistController',
       resolve: {
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
@@ -78,10 +70,21 @@ angular
         }
       }
     })
-    .state('viewMusic', {
+    .state('artists', {
+      url: '/artists?genre',
+      templateUrl: '/app/partials/artists.html',
+      controller: 'artistsController',
+      resolve: {
+        viewService: 'viewService',
+        dataResponse: function($stateParams, viewService) {
+          return viewService.artistsView($stateParams.genre);
+        }
+      }
+    })
+    .state('music', {
       url: '/music/:music?sort',
-      templateUrl: '/app/partials/view-music.html',
-      controller: 'viewMusicController',
+      templateUrl: '/app/partials/music.html',
+      controller: 'musicController',
       resolve: {
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
@@ -89,14 +92,25 @@ angular
         }
       }
     })
-    .state('viewMusicGenre', {
-      url: '/genre/:genre?sort',
-      templateUrl: '/app/partials/view-music-genre.html',
-      controller: 'viewMusicGenreController',
+    .state('musicGenre', {
+      url: '/genre/:genre',
+      templateUrl: '/app/partials/music-genre.html',
+      controller: 'musicGenreController',
       resolve: {
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
-          return viewService.musicGenreView($stateParams.genre, $stateParams.sort);
+          return viewService.musicGenreView($stateParams.genre);
+        }
+      }
+    })
+    .state('musicGenreRank', {
+      url: '/genre/:genre/:rank',
+      templateUrl: '/app/partials/music-genre-rank.html',
+      controller: 'musicGenreRankController',
+      resolve: {
+        viewService: 'viewService',
+        dataResponse: function($stateParams, viewService) {
+          return viewService.musicGenreRankView($stateParams.genre, $stateParams.rank);
         }
       }
     })

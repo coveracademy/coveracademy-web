@@ -1,15 +1,15 @@
 <div class="row" ng-repeat="row in covers | partition: coversPerRow">
   <div ng-repeat="cover in row" class="col-md-{{ columnSize }} cover-snippet">
     <div ng-click="viewCover(cover)" class="thumbnail clickable">
-      <a ui-sref="viewCover({id: cover.id})" class="link"></a>
-      <div class="video-thumb">
+      <a ui-sref="cover({id: cover.id})" autoscroll="false" class="link"></a>
+      <div class="cover">
         <img ng-src="{{ cover.medium_thumbnail }}">
-        <div class="video-duration">
+        <div class="legend">
           <span class="label label-black">{{ cover.duration | inMinutes }} min</span>
         </div>
       </div>
       <div class="caption {{ fontSizeCss }}">
-        <a ui-sref="viewCover({id: cover.id})">
+        <a ui-sref="cover({id: cover.id})" autoscroll="false">
           {{ cover.artist.name }} - {{ cover.music.name }}
         </a>
         <div>

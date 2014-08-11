@@ -8,17 +8,17 @@
         <div class="media-body">
           <h1 class="media-heading">
             {{ music.name }} by
-            <a ui-sref="viewArtist({artist: music.artist.slug})">{{ music.artist.name }}</a>
+            <a ui-sref="artist({artist: music.artist.slug})">{{ music.artist.name }}</a>
           </h1>
           <p class="font-biggest">
             <span class="label label-info">{{ totalCoversOfMusic }} Covers</span>
           </p>
           <div class="pull-right">
             <div class="btn-group">
-              <a class="btn btn-default" ui-sref="viewMusic({music: music.slug, sort: 'best'})" ng-class="{'active': isSorted('best')}">
+              <a class="btn btn-default" ui-sref="music({music: music.slug, sort: 'best'})" ng-class="{'active': isSorted('best')}">
                 Best Covers
               </a>
-              <a class="btn btn-default" ui-sref="viewMusic({music: music.slug, sort: 'latest'})" ng-class="{'active': isSorted('latest')}">
+              <a class="btn btn-default" ui-sref="music({music: music.slug, sort: 'latest'})" ng-class="{'active': isSorted('latest')}">
                 Latest Covers
               </a>
             </div>

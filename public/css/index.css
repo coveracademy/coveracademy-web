@@ -267,11 +267,11 @@ input.big {
   font-size: 28px;
 }
 
-.video-thumb {
+.cover {
   position: relative;
 }
 
-.video-duration {
+.cover .legend {
   font-size: 16px;
   position: absolute;
   bottom: 3px;
@@ -283,7 +283,7 @@ input.big {
 }
 
 .medium-thumbnail {
-  width: 125px;
+  width: 126px;
 }
 
 .default-link {

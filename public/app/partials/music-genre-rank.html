@@ -1,0 +1,50 @@
+<section>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="media">
+        <div class="pull-left">
+          <img class="medium-thumbnail" ng-src="/img/genres/{{ musicGenre.image }}">
+        </div>
+        <div class="media-body">
+          <h1 class="media-heading">
+            <a ui-sref="musicGenre({genre: musicGenre.slug})">{{ musicGenre.name }}</a>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <div class="row">
+          <div class="col-md-8">
+            <h1>
+              <span ng-if="isRanked('best')">
+                Best {{ musicGenre.name }} covers
+              </span>
+              <span ng-if="isRanked('latest')">
+                Latest {{ musicGenre.name }} covers
+              </span>
+            </h1>
+          </div>
+          <div class="col-md-4 align-right" style="padding-top: 36px;">
+            <h4>
+              <a ng-if="isRanked('best')" ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'latest'})">
+                See the latest {{ musicGenre.name }} covers
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+              <a ng-if="isRanked('latest')" ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'best'})">
+                See the best {{ musicGenre.name }} covers
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <cover-list ng-model="coversOfMusicGenre"></cover-list>
+      <div class="align-center">
+        <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+      </div>
+    </div>
+  </div>
+</section>

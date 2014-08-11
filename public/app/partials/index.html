@@ -1,35 +1,22 @@
 <section>
   <carousel interval="carouselSlidesInterval">
     <slide ng-repeat="carouselSlide in carouselSlides" active="carouselSlide.active">
-      <img src="https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-xfp1/t1.0-9/734143_426916150711835_12986040_n.jpg">
-    </slide>
-  </carousel>
-  <!-- <div id="carousel-genres" class="carousel-genres carousel slide">
-    <div class="carousel-inner">
-      <div class="item" ng-repeat="slide in carouselSlides" ng-class="{'active': isFirstCarouselSlide($index)}">
-        <div class="row text-center">
-          <div ng-repeat="musicGenre in slide" class="col-md-2 cover-snippet">
-            <div class="thumbnail">
-              <div class="video-thumb">
-                <a ui-sref="viewMusicGenre({genre: musicGenre.slug})">
-                  <img ng-src="/img/genres/{{ musicGenre.image }}">
-                </a>
-                <div class="video-duration">
-                  <span class="label label-black">{{ musicGenre.name }}</span>
-                </div>
+      <div class="row text-center">
+        <div ng-repeat="musicGenre in carouselSlide.item" class="col-md-2 cover-snippet">
+          <div class="thumbnail">
+            <div class="cover">
+              <a ui-sref="musicGenre({genre: musicGenre.slug})">
+                <img ng-src="/img/genres/{{ musicGenre.image }}">
+              </a>
+              <div class="legend">
+                <span class="label label-black">{{ musicGenre.name }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <a class="left carousel-control" href="#carousel-genres" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-    </a>
-    <a class="right carousel-control" href="#carousel-genres" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
-  </div> -->
+    </slide>
+  </carousel>
   <div class="row">
     <div class="col-md-7">
       <div class="thumbnail">
@@ -37,7 +24,7 @@
           <embed-video ng-href="{{ topCover.url }}"></embed-video>
         </div>
         <div class="caption">
-          <a ui-sref="viewCover({id: topCover.id})">
+          <a ui-sref="cover({id: topCover.id})">
             {{ topCover.artist.name }} - {{ topCover.music.name }}
           </a>
           <div>
@@ -53,46 +40,44 @@
 
     </div>
   </div>
-  <div>
-    <div class="page-title">
-      <div class="row">
-        <div class="col-md-8">
-          <h1 class="title">
-            Best covers from this Week
-          </h1>
-        </div>
-        <div class="col-md-4 align-right">
-          <h1 class="title">
-            <small>
-              <a ui-sref="coversRank({rank: 'best'})">
-                More covers
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </a>
-            </small>
-          </h1>
-        </div>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          Best covers from this Week
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="coversRank({rank: 'best'})" autoscroll="false">
+              More covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
       </div>
     </div>
-    <cover-list ng-model="bestCovers"></cover-list>
-    <div class="page-title">
-      <div class="row">
-        <div class="col-md-8">
-          <h1 class="title">
-            Latest covers songs from this Week
-          </h1>
-        </div>
-        <div class="col-md-4 align-right">
-          <h1 class="title">
-            <small>
-              <a ui-sref="coversRank({rank: 'latest'})">
-                More covers
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </a>
-            </small>
-          </h1>
-        </div>
-      </div>
-    </div>
-    <cover-list ng-model="latestCovers"></cover-list>
   </div>
+  <cover-list ng-model="bestCovers"></cover-list>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          Latest covers from this Week
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="coversRank({rank: 'latest'})" autoscroll="false">
+              More covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <cover-list ng-model="latestCovers"></cover-list>
 </section>

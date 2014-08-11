@@ -1,0 +1,22 @@
+<div class="page-title">
+  <h1 class="align-center">
+    <span ng-if="musicGenre">{{ musicGenre.name }}</span>
+    <span ng-if="!musicGenre">All</span>
+    artists
+  </h1>
+</div>
+<div ng-repeat="row in artists | partition: 4" class="row text-center">
+  <div ng-repeat="artist in row" class="col-md-3">
+    <div class="thumbnail">
+      <div class="cover">
+        <a ui-sref="artist({artist: artist.slug})">
+          <span style="background-image: url({{ artist.medium_thumbnail }}); display: block; width: 252px; height: 252px; background-size: cover;">
+            <div class="caption">
+              <span class="label label-black">{{ artist.name }}</span>
+            </div>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -117,17 +117,23 @@ angular
   this.coverView = function(id) {
     return $http.get('/view/cover/' + id);
   };
-  this.coversRankView = function(rank, pageSize) {
-    return $http.get('/view/covers/' + rank, {params: {pageSize: pageSize}});
+  this.coversRankView = function(rank) {
+    return $http.get('/view/covers/' + rank);
   };
   this.artistView = function(artist, sort) {
     return $http.get('/view/artist/' + artist + (sort ? '?sort=' + sort : ''));
+  };
+  this.artistsView = function(genre) {
+    return $http.get('/view/artists' + (genre ? '?genre=' + genre : ''));
   };
   this.musicView = function(music, sort) {
     return $http.get('/view/music/' + music + (sort ? '?sort=' + sort : ''));
   };
   this.musicGenreView = function(genre, sort) {
     return $http.get('/view/genre/' + genre + (sort ? '?sort=' + sort : ''));
+  };
+  this.musicGenreRankView = function(genre, rank) {
+    return $http.get('/view/genre/' + genre + '/' + rank);
   };
 }])
 .service('coverService', ['$http', function($http) {
