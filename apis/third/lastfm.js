@@ -50,6 +50,7 @@ exports.getArtistInfos = function(artistName) {
       autocorrect: 1,
       handlers: {
         success: function(data) {
+          console.log(data)
           var artistInfos = {};
           artistInfos.name = data.name;
           artistInfos.thumbnails = {};
@@ -73,16 +74,17 @@ exports.getArtistInfos = function(artistName) {
   });
 }
 
-exports.getMusicInfos = function(artistName, musicName) {
+exports.getMusicInfos = function(artistName, musicTitle) {
   return new Promise(function(resolve, reject) {
     lastfm.info("track", {
       artist: artistName,
-      track: musicName,
+      track: musicTitle,
       autocorrect: 1,
       handlers: {
         success: function(data) {
+          console.log(data)
           var musicInfos = {};
-          musicInfos.name = data.name;
+          musicInfos.title = data.name;
           musicInfos.artist = data.artist.name;
           musicInfos.thumbnails = {};
           if(data.album) {

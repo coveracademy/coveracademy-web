@@ -22,6 +22,16 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/addCover', function(req, res, next) {
+    coverService.allMusicGenres().then(function(allMusicGenres) {
+      res.json({
+        allMusicGenres: allMusicGenres
+      });
+    }).catch(function(err) {
+      console.log(err);
+    })
+  });
+
   router.get('/cover/:id', function(req, res, next) {
     var id = req.param('id');
     coverService.getCover(id).then(function(cover) {
@@ -48,13 +58,18 @@ module.exports = function(router, app) {
     var promiseRank = rank === 'best' ? coverService.bestCovers(weekPeriod, firstPage, numberOfCoversInList) : coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInList);
     Promise.all([promiseRank, coverService.totalCovers(weekPeriod)])
     .spread(function(coversRank, totalCoversRank) {
+      this.coversRank = coversRank;
+      this.totalCoversRank = totalCoversRank;
+      return coverService.artistsOfCovers(coversRank);
+    }).then(function(artistsOfCovers) {
       res.json({
-        coversRank: coversRank,
-        totalCoversRank: totalCoversRank
+        coversRank: this.coversRank,
+        totalCoversRank: this.totalCoversRank,
+        artistsOfCovers: artistsOfCovers
       });
     }).catch(function(err) {
       console.log(err);
-    })
+    }).bind({});
   });
 
   router.get('/artist/:slug', function(req, res, next) {
@@ -174,6 +189,25 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
     });
+  });
+
+  router.get('/search', function(req, res, next) {
+    var query = req.param('query');
+    Promise.all([coverService.searchArtists(query), coverService.searchMusics(query)])
+    .spread(function(artists, musics) {
+      this.artists = artists;
+      this.musics = musics;
+      return Promise.all([coverService.bestCoversByArtists(artists, 6), coverService.bestCoversOfMusics(musics, 6)]);
+    }).spread(function(coversByArtists, coversOfMusics) {
+      res.json({
+        artists: this.artists,
+        musics: this.musics,
+        coversByArtists: coversByArtists,
+        coversOfMusics: coversOfMusics
+      });
+    }).catch(function(err) {
+      console.log(err);
+    }).bind({});
   });
 
   app.use('/view', router);

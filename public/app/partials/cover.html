@@ -1,61 +1,59 @@
-<section>
-  <div class="row">
-    <div class="col-md-12 align-center">
-      <div class="page-title">
-        <h1 class="title">{{ cover.title }}</h1>
-      </div>
+<div class="row">
+  <div class="col-md-12 align-center">
+    <div class="page-title">
+      <h1 class="title">{{ cover.title }}</h1>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="embed-container">
-            <embed-video ng-href="{{ cover.url }}"></embed-video>
-          </div>
-        </div>
-      </div>
-      <div class="row padding">
-        <div class="col-md-9 font-big">
-          <p>
-            Cover by {{ cover.video_author }}
-          </p>
-          <p>
-            <span am-time-ago="cover.video_date"></span>
-          </p>
-        </div>
-        <div class="col-md-3 align-right">
-          <a ng-href="http://www.facebook.com/sharer/sharer.php?u=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Facebook" class="icon icon-facebook" target="_blank"></a>
-          <a ng-href="http://twitter.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Twitter" class="icon icon-twitter"target="_blank"></a>
-          <a ng-href="https://plus.google.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Google+" class="icon icon-googleplus"target="_blank"></a>
+</div>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="embed-container">
+          <embed-video ng-href="{{ cover.url }}"></embed-video>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-title">
-        <h3>
-          More covers of
-          <a ui-sref="music({music: cover.music.slug})">
-            {{ cover.music.name }}
-          </a>
-        </h3>
+    <div class="row padding">
+      <div class="col-md-9 font-big">
+        <p>
+          Cover by {{ cover.video_author }}
+        </p>
+        <p>
+          <span am-time-ago="cover.video_date"></span>
+        </p>
       </div>
-      <cover-list ng-model="bestCoversOfMusic"></cover-list>
+      <div class="col-md-3 align-right">
+        <a ng-href="http://www.facebook.com/sharer/sharer.php?u=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Facebook" class="icon icon-facebook" target="_blank"></a>
+        <a ng-href="http://twitter.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Twitter" class="icon icon-twitter"target="_blank"></a>
+        <a ng-href="https://plus.google.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Google+" class="icon icon-googleplus"target="_blank"></a>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-title">
-        <h3>
-          More covers by
-          <a ui-sref="artist({artist: cover.artist.slug})">
-            {{ cover.artist.name }}
-          </a>
-        </h3>
-      </div>
-      <cover-list ng-model="bestCoversByArtist"></cover-list>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="page-title">
+      <h3>
+        More covers of
+        <a ui-sref="music({music: cover.music.slug})">
+          {{ cover.music.title }}
+        </a>
+      </h3>
     </div>
+    <cover-songs ng-model="bestCoversOfMusic"></cover-songs>
   </div>
-</section>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="page-title">
+      <h3>
+        More covers by
+        <a ui-sref="artist({artist: cover.artist.slug})">
+          {{ cover.artist.name }}
+        </a>
+      </h3>
+    </div>
+    <cover-songs ng-model="bestCoversByArtist"></cover-songs>
+  </div>
+</div>

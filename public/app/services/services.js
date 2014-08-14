@@ -114,6 +114,9 @@ angular
   this.indexView = function() {
     return $http.get('/view/index');
   };
+  this.addCoverView = function() {
+    return $http.get('/view/addCover');
+  };
   this.coverView = function(id) {
     return $http.get('/view/cover/' + id);
   };
@@ -121,34 +124,25 @@ angular
     return $http.get('/view/covers/' + rank);
   };
   this.artistView = function(artist, sort) {
-    return $http.get('/view/artist/' + artist + (sort ? '?sort=' + sort : ''));
+    return $http.get('/view/artist/' + artist, {params: {sort: sort}});
   };
   this.artistsView = function(genre) {
-    return $http.get('/view/artists' + (genre ? '?genre=' + genre : ''));
+    return $http.get('/view/artists', {params: {genre: genre}});
   };
   this.musicView = function(music, sort) {
-    return $http.get('/view/music/' + music + (sort ? '?sort=' + sort : ''));
+    return $http.get('/view/music/' + music, {params: {sort: sort}});
   };
   this.musicGenreView = function(genre, sort) {
-    return $http.get('/view/genre/' + genre + (sort ? '?sort=' + sort : ''));
+    return $http.get('/view/genre/' + genre, {params: {sort: sort}});
   };
   this.musicGenreRankView = function(genre, rank) {
     return $http.get('/view/genre/' + genre + '/' + rank);
   };
+  this.searchView = function(query) {
+    return $http.get('/view/search', {params: {query: query}});
+  };
 }])
 .service('coverService', ['$http', function($http) {
-  this.allMusicGenres = function() {
-    return $http.get('/api/musicGenre');
-  };
-  this.searchArtists = function(query) {
-    return $http.get('/api/artist', {params: {query: query}});
-  };
-  this.searchMusics = function(artist_id, query) {
-    return $http.get('/api/music', {params: {artist_id: artist_id, query: query}});
-  };
-  this.getCover = function(id, related) {
-    return $http.get('/api/cover/' + id);
-  };
   this.addCover = function(cover) {
     return $http.post('/api/cover', {cover: cover});
   };
@@ -158,7 +152,13 @@ angular
   this.bestCovers = function(period, page, pageSize) {
     return $http.get('/api/cover/best', {params: {period: period, page: page, pageSize: pageSize}});
   };
-  this.topCover = function(page, pageSize) {
-    return $http.get('/api/cover/top');
+  this.searchMusicOrArtist = function(query) {
+    return $http.get('/api/search/musicOrArtist', {params: {query: query}});
+  };
+  this.searchArtists = function(query) {
+    return $http.get('/api/search/artist', {params: {query: query}});
+  };
+  this.searchMusics = function(artist, query) {
+    return $http.get('/api/search/music', {params: {artist: artist, query: query}});
   };
 }]);

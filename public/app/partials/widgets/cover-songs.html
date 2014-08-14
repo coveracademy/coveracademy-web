@@ -1,5 +1,5 @@
 <div class="row" ng-repeat="row in covers | partition: coversPerRow">
-  <div ng-repeat="cover in row" class="col-md-{{ columnSize }} cover-snippet">
+  <div ng-repeat="cover in row" class="col-md-{{ columnSize }}">
     <div ng-click="viewCover(cover)" class="thumbnail clickable">
       <a ui-sref="cover({id: cover.id})" autoscroll="false" class="link"></a>
       <div class="cover">
@@ -10,7 +10,7 @@
       </div>
       <div class="caption {{ fontSizeCss }}">
         <a ui-sref="cover({id: cover.id})" autoscroll="false">
-          {{ cover.artist.name }} - {{ cover.music.name }}
+          {{ cover.artist.name }} - {{ cover.music.title }}
         </a>
         <div>
           By {{ cover.video_author }}

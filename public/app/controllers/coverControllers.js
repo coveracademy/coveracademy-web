@@ -14,9 +14,17 @@ angular
     $state.go('cover', {id : cover.id});
   };
 }])
+.controller('searchController', ['$scope', '$stateParams', 'dataResponse', function($scope, $stateParams, dataResponse) {
+  $scope.searchQuery = $stateParams.q;
+  $scope.artists = dataResponse.data.artists;
+  $scope.musics = dataResponse.data.musics;
+  $scope.coversByArtists = dataResponse.data.coversByArtists;
+  $scope.coversOfMusics = dataResponse.data.coversOfMusics;
+  $scope.totalResults = $scope.artists.length + $scope.musics.length;
+}])
 .controller('addCoverController', ['$scope', '$state', 'dataResponse', 'alertService', 'coverService', function($scope, $state, dataResponse, alertService, coverService) {
   $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
-  $scope.musicGenres = dataResponse.data;
+  $scope.musicGenres = dataResponse.data.allMusicGenres;
   $scope.videoUrlPasted = function(event) {
     $scope.cover = {};
     var url = event.originalEvent.clipboardData.getData("text/plain");
@@ -35,12 +43,12 @@ angular
     $scope.cover.artist = artist.name;
   };
   $scope.searchMusics = function(query) {
-    return coverService.searchMusics($scope.cover.artist.id, query).then(function(response) {
+    return coverService.searchMusics($scope.cover.artist, query).then(function(response) {
       return response.data;
     });
   };
   $scope.selectMusic = function(music) {
-    $scope.cover.music = music.name;
+    $scope.cover.music = music.title;
   };
   $scope.addCover = function() {
     coverService.addCover($scope.cover).then(function(response) {
@@ -57,6 +65,7 @@ angular
   $scope.rankType = $stateParams.rank;
   $scope.coversRank = dataResponse.data.coversRank;
   $scope.totalCoversRank = dataResponse.data.totalCoversRank;
+  $scope.artistsOfCovers = dataResponse.data.artistsOfCovers;
 
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;

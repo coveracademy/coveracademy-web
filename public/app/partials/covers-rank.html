@@ -1,36 +1,43 @@
-<section>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-title">
-        <div class="row">
-          <div class="col-md-8">
-            <h1>
-              <span ng-if="isRanked('best')">
-                Best covers from this Week
-              </span>
-              <span ng-if="isRanked('latest')">
-                Latest covers from this Week
-              </span>
-            </h1>
-          </div>
-          <div class="col-md-4 align-right" style="padding-top: 36px;">
-            <h4>
-              <a ng-if="isRanked('best')" ui-sref="coversRank({rank: 'latest'})">
-                See the latest covers
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </a>
-              <a ng-if="isRanked('latest')" ui-sref="coversRank({rank: 'best'})">
-                See the best covers
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </a>
-            </h4>
-          </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-md-8">
+          <h1>
+            <span ng-if="isRanked('best')">
+              Best covers from this Week
+            </span>
+            <span ng-if="isRanked('latest')">
+              Latest covers from this Week
+            </span>
+          </h1>
+        </div>
+        <div class="col-md-4 align-right" style="padding-top: 36px;">
+          <h4>
+            <a ng-if="isRanked('best')" ui-sref="coversRank({rank: 'latest'})">
+              See the latest covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+            <a ng-if="isRanked('latest')" ui-sref="coversRank({rank: 'best'})">
+              See the best covers
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </h4>
         </div>
       </div>
-      <cover-list ng-model="coversRank"></cover-list>
-      <div class="align-center">
-        <pagination total-items="totalCoversRank" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+    <cover-songs ng-model="coversRank"></cover-songs>
+    <div class="align-center">
+      <pagination total-items="totalCoversRank" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div ng-repeat="row in artistsOfCovers | partition: 6" class="row padding">
+      <div ng-repeat="artist in row" class="col-md-2">
+        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
       </div>
     </div>
   </div>
-</section>
+</div>

@@ -332,6 +332,7 @@ exports.addArtist = function(name) {
     Artist.forge({name: name, slug: slug.slugify(name)}).save().then(function(artist) {
       resolve(artist);
       lastfm.getArtistInfos(artist.get('name')).then(function(artistInfos) {
+        artist.set('name', artistInfos.name);
         artist.set('small_thumbnail', artistInfos.thumbnails.small);
         artist.set('medium_thumbnail', artistInfos.thumbnails.medium);
         artist.set('large_thumbnail', artistInfos.thumbnails.large);
@@ -392,8 +393,8 @@ exports.totalArtists = function(musicGenre) {
   });
 }
 
-exports.getMusic = function(artist, name) {
-  var slugified = slug.slugify(artist.get('name') + ' ' + name);
+exports.getMusic = function(artist, title) {
+  var slugified = slug.slugify(artist.get('name') + ' ' + title);
   return this.getMusicBySlug(slugified);
 }
 
@@ -401,40 +402,49 @@ exports.getMusicBySlug = function(slug) {
   return Music.query({where: ['slug', slug]}).fetch({withRelated: ['artist']});
 }
 
-exports.searchMusics = function(artist, query) {
-  var whereCondition = null;
-  if(artist) {
-    whereCondition = {where: ['artist_id', artist.id], andWhere: ['name', 'like', '%' + query + '%']};
-  } else {
-    whereCondition = {where: ['name', 'like', '%' + query + '%']};
-  }
-  return Music.collection().query(whereCondition).fetch();
+exports.searchMusics = function(query) {
+  return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch({withRelated: ['artist']});
 }
 
-exports.addMusic = function(artist, name) {
+exports.searchMusicsOfArtist = function(artistName, query) {
   return new Promise(function(resolve, reject) {
-    Music.forge({artist_id: artist.id, name: name, slug: slug.slugify(artist.get('name') + '-' + name)}).save().then(function(music) {
+    $.getArtist(artistName).then(function(artist) {
+      if(artist) {
+        resolve(Music.collection().query({where: ['artist_id', artist.id], andWhere: ['title', 'like', '%' + query + '%']}).fetch());
+      } else {
+        resolve(Music.collection());
+      }
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
+exports.addMusic = function(artist, title) {
+  return new Promise(function(resolve, reject) {
+    Music.forge({artist_id: artist.id, title: title, slug: slug.slugify(artist.get('name') + '-' + title)}).save().then(function(music) {
       resolve(music);
-      lastfm.getMusicInfos(artist.get('name'), name).then(function(musicInfos) {
+      lastfm.getMusicInfos(artist.get('name'), title).then(function(musicInfos) {
+        music.set('title', musicInfos.title);
         music.set('small_thumbnail', musicInfos.thumbnails.small);
         music.set('medium_thumbnail', musicInfos.thumbnails.medium);
         music.set('large_thumbnail', musicInfos.thumbnails.large);
         music.save();
       }).catch(function(err) {
-        console.log('Error fetching ' + artist.get('name') + ' - ' + name + ' infos from last.fm api: ', err);
+        console.log('Error fetching ' + artist.get('name') + ' - ' + title + ' infos from last.fm api: ', err);
       });
     });
 
   });
 }
 
-exports.discoverMusic = function(artist, name) {
+exports.discoverMusic = function(artist, title) {
   return new Promise(function(resolve, reject) {
-    $.getMusic(artist, name).then(function(music) {
+    $.getMusic(artist, title).then(function(music) {
       if(music) {
         resolve(music);
       } else {
-        $.addMusic(artist, name).then(function(music) {
+        $.addMusic(artist, title).then(function(music) {
           resolve(music);
         });
       }
@@ -442,4 +452,15 @@ exports.discoverMusic = function(artist, name) {
       reject(err);
     });
   });
+}
+
+exports.artistsOfCovers = function(covers) {
+  var artistsOfCovers = Artist.collection();
+  covers.forEach(function(cover) {
+    var artist = cover.related('artist');
+    if(!artistsOfCovers.contains(artist)) {
+      artistsOfCovers.add(artist);
+    }
+  });
+  return artistsOfCovers;
 }

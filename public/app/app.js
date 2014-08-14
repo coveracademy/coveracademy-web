@@ -11,7 +11,8 @@ angular
     'ngProgress'
   ]
 )
-.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+.config(function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider) {
+  $uiViewScrollProvider.useAnchorScroll();
   // $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/');
   $stateProvider
@@ -31,9 +32,9 @@ angular
       templateUrl: '/app/partials/add-cover.html',
       controller: 'addCoverController',
       resolve: {
-        coverService: 'coverService',
-        dataResponse: function(coverService) {
-          return coverService.allMusicGenres();
+        viewService: 'viewService',
+        dataResponse: function(viewService) {
+          return viewService.addCoverView();
         }
       }
     })
@@ -111,6 +112,17 @@ angular
         viewService: 'viewService',
         dataResponse: function($stateParams, viewService) {
           return viewService.musicGenreRankView($stateParams.genre, $stateParams.rank);
+        }
+      }
+    })
+    .state('search', {
+      url: '/search?q',
+      templateUrl: '/app/partials/search.html',
+      controller: 'searchController',
+      resolve: {
+        viewService: 'viewService',
+        dataResponse: function($stateParams, viewService) {
+          return viewService.searchView($stateParams.q);
         }
       }
     })

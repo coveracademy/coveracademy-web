@@ -1,83 +1,72 @@
-<section>
-  <carousel interval="carouselSlidesInterval">
-    <slide ng-repeat="carouselSlide in carouselSlides" active="carouselSlide.active">
-      <div class="row text-center">
-        <div ng-repeat="musicGenre in carouselSlide.item" class="col-md-2 cover-snippet">
-          <div class="thumbnail">
-            <div class="cover">
-              <a ui-sref="musicGenre({genre: musicGenre.slug})">
-                <img ng-src="/img/genres/{{ musicGenre.image }}">
-              </a>
-              <div class="legend">
-                <span class="label label-black">{{ musicGenre.name }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+<carousel interval="carouselSlidesInterval">
+  <slide ng-repeat="carouselSlide in carouselSlides" active="carouselSlide.active">
+    <div class="row text-center">
+      <div ng-repeat="musicGenre in carouselSlide.item" class="col-md-2">
+        <cover image="/img/genres/{{ musicGenre.image }}" link="musicGenre({genre: '{{ musicGenre.slug }}'})" legend="{{ musicGenre.name }}" height="115"></cover>
       </div>
-    </slide>
-  </carousel>
-  <div class="row">
-    <div class="col-md-7">
-      <div class="thumbnail">
-        <div class="embed-container">
-          <embed-video ng-href="{{ topCover.url }}"></embed-video>
+    </div>
+  </slide>
+</carousel>
+<div class="row">
+  <div class="col-md-7">
+    <div class="thumbnail">
+      <div class="embed-container">
+        <embed-video ng-href="{{ topCover.url }}"></embed-video>
+      </div>
+      <div class="caption">
+        <a ui-sref="cover({id: topCover.id})">
+          {{ topCover.artist.name }} - {{ topCover.music.title }}
+        </a>
+        <div>
+          By {{ topCover.video_author }}
         </div>
-        <div class="caption">
-          <a ui-sref="cover({id: topCover.id})">
-            {{ topCover.artist.name }} - {{ topCover.music.name }}
-          </a>
-          <div>
-            By {{ topCover.video_author }}
-          </div>
-          <div class="video-date">
-            <span am-time-ago="topCover.video_date"></span>
-          </div>
+        <div class="video-date">
+          <span am-time-ago="topCover.video_date"></span>
         </div>
       </div>
     </div>
-    <div class="col-md-5">
+  </div>
+  <div class="col-md-5">
 
+  </div>
+</div>
+<div class="page-title">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="title">
+        Best covers from this Week
+      </h3>
+    </div>
+    <div class="col-md-4 align-right">
+      <h3 class="title">
+        <small>
+          <a ui-sref="coversRank({rank: 'best'})" autoscroll="false">
+            More covers
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </small>
+      </h3>
     </div>
   </div>
-  <div class="page-title">
-    <div class="row">
-      <div class="col-md-8">
-        <h3 class="title">
-          Best covers from this Week
-        </h3>
-      </div>
-      <div class="col-md-4 align-right">
-        <h3 class="title">
-          <small>
-            <a ui-sref="coversRank({rank: 'best'})" autoscroll="false">
-              More covers
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-          </small>
-        </h3>
-      </div>
+</div>
+<cover-songs ng-model="bestCovers"></cover-songs>
+<div class="page-title">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="title">
+        Latest covers from this Week
+      </h3>
+    </div>
+    <div class="col-md-4 align-right">
+      <h3 class="title">
+        <small>
+          <a ui-sref="coversRank({rank: 'latest'})" autoscroll="false">
+            More covers
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </small>
+      </h3>
     </div>
   </div>
-  <cover-list ng-model="bestCovers"></cover-list>
-  <div class="page-title">
-    <div class="row">
-      <div class="col-md-8">
-        <h3 class="title">
-          Latest covers from this Week
-        </h3>
-      </div>
-      <div class="col-md-4 align-right">
-        <h3 class="title">
-          <small>
-            <a ui-sref="coversRank({rank: 'latest'})" autoscroll="false">
-              More covers
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-          </small>
-        </h3>
-      </div>
-    </div>
-  </div>
-  <cover-list ng-model="latestCovers"></cover-list>
-</section>
+</div>
+<cover-songs ng-model="latestCovers"></cover-songs>

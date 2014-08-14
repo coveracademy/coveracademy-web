@@ -1,12 +1,31 @@
 angular
 .module('coverChallengeApp')
-.controller('headerController', ['$scope', '$window', 'authenticationService', function($scope, $window, authenticationService) {
-  $scope.user = authenticationService.getUser();
-  $scope.authenticate = function() {
-    authenticationService.ensureAuth();
+.controller('headerController', ['$scope', '$state', 'coverService', function($scope, $state, coverService) {
+  $scope.searchMusicOrArtist = function(query) {
+    return coverService.searchMusicOrArtist(query).then(function(response) {
+      var queryResult = [];
+      response.data.musics.forEach(function(music) {
+        music.itemType = 'music';
+        music.displayName = music.title + ' (' + music.artist.name + ')';
+        queryResult.push(music);
+      });
+      response.data.artists.forEach(function(artist) {
+        artist.itemType = 'artist';
+        artist.displayName = artist.name;
+        queryResult.push(artist);
+      });
+      return queryResult;
+    });
   };
-  $scope.isSectionActive = function(section) {
-    return true === $scope[section];
+  $scope.selectItem = function(item) {
+    if(item.itemType === 'music') {
+      $state.go('music', {music : item.slug});
+    } else {
+      $state.go('artist', {artist : item.slug});
+    }
+  };
+  $scope.submitSearch = function() {
+    $state.go('search', {q: $scope.searchQuery});
   };
 }])
 .controller('alertController', ['$scope', 'alertService', function($scope, alertService) {

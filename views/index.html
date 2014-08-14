@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+  <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="fragment" content="!">
@@ -30,8 +30,6 @@
 
   <script src="/lib/jquery/dist/jquery.min.js"></script>
   <script src="/lib/angular/angular.min.js"></script>
-  <% block stylesheets %>
-  <% endblock %>
 </head>
 <body ng-app="coverChallengeApp" ng-cloak class="ng-cloak">
   <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -42,18 +40,17 @@
         </a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li ng-class="{'active': isSectionActive('howItWorksActive')}">
-            <a href="/como-funciona">Como funciona</a>
-          </li>
-          <li ng-class="{'active': isSectionActive('contactActive')}">
-            <a href="/contato">Contato</a>
-          </li>
-        </ul>
-        <form class="navbar-form navbar-left">
-          <input type="search" ng-model="selectedItem" typeahead="item.displayName for items in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for music or artist" class="form-control" style="width: 300px;">
+        <form name="searchForm" class="navbar-form navbar-left" novalidate>
+          <div class="input-group">
+            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for music or artist" class="form-control" style="width: 400px;" required>
+            <span class="input-group-btn">
+              <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
         </form>
-        <ul ng-show="user" class="nav navbar-nav navbar-right">
+        <!-- <ul ng-show="user" class="nav navbar-nav navbar-right">
           <li>
             <button class="btn btn-primary btn-lg" ui-sref="addCover">
               Add a new Cover Video
@@ -71,12 +68,12 @@
         </ul>
         <form ng-show="!user" class="navbar-form navbar-right">
           <button ng-click="authenticate()" class="btn btn-success">Acessar</button>
-        </form>
+        </form> -->
       </div>
     </div>
   </header>
 
-  <main class="content container" ui-view>
+  <main class="content container" ui-view autoscroll="true">
   </main>
 
   <footer>

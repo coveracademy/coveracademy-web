@@ -1,45 +1,43 @@
-<section>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="media">
-        <div class="pull-left">
-          <img class="medium-thumbnail" ng-src="{{ artist.small_thumbnail }}">
-        </div>
-        <div class="media-body">
-          <h1 class="media-heading">{{ artist.name }}</h1>
-          <p class="font-biggest">
-            <span class="label label-success">{{ artist.musicGenre.name }}</span>
-            <span class="label label-info">{{ totalMusicsByArtist }} Musics</span>
-          </p>
-          <div class="pull-right">
-            <div class="btn-group">
-              <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'best'})" ng-class="{'active': isSorted('best')}">
-                Best Covers
-              </a>
-              <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'latest'})" ng-class="{'active': isSorted('latest')}">
-                Latest Covers
-              </a>
-            </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="media">
+      <div ng-if="artist.small_thumbnail" class="pull-left">
+        <img class="medium-thumbnail" ng-src="{{ artist.small_thumbnail }}">
+      </div>
+      <div class="media-body">
+        <h1 class="media-heading">{{ artist.name }}</h1>
+        <p class="font-biggest">
+          <span class="label label-success">{{ artist.musicGenre.name }}</span>
+          <span class="label label-info">{{ totalMusicsByArtist }} musics</span>
+        </p>
+        <div class="pull-right">
+          <div class="btn-group">
+            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'best'})" ng-class="{'active': isSorted('best')}">
+              Best Covers
+            </a>
+            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'latest'})" ng-class="{'active': isSorted('latest')}">
+              Latest Covers
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="page-section">
-    <div class="panel panel-default" ng-repeat="musicByArtist in musicsByArtist">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a ui-sref="music({music: musicByArtist.slug})">
-            <img class="small-thumbnail" ng-if="musicByArtist.small_thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
-          </a>
-          <a class="default-link" ui-sref="music({music: musicByArtist.slug})">
-            {{ musicByArtist.name }}
-          </a>
-        </h3>
-      </div>
-      <div class="panel-body">
-        <cover-list ng-model="coversOfMusics[musicByArtist.id]" thumb-size="small"></cover-list>
-      </div>
+</div>
+<div class="page-section">
+  <div class="panel panel-default" ng-repeat="musicByArtist in musicsByArtist">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <a ng-if="musicByArtist.small_thumbnail" ui-sref="music({music: musicByArtist.slug})">
+          <img class="small-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
+        </a>
+        <a class="default-link" ui-sref="music({music: musicByArtist.slug})">
+          {{ musicByArtist.title }}
+        </a>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <cover-songs ng-model="coversOfMusics[musicByArtist.id]" thumb-size="small"></cover-songs>
     </div>
   </div>
-</section>
+</div>

@@ -10,17 +10,17 @@ angular
     }
   };
 })
-.directive('coverList', function() {
+.directive('coverSongs', function() {
   return {
     restrict: 'E',
     require: 'ngModel',
     transclude: true,
     scope: {
-      thumbSize: '@thumbSize',
+      thumbSize: '@',
       covers: '=ngModel'
     },
-    templateUrl: 'app/partials/widgets/cover-list.html',
-    link: function(scope, element, attrs, crtl) {
+    templateUrl: 'app/partials/widgets/cover-songs.html',
+    link: function(scope, element, attrs, ctrl) {
       if(!scope.thumbSize) {
         scope.thumbSize = 'normal';
       }
@@ -33,5 +33,18 @@ angular
         scope.fontSizeCss = 'font-small';
       }
     }
+  };
+})
+.directive('cover', function() {
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      link: '@',
+      legend: '@',
+      image: '@',
+      height: '@'
+    },
+    templateUrl: 'app/partials/widgets/cover.html'
   };
 });

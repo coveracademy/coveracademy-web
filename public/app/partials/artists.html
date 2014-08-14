@@ -7,16 +7,6 @@
 </div>
 <div ng-repeat="row in artists | partition: 4" class="row text-center">
   <div ng-repeat="artist in row" class="col-md-3">
-    <div class="thumbnail">
-      <div class="cover">
-        <a ui-sref="artist({artist: artist.slug})">
-          <span style="background-image: url({{ artist.medium_thumbnail }}); display: block; width: 252px; height: 252px; background-size: cover;">
-            <div class="caption">
-              <span class="label label-black">{{ artist.name }}</span>
-            </div>
-          </span>
-        </a>
-      </div>
-    </div>
+    <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="180"></cover>
   </div>
 </div>

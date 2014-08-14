@@ -40,7 +40,7 @@ create table artist (
 
 create table music (
   id                int(11) not null auto_increment,
-  name              varchar(255) not null,
+  title             varchar(255) not null,
   slug              varchar(255) not null,
   artist_id         int(11) not null,
   small_thumbnail   varchar(255) default null,

@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 class="align-center">{{ totalResults }} results for "{{ searchQuery }}"</h1>
+  </div>
+</div>
+<div class="row" ng-repeat="artist in artists">
+  <div class="col-md-12">
+    <div class="page-title">
+      <h3>
+        <a ng-if="artist.small_thumbnail" ui-sref="artist({artist: artist.slug})">
+          <img class="small-thumbnail" ng-src="{{ artist.small_thumbnail }}">
+        </a>
+        <a ui-sref="artist({artist: artist.slug})">
+          {{ artist.name }}
+        </a>
+      </h3>
+    </div>
+    <cover-songs ng-model="coversByArtists[artist.id]" thumb-size="small"></cover-songs>
+  </div>
+</div>
+<div class="row" ng-repeat="music in musics">
+  <div class="col-md-12">
+    <div class="page-title">
+      <h3>
+        <a ng-if="music.small_thumbnail" ui-sref="music({music: music.slug})">
+          <img class="small-thumbnail" ng-src="{{ music.small_thumbnail }}">
+        </a>
+        <a ui-sref="music({music: music.slug})">{{ music.title }}</a>
+        by
+        <a ui-sref="artist({artist: music.artist.slug})">{{ music.artist.name }}</a>
+      </h3>
+    </div>
+    <cover-songs ng-model="coversOfMusics[music.id]" thumb-size="small"></cover-songs>
+  </div>
+</div>
