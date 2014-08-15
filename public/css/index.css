@@ -291,20 +291,27 @@ input.big {
 }
 
 .carousel-genres {
-  height: 115px;
+  height: 125px;
+  margin-bottom: 10px;
 }
 
 .carousel-genres .carousel-inner {
-  height: 115px;
+  height: 125px;
 }
 
 .carousel-genres .carousel-inner .item {
-  height: 115px;
+  height: 125px;
 }
 
-/*.carousel-genres .carousel-control {
+.carousel-genres .carousel-control {
   width: 0%;
-}*/
+  color: #ffc200;
+  opacity: 0.8;
+}
+
+.carousel-genres .carousel-control:hover, .carousel-genres .carousel-control:focus {
+  color: #f30;
+}
 
 /* Social buttons START */
 .btn-social {position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn-social :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}

@@ -3,7 +3,6 @@ angular
   [
     'ui.router',
     'ui.bootstrap',
-    'ngAnimate',
     'angularMoment',
     'infinite-scroll',
     'nya.bootstrap.select',
@@ -126,10 +125,17 @@ angular
         }
       }
     })
-    .state('contact', {
-      url: '/contact',
-      templateUrl: '/app/partials/contact.html',
-      controller: 'contactController'
-    })
-    .state('404', {templateUrl: '/app/partials/errors/404.html'});
-});
+    .state('404', {
+      url: '/404',
+      templateUrl: '/app/partials/errors/404.html'
+    });
+})
+.run(['$rootScope', '$state', function ($rootScope, $state) {
+  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+     if(error.status === 404) {
+      $state.go("404", null, {location: false});
+    } else if(error.status === 500) {
+      $state.go("500", null, {location: false});
+    }
+  });
+}]);

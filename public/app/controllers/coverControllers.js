@@ -5,7 +5,7 @@ angular
   $scope.bestCovers = dataResponse.data.bestCovers;
   $scope.topCover = dataResponse.data.topCover;
   $scope.musicGenres = dataResponse.data.musicGenres;
-  $scope.carouselSlidesInterval = 5000;
+  $scope.carouselSlidesInterval = 10000;
   $scope.carouselSlides = $filter('partition')($scope.musicGenres, 6);
   for(index in $scope.carouselSlides) {
     $scope.carouselSlides[index] = {item: $scope.carouselSlides[index], active: false};

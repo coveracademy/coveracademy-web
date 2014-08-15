@@ -12,6 +12,10 @@ module.exports = function(router, app) {
   var numberOfCoversOfMusics = 12;
   var artistsInList = 60;
 
+  function validRankType(rank) {
+    return rank === 'best' || rank === 'latest';
+  }
+
   router.get('/index', function(req, res, next) {
     Promise
     .all([coverService.topCover(), coverService.bestCovers(weekPeriod, firstPage, numberOfCoversInSummarizedList), coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInSummarizedList), coverService.allMusicGenres()])
@@ -36,10 +40,9 @@ module.exports = function(router, app) {
     var id = req.param('id');
     coverService.getCover(id).then(function(cover) {
       if(!cover) {
-        res.json(404, {});
+        res.send(404);
       } else {
-        Promise
-        .all([coverService.bestCoversOfMusic(cover.related('music'), firstPage, numberOfCoversInSummarizedList), coverService.bestCoversByArtist(cover.related('artist'), firstPage, numberOfCoversInSummarizedList)])
+        Promise.all([coverService.bestCoversOfMusic(cover.related('music'), firstPage, numberOfCoversInSummarizedList), coverService.bestCoversByArtist(cover.related('artist'), firstPage, numberOfCoversInSummarizedList)])
         .spread(function(bestCoversOfMusic, bestCoversByArtist) {
           res.json({
             cover: cover,
@@ -55,21 +58,26 @@ module.exports = function(router, app) {
 
   router.get('/covers/:rank', function(req, res, next) {
     var rank = req.param('rank');
-    var promiseRank = rank === 'best' ? coverService.bestCovers(weekPeriod, firstPage, numberOfCoversInList) : coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInList);
-    Promise.all([promiseRank, coverService.totalCovers(weekPeriod)])
-    .spread(function(coversRank, totalCoversRank) {
-      this.coversRank = coversRank;
-      this.totalCoversRank = totalCoversRank;
-      return coverService.artistsOfCovers(coversRank);
-    }).then(function(artistsOfCovers) {
-      res.json({
-        coversRank: this.coversRank,
-        totalCoversRank: this.totalCoversRank,
-        artistsOfCovers: artistsOfCovers
-      });
-    }).catch(function(err) {
-      console.log(err);
-    }).bind({});
+    var page = req.param('page') || firstPage;
+    if(!validRankType(rank)) {
+      res.send(404);
+    } else {
+      var promiseRank = rank === 'best' ? coverService.bestCovers(weekPeriod, page, numberOfCoversInList) : coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInList);
+      Promise.all([promiseRank, coverService.totalCovers(weekPeriod)])
+      .spread(function(coversRank, totalCoversRank) {
+        this.coversRank = coversRank;
+        this.totalCoversRank = totalCoversRank;
+        return coverService.artistsOfCovers(coversRank);
+      }).then(function(artistsOfCovers) {
+        res.json({
+          coversRank: this.coversRank,
+          totalCoversRank: this.totalCoversRank,
+          artistsOfCovers: artistsOfCovers
+        });
+      }).catch(function(err) {
+        console.log(err);
+      }).bind({});
+    }
   });
 
   router.get('/artist/:slug', function(req, res, next) {
@@ -77,7 +85,7 @@ module.exports = function(router, app) {
     var sort = req.param('sort') || 'best';
     coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
       if(!artist) {
-
+        res.send(404);
       } else {
         Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, firstPage, numberOfMusicsByArtist)])
         .spread(function(totalMusicsByArtist, musicsByArtist) {
@@ -126,7 +134,7 @@ module.exports = function(router, app) {
     var sort = req.param('sort') || 'best';
     coverService.getMusicBySlug(slug).bind({}).then(function(music) {
       if(!music) {
-
+        res.send(404);
       } else {
         var coversOfMusic;
         if(sort === 'best') {
@@ -152,7 +160,7 @@ module.exports = function(router, app) {
     var slug = req.param('slug');
     coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
       if(!musicGenre) {
-
+        res.send(404);
       } else {
         Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, firstPage, numberOfArtistsInSummarizedList), coverService.bestCoversOfMusicGenre(musicGenre, firstPage, numberOfCoversInSummarizedList), coverService.latestCoversOfMusicGenre(musicGenre, firstPage, numberOfCoversInSummarizedList)]).bind({})
         .spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
@@ -172,23 +180,28 @@ module.exports = function(router, app) {
   router.get('/genre/:slug/:rank', function(req, res, next) {
     var slug = req.param('slug');
     var rank = req.param('rank');
-    coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
-      if(!musicGenre) {
-
-      } else {
-        var promiseRank = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
-        Promise.all([promiseRank(musicGenre, firstPage, numberOfCoversInList), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
-        .spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
-          res.json({
-            musicGenre: musicGenre,
-            coversOfMusicGenre: coversOfMusicGenre,
-            totalCoversOfMusicGenre: totalCoversOfMusicGenre
+    var page = req.param('page') || firstPage;
+    if(!validRankType(rank)) {
+      res.send(404);
+    } else {
+      coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
+        if(!musicGenre) {
+          res.send(404);
+        } else {
+          var promiseRank = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
+          Promise.all([promiseRank(musicGenre, page, numberOfCoversInList), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
+          .spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
+            res.json({
+              musicGenre: musicGenre,
+              coversOfMusicGenre: coversOfMusicGenre,
+              totalCoversOfMusicGenre: totalCoversOfMusicGenre
+            });
           });
-        });
-      }
-    }).catch(function(err) {
-      console.log(err);
-    });
+        }
+      }).catch(function(err) {
+        console.log(err);
+      });
+    }
   });
 
   router.get('/search', function(req, res, next) {

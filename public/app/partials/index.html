@@ -1,5 +1,5 @@
-<carousel interval="carouselSlidesInterval">
-  <slide ng-repeat="carouselSlide in carouselSlides" active="carouselSlide.active">
+<carousel class="carousel-genres" interval="carouselSlidesInterval">
+  <slide ng-repeat="carouselSlide in carouselSlides">
     <div class="row text-center">
       <div ng-repeat="musicGenre in carouselSlide.item" class="col-md-2">
         <cover image="/img/genres/{{ musicGenre.image }}" link="musicGenre({genre: '{{ musicGenre.slug }}'})" legend="{{ musicGenre.name }}" height="115"></cover>
