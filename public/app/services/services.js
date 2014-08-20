@@ -18,6 +18,15 @@ angular
 .service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, constants, authEvents, userService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
+  var changeUser = function(newUser) {
+    if(newUser) {
+      user = newUser;
+      $cookieStore.put(constants.USER_COOKIE, newUser);
+    } else {
+      user = null;
+      $cookieStore.remove(constants.USER_COOKIE);
+    }
+  };
   this.getUser = function() {
     return user;
   };
@@ -37,8 +46,7 @@ angular
     $window.authResult = function(result) {
       if(result === 'success') {
         userService.getAuthenticatedUser().then(function(response) {
-          user = response.data;
-          $cookieStore.put(constants.USER_COOKIE, user);
+          changeUser(response.data);
           deferred.resolve(user);
           $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
         }).catch(function(err) {
@@ -55,8 +63,7 @@ angular
   this.logout = function() {
     var deferred = $q.defer();
     userService.logout().then(function(response) {
-      user = null;
-      $cookieStore.remove(constants.USER_COOKIE);
+      changeUser(null);
       deferred.resolve();
       $rootScope.$broadcast(authEvents.LOGOUT_SUCCESS);
     }).catch(function(err) {

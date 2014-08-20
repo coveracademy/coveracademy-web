@@ -16,6 +16,9 @@ angular
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
     authenticationService.ensureAuth();
   });
+  $scope.$on(authEvents.HTTP_CONNECTION_REFUSED, function() {
+    alertService.addAlert('danger', 'Error connecting to the server, please contact us via the contact page');
+  });
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     alertService.addAlert('success', 'You are authenticated now');
   });
@@ -26,7 +29,7 @@ angular
     $state.transitionTo($state.current, $stateParams, {reload: true, inherit: false, notify: true});
   });
 }])
-.controller('loginController', ['$scope', '$state', 'authenticationService', 'alertService', function($scope, $state, authenticationService, alertService) {
+.controller('loginController', ['$rootScope', '$scope', '$state', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authenticationService, alertService) {
   $scope.login = function(provider) {
     authenticationService.login(provider).then(function(user) {
       $state.go('index');

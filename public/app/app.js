@@ -34,6 +34,32 @@ angular
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
   $stateProvider
+    // ADMIN STATES
+    .state('admin', {
+      url: '/admin',
+      templateUrl: '/app/partials/admin.html',
+      controller: 'adminController',
+      accessLevel: accessLevel.ADMIN,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.adminView();
+        }
+      }
+    })
+    .state('addCover', {
+      url: '/add-cover',
+      templateUrl: '/app/partials/add-cover.html',
+      controller: 'addCoverController',
+      accessLevel: accessLevel.ADMIN,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.addCoverView();
+        }
+      }
+    })
+    // PUBLIC STATES
     .state('index', {
       url: '/',
       templateUrl: '/app/partials/index.html',
@@ -51,18 +77,6 @@ angular
       templateUrl: '/app/partials/login.html',
       controller: 'loginController',
       accessLevel: accessLevel.ANONYMOUS
-    })
-    .state('addCover', {
-      url: '/add-cover',
-      templateUrl: '/app/partials/add-cover.html',
-      controller: 'addCoverController',
-      accessLevel: accessLevel.ADMIN,
-      resolve: {
-        viewService: 'viewService',
-        backendResponse: function(viewService) {
-          return viewService.addCoverView();
-        }
-      }
     })
     .state('cover', {
       url: '/cover/:id',
@@ -157,18 +171,6 @@ angular
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
           return viewService.searchView($stateParams.q);
-        }
-      }
-    })
-    .state('admin', {
-      url: '/admin',
-      templateUrl: '/app/partials/admin.html',
-      controller: 'adminController',
-      accessLevel: accessLevel.ADMIN,
-      resolve: {
-        viewService: 'viewService',
-        backendResponse: function(viewService) {
-          return viewService.adminView();
         }
       }
     });

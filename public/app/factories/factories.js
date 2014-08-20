@@ -4,6 +4,7 @@ angular
   return {
     responseError: function (response) {
       $rootScope.$broadcast({
+        0: authEvents.HTTP_CONNECTION_REFUSED,
         401: authEvents.HTTP_NOT_AUTHENTICATED,
         403: authEvents.NOT_AUTHORIZED,
         419: authEvents.SESSION_TIMEOUT,
