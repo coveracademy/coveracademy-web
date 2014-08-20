@@ -4,6 +4,7 @@ var express        = require('express'),
     logger         = require('morgan'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
+    session        = require('express-session'),
     passport       = require('passport'),
     engine         = require('./configs/engine'),
     routes         = require('./configs/routes'),
@@ -23,6 +24,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(session({secret: 'cindy-and-mia', saveUninitialized: true, resave: true}));
 app.use(express.static(app.get('public')));
 
 engine.configure(app);

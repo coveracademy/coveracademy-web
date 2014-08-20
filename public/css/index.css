@@ -292,7 +292,7 @@ input.big {
 
 .carousel-genres {
   height: 125px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .carousel-genres .carousel-inner {
@@ -311,6 +311,10 @@ input.big {
 
 .carousel-genres .carousel-control:hover, .carousel-genres .carousel-control:focus {
   color: #f30;
+}
+
+form.compacted .form-group {
+  margin-bottom: 5px;
 }
 
 /* Social buttons START */

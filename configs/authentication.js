@@ -16,8 +16,7 @@ exports.configure = function(app, passport) {
   });
 
   passport.deserializeUser(function(id, done) {
-    userService.findByID(id)
-    .then(function(user) {
+    userService.findByID(id).then(function(user) {
       if(user) {
         return user;
       }

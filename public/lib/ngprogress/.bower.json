@@ -17,6 +17,6 @@
     "commit": "ca2af86f8c56d363302bb352ae53639fa4dcd559"
   },
   "_source": "git://github.com/VictorBjelkholm/ngProgress.git",
-  "_target": "*",
+  "_target": "1.0.4",
   "_originalSource": "ngprogress"
 }

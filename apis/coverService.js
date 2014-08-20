@@ -1,16 +1,17 @@
-var Cover        = require('../models/models').Cover,
-    MusicGenre   = require('../models/models').MusicGenre,
-    Artist       = require('../models/models').Artist,
-    Music        = require('../models/models').Music,
-    Bookshelf    = require('../models/models').Bookshelf,
-    settings     = require('../configs/settings'),
-    slug         = require('../utils/slug'),
-    youtube      = require('./third/youtube'),
-    lastfm       = require('./third/lastfm'),
-    request      = require('request'),
-    Promise      = require('bluebird'),
-    _            = require('underscore'),
-    $            = this;
+var Cover          = require('../models/models').Cover,
+    PotentialCover = require('../models/models').PotentialCover,
+    MusicGenre     = require('../models/models').MusicGenre,
+    Artist         = require('../models/models').Artist,
+    Music          = require('../models/models').Music,
+    Bookshelf      = require('../models/models').Bookshelf,
+    settings       = require('../configs/settings'),
+    slug           = require('../utils/slug'),
+    youtube        = require('./third/youtube'),
+    lastfm         = require('./third/lastfm'),
+    request        = require('request'),
+    Promise        = require('bluebird'),
+    _              = require('underscore'),
+    $              = this;
 
 var defaultCoverRelated = ['artist', 'music'];
 var defaultArtistRelated = ['musicGenre'];
@@ -129,7 +130,7 @@ var listCovers = function(rankType, period, page, pageSize) {
 }
 
 exports.addCover = function(coverData) {
-  return $.discoverArtist(coverData.artist).bind({}).then(function(artist) {
+  return $.discoverArtist(coverData.artist).then(function(artist) {
     this.artist = artist;
     return $.discoverMusic(artist, coverData.music);
   }).then(function(music) {
@@ -146,7 +147,7 @@ exports.addCover = function(coverData) {
       video_id: videoInfos.id,
       video_likes: videoInfos.likes,
       video_views: videoInfos.views,
-      video_author: coverData.videoAuthor ? coverData.videoAuthor : videoInfos.author,
+      author: coverData.author ? coverData.author : videoInfos.author,
       video_date: videoInfos.date,
       small_thumbnail: videoInfos.thumbnails.small,
       medium_thumbnail: videoInfos.thumbnails.medium,
@@ -157,7 +158,7 @@ exports.addCover = function(coverData) {
     this.music.set('last_cover_date', new Date());
     this.music.save();
     return cover;
-  });
+  }).bind({});
 }
 
 exports.getCover = function(id) {
@@ -296,8 +297,9 @@ exports.latestArtists = function(page, pageSize) {
   page = parseInt(page);
   pageSize = parseInt(pageSize);
   return Artist.collection().query(function(qb) {
-    qb.orderBy('registration_date', 'desc');
-    qb.limit(pageSize).offset((page - 1) * pageSize);
+    qb.orderBy('registration_date', 'desc')
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
   }).fetch();
 }
 
@@ -311,7 +313,10 @@ exports.bestArtistsOfMusicGenre = function(musicGenre, period, page, pageSize) {
 
 exports.totalMusicsByArtist = function(artist) {
   return new Promise(function(resolve, reject) {
-    Bookshelf.knex('music').count('id as total_musics').where('artist_id', artist.id).then(function(rows) {
+    Bookshelf.knex('music')
+    .count('id as total_musics')
+    .where('artist_id', artist.id)
+    .then(function(rows) {
       resolve(rows[0].total_musics);
     }).catch(function(err) {
       reject(err);
@@ -321,9 +326,10 @@ exports.totalMusicsByArtist = function(artist) {
 
 exports.lastMusicsByArtist = function(artist, page, pageSize) {
   return Music.collection().query(function(qb) {
-    qb.where('artist_id', artist.id);
-    qb.orderBy('last_cover_date', 'desc');
-    qb.limit(pageSize).offset((page - 1) * pageSize);
+    qb.where('artist_id', artist.id)
+    .orderBy('last_cover_date', 'desc')
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
   }).fetch();
 }
 
@@ -374,8 +380,9 @@ exports.listArtists = function(musicGenre, page, pageSize) {
     if(musicGenre) {
       qb.where('music_genre_id', musicGenre.id);
     }
-    qb.orderBy('name', 'asc');
-    qb.limit(pageSize).offset((page - 1) * pageSize);
+    qb.orderBy('name', 'asc')
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
   }).fetch({withRelated: defaultArtistRelated});
 }
 
@@ -463,4 +470,32 @@ exports.artistsOfCovers = function(covers) {
     }
   });
   return artistsOfCovers;
+}
+
+exports.potentialCovers = function(page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
+  return PotentialCover.collection().query(function(qb) {
+    qb.orderBy('registration_date', 'desc')
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
+  }).fetch();
+}
+
+exports.acceptCover = function(potentialCover) {
+  return this.addCover({
+    artist: potentialCover.get('artist'),
+    music: potentialCover.get('music'),
+    author: potentialCover.get('author'),
+    url: potentialCover.get('url')
+  }).then(function(cover) {
+    this.cover = cover;
+    return potentialCover.destroy();
+  }).then(function(potentialCover) {
+    return this.cover;
+  }).bind({});
+}
+
+exports.refuseCover = function(potentialCover) {
+  return potentialCover.destroy();
 }

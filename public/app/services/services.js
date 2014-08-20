@@ -1,13 +1,7 @@
 angular
 .module('coverChallengeApp')
-.service('dataService', [function() {
-  this.mergeData = function(source, destiny) {
-    for (var attr in source) {
-      destiny[attr] = source[attr];
-    }
-  };
-}])
 .service('alertService', ['$timeout', function($timeout) {
+  var $ = this;
   var alerts = [];
   this.getAlerts = function() {
     return alerts;
@@ -15,16 +9,63 @@ angular
   this.addAlert = function(type, message) {
     var that = this;
     var alert = {type: type, msg: message};
-    this.getAlerts().push(alert);
+    $.getAlerts().push(alert);
     $timeout(function() {
-      that.getAlerts().splice(that.getAlerts().indexOf(alert), 1);
+      $.getAlerts().splice(that.getAlerts().indexOf(alert), 1);
     }, 5000);
   };
 }])
-.service('authenticationService', ['$modal', '$window', function($modal, $window) {
+.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, constants, authEvents, userService) {
   var $ = this;
-  var user = null;
-  var userAuthenticated = false;
+  var user = $cookieStore.get(constants.USER_COOKIE) || null;
+  this.getUser = function() {
+    return user;
+  };
+  this.isAuthenticated = function() {
+    return user ? true : false;
+  };
+  this.isAuthorized = function (accessLevel) {
+    var userRole = $.isAuthenticated() ? $.getUser().permission : 'PUBLIC';
+    return _.contains(accessLevel.roles, userRole);
+  };
+  this.login = function(provider) {
+    var deferred = $q.defer();
+    var left = ($window.screen.width / 2) - (780 / 2);
+    var top = ($window.screen.height / 2) - (410 / 2);
+    var win = $window.open(userService.loginEndpoint(provider), "SignIn", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=" + left + ",top=" + top);
+    win.focus();
+    $window.authResult = function(result) {
+      if(result === 'success') {
+        userService.getAuthenticatedUser().then(function(response) {
+          user = response.data;
+          $cookieStore.put(constants.USER_COOKIE, user);
+          deferred.resolve(user);
+          $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+        }).catch(function(err) {
+          deferred.reject(err);
+          $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+        });
+      } else if(result === 'fail') {
+        deferred.reject();
+        $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+      }
+    }
+    return deferred.promise;
+  };
+  this.logout = function() {
+    var deferred = $q.defer();
+    userService.logout().then(function(response) {
+      user = null;
+      $cookieStore.remove(constants.USER_COOKIE);
+      deferred.resolve();
+      $rootScope.$broadcast(authEvents.LOGOUT_SUCCESS);
+    }).catch(function(err) {
+      deferred.reject();
+      $rootScope.$broadcast(authEvents.LOGOUT_FAILED);
+    });
+    return deferred.promise;
+  };
+
   var modalOptions = {
     backdrop: true,
     keyboard: true,
@@ -35,37 +76,28 @@ angular
         $modalInstance.dismiss('cancel');
       };
       $scope.modalScope.auth = function(provider) {
-        var authWindow = $window.open('/auth/' + provider + '', '', '');
-        $window.authResult = function(result) {
-          if('success' === result) {
-            userAuthenticated = true;
-            $modalInstance.close($.isUserAuthenticated());
-          } else if('fail' === result) {
-            userAuthenticated = false;
-            $modalInstance.close($.isUserAuthenticated());
-          }
-        }
+        $.login(provider).then(function(user) {
+          $modalInstance.close($.isAuthenticated());
+        }).catch(function(err) {
+          $modalInstance.close($.isAuthenticated());
+        });
       };
     }
   };
-  this.getUser = function() {
-    return user;
-  };
-  this.isUserAuthenticated = function() {
-    return userAuthenticated;
-  };
   this.ensureAuth = function() {
-    if(!this.isUserAuthenticated()) {
+    var deferred = $q.defer();
+    if(!$.isAuthenticated()) {
       $modal.open(modalOptions).result.then(function(authenticated) {
         if(authenticated === true) {
-          $window.location.reload();
+          deferred.resolve(true);
         } else {
-          return false;
+          deferred.reject(false);
         }
       });
     } else {
-      return true;
+      deferred.resolve(true);
     }
+    return deferred.promise;
   };
 }])
 .service('modalService', ['$modal', function($modal) {
@@ -98,8 +130,14 @@ angular
   };
 }])
 .service('userService', ['$http', function($http) {
+  this.loginEndpoint = function(provider) {
+    return '/api/auth/' + provider;
+  };
+  this.logout = function() {
+    return $http.get('/api/auth/logout');
+  };
   this.getAuthenticatedUser = function() {
-    return $http.post('/ajax', {key: 'getAuthenticatedUser'});
+    return $http.get('/api/user/authenticated');
   };
   this.sendEmail = function(name, email, subject, message) {
     return $http.post('/ajax', {key: 'sendEmail', params: [name, email, subject, message]});
@@ -111,6 +149,9 @@ angular
   };
 }])
 .service('viewService', ['$http', function($http) {
+  this.adminView = function() {
+    return $http.get('/view/admin');
+  };
   this.indexView = function() {
     return $http.get('/view/index');
   };
@@ -143,14 +184,20 @@ angular
   };
 }])
 .service('coverService', ['$http', function($http) {
+  this.acceptCover = function(potentialCover) {
+    return $http.post('/api/cover/accept', {potentialCover: potentialCover});
+  };
+  this.refuseCover = function(potentialCover) {
+    return $http.post('/api/cover/refuse', {potentialCover: potentialCover});
+  };
   this.addCover = function(cover) {
     return $http.post('/api/cover', {cover: cover});
   };
-  this.latestCovers = function(period, page, pageSize) {
-    return $http.get('/api/cover/latest', {params: {period: period, page: page, pageSize: pageSize}});
+  this.latestCovers = function(page) {
+    return $http.get('/api/cover/latest', {params: {page: page}});
   };
-  this.bestCovers = function(period, page, pageSize) {
-    return $http.get('/api/cover/best', {params: {period: period, page: page, pageSize: pageSize}});
+  this.bestCovers = function(page) {
+    return $http.get('/api/cover/best', {params: {page: page}});
   };
   this.searchMusicOrArtist = function(query) {
     return $http.get('/api/search/musicOrArtist', {params: {query: query}});

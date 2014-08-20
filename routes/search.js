@@ -3,6 +3,7 @@ var coverService = require('../apis/coverService'),
 
 module.exports = function(router, app) {
 
+  // PUBLIC ROUTES
   router.get('/musicOrArtist', function(req, res, next) {
     var query = req.param('query');
     Promise.all([coverService.searchMusics(query), coverService.searchArtists(query)])
@@ -12,7 +13,8 @@ module.exports = function(router, app) {
         artists: artists
       });
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     })
   });
 
@@ -22,7 +24,8 @@ module.exports = function(router, app) {
       console.log(artists)
       res.json(artists);
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     });
   });
 
@@ -33,7 +36,8 @@ module.exports = function(router, app) {
       console.log(musics)
       res.json(musics);
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     });
   });
 

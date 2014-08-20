@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn btn-primary btn-lg" ui-sref="addCover">
+      Add a new cover video
+    </button>
+  </div>
+</div>
+<div class="row padding">
+  <div class="col-md-12">
+    <div ng-repeat="row in potentialCovers | partition: 3" class="row">
+      <div ng-repeat="potentialCover in row" class="col-md-4">
+        <div class="thumbnail">
+          <div class="embed-container">
+            <embed-video ng-href="{{ potentialCover.url }}"></embed-video>
+          </div>
+          <div class="caption">
+            <form class="form-horizontal compacted" role="form">
+              <div class="form-group">
+                <label for="artist-{{ potentialCover.id }}" class="col-md-2 control-label">Artist</label>
+                <div class="col-md-10">
+                  <input ng-model="potentialCover.artist" type="text" id="artist-{{ potentialCover.id }}" class="form-control" placeholder="The artist">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="music-{{ potentialCover.id }}" class="col-md-2 control-label">Music</label>
+                <div class="col-md-10">
+                  <input ng-model="potentialCover.music" type="text" id="music-{{ potentialCover.id }}" class="form-control"placeholder="The music title">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="author-{{ potentialCover.id }}" class="col-md-2 control-label">Author</label>
+                <div class="col-md-10">
+                  <input ng-model="potentialCover.author" type="text" id="author-{{ potentialCover.id }}" class="form-control" placeholder="The cover author">
+                </div>
+              </div>
+              <div class="align-right">
+                <button type="button" ng-click="acceptCover(potentialCover)" class="btn btn-success"><span class="glyphicon glyphicon-ok"/></button>
+                <button type="button" ng-click="refuseCover(potentialCover)" class="btn btn-danger"><span class="glyphicon glyphicon-remove"/></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

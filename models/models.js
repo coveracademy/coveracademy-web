@@ -50,9 +50,14 @@ var Cover = Bookshelf.Model.extend({
   }
 });
 
+var PotentialCover = Bookshelf.Model.extend({
+  tableName: 'potential_cover'
+});
+
 module.exports = {
   User: User,
   Cover: Cover,
+  PotentialCover: PotentialCover,
   MusicGenre: MusicGenre,
   Artist: Artist,
   Music: Music,

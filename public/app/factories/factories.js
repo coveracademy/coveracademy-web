@@ -1,0 +1,15 @@
+angular
+.module('coverChallengeApp')
+.factory('httpAuthInterceptor', ['$rootScope', '$q', 'authEvents', function ($rootScope, $q, authEvents) {
+  return {
+    responseError: function (response) {
+      $rootScope.$broadcast({
+        401: authEvents.HTTP_NOT_AUTHENTICATED,
+        403: authEvents.NOT_AUTHORIZED,
+        419: authEvents.SESSION_TIMEOUT,
+        440: authEvents.SESSION_TIMEOUT
+      }[response.status], response);
+      return $q.reject(response);
+    }
+  };
+}])

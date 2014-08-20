@@ -1,40 +1,47 @@
 var coverService = require('../apis/coverService'),
+    constants    = require('../apis/constants'),
+    isAdmin      = require('../utils/authorization').isAdmin,
     Promise      = require('bluebird');
 
 module.exports = function(router, app) {
-
-  var weekPeriod = 7;
-  var firstPage = 1;
-  var numberOfCoversInList = 20;
-  var numberOfCoversInSummarizedList = 8;
-  var numberOfArtistsInSummarizedList = 8;
-  var numberOfMusicsByArtist = 5;
-  var numberOfCoversOfMusics = 12;
-  var artistsInList = 60;
 
   function validRankType(rank) {
     return rank === 'best' || rank === 'latest';
   }
 
-  router.get('/index', function(req, res, next) {
-    Promise
-    .all([coverService.topCover(), coverService.bestCovers(weekPeriod, firstPage, numberOfCoversInSummarizedList), coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInSummarizedList), coverService.allMusicGenres()])
-    .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
-      res.json({topCover: topCover, bestCovers: bestCovers, latestCovers: latestCovers, musicGenres: musicGenres});
+  // ADMIN ROUTES
+  router.get('/admin', isAdmin, function(req, res, next) {
+    coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST).then(function(potentialCovers) {
+      res.json({potentialCovers: potentialCovers});
     }).catch(function(err) {
       console.log(err.stack);
+      res.send(500);
     });
   });
 
-  router.get('/addCover', function(req, res, next) {
+  router.get('/addCover', isAdmin, function(req, res, next) {
     coverService.allMusicGenres().then(function(allMusicGenres) {
       res.json({
         allMusicGenres: allMusicGenres
       });
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     })
   });
+
+  // PUBLIC ROUTES
+  router.get('/index', function(req, res, next) {
+    Promise
+    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.allMusicGenres()])
+    .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
+      res.json({topCover: topCover, bestCovers: bestCovers, latestCovers: latestCovers, musicGenres: musicGenres});
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
 
   router.get('/cover/:id', function(req, res, next) {
     var id = req.param('id');
@@ -42,7 +49,7 @@ module.exports = function(router, app) {
       if(!cover) {
         res.send(404);
       } else {
-        Promise.all([coverService.bestCoversOfMusic(cover.related('music'), firstPage, numberOfCoversInSummarizedList), coverService.bestCoversByArtist(cover.related('artist'), firstPage, numberOfCoversInSummarizedList)])
+        Promise.all([coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)])
         .spread(function(bestCoversOfMusic, bestCoversByArtist) {
           res.json({
             cover: cover,
@@ -52,18 +59,19 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     })
   });
 
   router.get('/covers/:rank', function(req, res, next) {
     var rank = req.param('rank');
-    var page = req.param('page') || firstPage;
+    var page = req.param('page') || constants.FIRST_PAGE;
     if(!validRankType(rank)) {
       res.send(404);
     } else {
-      var promiseRank = rank === 'best' ? coverService.bestCovers(weekPeriod, page, numberOfCoversInList) : coverService.latestCovers(weekPeriod, firstPage, numberOfCoversInList);
-      Promise.all([promiseRank, coverService.totalCovers(weekPeriod)])
+      var promiseRank = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
+      Promise.all([promiseRank, coverService.totalCovers(constants.WEEK_PERIOD)])
       .spread(function(coversRank, totalCoversRank) {
         this.coversRank = coversRank;
         this.totalCoversRank = totalCoversRank;
@@ -75,7 +83,8 @@ module.exports = function(router, app) {
           artistsOfCovers: artistsOfCovers
         });
       }).catch(function(err) {
-        console.log(err);
+        console.log(err.stack);
+        res.send(500);
       }).bind({});
     }
   });
@@ -87,7 +96,7 @@ module.exports = function(router, app) {
       if(!artist) {
         res.send(404);
       } else {
-        Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, firstPage, numberOfMusicsByArtist)])
+        Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)])
         .spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
@@ -97,7 +106,7 @@ module.exports = function(router, app) {
           } else {
             coversOfMusics = coverService.latestCoversOfMusics;
           }
-          return coversOfMusics(musicsByArtist, numberOfCoversOfMusics);
+          return coversOfMusics(musicsByArtist, constants.NUMBER_OF_COVERS_OF_MUSIC);
         }).then(function(coversOfMusics) {
           res.json({
             artist: artist,
@@ -108,7 +117,8 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     });
   });
 
@@ -116,7 +126,7 @@ module.exports = function(router, app) {
     var genre = req.param('genre');
     coverService.getMusicGenreBySlug(genre).then(function(musicGenre) {
       this.musicGenre = musicGenre;
-      return Promise.all([coverService.listArtists(musicGenre, firstPage, artistsInList), coverService.totalArtists(musicGenre)]);
+      return Promise.all([coverService.listArtists(musicGenre, constants.FIRST_PAGE, constants.ARTISTS_IN_LIST), coverService.totalArtists(musicGenre)]);
     }).spread(function(artists, totalArtists) {
       res.json({
         musicGenre: this.musicGenre,
@@ -124,7 +134,8 @@ module.exports = function(router, app) {
         totalArtists: totalArtists
       });
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     }).bind({});
   });
 
@@ -142,7 +153,7 @@ module.exports = function(router, app) {
         } else {
           coversOfMusic = coverService.latestCoversOfMusic;
         }
-        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusic(music, firstPage, numberOfCoversInList)])
+        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusic(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)])
         .spread(function(totalCoversOfMusic, coversOfMusic) {
           res.json({
             music: music,
@@ -152,7 +163,8 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     });
   });
 
@@ -162,7 +174,7 @@ module.exports = function(router, app) {
       if(!musicGenre) {
         res.send(404);
       } else {
-        Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, firstPage, numberOfArtistsInSummarizedList), coverService.bestCoversOfMusicGenre(musicGenre, firstPage, numberOfCoversInSummarizedList), coverService.latestCoversOfMusicGenre(musicGenre, firstPage, numberOfCoversInSummarizedList)]).bind({})
+        Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_SUMMARIZED_LIST), coverService.bestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)]).bind({})
         .spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
           res.json({
             musicGenre: musicGenre,
@@ -173,14 +185,15 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     });
   });
 
   router.get('/genre/:slug/:rank', function(req, res, next) {
     var slug = req.param('slug');
     var rank = req.param('rank');
-    var page = req.param('page') || firstPage;
+    var page = req.param('page') || constants.FIRST_PAGE;
     if(!validRankType(rank)) {
       res.send(404);
     } else {
@@ -189,7 +202,7 @@ module.exports = function(router, app) {
           res.send(404);
         } else {
           var promiseRank = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
-          Promise.all([promiseRank(musicGenre, page, numberOfCoversInList), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
+          Promise.all([promiseRank(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
           .spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
             res.json({
               musicGenre: musicGenre,
@@ -199,7 +212,8 @@ module.exports = function(router, app) {
           });
         }
       }).catch(function(err) {
-        console.log(err);
+        console.log(err.stack);
+        res.send(500);
       });
     }
   });
@@ -219,7 +233,8 @@ module.exports = function(router, app) {
         coversOfMusics: coversOfMusics
       });
     }).catch(function(err) {
-      console.log(err);
+      console.log(err.stack);
+      res.send(500);
     }).bind({});
   });
 
