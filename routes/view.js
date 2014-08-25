@@ -1,6 +1,7 @@
 var coverService = require('../apis/coverService'),
     constants    = require('../apis/constants'),
     isAdmin      = require('../utils/authorization').isAdmin,
+    math         = require('../utils/math'),
     Promise      = require('bluebird');
 
 module.exports = function(router, app) {
@@ -35,15 +36,28 @@ module.exports = function(router, app) {
     Promise
     .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.allMusicGenres()])
     .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
-      res.json({topCover: topCover, bestCovers: bestCovers, latestCovers: latestCovers, musicGenres: musicGenres});
+      this.topCover = topCover;
+      this.bestCovers = bestCovers;
+      this.latestCovers = latestCovers;
+      this.musicGenres = musicGenres;
+
+      var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
+      return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, 4);
+    }).then(function(bestArtistsOfMusicGenre) {
+      res.json({
+        topCover: this.topCover,
+        bestCovers: this.bestCovers,
+        latestCovers: this.latestCovers,
+        musicGenres: this.musicGenres,
+        bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
+      });
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);
-    });
+    }).bind();
   });
 
-
-  router.get('/cover/:id', function(req, res, next) {
+  router.get('/cover/:id/:slug', function(req, res, next) {
     var id = req.param('id');
     coverService.getCover(id).then(function(cover) {
       if(!cover) {
@@ -70,8 +84,8 @@ module.exports = function(router, app) {
     if(!validRankType(rank)) {
       res.send(404);
     } else {
-      var promiseRank = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
-      Promise.all([promiseRank, coverService.totalCovers(constants.WEEK_PERIOD)])
+      var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
+      Promise.all([coversPromise, coverService.totalCovers(constants.WEEK_PERIOD)])
       .spread(function(coversRank, totalCoversRank) {
         this.coversRank = coversRank;
         this.totalCoversRank = totalCoversRank;
@@ -91,7 +105,7 @@ module.exports = function(router, app) {
 
   router.get('/artist/:slug', function(req, res, next) {
     var slug = req.param('slug');
-    var sort = req.param('sort') || 'best';
+    var rank = req.param('rank') || 'best';
     coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
       if(!artist) {
         res.send(404);
@@ -101,7 +115,7 @@ module.exports = function(router, app) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
           var coversOfMusics;
-          if(sort === 'best') {
+          if(rank === 'best') {
             coversOfMusics = coverService.bestCoversOfMusics;
           } else {
             coversOfMusics = coverService.latestCoversOfMusics;
@@ -142,18 +156,13 @@ module.exports = function(router, app) {
 
   router.get('/music/:slug', function(req, res, next) {
     var slug = req.param('slug');
-    var sort = req.param('sort') || 'best';
+    var rank = req.param('rank') || 'best';
     coverService.getMusicBySlug(slug).bind({}).then(function(music) {
       if(!music) {
         res.send(404);
       } else {
-        var coversOfMusic;
-        if(sort === 'best') {
-          coversOfMusic = coverService.bestCoversOfMusic;
-        } else {
-          coversOfMusic = coverService.latestCoversOfMusic;
-        }
-        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusic(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)])
+        var coversOfMusicPromise = rank === 'best' ? coverService.bestCoversOfMusic : coverService.latestCoversOfMusic;
+        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)])
         .spread(function(totalCoversOfMusic, coversOfMusic) {
           res.json({
             music: music,
@@ -201,8 +210,8 @@ module.exports = function(router, app) {
         if(!musicGenre) {
           res.send(404);
         } else {
-          var promiseRank = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
-          Promise.all([promiseRank(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
+          var coversOfMusicGenrePromise = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
+          Promise.all([coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
           .spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
             res.json({
               musicGenre: musicGenre,

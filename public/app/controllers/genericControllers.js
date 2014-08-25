@@ -1,6 +1,9 @@
 angular
 .module('coverChallengeApp')
-.controller('applicationController', ['$scope', '$state', '$stateParams', 'authEvents', 'authenticationService', 'alertService', function($scope, $state, $stateParams, authEvents, authenticationService, alertService) {
+.controller('applicationController', ['$scope', '$state', '$stateParams', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($scope, $state, $stateParams, authEvents, authenticationService, alertService, seoService) {
+  $scope.pageTitle = seoService.getTitle;
+  $scope.metaDescription = seoService.getDescription;
+  $scope.metaKeywords = seoService.getKeywords;
   $scope.user = authenticationService.getUser;
   $scope.login = authenticationService.ensureAuth;
   $scope.logout = authenticationService.logout;
@@ -16,9 +19,6 @@ angular
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
     authenticationService.ensureAuth();
   });
-  $scope.$on(authEvents.HTTP_CONNECTION_REFUSED, function() {
-    alertService.addAlert('danger', 'Error connecting to the server, please contact us via the contact page');
-  });
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     alertService.addAlert('success', 'You are authenticated now');
   });
@@ -28,20 +28,20 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $state.transitionTo($state.current, $stateParams, {reload: true, inherit: false, notify: true});
   });
+  // $scope.$on(authEvents.HTTP_CONNECTION_REFUSED, function() {
+  //   alertService.addAlert('danger', 'Error connecting to the server, please contact us via the contact page');
+  // });
 }])
-.controller('loginController', ['$rootScope', '$scope', '$state', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authenticationService, alertService) {
+.controller('loginController', ['$rootScope', '$scope', '$state', 'authEvents', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authEvents, authenticationService, alertService) {
   $scope.login = function(provider) {
     authenticationService.login(provider).then(function(user) {
       $state.go('index');
-      $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
-    }).catch(function(err) {
-      $rootScope.$broadcast(authEvents.LOGIN_FAILED);
     });
   };
 }])
-.controller('headerController', ['$scope', '$state', 'authenticationService', 'coverService', function($scope, $state, authenticationService, coverService) {
+.controller('headerController', ['$scope', '$state', 'authenticationService', 'coverService', 'searchService', function($scope, $state, authenticationService, coverService, searchService) {
   $scope.searchMusicOrArtist = function(query) {
-    return coverService.searchMusicOrArtist(query).then(function(response) {
+    return searchService.searchMusicOrArtist(query).then(function(response) {
       var queryResult = [];
       response.data.musics.forEach(function(music) {
         music.itemType = 'music';

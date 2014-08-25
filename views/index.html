@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt" ng-app="coverChallengeApp" ng-controller="applicationController">
 <head>
   <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
+  <base href="/">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="fragment" content="!">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cover Challenge">
-  <meta name="keywords" content="cover challenge">
+  <meta name="description" content="{{ metaDescription() }}">
+  <meta name="keywords" content="{{ metaKeywords() }}">
   <meta name="author" content="Sandro Simas">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Cover Challenge">
-  <meta property="og:description" content="Cover Challenge">
-  <meta property="og:image" content="http://www.coverchallenge.com">
+  <meta property="og:title" content="{{ pageTitle() }}">
+  <meta property="og:description" content="{{ metaDescription() }}">
+  <meta property="og:image" content="{{ metaImage() }}">
 
-  <title>Cover Challenge</title>
+  <title>{{ pageTitle() }}</title>
 
   <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
   <link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- <link href="/lib/bootswatch/lumen/bootstrap.min.css" rel="stylesheet"> -->
+  <link href="/lib/bootswatch/lumen/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="/lib/bootswatch-paper/bootstrap.min.css" rel="stylesheet"> -->
   <link href="/lib/ngprogress/ngProgress.css" rel="stylesheet">
   <link href="/css/index.css" rel="stylesheet">
 
@@ -29,7 +31,7 @@
   <script src="/lib/angular/angular.min.js"></script>
   <script src="/lib/jquery/dist/jquery.min.js"></script>
 </head>
-<body ng-app="coverChallengeApp" ng-controller="applicationController" ng-cloak class="ng-cloak">
+<body ng-cloak class="ng-cloak">
   <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -40,7 +42,7 @@
       <div class="navbar-collapse collapse">
         <form name="searchForm" class="navbar-form navbar-left" novalidate>
           <div class="input-group">
-            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for music or artist" class="form-control" style="width: 400px;" required>
+            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for musics or artists" class="form-control" style="width: 400px;" required>
             <span class="input-group-btn">
               <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
                 <span class="glyphicon glyphicon-search"></span>
@@ -111,7 +113,6 @@
 
   <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
   <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
-  <script src="/lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 
   <script src="/app/app.js"></script>
   <script src="/app/filters/filters.js"></script>

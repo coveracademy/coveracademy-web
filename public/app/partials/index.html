@@ -14,7 +14,7 @@
         <embed-video ng-href="{{ topCover.url }}"></embed-video>
       </div>
       <div class="caption">
-        <a ui-sref="cover({id: topCover.id})">
+        <a ui-sref="cover({id: topCover.id, slug: topCover.slug})">
           {{ topCover.artist.name }} - {{ topCover.music.title }}
         </a>
         <div>
@@ -27,7 +27,11 @@
     </div>
   </div>
   <div class="col-md-5">
-
+    <div ng-repeat="row in bestArtistsOfMusicGenre | partition: 2" class="row">
+      <div ng-repeat="artist in row" class="col-md-6">
+        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
+      </div>
+    </div>
   </div>
 </div>
 <div class="page-title">

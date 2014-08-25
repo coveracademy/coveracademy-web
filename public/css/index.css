@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  padding-top: 50px;
+  padding-top: 64px;
   font-family: "Ubuntu", "sans-serif";
   /* Margin bottom by footer height */
   margin-bottom: 200px;
@@ -32,18 +32,18 @@ footer .container {
   padding-top: 20px;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 .row.padding {
   padding-top: 10px;
 }
 
 .navbar-logo {
   float: left;
-  height: 50px;
+  height: 64px;
   padding: 10px 5px 10px 0px;
-}
-
-a:hover {
-  cursor: pointer;
 }
 
 .content {
@@ -127,7 +127,7 @@ a:hover {
 .alerts {
   z-index: 999999;
   position: fixed;
-  top: 64px;
+  top: 80px;
   right: 10px;
 }
 
@@ -180,7 +180,7 @@ a:hover {
 }
 
 .user-logged {
-  line-height: 50px;
+  line-height: 64px;
   overflow: hidden;
 }
 

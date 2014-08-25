@@ -1,7 +1,7 @@
 var userService = require('../apis/userService');
 
 exports.isAdmin = function (req, res, next) {
-  if(req.isAuthenticated() && req.user.get('permission') === 'ADMIN') {
+  if(req.isAuthenticated() && req.user.get('permission') === 'admin') {
     next();
   } else {
     res.send(401);
@@ -9,7 +9,7 @@ exports.isAdmin = function (req, res, next) {
 }
 
 exports.isUser = function (req, res, next) {
-  if(req.isAuthenticated() && req.user.get('permission') === 'USER') {
+  if(req.isAuthenticated() && req.user.get('permission') === 'user') {
     next();
   } else {
     res.send(401);

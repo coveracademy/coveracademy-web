@@ -1,12 +1,18 @@
 <div class="row">
   <div class="col-md-12 align-center">
     <div class="page-title">
-      <h1 class="title">{{ cover.title }}</h1>
+      <h1 class="title">
+        {{ cover.author }}'s cover of "{{ cover.music.title }}" by {{ cover.artist.name }}
+      </h1>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
+  <div class="col-md-2">
+    <cover image="{{ cover.artist.medium_thumbnail }}" link="artist({artist: '{{ cover.artist.slug }}'})" legend="{{ cover.artist.name }}" height="126"></cover>
+    <cover image="{{ cover.music.medium_thumbnail }}" link="music({music: '{{ cover.artist.slug }}'})" legend="{{ cover.music.title }}" height="126"></cover>
+  </div>
+  <div class="col-md-8">
     <div class="row">
       <div class="col-md-12">
         <div class="embed-container">

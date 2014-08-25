@@ -1,6 +1,6 @@
 angular
 .module('coverChallengeApp')
-.factory('httpAuthInterceptor', ['$rootScope', '$q', 'authEvents', function ($rootScope, $q, authEvents) {
+.factory('authHttpInterceptor', ['$rootScope', '$q', 'authEvents', function($rootScope, $q, authEvents) {
   return {
     responseError: function (response) {
       $rootScope.$broadcast({
@@ -13,4 +13,47 @@ angular
       return $q.reject(response);
     }
   };
-}])
+}]);
+// .factory('ngProgressHttpInterceptor', ['$injector', function($injector) {
+//   var ngProgress = null;
+//   var working = false;
+//   var getNGProgress = function() {
+//     if(!ngProgress) {
+//       ngProgress = $injector.get('ngProgress');
+//       ngProgress.height('3px');
+//     }
+//     return ngProgress;
+//   };
+//   var completeProgress = function() {
+//     if (working === true) {
+//       var ngProgress = getNGProgress();
+//       ngProgress.complete();
+//       working = false;
+//     }
+//   };
+//   var isView = function(request) {
+//     return request.url.indexOf('.html') > 0;
+//   };
+//   return {
+//     request: function(request) {
+//       if (!isView(request) && working === false) {
+//         var ngProgress = getNGProgress();
+//         ngProgress.start();
+//         working = true;
+//       }
+//       return request;
+//     },
+//     requestError: function(request) {
+//       completeProgress();
+//       return request;
+//     },
+//     response: function(response) {
+//       completeProgress();
+//       return response;
+//     },
+//     responseError: function(response) {
+//       completeProgress();
+//       return response;
+//     }
+//   }
+// }])

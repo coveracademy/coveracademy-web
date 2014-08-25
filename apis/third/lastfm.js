@@ -10,6 +10,7 @@ var lastfm = new LastFmNode({
 });
 
 var genres = {
+  'Reggae': ['reggae'],
   'Acoustic': ['acoustic'],
   'Rock': ['.*rock', '.*metal', '.*core', '.*punk', 'indie', 'alternative', 'emo', 'grunge', 'screamo', 'progressive'],
   'Pop': ['.*pop'],
@@ -51,7 +52,6 @@ exports.getArtistInfos = function(artistName) {
       autocorrect: 1,
       handlers: {
         success: function(data) {
-          console.log(data)
           var artistInfos = {};
           artistInfos.name = data.name;
           artistInfos.thumbnails = {};
@@ -83,7 +83,6 @@ exports.getMusicInfos = function(artistName, musicTitle) {
       autocorrect: 1,
       handlers: {
         success: function(data) {
-          console.log(data)
           var musicInfos = {};
           musicInfos.title = data.name;
           musicInfos.artist = data.artist.name;

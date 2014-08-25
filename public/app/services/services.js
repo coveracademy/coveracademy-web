@@ -1,5 +1,51 @@
 angular
 .module('coverChallengeApp')
+.service('seoService', [function() {
+  var title = '';
+  var description = '';
+  var keywords = '';
+  var image = '';
+
+  this.getTitle = function() {
+    return title;
+  };
+  this.setTitle = function(newTitle) {
+    title = newTitle;
+  };
+  this.getDescription = function() {
+    return description;
+  };
+  this.setDescription = function(newDescription) {
+    description = newDescription;
+  };
+  this.getImage = function() {
+    return image;
+  };
+  this.setImage = function(newImage) {
+    image = newImage;
+  };
+  this.setKeywords = function(newKeywords) {
+    if(_.isString(newKeywords)) {
+      keywords = newKeywords;
+    } else if(_.isArray(newKeywords)) {
+      _.forEach(newKeywords, function(newKeyword) {
+        if (keywords === '') {
+          keywords += newKeyword;
+        } else {
+          keywords += ', ' + newKeyword;
+        }
+      });
+    }
+  };
+  this.getKeywords = function() {
+    return keywords;
+  };
+  this.reset = function() {
+    title = '';
+    description = '';
+    keywords = '';
+  };
+}])
 .service('alertService', ['$timeout', function($timeout) {
   var $ = this;
   var alerts = [];
@@ -34,8 +80,8 @@ angular
     return user ? true : false;
   };
   this.isAuthorized = function (accessLevel) {
-    var userRole = $.isAuthenticated() ? $.getUser().permission : 'PUBLIC';
-    return _.contains(accessLevel.roles, userRole);
+    var userRole = $.isAuthenticated() ? $.getUser().permission : 'public';
+    return !accessLevel || _.contains(accessLevel.roles, userRole);
   };
   this.login = function(provider) {
     var deferred = $q.defer();
@@ -76,6 +122,7 @@ angular
   var modalOptions = {
     backdrop: true,
     keyboard: true,
+    size: 'lg',
     templateUrl: '/app/partials/widgets/login-modal.html',
     controller: function($scope, $modalInstance) {
       $scope.modalScope = {};
@@ -165,23 +212,23 @@ angular
   this.addCoverView = function() {
     return $http.get('/view/addCover');
   };
-  this.coverView = function(id) {
-    return $http.get('/view/cover/' + id);
+  this.coverView = function(id, slug) {
+    return $http.get('/view/cover/' + id + '/' + slug);
   };
   this.coversRankView = function(rank) {
     return $http.get('/view/covers/' + rank);
   };
-  this.artistView = function(artist, sort) {
-    return $http.get('/view/artist/' + artist, {params: {sort: sort}});
+  this.artistView = function(artist, rank) {
+    return $http.get('/view/artist/' + artist, {params: {rank: rank}});
   };
   this.artistsView = function(genre) {
     return $http.get('/view/artists', {params: {genre: genre}});
   };
-  this.musicView = function(music, sort) {
-    return $http.get('/view/music/' + music, {params: {sort: sort}});
+  this.musicView = function(music, rank) {
+    return $http.get('/view/music/' + music, {params: {rank: rank}});
   };
-  this.musicGenreView = function(genre, sort) {
-    return $http.get('/view/genre/' + genre, {params: {sort: sort}});
+  this.musicGenreView = function(genre, rank) {
+    return $http.get('/view/genre/' + genre, {params: {rank: rank}});
   };
   this.musicGenreRankView = function(genre, rank) {
     return $http.get('/view/genre/' + genre + '/' + rank);
@@ -206,6 +253,25 @@ angular
   this.bestCovers = function(page) {
     return $http.get('/api/cover/best', {params: {page: page}});
   };
+  this.latestCoversOfMusic = function(music, page) {
+    return $http.get('/api/cover/latestOfMusic', {params: {music: music.id, page: page}});
+  };
+  this.bestCoversOfMusic = function(music, page) {
+    return $http.get('/api/cover/bestOfMusic', {params: {music: music.id, page: page}});
+  };
+  this.latestCoversOfMusicGenre = function(musicGenre, page) {
+    return $http.get('/api/cover/latestOfMusicGenre', {params: {musicGenre: musicGenre.id, page: page}});
+  };
+  this.bestCoversOfMusicGenre = function(musicGenre, page) {
+    return $http.get('/api/cover/bestOfMusicGenre', {params: {musicGenre: musicGenre.id, page: page}});
+  };
+}])
+.service('artistService', ['$http', function($http) {
+  this.listArtists = function(musicGenre, page) {
+    return $http.get('/api/artist', {params: {musicGenre: musicGenre.id, page: page}});
+  };
+}])
+.service('searchService', ['$http', function($http) {
   this.searchMusicOrArtist = function(query) {
     return $http.get('/api/search/musicOrArtist', {params: {query: query}});
   };

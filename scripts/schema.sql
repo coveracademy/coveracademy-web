@@ -1,8 +1,8 @@
 create table user (
   id                int(11) not null auto_increment,
   name              varchar(100) not null,
-  gender            enum('MALE', 'FEMALE') default 'MALE',
-  permission        enum('USER', 'MODERATOR', 'ADMIN') default 'USER',
+  gender            enum('male', 'female') default 'male',
+  permission        enum('user', 'admin') default 'user',
   email             varchar(255) default null,
   photo_filename    varchar(255) default null,
   facebook_account  varchar(255) default null,
@@ -21,7 +21,9 @@ create table music_genre (
   name  varchar(50) not null,
   slug  varchar(50) not null,
   image varchar(50) default null,
-  primary key (id)
+  primary key (id),
+  unique key `uq_music_genre_name` (`name`),
+  unique key `uq_music_genre_slug` (`slug`)
 ) engine = innodb default charset = utf8;
 
 create table artist (
@@ -34,6 +36,8 @@ create table artist (
   large_thumbnail   varchar(255) default null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
+  unique key `uq_artist_name` (`name`),
+  unique key `uq_artist_slug` (`slug`),
   key `fk_artist_music_genre_id` (`music_genre_id`),
   constraint `fk_artist_music_genre_id` foreign key (`music_genre_id`) references `music_genre` (`id`)
 ) engine = innodb default charset = utf8;
@@ -49,6 +53,7 @@ create table music (
   last_cover_date   timestamp null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
+  unique key `uq_music_slug` (`slug`),
   key `fk_music_artist_id` (`artist_id`),
   constraint `fk_music_artist_id` foreign key (`artist_id`) references `artist` (`id`)
 ) engine = innodb default charset = utf8;
@@ -58,12 +63,14 @@ create table cover (
   user_id           int(11) not null,
   artist_id         int(11) not null,
   music_id          int(11) not null,
+  slug              varchar(255) not null,
   url               varchar(255) not null,
   embed_url         varchar(255) not null,
-  title             varchar(255) not null,
-  author            varchar(255) default null,
+  author            varchar(255) not null,
+  score             decimal(17, 16) not null,
   duration          int(11) default null,
   video_id          varchar(255) default null,
+  video_title       varchar(255) default null,
   video_likes       int(11) default null,
   video_views       int(11) default null,
   video_date        timestamp null default null,
@@ -72,6 +79,7 @@ create table cover (
   large_thumbnail   varchar(255) default null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
+  unique key `uq_cover_url` (`url`),
   key `fk_cover_artist_id` (`artist_id`),
   key `fk_cover_music_id` (`music_id`),
   constraint `fk_cover_artist_id` foreign key (`artist_id`) references `artist` (`id`),
@@ -82,8 +90,9 @@ create table potential_cover (
   id                int(11) not null auto_increment,
   artist            varchar(255) not null,
   music             varchar(255) not null,
-  author            varchar(255) default null,
+  author            varchar(255) not null,
   url               varchar(255) not null,
   registration_date timestamp not null default current_timestamp,
-  primary key (id)
+  primary key (id),
+  unique key `uq_potential_cover_url` (`url`)
 ) engine = innodb default charset = utf8;

@@ -12,10 +12,10 @@
         </p>
         <div class="pull-right">
           <div class="btn-group">
-            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'best'})" ng-class="{'active': isSorted('best')}">
+            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
               Best Covers
             </a>
-            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, sort: 'latest'})" ng-class="{'active': isSorted('latest')}">
+            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
               Latest Covers
             </a>
           </div>

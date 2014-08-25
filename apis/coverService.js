@@ -8,6 +8,7 @@ var Cover          = require('../models/models').Cover,
     slug           = require('../utils/slug'),
     youtube        = require('./third/youtube'),
     lastfm         = require('./third/lastfm'),
+    wilsonScore    = require('decay').wilsonScore(),
     request        = require('request'),
     Promise        = require('bluebird'),
     _              = require('underscore'),
@@ -98,7 +99,7 @@ var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.video_views', 'desc');
   }).fetch({withRelated: defaultCoverRelated});
 }
 
@@ -142,9 +143,9 @@ exports.addCover = function(coverData) {
       music_id: this.music.id,
       url: videoInfos.url,
       embed_url: videoInfos.embedUrl,
-      title: videoInfos.title,
       duration: videoInfos.duration,
       video_id: videoInfos.id,
+      video_title: videoInfos.title,
       video_likes: videoInfos.likes,
       video_views: videoInfos.views,
       author: coverData.author ? coverData.author : videoInfos.author,
@@ -153,6 +154,7 @@ exports.addCover = function(coverData) {
       medium_thumbnail: videoInfos.thumbnails.medium,
       large_thumbnail: videoInfos.thumbnails.large
     });
+    cover.set('slug', this.music.get('slug') + '-' + slug.slugify(cover.get('author')));
     return cover.save();
   }).then(function(cover) {
     this.music.set('last_cover_date', new Date());
@@ -325,6 +327,8 @@ exports.totalMusicsByArtist = function(artist) {
 }
 
 exports.lastMusicsByArtist = function(artist, page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
   return Music.collection().query(function(qb) {
     qb.where('artist_id', artist.id)
     .orderBy('last_cover_date', 'desc')
@@ -376,6 +380,8 @@ exports.discoverArtist = function(name) {
 }
 
 exports.listArtists = function(musicGenre, page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
   return Artist.collection().query(function(qb) {
     if(musicGenre) {
       qb.where('music_genre_id', musicGenre.id);
@@ -429,7 +435,7 @@ exports.searchMusicsOfArtist = function(artistName, query) {
 
 exports.addMusic = function(artist, title) {
   return new Promise(function(resolve, reject) {
-    Music.forge({artist_id: artist.id, title: title, slug: slug.slugify(artist.get('name') + '-' + title)}).save().then(function(music) {
+    Music.forge({artist_id: artist.id, title: title, slug: slug.slugify(title) + '-' + slug.slugify(artist.get('name'))}).save().then(function(music) {
       resolve(music);
       lastfm.getMusicInfos(artist.get('name'), title).then(function(musicInfos) {
         music.set('title', musicInfos.title);
@@ -441,7 +447,6 @@ exports.addMusic = function(artist, title) {
         console.log('Error fetching ' + artist.get('name') + ' - ' + title + ' infos from last.fm api: ', err);
       });
     });
-
   });
 }
 

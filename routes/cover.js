@@ -1,6 +1,8 @@
 var coverService   = require('../apis/coverService'),
     constants      = require('../apis/constants'),
     isAdmin        = require('../utils/authorization').isAdmin,
+    Music          = require('../models/models').Music,
+    MusicGenre     = require('../models/models').MusicGenre,
     PotentialCover = require('../models/models').PotentialCover;
 
 module.exports = function(router, app) {
@@ -37,6 +39,15 @@ module.exports = function(router, app) {
   });
 
   // PUBLIC ROUTES
+  router.get('/top', function(req, res, next) {
+    coverService.topCover().then(function(cover) {
+      res.json(cover);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
   router.get('/latest', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
     coverService.latestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
@@ -53,16 +64,51 @@ module.exports = function(router, app) {
       res.json(covers);
     }).catch(function(err) {
       console.log(err.stack);
-      console.log(err);
+      res.send(500);
     });
   });
 
-  router.get('/top', function(req, res, next) {
-    coverService.topCover().then(function(cover) {
-      res.json(cover);
+  router.get('/latestOfMusic', function(req, res, next) {
+    var music = Music.forge({id: req.param('music')});
+    var page = req.param('page') || constants.FIRST_PAGE;
+    coverService.latestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+      res.json(covers);
     }).catch(function(err) {
       console.log(err.stack);
-      console.log(err);
+      res.send(500);
+    });
+  });
+
+  router.get('/bestOfMusic', function(req, res, next) {
+    var music = Music.forge({id: req.param('music')});
+    var page = req.param('page') || constants.FIRST_PAGE;
+    coverService.bestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+      res.json(covers);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
+  router.get('/latestOfMusicGenre', function(req, res, next) {
+    var musicGenre = MusicGenre.forge({id: req.param('musicGenre')});
+    var page = req.param('page') || constants.FIRST_PAGE;
+    coverService.latestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+      res.json(covers);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
+  router.get('/bestOfMusicGenre', function(req, res, next) {
+    var musicGenre = MusicGenre.forge({id: req.param('musicGenre')});
+    var page = req.param('page') || constants.FIRST_PAGE;
+    coverService.bestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+      res.json(covers);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
     });
   });
 
@@ -72,10 +118,9 @@ module.exports = function(router, app) {
       res.json(cover);
     }).catch(function(err) {
       console.log(err.stack);
-      console.log(err);
-    })
+      res.send(500);
+    });
   });
 
   app.use('/api/cover', router);
-
 }

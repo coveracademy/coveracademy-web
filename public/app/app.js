@@ -1,15 +1,12 @@
 angular
-.module('coverChallengeApp',
-  [
-    'ui.router',
-    'ui.bootstrap',
-    'angularMoment',
-    'infinite-scroll',
-    'videosharing-embed',
-    'ngProgress',
-    'ngCookies'
-  ]
-)
+.module('coverChallengeApp', [
+  'ui.router',
+  'ui.bootstrap',
+  'videosharing-embed',
+  'angularMoment',
+  'ngProgress',
+  'ngCookies'
+])
 .constant('constants', {
   USER_COOKIE: 'coverChallenge.user'
 })
@@ -19,18 +16,19 @@ angular
   LOGOUT_SUCCESS: 'logoutSuccess',
   LOGOUT_FAILED: 'logoutFailed',
   SESSION_TIMEOUT: 'sessionTimeout',
-  NOT_AUTHORIZED: 'not_authorized',
-  NOT_AUTHENTICATED: 'not_authenticated',
-  HTTP_NOT_AUTHENTICATED: 'http_not_authenticated'
+  NOT_AUTHORIZED: 'notAuthorized',
+  NOT_AUTHENTICATED: 'notAuthenticated',
+  HTTP_NOT_AUTHENTICATED: 'httpNotAuthenticated'
 })
 .constant('accessLevel', {
-  ADMIN: {name: 'ADMIN', roles: ['ADMIN']},
-  USER: {name: 'USER', roles: ['USER', 'ADMIN']},
-  PUBLIC: {name: 'PUBLIC', roles: ['PUBLIC', 'USER', 'ADMIN']},
-  ANONYMOUS: {name: 'ANONYMOUS', roles: ['PUBLIC']}
+  ADMIN: {name: 'admin', roles: ['admin']},
+  USER: {name: 'user', roles: ['user', 'admin']},
+  PUBLIC: {name: 'public', roles: ['public', 'user', 'admin']},
+  ANONYMOUS: {name: 'anonymous', roles: ['public']}
 })
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, accessLevel) {
-  // $locationProvider.html5Mode(true);
+  $httpProvider.interceptors.push('authHttpInterceptor');
+  $locationProvider.html5Mode(true);
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
   $stateProvider
@@ -79,14 +77,14 @@ angular
       accessLevel: accessLevel.ANONYMOUS
     })
     .state('cover', {
-      url: '/cover/:id',
+      url: '/cover/:id/:slug',
       templateUrl: '/app/partials/cover.html',
       controller: 'coverController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.coverView($stateParams.id);
+          return viewService.coverView($stateParams.id, $stateParams.slug);
         }
       }
     })
@@ -103,14 +101,14 @@ angular
       }
     })
     .state('artist', {
-      url: '/artist/:artist?sort',
+      url: '/artist/:artist?rank',
       templateUrl: '/app/partials/artist.html',
       controller: 'artistController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.artistView($stateParams.artist, $stateParams.sort);
+          return viewService.artistView($stateParams.artist, $stateParams.rank);
         }
       }
     })
@@ -127,14 +125,14 @@ angular
       }
     })
     .state('music', {
-      url: '/music/:music?sort',
+      url: '/music/:music?rank',
       templateUrl: '/app/partials/music.html',
       controller: 'musicController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.musicView($stateParams.music, $stateParams.sort);
+          return viewService.musicView($stateParams.music, $stateParams.rank);
         }
       }
     })
@@ -173,20 +171,16 @@ angular
           return viewService.searchView($stateParams.q);
         }
       }
+    })
+    // ERROR STATES
+    .state('404', {
+      templateUrl: '/app/partials/errors/404.html'
+    })
+    .state('500', {
+      templateUrl: '/app/partials/errors/500.html'
     });
-
-  $httpProvider.interceptors.push(['$injector', function ($injector) {
-    return $injector.get('httpAuthInterceptor');
-  }]);
 })
-.run(['$rootScope', '$state', 'authEvents', 'authenticationService', 'alertService', function($rootScope, $state, authEvents, authenticationService, alertService) {
-  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    if(error.status === 404) {
-      $state.go('404', null, {location: false});
-    } else if(error.status === 500) {
-      $state.go('500', null, {location: false});
-    }
-  });
+.run(['$rootScope', '$state', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($rootScope, $state, authEvents, authenticationService, alertService, seoService) {
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     if (!authenticationService.isAuthorized(toState.accessLevel)) {
       event.preventDefault();
@@ -196,5 +190,18 @@ angular
         $rootScope.$broadcast(authEvents.NOT_AUTHENTICATED);
       }
     }
+  });
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    seoService.reset();
+  });
+  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+    if(error.status === 404) {
+      $state.go('404', null, {location: false});
+    } else if(error.status === 500) {
+      $state.go('500', null, {location: false});
+    }
+  });
+  $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams){
+    $state.go('404', null, {location: false});
   });
 }]);
