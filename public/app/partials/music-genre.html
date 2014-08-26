@@ -19,7 +19,7 @@
       <h3 class="title">
         <small>
           <a ui-sref="artists({genre: musicGenre.slug})">
-            See all {{ musicGenre.name }} artists
+            {{ 'SEE_ALL_MUSIC_GENRE_ARTISTS' | translate: musicGenre }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>
@@ -36,14 +36,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        The best {{ musicGenre.name }} covers
+        {{ 'THE_BEST_MUSIC_GENRE_COVERS' | translate: musicGenre }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'best'})">
-            More covers
+            {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>
@@ -56,14 +56,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        The latest {{ musicGenre.name }} covers
+        {{ 'THE_LATEST_MUSIC_GENRE_COVERS' | translate: musicGenre }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'latest'})">
-            More covers
+            {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>

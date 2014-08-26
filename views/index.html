@@ -42,7 +42,7 @@
       <div class="navbar-collapse collapse">
         <form name="searchForm" class="navbar-form navbar-left" novalidate>
           <div class="input-group">
-            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="Search for musics or artists" class="form-control" style="width: 400px;" required>
+            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="{{ 'SEARCH_INPUT_PLACEHOLDER' | translate }}" class="form-control" style="width: 400px;" required>
             <span class="input-group-btn">
               <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
                 <span class="glyphicon glyphicon-search"></span>
@@ -62,7 +62,7 @@
           </li>
         </ul>
         <form ng-show="!user()" class="navbar-form navbar-right">
-          <button ng-click="login()" class="btn btn-success">Acessar</button>
+          <button ng-click="login()" class="btn btn-success">{{ 'SIGNIN_BUTTON' | translate }}</button>
         </form>
       </div>
     </div>
@@ -107,20 +107,23 @@
   <script src="/lib/underscore/underscore.js"></script>
 
   <script src="/lib/angular-cookies/angular-cookies.min.js"></script>
-  <script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script src="/lib/angular-moment/angular-moment.min.js"></script>
+  <script src="/lib/angular-translate/angular-translate.min.js"></script>
+  <script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
 
   <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
   <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
 
-  <script src="/app/app.js"></script>
-  <script src="/app/filters/filters.js"></script>
+  <script src="/app/providers/providers.js"></script>
   <script src="/app/factories/factories.js"></script>
   <script src="/app/services/services.js"></script>
   <script src="/app/directives/directives.js"></script>
+  <script src="/app/filters/filters.js"></script>
+  <script src="/app/controllers/controllers.js"></script>
   <script src="/app/controllers/genericControllers.js"></script>
   <script src="/app/controllers/coverControllers.js"></script>
+  <script src="/app/app.js"></script>
   <script src="/js/index.js"></script>
   <!-- <script type="text/javascript">
     var _sf_async_config = { uid: 56362, domain: 'coverchallenge.com', useCanonical: true };

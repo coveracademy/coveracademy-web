@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp')
+.module('coverChallengeApp.services', [])
 .service('seoService', [function() {
   var title = '';
   var description = '';

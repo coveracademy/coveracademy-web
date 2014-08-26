@@ -5,21 +5,21 @@
         <div class="col-md-8">
           <h1>
             <span ng-if="isRanked('best')">
-              Best covers from this Week
+              {{ 'BEST_COVERS_WEEK' | translate }}
             </span>
             <span ng-if="isRanked('latest')">
-              Latest covers from this Week
+              {{ 'LATEST_COVERS_WEEK' | translate }}
             </span>
           </h1>
         </div>
         <div class="col-md-4 align-right" style="padding-top: 36px;">
           <h4>
             <a ng-if="isRanked('best')" ui-sref="coversRank({rank: 'latest'})">
-              See the latest covers
+              {{ 'SEE_THE_LATEST_COVERS' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
             <a ng-if="isRanked('latest')" ui-sref="coversRank({rank: 'best'})">
-              See the best covers
+              {{ 'SEE_THE_BEST_COVERS' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </h4>

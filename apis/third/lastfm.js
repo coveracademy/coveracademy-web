@@ -10,10 +10,10 @@ var lastfm = new LastFmNode({
 });
 
 var genres = {
+  'Pop': ['.*pop'],
   'Reggae': ['reggae'],
   'Acoustic': ['acoustic'],
   'Rock': ['.*rock', '.*metal', '.*core', '.*punk', 'indie', 'alternative', 'emo', 'grunge', 'screamo', 'progressive'],
-  'Pop': ['.*pop'],
   'Rhythm and blues': ['rhythm and blues', 'rnb', 'r and b', 'r&b', '.*soul', 'disco'],
   'Country': ['.*country'],
   'Hip-hop': ['.*hip-hop', '.*hip hop', '.*hiphop'],

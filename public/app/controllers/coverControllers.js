@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp')
+.module('coverChallengeApp.controllers')
 .controller('adminController', ['$scope', 'backendResponse', 'seoService', 'alertService', 'coverService', function($scope, backendResponse, seoService, alertService, coverService) {
   seoService.setTitle('Administration console');
 

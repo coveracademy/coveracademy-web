@@ -7,6 +7,7 @@ var path = require('path'),
     _oembedApiKey = '1e9d27d76b02e60bc0afdf',
     _lastfmKey = '33623b4ad36e7ce8591b5247c2c51f72',
     _lastfmSecret = '06bb829a0c65fdd087fc0d89f1f7e9f3',
+    _googleOAuthClientID = '756915897629-p0rai91dim44ssj0cplrdanuiioo2v1i.apps.googleusercontent.com',
     _envs = {
       dev: {
         email: {
@@ -85,6 +86,7 @@ exports.viewsPath = _viewsPath;
 exports.oembedApiKey = _oembedApiKey;
 exports.lastfmKey = _lastfmKey;
 exports.lastfmSecret = _lastfmSecret;
+exports.googleOAuthClientID = _googleOAuthClientID;
 
 var env = _envs[_nodeEnv];
 for(property in env) {

@@ -23,7 +23,7 @@
     <div class="row padding">
       <div class="col-md-9 font-big">
         <p>
-          Cover by {{ cover.author }}
+          {{ 'COVER_BY' | translate }} {{ cover.author }}
         </p>
         <p>
           <span am-time-ago="cover.video_date"></span>
@@ -41,7 +41,7 @@
   <div class="col-md-12">
     <div class="page-title">
       <h3>
-        More covers of
+        {{ 'MORE_COVERS_OF' | translate }}
         <a ui-sref="music({music: cover.music.slug})">
           {{ cover.music.title }}
         </a>
@@ -54,7 +54,7 @@
   <div class="col-md-12">
     <div class="page-title">
       <h3>
-        More covers by
+        {{ 'MORE_COVERS_BY' | translate }}
         <a ui-sref="artist({artist: cover.artist.slug})">
           {{ cover.artist.name }}
         </a>

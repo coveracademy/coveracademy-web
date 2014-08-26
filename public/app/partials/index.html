@@ -38,14 +38,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        Best covers from this Week
+        {{ 'BEST_COVERS_WEEK' | translate }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="coversRank({rank: 'best'})" autoscroll="false">
-            More covers
+            {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>
@@ -58,14 +58,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        Latest covers from this Week
+        {{ 'LATEST_COVERS_WEEK' | translate }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="coversRank({rank: 'latest'})" autoscroll="false">
-            More covers
+            {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>

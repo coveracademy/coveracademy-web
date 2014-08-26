@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp')
+.module('coverChallengeApp.directives', [])
 .directive('coverSongs', function() {
   return {
     restrict: 'E',

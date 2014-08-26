@@ -13,10 +13,10 @@
         <div class="pull-right">
           <div class="btn-group">
             <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-              Best Covers
+              {{ 'BEST_COVERS' | translate }}
             </a>
             <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-              Latest Covers
+              {{ 'LATEST_COVERS' | translate }}
             </a>
           </div>
         </div>

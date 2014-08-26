@@ -6,7 +6,7 @@
       </div>
       <div class="media-body">
         <h1 class="media-heading">
-          {{ music.title }} by
+          {{ music.title }} {{ 'BY_LOWERCASE' | translate }}
           <a ui-sref="artist({artist: music.artist.slug})">{{ music.artist.name }}</a>
         </h1>
         <p class="font-biggest">
@@ -15,10 +15,10 @@
         <div class="pull-right">
           <div class="btn-group">
             <a class="btn btn-default" ui-sref="music({music: music.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-              Best Covers
+              {{ 'BEST_COVERS' | translate }}
             </a>
             <a class="btn btn-default" ui-sref="music({music: music.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-              Latest Covers
+              {{ 'LATEST_COVERS' | translate }}
             </a>
           </div>
         </div>

@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp')
+.module('coverChallengeApp.factories', [])
 .factory('authHttpInterceptor', ['$rootScope', '$q', 'authEvents', function($rootScope, $q, authEvents) {
   return {
     responseError: function (response) {

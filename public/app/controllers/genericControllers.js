@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp')
+.module('coverChallengeApp.controllers')
 .controller('applicationController', ['$scope', '$state', '$stateParams', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($scope, $state, $stateParams, authEvents, authenticationService, alertService, seoService) {
   $scope.pageTitle = seoService.getTitle;
   $scope.metaDescription = seoService.getDescription;

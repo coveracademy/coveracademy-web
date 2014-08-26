@@ -1,0 +1,2 @@
+angular
+.module('coverChallengeApp.controllers', []);

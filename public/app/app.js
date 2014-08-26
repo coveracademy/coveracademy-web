@@ -1,11 +1,18 @@
 angular
 .module('coverChallengeApp', [
+  'coverChallengeApp.providers',
+  'coverChallengeApp.factories',
+  'coverChallengeApp.services',
+  'coverChallengeApp.directives',
+  'coverChallengeApp.filters',
+  'coverChallengeApp.controllers',
+  'angularMoment',
+  'ngCookies',
+  'ngProgress',
+  'pascalprecht.translate',
   'ui.router',
   'ui.bootstrap',
-  'videosharing-embed',
-  'angularMoment',
-  'ngProgress',
-  'ngCookies'
+  'videosharing-embed'
 ])
 .constant('constants', {
   USER_COOKIE: 'coverChallenge.user'
@@ -26,7 +33,11 @@ angular
   PUBLIC: {name: 'public', roles: ['public', 'user', 'admin']},
   ANONYMOUS: {name: 'anonymous', roles: ['public']}
 })
-.config(function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, accessLevel) {
+.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
+  $languagesProvider.getLanguages().forEach(function(language) {
+    $translateProvider.translations(language.id, language.table);
+  });
+  $translateProvider.preferredLanguage('pt');
   $httpProvider.interceptors.push('authHttpInterceptor');
   $locationProvider.html5Mode(true);
   $uiViewScrollProvider.useAnchorScroll();
@@ -179,7 +190,7 @@ angular
     .state('500', {
       templateUrl: '/app/partials/errors/500.html'
     });
-})
+}])
 .run(['$rootScope', '$state', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($rootScope, $state, authEvents, authenticationService, alertService, seoService) {
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     if (!authenticationService.isAuthorized(toState.accessLevel)) {
@@ -191,15 +202,15 @@ angular
       }
     }
   });
-  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-    seoService.reset();
-  });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     if(error.status === 404) {
       $state.go('404', null, {location: false});
     } else if(error.status === 500) {
       $state.go('500', null, {location: false});
     }
+  });
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    seoService.reset();
   });
   $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams){
     $state.go('404', null, {location: false});
