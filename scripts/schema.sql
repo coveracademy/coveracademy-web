@@ -17,12 +17,14 @@ create table user (
 ) engine = innodb default charset = utf8;
 
 create table music_genre (
-  id    int(11) not null auto_increment,
-  name  varchar(50) not null,
-  slug  varchar(50) not null,
-  image varchar(50) default null,
+  id       int(11) not null auto_increment,
+  name     varchar(50) not null,
+  slug     varchar(50) not null,
+  image    varchar(50) not null,
+  i18n_key varchar(50) not null,
   primary key (id),
   unique key `uq_music_genre_name` (`name`),
+  unique key `uq_music_genre_i18n_key` (`i18n_key`),
   unique key `uq_music_genre_slug` (`slug`)
 ) engine = innodb default charset = utf8;
 

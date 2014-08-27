@@ -3,63 +3,125 @@ angular
 .provider('$languages', function() {
   var english = {
     id: 'en',
+    image: 'en.png',
     table: {
-      SEARCH_INPUT_PLACEHOLDER: 'Search for musics or artists',
-      SIGNIN_BUTTON: 'Sign in',
-      SIGNIN_MESSAGE: 'Please sign in with your social network account',
-      BEST_COVERS_WEEK: 'Best covers from this week',
-      LATEST_COVERS_WEEK: 'Latest covers from this week',
+      ADD_COVER: 'Add cover',
+      ADD_NEW_COVER_VIDEO: 'Add a new cover video',
+      ADDED: 'Added',
+      ALL_ARTISTS: 'All artists',
       BEST_COVERS: 'Best covers',
-      LATEST_COVERS: 'Latest covers',
-      MORE_COVERS: 'More covers',
-      SEE_THE_BEST_COVERS: 'See the best covers',
-      SEE_THE_LATEST_COVERS: 'See the latest covers',
-      SEE_ALL_MUSIC_GENRE_ARTISTS: 'See all {{ name }} artists',
-      THE_BEST_MUSIC_GENRE_COVERS: 'The best {{ name }} covers',
-      THE_LATEST_MUSIC_GENRE_COVERS: 'The latest {{ name }} covers',
-      MORE_COVERS_OF: 'More covers of',
-      MORE_COVERS_BY: 'More covers by',
-      COVER_BY: 'Cover by',
+      BEST_COVERS_WEEK: 'Best covers from this week',
       BY: 'By',
       BY_LOWERCASE: 'by',
+      COVER_BY: 'Cover by',
+      COVER_VIDEO_TITLE: '{{ author }}\'s cover of "{{ music.title }}" by {{ artist.name }}',
+      LATEST_COVERS: 'Latest covers',
+      LATEST_COVERS_WEEK: 'Latest covers from this week',
+      MORE_COVERS: 'More covers',
+      MORE_COVERS_BY: 'More covers by',
+      MORE_COVERS_OF: 'More covers of',
       MUSIC_GENRE_ARTISTS: '{{ name }} artists',
-      ALL_ARTISTS: 'All artists',
-      COVER_VIDEO_TITLE: ''
+      MUSICS: 'musics',
+      ON_YOUTUBE: 'on YouTube',
+      PASTE_HERE_THE_VIDEO_URL: 'Paste here the video URL',
+      SEARCH_FOR_MUSICS_OR_ARTISTS: 'Search for musics or artists',
+      SEE_ALL_MUSIC_GENRE_ARTISTS: 'See all {{ name }} artists',
+      SEE_THE_BEST_COVERS: 'See the best covers',
+      SEE_THE_LATEST_COVERS: 'See the latest covers',
+      SIGNIN_BUTTON: 'Sign in',
+      SIGNIN_MESSAGE: 'Please sign in with your social network account',
+      THE_ARTIST_OR_BAND_NAME: 'The artist or band name',
+      THE_BEST_MUSIC_GENRE_COVERS: 'The best {{ name }} covers',
+      THE_COVER_AUTHOR: 'The cover author',
+      THE_LATEST_MUSIC_GENRE_COVERS: 'The latest {{ name }} covers',
+      THE_MUSIC_TITLE: 'The music title',
+      ALERTS: {
+        NOT_AUTHORIZED: 'You are not authorized to access this section!',
+        NOT_AUTHENTICATED: 'You are trying to access an privileged section, please sign in with your social account!',
+        LOGIN_SUCCESS: 'You are authenticated now!',
+        LOGIN_FAILED: 'Error authenticating, please try again!'
+      },
+      MUSIC_GENRE: {
+        ACOUSTIC: 'Acoustic',
+        BLUES_OR_JAZZ: 'Blues of Jazz',
+        COUNTRY: 'Country',
+        ELECTRONIC: 'Electronic',
+        POP: 'Pop',
+        RAP_OR_HIP_HOP: 'Rap or Hip-Hop',
+        REGGAE: 'Reggae',
+        RHYTHM_AND_BLUES: 'Rhythm and blues',
+        ROCK: 'Rock'
+      }
     }
   };
   var portuguese = {
-    id: 'pt',
+    id: 'pt-br',
+    image: 'pt-br.png',
     table: {
-      SEARCH_INPUT_PLACEHOLDER: 'Busque por músicas ou artistas',
-      SIGNIN_BUTTON: 'Acessar',
-      SIGNIN_MESSAGE: 'Por favor acesse com sua conta de rede social',
-      BEST_COVERS_WEEK: 'Melhores covers da semana',
-      LATEST_COVERS_WEEK: 'Últimos covers da semana',
+      ADD_COVER: 'Adicionar cover',
+      ADD_NEW_COVER_VIDEO: 'Adicionar um novo vídeo de cover',
+      ADDED: 'Adicionado',
+      ALL_ARTISTS: 'Todos os artistas',
       BEST_COVERS: 'Melhores covers',
-      LATEST_COVERS: 'Últimos covers',
-      MORE_COVERS: 'Mais covers',
-      SEE_THE_BEST_COVERS: 'Veja os melhores covers',
-      SEE_THE_LATEST_COVERS: 'Veja os últimos covers',
-      SEE_ALL_MUSIC_GENRE_ARTISTS: 'Veja todos os artistas de {{ name }}',
-      THE_BEST_MUSIC_GENRE_COVERS: 'Os melhores covers de {{ name }}',
-      THE_LATEST_MUSIC_GENRE_COVERS: 'Os últimos covers de {{ name }}',
-      MORE_COVERS_OF: 'Mais covers de',
-      MORE_COVERS_BY: 'Mais covers de',
-      COVER_BY: 'Cover de',
+      BEST_COVERS_WEEK: 'Melhores covers da semana',
       BY: 'Por',
       BY_LOWERCASE: 'de',
+      COVER_BY: 'Cover de',
+      COVER_VIDEO_TITLE: 'Cover de {{ author }} da música "{{ music.title }}" de {{ artist.name }}',
+      LATEST_COVERS: 'Últimos covers',
+      LATEST_COVERS_WEEK: 'Últimos covers da semana',
+      MORE_COVERS: 'Mais covers',
+      MORE_COVERS_BY: 'Mais covers de',
+      MORE_COVERS_OF: 'Mais covers de',
       MUSIC_GENRE_ARTISTS: 'Artistas de {{ name }}',
-      ALL_ARTISTS: 'Todos os artistas',
-      COVER_VIDEO_TITLE: ''
+      MUSICS: 'musicas',
+      ON_YOUTUBE: 'no YouTube',
+      PASTE_HERE_THE_VIDEO_URL: 'Cole aqui a URL do vídeo',
+      SEARCH_FOR_MUSICS_OR_ARTISTS: 'Busque por músicas ou artistas',
+      SEE_ALL_MUSIC_GENRE_ARTISTS: 'Veja todos os artistas de {{ name }}',
+      SEE_THE_BEST_COVERS: 'Veja os melhores covers',
+      SEE_THE_LATEST_COVERS: 'Veja os últimos covers',
+      SIGNIN_BUTTON: 'Acessar',
+      SIGNIN_MESSAGE: 'Por favor acesse com sua conta de rede social',
+      THE_ARTIST_OR_BAND_NAME: 'O nome do artista ou da banda',
+      THE_BEST_MUSIC_GENRE_COVERS: 'Os melhores covers de {{ name }}',
+      THE_COVER_AUTHOR: 'O autor do cover',
+      THE_LATEST_MUSIC_GENRE_COVERS: 'Os últimos covers de {{ name }}',
+      THE_MUSIC_TITLE: 'O título da música',
+      ALERTS: {
+        NOT_AUTHORIZED: 'Você não tem autorização para acessar esta seção!',
+        NOT_AUTHENTICATED: 'Você está tentando acessar uma seção privilegiada, por favor acesse sua conta de rede social!',
+        LOGIN_SUCCESS: 'Você está autenticado agora!',
+        LOGIN_FAILED: 'Erro ao autenticar, por favor tente novamente!'
+      },
+      MUSIC_GENRE: {
+        ACOUSTIC: 'Acústico',
+        BLUES_OR_JAZZ: 'Blues ou Jazz',
+        COUNTRY: 'Country',
+        ELECTRONIC: 'Eletrônica',
+        POP: 'Pop',
+        RAP_OR_HIP_HOP: 'Rap ou Hip-Hop',
+        REGGAE: 'Reggae',
+        RHYTHM_AND_BLUES: 'Rhythm and blues',
+        ROCK: 'Rock'
+      }
     }
   };
-  var supportedLanguages = [english, portuguese];
+  var languages = [english, portuguese];
 
   this.getLanguages = function() {
-    return supportedLanguages;
+    return languages;
+  };
+
+  this.getPreferredLanguage = function() {
+    return portuguese;
+  };
+
+  this.getFallbackLanguage = function() {
+    return portuguese;
   };
 
   this.$get = function() {
-    return supportedLanguages;
+    return languages;
   };
 });

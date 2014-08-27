@@ -47,6 +47,6 @@
     "commit": "80737eebb10731383dd61f9c5e50951667434cc8"
   },
   "_source": "git://github.com/thomaspark/bootswatch.git",
-  "_target": "3.2.0+3",
+  "_target": "v3.2.0+3",
   "_originalSource": "bootswatch"
 }

@@ -131,7 +131,7 @@ angular
   $scope.currentPage = 1;
   $scope.artistsPerPage = 60;
 
-  seoService.setTitle($scope.musicGenre.name + ' artists');
+  seoService.setTitle(($scope.musicGenre ? $scope.musicGenre.name : 'All') + ' artists');
 
   $scope.pageChanged = function() {
     artistService.listArtists($scope.musicGenre, $scope.currentPage).then(function(response) {

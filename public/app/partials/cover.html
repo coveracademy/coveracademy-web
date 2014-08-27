@@ -2,7 +2,7 @@
   <div class="col-md-12 align-center">
     <div class="page-title">
       <h1 class="title">
-        {{ cover.author }}'s cover of "{{ cover.music.title }}" by {{ cover.artist.name }}
+        {{ 'COVER_VIDEO_TITLE' | translate: cover }}
       </h1>
     </div>
   </div>
@@ -26,7 +26,9 @@
           {{ 'COVER_BY' | translate }} {{ cover.author }}
         </p>
         <p>
-          <span am-time-ago="cover.video_date"></span>
+          {{ 'ADDED' | translate }} <span am-time-ago="cover.registration_date"></span>
+          • <span am-time-ago="cover.video_date"></span>
+          <a ng-href="{{ cover.url }}">{{ 'ON_YOUTUBE' | translate }}</a>
         </p>
       </div>
       <div class="col-md-3 align-right">

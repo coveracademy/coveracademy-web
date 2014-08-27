@@ -122,7 +122,6 @@ angular
   var modalOptions = {
     backdrop: true,
     keyboard: true,
-    size: 'lg',
     templateUrl: '/app/partials/widgets/login-modal.html',
     controller: function($scope, $modalInstance) {
       $scope.modalScope = {};

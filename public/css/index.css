@@ -46,6 +46,15 @@ a:hover {
   padding: 10px 5px 10px 0px;
 }
 
+.languages.navbar-nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.languages.navbar-nav > li > a {
+  padding: 10px 5px;
+}
+
 .content {
   padding-top: 20px;
 }

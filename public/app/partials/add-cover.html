@@ -2,26 +2,27 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <div class="form-group" ng-class="{'has-error': coverForm.url.$invalid && !coverForm.url.$pristine}">
-        <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control big" placeholder="Paste here the video url" required/>
+        <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control big" placeholder="{{ 'PASTE_HERE_THE_VIDEO_URL' | translate}}" required/>
       </div>
-      <div ng-show="cover.url">
+      <div ng-if="cover.url">
         <div class="form-group embed-container">
           <embed-video ng-href="{{ cover.url }}"></embed-video>
         </div>
         <div class="form-group" ng-class="{'has-error': coverForm.artist.$invalid && !coverForm.artist.$pristine}">
-          <input ng-model="cover.artist" type="text" name="artist" typeahead="artist.name for artist in searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
+          <input ng-model="cover.artist" type="text" name="artist" typeahead="artist.name for artist in searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="selectArtist($item)" placeholder="
+          {{ 'THE_ARTIST_OR_BAND_NAME' | translate }}" class="form-control" required>
         </div>
         <div ng-if="cover.artist">
           <div class="form-group" ng-class="{'has-error': coverForm.music.$invalid && !coverForm.music.$pristine}">
-            <input ng-model="cover.music" type="text" name="music" typeahead="music.title for music in searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusic($item)" placeholder="The music title" class="form-control" required>
+            <input ng-model="cover.music" type="text" name="music" typeahead="music.title for music in searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusic($item)" placeholder="{{ 'THE_MUSIC_TITLE' | translate }}" class="form-control" required>
           </div>
           <div class="form-group" ng-class="{'has-error': coverForm.author.$invalid && !coverForm.author.$pristine}">
-            <input ng-model="cover.author" ng-disabled="userIsAuthor" type="text" name="author" placeholder="The cover author" class="form-control" required>
+            <input ng-model="cover.author" ng-disabled="userIsAuthor" type="text" name="author" placeholder="{{ 'THE_COVER_AUTHOR' | translate }}" class="form-control" required>
           </div>
         </div>
         <div class="form-group">
           <button ng-click="addCover()" ng-disabled="coverForm.$invalid" class="btn btn-primary btn-block btn-lg">
-            Add Cover
+            {{ 'ADD_COVER' | translate }}
           </button>
         </div>
       </div>

@@ -34,16 +34,21 @@ angular
   ANONYMOUS: {name: 'anonymous', roles: ['public']}
 })
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
+  // Internationalization
   $languagesProvider.getLanguages().forEach(function(language) {
     $translateProvider.translations(language.id, language.table);
   });
-  $translateProvider.preferredLanguage('pt');
+  $translateProvider.preferredLanguage($languagesProvider.getPreferredLanguage().id);
+  $translateProvider.fallbackLanguage($languagesProvider.getFallbackLanguage().id);
+  $translateProvider.useCookieStorage();
+
+  // Routes
   $httpProvider.interceptors.push('authHttpInterceptor');
   $locationProvider.html5Mode(true);
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
   $stateProvider
-    // ADMIN STATES
+    // Admin states
     .state('admin', {
       url: '/admin',
       templateUrl: '/app/partials/admin.html',
@@ -68,7 +73,7 @@ angular
         }
       }
     })
-    // PUBLIC STATES
+    // Public states
     .state('index', {
       url: '/',
       templateUrl: '/app/partials/index.html',
@@ -183,7 +188,7 @@ angular
         }
       }
     })
-    // ERROR STATES
+    // Error states
     .state('404', {
       templateUrl: '/app/partials/errors/404.html'
     })
@@ -191,7 +196,8 @@ angular
       templateUrl: '/app/partials/errors/500.html'
     });
 }])
-.run(['$rootScope', '$state', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($rootScope, $state, authEvents, authenticationService, alertService, seoService) {
+.run(['$rootScope', '$state', '$translate', 'amMoment', 'paginationConfig', 'authEvents', 'authenticationService', 'seoService', function($rootScope, $state, $translate, amMoment, paginationConfig, authEvents, authenticationService, seoService) {
+  // Ui-Router events
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     if (!authenticationService.isAuthorized(toState.accessLevel)) {
       event.preventDefault();
@@ -212,7 +218,26 @@ angular
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     seoService.reset();
   });
-  $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams){
+  $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams) {
     $state.go('404', null, {location: false});
   });
+  // Angular-Translate events
+  $rootScope.$on('$translateChangeSuccess', function() {
+    if($translate.use() === 'en') {
+      amMoment.changeLanguage('en');
+      paginationConfig.firstText = 'First';
+      paginationConfig.lastText = 'Last';
+      paginationConfig.previousText = 'Previous';
+      paginationConfig.nextText = 'Next';
+    } else {
+      amMoment.changeLanguage('pt-br');
+      paginationConfig.firstText = 'Primeira';
+      paginationConfig.lastText = 'Última';
+      paginationConfig.previousText = 'Anterior';
+      paginationConfig.nextText = 'Próxima';
+    }
+  });
+
+  // Force angular-translate to emit $translateChangeSuccess
+  $translate.use($translate.use());
 }]);
