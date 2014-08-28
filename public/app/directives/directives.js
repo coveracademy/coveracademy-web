@@ -33,8 +33,16 @@ angular
       link: '@',
       legend: '@',
       image: '@',
-      height: '@'
+      height: '@',
+      border: '&'
     },
-    templateUrl: 'app/partials/widgets/cover.html'
+    templateUrl: 'app/partials/widgets/cover.html',
+    link: function(scope, element, attrs, ctrl) {
+      if(!angular.isDefined(scope.border())) {
+        scope.border = true;
+      } else {
+        scope.border = scope.border();
+      }
+    }
   };
 });

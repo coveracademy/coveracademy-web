@@ -27,9 +27,18 @@
     </div>
   </div>
   <div class="col-md-5">
-    <div ng-repeat="row in bestArtistsOfMusicGenre | partition: 2" class="row">
-      <div ng-repeat="artist in row" class="col-md-6">
-        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
+    <div class="row">
+      <div class="col-md-6">
+        <cover image="{{ firstArtist.medium_thumbnail }}" link="artist({artist: '{{ firstArtist.slug }}'})" legend="{{ firstArtist.name }}" height="155" border="false"></cover>
+        <cover image="{{ secondArtist.medium_thumbnail }}" link="artist({artist: '{{ secondArtist.slug }}'})" legend="{{ secondArtist.name }}" height="155" border="false"></cover>
+      </div>
+      <div class="col-md-6">
+        <div class="fb-like-box" data-href="https://www.facebook.com/promessadepolitico" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="true" data-width="212" data-height="260"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div ng-repeat="artist in thirdAndFourthArtists" class="col-md-6">
+        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155" border="false"></cover>
       </div>
     </div>
   </div>

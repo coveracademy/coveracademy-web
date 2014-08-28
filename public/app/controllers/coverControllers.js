@@ -29,6 +29,10 @@ angular
   $scope.topCover = backendResponse.data.topCover;
   $scope.musicGenres = backendResponse.data.musicGenres;
   $scope.bestArtistsOfMusicGenre = backendResponse.data.bestArtistsOfMusicGenre;
+  $scope.firstArtist = $scope.bestArtistsOfMusicGenre[0];
+  $scope.secondArtist = $scope.bestArtistsOfMusicGenre[1];
+  $scope.thirdAndFourthArtists = $scope.bestArtistsOfMusicGenre.slice(2);
+
   $scope.carouselSlidesInterval = 10000;
   $scope.carouselSlides = $filter('partition')($scope.musicGenres, 6);
   for(index in $scope.carouselSlides) {

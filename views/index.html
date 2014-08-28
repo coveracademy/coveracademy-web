@@ -1,151 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt" ng-app="coverChallengeApp" ng-controller="applicationController">
-<head>
-  <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
-  <base href="/">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="fragment" content="!">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{{ metaDescription() }}">
-  <meta name="keywords" content="{{ metaKeywords() }}">
-  <meta name="author" content="Sandro Simas">
+  <head>
+    <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="fragment" content="!">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ metaDescription() }}">
+    <meta name="keywords" content="{{ metaKeywords() }}">
+    <meta name="author" content="Sandro Simas">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ pageTitle() }}">
-  <meta property="og:description" content="{{ metaDescription() }}">
-  <meta property="og:image" content="{{ metaImage() }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ pageTitle() }}">
+    <meta property="og:description" content="{{ metaDescription() }}">
+    <meta property="og:image" content="{{ metaImage() }}">
 
-  <title>{{ pageTitle() }}</title>
+    <title>{{ pageTitle() }}</title>
 
-  <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-  <link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/lib/ngprogress/ngProgress.css" rel="stylesheet">
-  <link href="/css/bootswatch-paper.min.css" rel="stylesheet">
-  <link href="/css/index.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/lib/bootswatch/lumen/bootstrap.min.css" rel="stylesheet">
+    <link href="/lib/ngprogress/ngProgress.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
 
-  <link href="/img/favicon.ico" rel="shortcut icon">
+    <link href="/img/favicon.ico" rel="shortcut icon">
 
-  <script src="/lib/angular/angular.min.js"></script>
-  <script src="/lib/jquery/dist/jquery.min.js"></script>
-</head>
-<body ng-cloak class="ng-cloak">
-  <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">
-          Cover Challenge
-        </a>
+    <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+  </head>
+  <body ng-cloak class="ng-cloak">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=235774129950285&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            Cover Challenge
+          </a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form name="searchForm" class="navbar-form navbar-left" novalidate>
+            <div class="input-group">
+              <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="{{ 'SEARCH_FOR_MUSICS_OR_ARTISTS' | translate }}" class="form-control" style="width: 400px;" required>
+              <span class="input-group-btn">
+                <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+            </div>
+          </form>
+          <ul class="languages nav navbar-nav navbar-left">
+            <li ng-repeat="language in languages">
+              <a ng-click="changeLanguage(language)">
+                <img ng-src="/img/langs/{{ language.image }}" width="25">
+              </a>
+            </li>
+          </ul>
+          <ul ng-show="user()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                {{ user().name }}
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a ng-click="logout()">Sair</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form ng-show="!user()" class="navbar-form navbar-right">
+            <button ng-click="login()" class="btn btn-success">{{ 'SIGNIN_BUTTON' | translate }}</button>
+          </form>
+        </div>
       </div>
-      <div class="navbar-collapse collapse">
-        <form name="searchForm" class="navbar-form navbar-left" novalidate>
-          <div class="input-group">
-            <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="{{ 'SEARCH_FOR_MUSICS_OR_ARTISTS' | translate }}" class="form-control" style="width: 400px;" required>
-            <span class="input-group-btn">
-              <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
-                <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
-          </div>
-        </form>
-        <ul class="languages nav navbar-nav navbar-left">
-          <li ng-repeat="language in languages">
-            <a ng-click="changeLanguage(language)">
-              <img ng-src="/img/langs/{{ language.image }}" width="25">
-            </a>
-          </li>
-        </ul>
-        <ul ng-show="user()" class="nav navbar-nav navbar-right">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              {{ user().name }}
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a ng-click="logout()">Sair</a></li>
+    </header>
+
+    <main class="content container" ui-view autoscroll="true">
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h4>Projeto</h4>
+            <ul>
+              <li><a href="/como-funciona">Como funciona</a></li>
+              <li><a href="/contribua">Contribua</a></li>
+              <li><a href="/contato">Contato</a></li>
             </ul>
-          </li>
-        </ul>
-        <form ng-show="!user()" class="navbar-form navbar-right">
-          <button ng-click="login()" class="btn btn-success">{{ 'SIGNIN_BUTTON' | translate }}</button>
-        </form>
-      </div>
-    </div>
-  </header>
+          </div>
+          <div class="col-md-4">
+            <h4>Redes Sociais</h4>
+            <ul>
+              <li><a href="http://www.facebook.com/promessadepolitico">Facebook</a></li>
+              <!--<li><a href="http://www.twitter.com/promessadepolitico">Twitter</a></li>-->
+            </ul>
+          </div>
+          <div class="col-md-4">
 
-  <main class="content container" ui-view autoscroll="true">
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h4>Projeto</h4>
-          <ul>
-            <li><a href="/como-funciona">Como funciona</a></li>
-            <li><a href="/contribua">Contribua</a></li>
-            <li><a href="/contato">Contato</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h4>Redes Sociais</h4>
-          <ul>
-            <li><a href="http://www.facebook.com/promessadepolitico">Facebook</a></li>
-            <!--<li><a href="http://www.twitter.com/promessadepolitico">Twitter</a></li>-->
-          </ul>
-        </div>
-        <div class="col-md-4">
-
+          </div>
         </div>
       </div>
+    </footer>
+
+    <div ng-controller="alertController" class="alerts">
+      <alert class="fade-in fade-out" ng-repeat="alert in alerts" type="{{ alert.type }}">
+        {{ alert.msg }}
+      </alert>
     </div>
-  </footer>
 
-  <div ng-controller="alertController" class="alerts">
-    <alert class="fade-in fade-out" ng-repeat="alert in alerts" type="{{ alert.type }}">
-      {{ alert.msg }}
-    </alert>
-  </div>
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/lib/moment/min/moment.min.js"></script>
+    <script src="/lib/moment/lang/pt-br.js"></script>
+    <script src="/lib/underscore/underscore.js"></script>
 
-  <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="/lib/moment/min/moment.min.js"></script>
-  <script src="/lib/moment/lang/pt-br.js"></script>
-  <script src="/lib/underscore/underscore.js"></script>
+    <script src="/lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="/lib/angular-moment/angular-moment.min.js"></script>
+    <script src="/lib/angular-translate/angular-translate.min.js"></script>
+    <script src="/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
 
-  <script src="/lib/angular-cookies/angular-cookies.min.js"></script>
-  <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-  <script src="/lib/angular-moment/angular-moment.min.js"></script>
-  <script src="/lib/angular-translate/angular-translate.min.js"></script>
-  <script src="/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
-  <script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
+    <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
 
-  <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
-  <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
-
-  <script src="/app/providers/providers.js"></script>
-  <script src="/app/factories/factories.js"></script>
-  <script src="/app/services/services.js"></script>
-  <script src="/app/directives/directives.js"></script>
-  <script src="/app/filters/filters.js"></script>
-  <script src="/app/controllers/controllers.js"></script>
-  <script src="/app/controllers/coverControllers.js"></script>
-  <script src="/app/app.js"></script>
-  <script src="/js/index.js"></script>
-  <!-- <script type="text/javascript">
-    var _sf_async_config = { uid: 56362, domain: 'coverchallenge.com', useCanonical: true };
-    (function() {
-      function loadChartbeat() {
-        window._sf_endpt = (new Date()).getTime();
-        var e = document.createElement('script');
-        e.setAttribute('language', 'javascript');
-        e.setAttribute('type', 'text/javascript');
-        e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
-        document.body.appendChild(e);
-      };
-      var oldonload = window.onload;
-      window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
-    })();
-  </script> -->
-</body>
+    <script src="/app/providers/providers.js"></script>
+    <script src="/app/factories/factories.js"></script>
+    <script src="/app/services/services.js"></script>
+    <script src="/app/directives/directives.js"></script>
+    <script src="/app/filters/filters.js"></script>
+    <script src="/app/controllers/controllers.js"></script>
+    <script src="/app/controllers/coverControllers.js"></script>
+    <script src="/app/app.js"></script>
+    <script src="/js/index.js"></script>
+    <!-- <script type="text/javascript">
+      var _sf_async_config = { uid: 56362, domain: 'coverchallenge.com', useCanonical: true };
+      (function() {
+        function loadChartbeat() {
+          window._sf_endpt = (new Date()).getTime();
+          var e = document.createElement('script');
+          e.setAttribute('language', 'javascript');
+          e.setAttribute('type', 'text/javascript');
+          e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+          document.body.appendChild(e);
+        };
+        var oldonload = window.onload;
+        window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
+      })();
+    </script> -->
+  </body>
 </html>
