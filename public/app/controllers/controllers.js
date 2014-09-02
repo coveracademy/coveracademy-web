@@ -46,6 +46,12 @@ angular
 }])
 .controller('headerController', ['$scope', '$state', '$translate', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $translate, $languages, authenticationService, coverService, searchService) {
   $scope.languages = $languages;
+  $scope.isSectionActive = function(section) {
+    return $state.current.name === section;
+  };
+  $scope.isLoginState = function() {
+    return $state.current.name === 'login';
+  };
   $scope.searchMusicOrArtist = function(query) {
     return searchService.searchMusicOrArtist(query).then(function(response) {
       var queryResult = [];
@@ -80,20 +86,21 @@ angular
   $scope.alerts = alertService.getAlerts();
   $scope.closeAlert = alertService.closeAlert;
 }])
-.controller('contactController', ['$scope', 'alertService', 'userService', function($scope, alertService, userService) {
+.controller('contactController', ['$scope', '$translate', 'alertService', 'userService', function($scope, $translate, alertService, userService) {
   $scope.sendEmail = function() {
-    NProgress.start();
     userService.sendEmail($scope.name, $scope.email, $scope.subject, $scope.message).then(function(response) {
-      alertService.addAlert('success', 'E-mail enviado com sucesso, aguarde o nosso contato.');
+      $translate('CONTACT_FORM.EMAIL_SENDED').then(function(message) {
+        alertService.addAlert('success', message);
+      });
       $scope.name = '';
       $scope.email = '';
       $scope.subject = '';
       $scope.message = '';
       $scope.contactForm.$setPristine();
     }).catch(function(response) {
-      alertService.addAlert('danger', 'Erro ao enviar e-mail, por favor tente novamente mais tarde.');
-    }).finally(function() {
-      NProgress.done();
+      $translate('CONTACT_FORM.ERROR_SENDING_EMAIL').then(function(message) {
+        alertService.addAlert('danger', message);
+      });
     });
   };
 }]);

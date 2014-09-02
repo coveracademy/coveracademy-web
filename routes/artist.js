@@ -1,6 +1,7 @@
-var coverService   = require('../apis/coverService'),
-    constants      = require('../apis/constants'),
-    MusicGenre     = require('../models/models').MusicGenre;
+var coverService = require('../apis/coverService'),
+    constants    = require('../apis/constants'),
+    isAdmin      = require('../utils/authorization').isAdmin,
+    Artist       = require('../models/models').Artist;
 
 module.exports = function(router, app) {
 
@@ -9,6 +10,16 @@ module.exports = function(router, app) {
     var page = req.param('page') || constants.FIRST_PAGE;
     coverService.listArtists(musicGenre, page, constants.ARTISTS_IN_LIST).then(function(artists) {
       res.json(artists);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
+  router.post('/', isAdmin, function(req, res, next) {
+    var artist = Artist.forge(req.param('artist'));
+    coverService.saveArtist(artist).then(function(artist) {
+      res.send(200);
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);

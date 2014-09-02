@@ -1,4 +1,4 @@
-insert into music_genre (id, name, i18n_key, slug, image) values (1, 'Rock', 'rock', 'rock.jpg');
+insert into music_genre (id, name, i18n_key, slug, image) values (1, 'Rock', 'ROCK', 'rock', 'rock.jpg');
 insert into music_genre (id, name, i18n_key, slug, image) values (2, 'Pop', 'POP', 'pop', 'pop.jpg');
 insert into music_genre (id, name, i18n_key, slug, image) values (3, 'Rap or Hip-Hop', 'RAP_OR_HIP_HOP', 'rap-or-hip-hop', 'rap-or-hip-hop.jpg');
 insert into music_genre (id, name, i18n_key, slug, image) values (4, 'Blues or Jazz', 'BLUES_OR_JAZZ', 'blues-or-jazz', 'blues-or-jazz.jpg');

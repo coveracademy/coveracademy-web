@@ -1,5 +1,4 @@
-var settings  = require('../configs/settings');
-
+var settings = require('../configs/settings');
 var knex = require('knex')({
   client: settings.database.dialect,
   debug: settings.database.debug,
@@ -16,14 +15,17 @@ var Bookshelf = require('bookshelf')(knex);
 Bookshelf.plugin('virtuals')
 
 var User = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'user'
 });
 
 var MusicGenre = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'music_genre'
 });
 
 var Artist = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'artist',
   musicGenre: function() {
     return this.belongsTo(MusicGenre, 'music_genre_id');
@@ -31,6 +33,7 @@ var Artist = Bookshelf.Model.extend({
 });
 
 var Music = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'music',
   artist: function() {
     return this.belongsTo(Artist, 'artist_id');
@@ -38,6 +41,7 @@ var Music = Bookshelf.Model.extend({
 });
 
 var Cover = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'cover',
   artist: function() {
     return this.belongsTo(Artist, 'artist_id');
@@ -51,6 +55,7 @@ var Cover = Bookshelf.Model.extend({
 });
 
 var PotentialCover = Bookshelf.Model.extend({
+  idAttribute: 'id',
   tableName: 'potential_cover'
 });
 

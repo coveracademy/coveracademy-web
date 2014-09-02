@@ -1,24 +1,126 @@
 angular
 .module('coverChallengeApp.controllers')
-.controller('adminController', ['$scope', 'backendResponse', 'seoService', 'alertService', 'coverService', function($scope, backendResponse, seoService, alertService, coverService) {
+.controller('adminController', ['$scope', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
   seoService.setTitle('Administration console');
-
-  $scope.potentialCovers = backendResponse.data.potentialCovers;
-  $scope.acceptCover = function(potentialCover) {
-    coverService.acceptCover(potentialCover).then(function(response) {
-      alertService.addAlert('success', 'Potential cover accepted successfully');
-      $scope.potentialCovers = _.reject($scope.potentialCovers, function(pCover) {
-        return potentialCover.id == pCover.id;
+  $scope.potentialCoversTab = {
+    potentialCovers: backendResponse.data.potentialCovers,
+    acceptCover: function(potentialCover) {
+      coverService.acceptCover(potentialCover).then(function(response) {
+        alertService.addAlert('success', 'Potential cover accepted successfully');
+        $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+          return potentialCover.id == cover.id;
+        });
       });
-    });
+    },
+    refuseCover: function(potentialCover) {
+      coverService.refuseCover(potentialCover).then(function(response) {
+        alertService.addAlert('success', 'Potential cover refused successfully');
+        $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+          return potentialCover.id == cover.id;
+        });
+      });
+    }
   };
-  $scope.refuseCover = function(potentialCover) {
-    coverService.refuseCover(potentialCover).then(function(response) {
-      alertService.addAlert('success', 'Potential cover refused successfully');
-      $scope.potentialCovers = _.reject($scope.potentialCovers, function(pCover) {
-        return potentialCover.id == pCover.id;
+  $scope.coverTab = {
+    searchCoverByID: function(searchID) {
+      coverService.getCover(searchID).then(function(response) {
+        $scope.coverTab.cover = {};
+        $scope.coverTab.cover.id = response.data.id;
+        $scope.coverTab.cover.url = response.data.url;
+        $scope.coverTab.cover.author = response.data.author;
+        $scope.coverTab.cover.artist = response.data.artist.name;
+        $scope.coverTab.cover.music = response.data.music.title;
+      })
+    },
+    searchArtists: function(query) {
+      return searchService.searchArtists(query).then(function(response) {
+        return response.data;
       });
-    });
+    },
+    selectArtist: function(artist) {
+      $scope.coverTab.cover.artist = artist.name;
+      $scope.coverTab.cover.music = null;
+    },
+    searchMusics: function(query) {
+      return searchService.searchMusics(query, $scope.coverTab.cover.artist).then(function(response) {
+        return response.data;
+      });
+    },
+    selectMusic: function(music) {
+      $scope.coverTab.cover.music = music.title;
+    },
+    saveCover: function() {
+      coverService.addCover($scope.coverTab.cover).then(function(response) {
+        alertService.addAlert('success', 'Cover saved successfully');
+      });
+    },
+    removeCover: function() {
+      var modalScope = {
+        headerText: 'Remove cover song',
+        bodyText: 'Do you really want to remove this cover song?'
+      };
+      modalService.show({}, modalScope).then(function() {
+        coverService.removeCover($scope.coverTab.cover).then(function(response) {
+          alertService.addAlert('success', 'Cover removed successfully');
+          $scope.coverTab.cover = null;
+        });
+      });
+    }
+  };
+  $scope.artistTab = {
+    musicGenres: backendResponse.data.musicGenres,
+    searchArtists: function(query) {
+      return searchService.searchArtists(query, ['musicGenre']).then(function(response) {
+        return response.data;
+      });
+    },
+    selectArtist: function(artist) {
+      $scope.artistTab.artist = artist;
+    },
+    saveArtist: function() {
+      var artist = {
+        id: $scope.artistTab.artist.id,
+        name: $scope.artistTab.artist.name,
+        music_genre_id: $scope.artistTab.artist.musicGenre.id,
+        small_thumbnail: $scope.artistTab.artist.small_thumbnail,
+        medium_thumbnail: $scope.artistTab.artist.medium_thumbnail,
+        large_thumbnail: $scope.artistTab.artist.large_thumbnail,
+      };
+      artistService.saveArtist(artist).then(function(response) {
+        alertService.addAlert('success', 'Artist saved successfully');
+      });
+    }
+  };
+  $scope.musicTab = {
+    searchArtists: function(query) {
+      return searchService.searchArtists(query).then(function(response) {
+        return response.data;
+      });
+    },
+    selectArtist: function(artist) {
+      $scope.artistTab.artist = artist;
+    },
+    searchMusics: function(query) {
+      return searchService.searchMusics(query).then(function(response) {
+        return response.data;
+      });
+    },
+    selectMusic: function(music) {
+      $scope.musicTab.music = music;
+    },
+    saveMusic: function() {
+      var music = {
+        id: $scope.musicTab.music.id,
+        name: $scope.musicTab.music.name,
+        artist_id: $scope.musicTab.music.artist.id,
+        small_thumbnail: $scope.musicTab.music.small_thumbnail,
+        medium_thumbnail: $scope.musicTab.music.medium_thumbnail,
+        large_thumbnail: $scope.musicTab.music.large_thumbnail,
+      };
+      musicService.saveMusic(music).then(function(response) {
+        alertService.addAlert('success', 'Music saved successfully');
+      });
+    }
   };
 }])
 .controller('indexController', ['$scope', '$state', '$filter', 'backendResponse', 'seoService', function($scope, $state, $filter, backendResponse, seoService) {
@@ -53,7 +155,7 @@ angular
   seoService.setTitle('Add a new cover');
 
   $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
-  $scope.musicGenres = backendResponse.data.allMusicGenres;
+  $scope.musicGenres = backendResponse.data.musicGenres;
   $scope.videoUrlPasted = function(event) {
     $scope.cover = {};
     var url = event.clipboardData.getData("text/plain");
@@ -70,6 +172,7 @@ angular
   };
   $scope.selectArtist = function(artist) {
     $scope.cover.artist = artist.name;
+    $scope.cover.music = null;
   };
   $scope.searchMusics = function(query) {
     return searchService.searchMusics($scope.cover.artist, query).then(function(response) {
@@ -86,11 +189,11 @@ angular
     });
   };
 }])
-.controller('coverController', ['$scope', '$stateParams', 'backendResponse', 'seoService', function($scope, $stateParams, backendResponse, seoService) {
+.controller('coverController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'constants', function($scope, $stateParams, backendResponse, seoService, constants) {
   $scope.cover = backendResponse.data.cover;
   $scope.bestCoversOfMusic = backendResponse.data.bestCoversOfMusic;
   $scope.bestCoversByArtist = backendResponse.data.bestCoversByArtist;
-
+  $scope.domain = constants.DOMAIN;
   seoService.setTitle($scope.cover.author + '\'s cover of "' + $scope.cover.music.title + '" by ' + $scope.cover.artist.name);
 }])
 .controller('coversRankController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, backendResponse, seoService, coverService) {

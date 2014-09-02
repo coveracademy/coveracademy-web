@@ -17,7 +17,7 @@
             <input ng-model="cover.music" type="text" name="music" typeahead="music.title for music in searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="selectMusic($item)" placeholder="{{ 'THE_MUSIC_TITLE' | translate }}" class="form-control" required>
           </div>
           <div class="form-group" ng-class="{'has-error': coverForm.author.$invalid && !coverForm.author.$pristine}">
-            <input ng-model="cover.author" ng-disabled="userIsAuthor" type="text" name="author" placeholder="{{ 'THE_COVER_AUTHOR' | translate }}" class="form-control" required>
+            <input ng-model="cover.author" type="text" name="author" placeholder="{{ 'THE_COVER_AUTHOR' | translate }}" class="form-control" required>
           </div>
         </div>
         <div class="form-group">

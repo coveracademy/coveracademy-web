@@ -20,8 +20,8 @@ module.exports = function(router, app) {
 
   router.get('/artist', function(req, res, next) {
     var query = req.param('query');
-    coverService.searchArtists(query).then(function(artists) {
-      console.log(artists)
+    var related = req.param('related');
+    coverService.searchArtists(query, related).then(function(artists) {
       res.json(artists);
     }).catch(function(err) {
       console.log(err.stack);
@@ -32,8 +32,8 @@ module.exports = function(router, app) {
   router.get('/music', function(req, res, next) {
     var artist = req.param('artist');
     var query = req.param('query');
-    coverService.searchMusicsOfArtist(artist, query).then(function(musics) {
-      console.log(musics)
+    var promise = artist ? coverService.searchMusicsOfArtist(artist, query) : coverService.searchMusics(query);
+    promise.then(function(musics) {
       res.json(musics);
     }).catch(function(err) {
       console.log(err.stack);

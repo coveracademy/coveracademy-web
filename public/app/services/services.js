@@ -73,6 +73,12 @@ angular
       $cookieStore.remove(constants.USER_COOKIE);
     }
   };
+  userService.getAuthenticatedUser().then(function(response) {
+    if(!response.data) {
+      changeUser(null);
+    }
+  });
+
   this.getUser = function() {
     return user;
   };
@@ -157,13 +163,13 @@ angular
   var modalOptions = {
     backdrop: true,
     keyboard: true,
-    templateUrl: '/partials/modal.html',
+    templateUrl: '/partials/widgets/modal.html',
   };
   var modalScope = {
-    headerText: 'Deseja realmente proceder ?',
+    headerText: 'Do you really want to procede with this action?',
     bodyText: '',
-    closeButtonText: 'Cancelar',
-    actionButtonText: 'Continuar',
+    closeButtonText: 'No',
+    actionButtonText: 'Yes',
   };
   this.show = function(customModalOptions, customModalScope) {
     var extendedOptions = {};
@@ -193,7 +199,7 @@ angular
     return $http.get('/api/user/authenticated');
   };
   this.sendEmail = function(name, email, subject, message) {
-    return $http.post('/ajax', {key: 'sendEmail', params: [name, email, subject, message]});
+    return $http.post('/api/user/email', {name: name, email: email, subject: subject, message: message});
   };
 }])
 .service('oembedService', ['$http', function($http) {
@@ -246,6 +252,9 @@ angular
   this.addCover = function(cover) {
     return $http.post('/api/cover', {cover: cover});
   };
+  this.getCover = function(id) {
+    return $http.get('/api/cover/' + id);
+  };
   this.latestCovers = function(page) {
     return $http.get('/api/cover/latest', {params: {page: page}});
   };
@@ -269,15 +278,23 @@ angular
   this.listArtists = function(musicGenre, page) {
     return $http.get('/api/artist', {params: {musicGenre: musicGenre.id, page: page}});
   };
+  this.saveArtist = function(artist) {
+    return $http.post('/api/artist', {artist: artist});
+  };
+}])
+.service('musicService', ['$http', function($http) {
+  this.saveMusic = function(music) {
+    return $http.post('/api/music', {music: music});
+  };
 }])
 .service('searchService', ['$http', function($http) {
   this.searchMusicOrArtist = function(query) {
     return $http.get('/api/search/musicOrArtist', {params: {query: query}});
   };
-  this.searchArtists = function(query) {
-    return $http.get('/api/search/artist', {params: {query: query}});
+  this.searchArtists = function(query, related) {
+    return $http.get('/api/search/artist', {params: {query: query, related: related}});
   };
-  this.searchMusics = function(artist, query) {
+  this.searchMusics = function(query, artist) {
     return $http.get('/api/search/music', {params: {artist: artist, query: query}});
   };
 }]);

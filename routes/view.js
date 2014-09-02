@@ -12,8 +12,11 @@ module.exports = function(router, app) {
 
   // ADMIN ROUTES
   router.get('/admin', isAdmin, function(req, res, next) {
-    coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST).then(function(potentialCovers) {
-      res.json({potentialCovers: potentialCovers});
+    Promise.all([coverService.musicGenres(), coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)]).spread(function(musicGenres, potentialCovers) {
+      res.json({
+        musicGenres: musicGenres,
+        potentialCovers: potentialCovers
+      });
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);
@@ -21,9 +24,9 @@ module.exports = function(router, app) {
   });
 
   router.get('/addCover', isAdmin, function(req, res, next) {
-    coverService.allMusicGenres().then(function(allMusicGenres) {
+    coverService.musicGenres().then(function(musicGenres) {
       res.json({
-        allMusicGenres: allMusicGenres
+        musicGenres: musicGenres
       });
     }).catch(function(err) {
       console.log(err.stack);
@@ -34,7 +37,7 @@ module.exports = function(router, app) {
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
     Promise
-    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.allMusicGenres()])
+    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.musicGenres()])
     .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
       this.topCover = topCover;
       this.bestCovers = bestCovers;

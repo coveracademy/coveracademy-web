@@ -10,7 +10,17 @@ module.exports = function(router, app) {
   // ADMIN ROUTES
   router.post('/', isAdmin, function(req, res, next) {
     var coverData = req.param('cover');
-    coverService.addCover(coverData).then(function(cover) {
+    coverService.addCover(req.user, coverData).then(function(cover) {
+      res.json(cover);
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    });
+  });
+
+  router.delete('/', isAdmin, function(req, res, next) {
+    var coverData = req.param('cover');
+    coverService.removeCover(coverData).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
       console.log(err.stack);
@@ -20,7 +30,7 @@ module.exports = function(router, app) {
 
   router.post('/accept', isAdmin, function(req, res, next) {
     var potentialCover = PotentialCover.forge(req.param('potentialCover'));
-    coverService.acceptCover(potentialCover).then(function(cover) {
+    coverService.acceptCover(req.user, potentialCover).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
       console.log(err.stack);
@@ -115,6 +125,9 @@ module.exports = function(router, app) {
   router.get('/:id', function(req, res, next) {
     var id = req.param('id');
     coverService.getCover(id).then(function(cover) {
+      if(!cover) {
+        throw new Error('Cover not found');
+      }
       res.json(cover);
     }).catch(function(err) {
       console.log(err.stack);

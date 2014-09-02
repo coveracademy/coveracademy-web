@@ -8,14 +8,15 @@ var Cover          = require('../models/models').Cover,
     slug           = require('../utils/slug'),
     lastfm         = require('./third/lastfm'),
     youtube        = require('./third/youtube'),
-    youtubeAPI     = require('./third/youtube-api'),
     wilsonScore    = require('decay').wilsonScore(),
     request        = require('request'),
     Promise        = require('bluebird'),
     _              = require('underscore'),
     $              = this;
+    _.str          = require('underscore.string');
 
 var defaultCoverRelated = ['artist', 'music'];
+var defaultCoverAllRelated = ['artist', 'artist.musicGenre', 'music'];
 var defaultArtistRelated = ['musicGenre'];
 
 var calculatePeriod = function(period) {
@@ -54,7 +55,7 @@ var coversOfMusic = function(rankType, music, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch({withRelated: defaultCoverRelated});
 }
 
@@ -87,7 +88,7 @@ var coversByArtist = function(rankType, artist, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch({withRelated: defaultCoverRelated});
 }
 
@@ -100,7 +101,7 @@ var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.score', 'desc');
   }).fetch({withRelated: defaultCoverRelated});
 }
 
@@ -115,7 +116,7 @@ var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.score', 'desc');
   }).fetch();
 }
 
@@ -127,11 +128,14 @@ var listCovers = function(rankType, period, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
 
-    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('video_views', 'desc');
+    rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch({withRelated: defaultCoverRelated});
 }
 
-exports.addCover = function(coverData) {
+exports.addCover = function(user, coverData) {
+  coverData.artist = _.str.trim(coverData.artist);
+  coverData.music = _.str.trim(coverData.music);
+  coverData.author = coverData.author ? _.str.trim(coverData.author) : null;
   return $.discoverArtist(coverData.artist).then(function(artist) {
     this.artist = artist;
     return $.discoverMusic(artist, coverData.music);
@@ -148,13 +152,20 @@ exports.addCover = function(coverData) {
       video_id: videoInfos.id,
       video_title: videoInfos.title,
       video_likes: videoInfos.likes,
+      video_dislikes: videoInfos.dislikes,
       video_views: videoInfos.views,
-      author: coverData.author ? coverData.author : videoInfos.author,
       video_date: videoInfos.date,
+      author: coverData.author ? coverData.author : videoInfos.author,
+      score: wilsonScore(videoInfos.views, videoInfos.dislikes),
       small_thumbnail: videoInfos.thumbnails.small,
       medium_thumbnail: videoInfos.thumbnails.medium,
       large_thumbnail: videoInfos.thumbnails.large
     });
+    if(coverData.id) {
+      cover.set('id', coverData.id);
+    } else {
+      cover.set('user_id', user.id);
+    }
     cover.set('slug', this.music.get('slug') + '-' + slug.slugify(cover.get('author')));
     return cover.save();
   }).then(function(cover) {
@@ -164,8 +175,12 @@ exports.addCover = function(coverData) {
   }).bind({});
 }
 
+exports.removeCover = function(cover) {
+  return cover.destroy();
+}
+
 exports.getCover = function(id) {
-  return Cover.forge({id: id}).fetch({withRelated: defaultCoverRelated});
+  return Cover.forge({id: id}).fetch({withRelated: defaultCoverAllRelated});
 }
 
 exports.topCover = function() {
@@ -280,7 +295,7 @@ exports.getMusicGenreBySlug = function(slug) {
   return MusicGenre.forge({slug: slug}).fetch();
 }
 
-exports.allMusicGenres = function() {
+exports.musicGenres = function() {
   return MusicGenre.fetchAll();
 }
 
@@ -292,8 +307,8 @@ exports.getArtistBySlug = function(slug) {
   return Artist.query({where: ['slug', slug]}).fetch({withRelated: defaultArtistRelated});
 }
 
-exports.searchArtists = function(query) {
-  return Artist.collection().query({where: ['name', 'like', '%' + query + '%']}).fetch();
+exports.searchArtists = function(query, related) {
+  return Artist.collection().query({where: ['name', 'like', '%' + query + '%']}).fetch({withRelated: related});
 }
 
 exports.latestArtists = function(page, pageSize) {
@@ -408,7 +423,7 @@ exports.totalArtists = function(musicGenre) {
 }
 
 exports.getMusic = function(artist, title) {
-  var slugified = slug.slugify(artist.get('name') + ' ' + title);
+  var slugified = slug.slugify(title) + '-' + artist.get('slug');
   return this.getMusicBySlug(slugified);
 }
 
@@ -488,8 +503,8 @@ exports.potentialCovers = function(page, pageSize) {
   }).fetch();
 }
 
-exports.acceptCover = function(potentialCover) {
-  return this.addCover({
+exports.acceptCover = function(user, potentialCover) {
+  return this.addCover(user, {
     artist: potentialCover.get('artist'),
     music: potentialCover.get('music'),
     author: potentialCover.get('author'),
@@ -504,4 +519,12 @@ exports.acceptCover = function(potentialCover) {
 
 exports.refuseCover = function(potentialCover) {
   return potentialCover.destroy();
+}
+
+exports.saveArtist = function(artist) {
+  return artist.save();
+}
+
+exports.saveMusic = function(music) {
+  return music.save();
 }

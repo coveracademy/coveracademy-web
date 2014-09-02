@@ -26,7 +26,7 @@ var path = require('path'),
         },
         facebook: {
           clientID: '235774129950285',
-          clientSecret: '329ada86e67ca322ae5c56af8f5a167d',
+          clientSecret: 'fde644d264f2f57360db07b4ca040e32',
           callbackURL: 'http://www.promessadepolitico.com.br:' + _nodePort + '/api/auth/facebook/callback',
           profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails']
         },

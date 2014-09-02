@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-md-2">
     <cover image="{{ cover.artist.medium_thumbnail }}" link="artist({artist: '{{ cover.artist.slug }}'})" legend="{{ cover.artist.name }}" height="126"></cover>
-    <cover image="{{ cover.music.medium_thumbnail }}" link="music({music: '{{ cover.artist.slug }}'})" legend="{{ cover.music.title }}" height="126"></cover>
+    <cover image="{{ cover.music.medium_thumbnail }}" link="music({music: '{{ cover.music.slug }}'})" legend="{{ cover.music.title }}" height="126"></cover>
   </div>
   <div class="col-md-8">
     <div class="row">
@@ -32,9 +32,9 @@
         </p>
       </div>
       <div class="col-md-3 align-right">
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Facebook" class="icon icon-facebook" target="_blank"></a>
-        <a ng-href="http://twitter.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Twitter" class="icon icon-twitter"target="_blank"></a>
-        <a ng-href="https://plus.google.com/share?url=http://www.promessadepolitico.com.br/politico/{{ politician.slug }}" title="Compartilhe as promessas de {{ politician.name }} no Google+" class="icon icon-googleplus"target="_blank"></a>
+        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ domain }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
+        <a ng-href="http://twitter.com/share?url={{ domain }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
+        <a ng-href="https://plus.google.com/share?url={{ domain }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
       </div>
     </div>
   </div>

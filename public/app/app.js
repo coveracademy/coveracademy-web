@@ -15,6 +15,7 @@ angular
   'videosharing-embed'
 ])
 .constant('constants', {
+  DOMAIN: 'http://www.promessadepolitico.com.br',
   USER_COOKIE: 'coverChallenge.user'
 })
 .constant('authEvents', {
@@ -73,6 +74,13 @@ angular
         }
       }
     })
+    // Anonymous states
+    .state('login', {
+      url: '/login',
+      templateUrl: '/app/partials/login.html',
+      controller: 'loginController',
+      accessLevel: accessLevel.ANONYMOUS
+    })
     // Public states
     .state('index', {
       url: '/',
@@ -86,11 +94,16 @@ angular
         }
       }
     })
-    .state('login', {
-      url: '/login',
-      templateUrl: '/app/partials/login.html',
-      controller: 'loginController',
-      accessLevel: accessLevel.ANONYMOUS
+    .state('about', {
+      url: '/about',
+      templateUrl: '/app/partials/about.html',
+      accessLevel: accessLevel.PUBLIC
+    })
+    .state('contact', {
+      url: '/contact',
+      templateUrl: '/app/partials/contact.html',
+      controller: 'contactController',
+      accessLevel: accessLevel.PUBLIC
     })
     .state('cover', {
       url: '/cover/:id/:slug',
@@ -209,7 +222,13 @@ angular
     }
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    if(error.status === 404) {
+    if(error.status === 401) {
+      if(authenticationService.isAuthenticated()) {
+        $rootScope.$broadcast(authEvents.NOT_AUTHORIZED);
+      } else {
+        $rootScope.$broadcast(authEvents.NOT_AUTHENTICATED);
+      }
+    } else if(error.status === 404) {
       $state.go('404', null, {location: false});
     } else if(error.status === 500) {
       $state.go('500', null, {location: false});
@@ -237,7 +256,6 @@ angular
       paginationConfig.nextText = 'Próxima';
     }
   });
-
-  // Force angular-translate to emit $translateChangeSuccess
+  // Force angular-translate to emit $translateChangeSuccess when run application
   $translate.use($translate.use());
 }]);
