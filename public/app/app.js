@@ -45,6 +45,7 @@ angular
 
   // Routes
   $httpProvider.interceptors.push('authHttpInterceptor');
+  // $httpProvider.interceptors.push('ngProgressHttpInterceptor');
   $locationProvider.html5Mode(true);
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');

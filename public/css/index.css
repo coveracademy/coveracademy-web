@@ -283,6 +283,23 @@ input.big {
   left: 3px;
 }
 
+.cover .darken {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.5;
+}
+
+.cover .caption {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  box-shadow: 10px;
+}
+
 .cover img {
   width: 100%;
 }

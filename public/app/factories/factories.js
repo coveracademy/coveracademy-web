@@ -24,35 +24,37 @@ angular
 //     }
 //     return ngProgress;
 //   };
-//   var completeProgress = function() {
-//     if (working === true) {
+//   var completeProgress = function(result) {
+//     if(!isView(result) && working === true) {
+//       working = false;
 //       var ngProgress = getNGProgress();
 //       ngProgress.complete();
-//       working = false;
 //     }
 //   };
-//   var isView = function(request) {
-//     return request.url.indexOf('.html') > 0;
+//   var isView = function(result) {
+//     var url = result.url || result.config.url;
+//     return url.indexOf('.html') > 0;
 //   };
 //   return {
 //     request: function(request) {
-//       if (!isView(request) && working === false) {
-//         var ngProgress = getNGProgress();
-//         ngProgress.start();
+//       if(!isView(request) && working === false) {
 //         working = true;
+//         var ngProgress = getNGProgress();
+//         ngProgress.reset();
+//         ngProgress.start();
 //       }
 //       return request;
 //     },
 //     requestError: function(request) {
-//       completeProgress();
+//       completeProgress(request);
 //       return request;
 //     },
 //     response: function(response) {
-//       completeProgress();
+//       completeProgress(response);
 //       return response;
 //     },
 //     responseError: function(response) {
-//       completeProgress();
+//       completeProgress(response);
 //       return response;
 //     }
 //   }
