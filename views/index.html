@@ -43,7 +43,7 @@
     <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" ng-href="/{{ locale() }}/">
             Cover <i class="glyphicon glyphicon-star-empty"></i> Ninja
           </a>
         </div>
@@ -60,15 +60,15 @@
           </form>
           <ul class="nav navbar-nav">
             <li ng-class="{'active': isSectionActive('about')}">
-              <a ui-sref="about()">{{ 'ABOUT' | translate }}</a>
+              <a ui-sref="app.about({locale: locale()})">{{ 'ABOUT' | translate }}</a>
             </li>
             <li ng-class="{'active': isSectionActive('contact')}">
-              <a ui-sref="contact()">{{ 'CONTACT' | translate }}</a>
+              <a ui-sref="app.contact({locale: locale()})">{{ 'CONTACT' | translate }}</a>
             </li>
           </ul>
           <ul class="languages nav navbar-nav navbar-left">
             <li ng-repeat="language in languages">
-              <a ng-click="changeLanguage(language)">
+              <a ui-sref="app.index({locale: language.id})">
                 <img ng-src="/img/langs/{{ language.image }}" width="25">
               </a>
             </li>
@@ -91,7 +91,7 @@
       </div>
     </header>
 
-    <main class="content container" ui-view autoscroll="true">
+    <main class="content container" ui-view>
     </main>
 
     <footer>

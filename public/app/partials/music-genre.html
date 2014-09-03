@@ -18,7 +18,7 @@
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
-          <a ui-sref="artists({genre: musicGenre.slug})">
+          <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
             {{ 'SEE_ALL_MUSIC_GENRE_ARTISTS' | translate: musicGenre }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -29,7 +29,7 @@
 </div>
 <div class="row">
   <div ng-repeat="artist in bestArtistsOfMusicGenre" class="col-md-2">
-    <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
+    <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
   </div>
 </div>
 <div class="page-title">
@@ -42,7 +42,7 @@
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
-          <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'best'})">
+          <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
             {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -51,7 +51,7 @@
     </div>
   </div>
 </div>
-<cover-songs ng-model="bestCoversOfMusicGenre"></cover-songs>
+<cover-songs ng-model="bestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
 <div class="page-title">
   <div class="row">
     <div class="col-md-8">
@@ -62,7 +62,7 @@
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
-          <a ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'latest'})">
+          <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
             {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -71,4 +71,4 @@
     </div>
   </div>
 </div>
-<cover-songs ng-model="latestCoversOfMusicGenre"></cover-songs>
+<cover-songs ng-model="latestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>

@@ -12,10 +12,10 @@
         </p>
         <div class="pull-right">
           <div class="btn-group">
-            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
+            <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
               {{ 'BEST_COVERS' | translate }}
             </a>
-            <a class="btn btn-default" ui-sref="artist({artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
+            <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
               {{ 'LATEST_COVERS' | translate }}
             </a>
           </div>
@@ -28,16 +28,16 @@
   <div class="panel panel-default" ng-repeat="musicByArtist in musicsByArtist">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <a ng-if="musicByArtist.small_thumbnail" ui-sref="music({music: musicByArtist.slug})">
+        <a ng-if="musicByArtist.small_thumbnail" ui-sref="app.music({locale: locale(), music: musicByArtist.slug})">
           <img class="small-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
         </a>
-        <a class="default-link" ui-sref="music({music: musicByArtist.slug})">
+        <a class="default-link" ui-sref="app.music({locale: locale(), music: musicByArtist.slug})">
           {{ musicByArtist.title }}
         </a>
       </h3>
     </div>
     <div class="panel-body">
-      <cover-songs ng-model="coversOfMusics[musicByArtist.id]" thumb-size="small"></cover-songs>
+      <cover-songs ng-model="coversOfMusics[musicByArtist.id]" locale="{{ locale() }}" thumb-size="small"></cover-songs>
     </div>
   </div>
 </div>

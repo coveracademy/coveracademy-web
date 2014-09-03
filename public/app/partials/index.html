@@ -2,7 +2,7 @@
   <slide ng-repeat="carouselSlide in carouselSlides">
     <div class="row text-center">
       <div ng-repeat="musicGenre in carouselSlide.item" class="col-md-2">
-        <cover image="/img/genres/{{ musicGenre.image }}" link="musicGenre({genre: '{{ musicGenre.slug }}'})" legend="{{ musicGenre.name }}" height="115"></cover>
+        <cover image="/img/genres/{{ musicGenre.image }}" link="app.musicGenre({locale: '{{ locale() }}', genre: '{{ musicGenre.slug }}'})" legend="{{ musicGenre.name }}" height="115"></cover>
       </div>
     </div>
   </slide>
@@ -14,7 +14,7 @@
         <embed-video ng-href="{{ topCover.url }}"></embed-video>
       </div>
       <div class="caption">
-        <a ui-sref="cover({id: topCover.id, slug: topCover.slug})">
+        <a ui-sref="app.cover({locale: locale(), id: topCover.id, slug: topCover.slug})">
           {{ topCover.artist.name }} - {{ topCover.music.title }}
         </a>
         <div>
@@ -29,8 +29,8 @@
   <div class="col-md-5">
     <div class="row">
       <div class="col-md-6">
-        <cover image="{{ firstArtist.medium_thumbnail }}" link="artist({artist: '{{ firstArtist.slug }}'})" legend="{{ firstArtist.name }}" height="155" border="false"></cover>
-        <cover image="{{ secondArtist.medium_thumbnail }}" link="artist({artist: '{{ secondArtist.slug }}'})" legend="{{ secondArtist.name }}" height="155" border="false"></cover>
+        <cover image="{{ firstArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ firstArtist.slug }}'})" legend="{{ firstArtist.name }}" height="155" border="false"></cover>
+        <cover image="{{ secondArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ secondArtist.slug }}'})" legend="{{ secondArtist.name }}" height="155" border="false"></cover>
       </div>
       <div class="col-md-6">
         <div class="fb-like-box" data-href="https://www.facebook.com/promessadepolitico" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="true" data-width="212" data-height="260"></div>
@@ -38,7 +38,7 @@
     </div>
     <div class="row">
       <div ng-repeat="artist in thirdAndFourthArtists" class="col-md-6">
-        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155" border="false"></cover>
+        <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155" border="false"></cover>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
-          <a ui-sref="coversRank({rank: 'best'})" autoscroll="false">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})" autoscroll="false">
             {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -62,7 +62,7 @@
     </div>
   </div>
 </div>
-<cover-songs ng-model="bestCovers"></cover-songs>
+<cover-songs ng-model="bestCovers" locale="{{ locale() }}"></cover-songs>
 <div class="page-title">
   <div class="row">
     <div class="col-md-8">
@@ -73,7 +73,7 @@
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
-          <a ui-sref="coversRank({rank: 'latest'})" autoscroll="false">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})" autoscroll="false">
             {{ 'MORE_COVERS' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -82,4 +82,4 @@
     </div>
   </div>
 </div>
-<cover-songs ng-model="latestCovers"></cover-songs>
+<cover-songs ng-model="latestCovers" locale="{{ locale() }}"></cover-songs>

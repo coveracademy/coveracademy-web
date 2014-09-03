@@ -14,11 +14,11 @@
         </div>
         <div class="col-md-4 align-right" style="padding-top: 36px;">
           <h4>
-            <a ng-if="isRanked('best')" ui-sref="coversRank({rank: 'latest'})">
+            <a ng-if="isRanked('best')" ui-sref="app.coversRank({locale: locale(), rank: 'latest'})">
               {{ 'SEE_THE_LATEST_COVERS' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
-            <a ng-if="isRanked('latest')" ui-sref="coversRank({rank: 'best'})">
+            <a ng-if="isRanked('latest')" ui-sref="app.coversRank({locale: locale(), rank: 'best'})">
               {{ 'SEE_THE_BEST_COVERS' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
@@ -29,7 +29,7 @@
     <div class="align-center">
       <pagination total-items="totalCoversRank" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>
-    <cover-songs ng-model="coversRank"></cover-songs>
+    <cover-songs ng-model="coversRank" locale="{{ locale() }}"></cover-songs>
     <div class="align-center">
       <pagination total-items="totalCoversRank" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>
@@ -39,7 +39,7 @@
   <div class="col-md-12">
     <div ng-repeat="row in artistsOfCovers | partition: 6" class="row padding">
       <div ng-repeat="artist in row" class="col-md-2">
-        <cover image="{{ artist.medium_thumbnail }}" link="artist({artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
+        <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
       </div>
     </div>
   </div>

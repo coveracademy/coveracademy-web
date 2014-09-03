@@ -70,8 +70,8 @@ angular
     }
   };
   var portuguese = {
-    id: 'pt-br',
-    image: 'pt-br.png',
+    id: 'pt',
+    image: 'pt.png',
     table: {
       ABOUT: 'Sobre',
       ADD_COVER: 'Adicionar cover',
@@ -142,16 +142,23 @@ angular
   this.getLanguages = function() {
     return languages;
   };
-
   this.getPreferredLanguage = function() {
     return portuguese;
   };
-
   this.getFallbackLanguage = function() {
     return portuguese;
   };
-
   this.$get = function() {
-    return languages;
+    return {
+      all: languages,
+      contains: function(languageId) {
+        for(index in languages) {
+          if(languages[index].id === languageId) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
   };
 });

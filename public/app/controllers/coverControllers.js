@@ -111,7 +111,7 @@ angular
     saveMusic: function() {
       var music = {
         id: $scope.musicTab.music.id,
-        name: $scope.musicTab.music.name,
+        title: $scope.musicTab.music.title,
         artist_id: $scope.musicTab.music.artist.id,
         small_thumbnail: $scope.musicTab.music.small_thumbnail,
         medium_thumbnail: $scope.musicTab.music.medium_thumbnail,
@@ -185,7 +185,7 @@ angular
   $scope.addCover = function() {
     coverService.addCover($scope.cover).then(function(response) {
       alertService.addAlert('success', 'Cover added successfully');
-      $state.go('cover', {id : response.data.id, slug: response.data.slug});
+      $state.go('app.cover', {locale: $scope.locale(), id : response.data.id, slug: response.data.slug});
     });
   };
 }])

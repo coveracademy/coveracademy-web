@@ -1,6 +1,7 @@
 angular
 .module('coverChallengeApp.controllers', [])
 .controller('applicationController', ['$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, seoService) {
+  $scope.locale = $translate.use;
   $scope.pageTitle = seoService.getTitle;
   $scope.metaDescription = seoService.getDescription;
   $scope.metaKeywords = seoService.getKeywords;
@@ -9,13 +10,13 @@ angular
   $scope.logout = authenticationService.logout;
 
   $scope.$on(authEvents.NOT_AUTHORIZED, function() {
-    $state.go('index');
+    $state.go('app.index', {locale: $scope.locale()});
     $translate('ALERTS.NOT_AUTHORIZED').then(function(message) {
       alertService.addAlert('warning', message);
     });
   });
   $scope.$on(authEvents.NOT_AUTHENTICATED, function() {
-    $state.go('login');
+    $state.go('app.login', {locale: $scope.locale()});
     $translate('ALERTS.NOT_AUTHENTICATED').then(function(message) {
       alertService.addAlert('warning', message);
     });
@@ -40,17 +41,17 @@ angular
 .controller('loginController', ['$rootScope', '$scope', '$state', 'authEvents', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authEvents, authenticationService, alertService) {
   $scope.login = function(provider) {
     authenticationService.login(provider).then(function(user) {
-      $state.go('index');
+      $state.go('app.index', {locale: $scope.locale()});
     });
   };
 }])
-.controller('headerController', ['$scope', '$state', '$translate', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $translate, $languages, authenticationService, coverService, searchService) {
-  $scope.languages = $languages;
+.controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
+  $scope.languages = $languages.all;
   $scope.isSectionActive = function(section) {
-    return $state.current.name === section;
+    return $state.current.name === 'app.' + section;
   };
   $scope.isLoginState = function() {
-    return $state.current.name === 'login';
+    return $state.current.name === 'app.login';
   };
   $scope.searchMusicOrArtist = function(query) {
     return searchService.searchMusicOrArtist(query).then(function(response) {
@@ -68,18 +69,15 @@ angular
       return queryResult;
     });
   };
-  $scope.changeLanguage = function(language) {
-    $translate.use(language.id);
-  };
   $scope.selectItem = function(item) {
     if(item.itemType === 'music') {
-      $state.go('music', {music : item.slug});
+      $state.go('app.music', {locale: $scope.locale(), music : item.slug});
     } else {
-      $state.go('artist', {artist : item.slug});
+      $state.go('app.artist', {locale: $scope.locale(), artist : item.slug});
     }
   };
   $scope.submitSearch = function() {
-    $state.go('search', {q: $scope.searchQuery});
+    $state.go('app.search', {locale: $scope.locale(), q: $scope.searchQuery});
   };
 }])
 .controller('alertController', ['$scope', 'alertService', function($scope, alertService) {

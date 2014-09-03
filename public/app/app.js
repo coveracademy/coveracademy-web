@@ -50,8 +50,13 @@ angular
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
   $stateProvider
+    .state('app', {
+      url: '/:locale',
+      abstract: true,
+      template: '<ui-view autoscroll="true"/>'
+    })
     // Admin states
-    .state('admin', {
+    .state('app.admin', {
       url: '/admin',
       templateUrl: '/app/partials/admin.html',
       controller: 'adminController',
@@ -63,7 +68,7 @@ angular
         }
       }
     })
-    .state('addCover', {
+    .state('app.addCover', {
       url: '/add-cover',
       templateUrl: '/app/partials/add-cover.html',
       controller: 'addCoverController',
@@ -76,14 +81,14 @@ angular
       }
     })
     // Anonymous states
-    .state('login', {
+    .state('app.login', {
       url: '/login',
       templateUrl: '/app/partials/login.html',
       controller: 'loginController',
       accessLevel: accessLevel.ANONYMOUS
     })
     // Public states
-    .state('index', {
+    .state('app.index', {
       url: '/',
       templateUrl: '/app/partials/index.html',
       controller: 'indexController',
@@ -95,18 +100,18 @@ angular
         }
       }
     })
-    .state('about', {
+    .state('app.about', {
       url: '/about',
       templateUrl: '/app/partials/about.html',
       accessLevel: accessLevel.PUBLIC
     })
-    .state('contact', {
+    .state('app.contact', {
       url: '/contact',
       templateUrl: '/app/partials/contact.html',
       controller: 'contactController',
       accessLevel: accessLevel.PUBLIC
     })
-    .state('cover', {
+    .state('app.cover', {
       url: '/cover/:id/:slug',
       templateUrl: '/app/partials/cover.html',
       controller: 'coverController',
@@ -118,7 +123,7 @@ angular
         }
       }
     })
-    .state('coversRank', {
+    .state('app.coversRank', {
       url: '/covers/:rank',
       templateUrl: '/app/partials/covers-rank.html',
       controller: 'coversRankController',
@@ -130,7 +135,7 @@ angular
         }
       }
     })
-    .state('artist', {
+    .state('app.artist', {
       url: '/artist/:artist?rank',
       templateUrl: '/app/partials/artist.html',
       controller: 'artistController',
@@ -142,7 +147,7 @@ angular
         }
       }
     })
-    .state('artists', {
+    .state('app.artists', {
       url: '/artists?genre',
       templateUrl: '/app/partials/artists.html',
       controller: 'artistsController',
@@ -154,7 +159,7 @@ angular
         }
       }
     })
-    .state('music', {
+    .state('app.music', {
       url: '/music/:music?rank',
       templateUrl: '/app/partials/music.html',
       controller: 'musicController',
@@ -166,7 +171,7 @@ angular
         }
       }
     })
-    .state('musicGenre', {
+    .state('app.musicGenre', {
       url: '/genre/:genre',
       templateUrl: '/app/partials/music-genre.html',
       controller: 'musicGenreController',
@@ -178,7 +183,7 @@ angular
         }
       }
     })
-    .state('musicGenreRank', {
+    .state('app.musicGenreRank', {
       url: '/genre/:genre/:rank',
       templateUrl: '/app/partials/music-genre-rank.html',
       controller: 'musicGenreRankController',
@@ -190,7 +195,7 @@ angular
         }
       }
     })
-    .state('search', {
+    .state('app.search', {
       url: '/search?q',
       templateUrl: '/app/partials/search.html',
       controller: 'searchController',
@@ -203,16 +208,41 @@ angular
       }
     })
     // Error states
-    .state('404', {
+    .state('app.404', {
       templateUrl: '/app/partials/errors/404.html'
     })
-    .state('500', {
+    .state('app.500', {
       templateUrl: '/app/partials/errors/500.html'
     });
 }])
-.run(['$rootScope', '$state', '$translate', 'amMoment', 'paginationConfig', 'authEvents', 'authenticationService', 'seoService', function($rootScope, $state, $translate, amMoment, paginationConfig, authEvents, authenticationService, seoService) {
+.run(['$rootScope', '$state', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'authenticationService', 'seoService', function($rootScope, $state, $translate, $languages, amMoment, paginationConfig, authEvents, authenticationService, seoService) {
+  // Angular-Translate events
+  $rootScope.$on('$translateChangeSuccess', function() {
+    if($translate.use() === 'en') {
+      amMoment.changeLanguage('en');
+      paginationConfig.firstText = 'First';
+      paginationConfig.lastText = 'Last';
+      paginationConfig.previousText = 'Previous';
+      paginationConfig.nextText = 'Next';
+    } else {
+      amMoment.changeLanguage('pt-br');
+      paginationConfig.firstText = 'Primeira';
+      paginationConfig.lastText = 'Última';
+      paginationConfig.previousText = 'Anterior';
+      paginationConfig.nextText = 'Próxima';
+    }
+  });
   // Ui-Router events
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    // Check if locale param is a supported language
+    if(!$languages.contains(toParams.locale)) {
+      event.preventDefault();
+      $state.go('app.404', {locale: $translate.use()}, {location: false});
+      return;
+    }
+    // Force angular-translate to emit $translateChangeSuccess and set the language
+    $translate.use(toParams.locale);
+    // Check if user has permission to access a view
     if (!authenticationService.isAuthorized(toState.accessLevel)) {
       event.preventDefault();
       if (authenticationService.isAuthenticated()) {
@@ -230,33 +260,15 @@ angular
         $rootScope.$broadcast(authEvents.NOT_AUTHENTICATED);
       }
     } else if(error.status === 404) {
-      $state.go('404', null, {location: false});
+      $state.go('app.404', {locale: $translate.use()}, {location: false});
     } else if(error.status === 500) {
-      $state.go('500', null, {location: false});
+      $state.go('app.500', {locale: $translate.use()}, {location: false});
     }
   });
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     seoService.reset();
   });
   $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams) {
-    $state.go('404', null, {location: false});
+    $state.go('app.404', {locale: $translate.use()}, {location: false});
   });
-  // Angular-Translate events
-  $rootScope.$on('$translateChangeSuccess', function() {
-    if($translate.use() === 'en') {
-      amMoment.changeLanguage('en');
-      paginationConfig.firstText = 'First';
-      paginationConfig.lastText = 'Last';
-      paginationConfig.previousText = 'Previous';
-      paginationConfig.nextText = 'Next';
-    } else {
-      amMoment.changeLanguage('pt-br');
-      paginationConfig.firstText = 'Primeira';
-      paginationConfig.lastText = 'Última';
-      paginationConfig.previousText = 'Anterior';
-      paginationConfig.nextText = 'Próxima';
-    }
-  });
-  // Force angular-translate to emit $translateChangeSuccess when run application
-  $translate.use($translate.use());
 }]);

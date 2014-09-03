@@ -296,8 +296,13 @@ input.big {
   bottom: 0px;
   width: 100%;
   color: #fff;
+  font-weight: bold;
   text-align: center;
-  box-shadow: 10px;
+  text-shadow: 2px 2px 5px #000000;
+
+  background-image: url('/img/gradient.png');
+  background-repeat: repeat-x;
+  background-position-y: 45px;
 }
 
 .cover img {

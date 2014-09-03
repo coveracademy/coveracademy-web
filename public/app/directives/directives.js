@@ -2,31 +2,37 @@ angular
 .module('coverChallengeApp.directives', [])
 .directive('coverSongs', function() {
   return {
+    templateUrl: 'app/partials/widgets/cover-songs.html',
     restrict: 'E',
     require: 'ngModel',
     transclude: true,
     scope: {
       thumbSize: '@',
+      locale: '@',
       covers: '=ngModel'
     },
-    templateUrl: 'app/partials/widgets/cover-songs.html',
+    controller: ['$scope', function($scope) {
+      $scope.thumbSizeFinal = $scope.thumbSize ? $scope.thumbSize : 'normal';
+      if($scope.thumbSizeFinal === 'normal') {
+        $scope.coversPerRow = 4;
+        $scope.columnSize = 12/$scope.coversPerRow;
+      } else if($scope.thumbSizeFinal === 'small') {
+        $scope.coversPerRow = 6;
+        $scope.columnSize = 12/$scope.coversPerRow;
+        $scope.fontSizeCss = 'font-small';
+      }
+      $scope.isThumbSize = function(size) {
+        return $scope.thumbSizeFinal === size;
+      };
+    }],
     link: function(scope, element, attrs, ctrl) {
-      if(!scope.thumbSize) {
-        scope.thumbSize = 'normal';
-      }
-      if(scope.thumbSize === 'normal') {
-        scope.coversPerRow = 4;
-        scope.columnSize = 12/scope.coversPerRow;
-      } else if(scope.thumbSize === 'small') {
-        scope.coversPerRow = 6;
-        scope.columnSize = 12/scope.coversPerRow;
-        scope.fontSizeCss = 'font-small';
-      }
+
     }
   };
 })
 .directive('cover', function() {
   return {
+    templateUrl: 'app/partials/widgets/cover.html',
     restrict: 'E',
     transclude: true,
     scope: {
@@ -36,7 +42,6 @@ angular
       height: '@',
       border: '&'
     },
-    templateUrl: 'app/partials/widgets/cover.html',
     link: function(scope, element, attrs, ctrl) {
       if(!angular.isDefined(scope.border())) {
         scope.border = true;

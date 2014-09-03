@@ -6,7 +6,7 @@
       </div>
       <div class="media-body">
         <h1 class="media-heading">
-          <a ui-sref="musicGenre({genre: musicGenre.slug})">{{ musicGenre.name }}</a>
+          <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
         </h1>
       </div>
     </div>
@@ -28,11 +28,11 @@
         </div>
         <div class="col-md-4 align-right" style="padding-top: 36px;">
           <h4>
-            <a ng-if="isRanked('best')" ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'latest'})">
+            <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
               See the latest {{ musicGenre.name }} covers
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
-            <a ng-if="isRanked('latest')" ui-sref="musicGenreRank({genre: musicGenre.slug, rank: 'best'})">
+            <a ng-if="isRanked('latest')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
               See the best {{ musicGenre.name }} covers
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
@@ -43,7 +43,7 @@
     <div class="align-center">
       <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>
-    <cover-songs ng-model="coversOfMusicGenre"></cover-songs>
+    <cover-songs ng-model="coversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
     <div class="align-center">
       <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>

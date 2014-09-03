@@ -9,8 +9,8 @@
 </div>
 <div class="row">
   <div class="col-md-2">
-    <cover image="{{ cover.artist.medium_thumbnail }}" link="artist({artist: '{{ cover.artist.slug }}'})" legend="{{ cover.artist.name }}" height="126"></cover>
-    <cover image="{{ cover.music.medium_thumbnail }}" link="music({music: '{{ cover.music.slug }}'})" legend="{{ cover.music.title }}" height="126"></cover>
+    <cover image="{{ cover.artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ cover.artist.slug }}'})" legend="{{ cover.artist.name }}" height="126"></cover>
+    <cover image="{{ cover.music.medium_thumbnail }}" link="app.music({locale: '{{ locale() }}', music: '{{ cover.music.slug }}'})" legend="{{ cover.music.title }}" height="126"></cover>
   </div>
   <div class="col-md-8">
     <div class="row">
@@ -47,12 +47,12 @@
     <div class="page-title">
       <h3>
         {{ 'MORE_COVERS_OF' | translate }}
-        <a ui-sref="music({music: cover.music.slug})">
+        <a ui-sref="app.music({locale: locale(), music: cover.music.slug})">
           {{ cover.music.title }}
         </a>
       </h3>
     </div>
-    <cover-songs ng-model="bestCoversOfMusic"></cover-songs>
+    <cover-songs ng-model="bestCoversOfMusic" locale="{{ locale() }}"></cover-songs>
   </div>
 </div>
 <div class="row">
@@ -60,11 +60,11 @@
     <div class="page-title">
       <h3>
         {{ 'MORE_COVERS_BY' | translate }}
-        <a ui-sref="artist({artist: cover.artist.slug})">
+        <a ui-sref="app.artist({locale: locale(), artist: cover.artist.slug})">
           {{ cover.artist.name }}
         </a>
       </h3>
     </div>
-    <cover-songs ng-model="bestCoversByArtist"></cover-songs>
+    <cover-songs ng-model="bestCoversByArtist" locale="{{ locale() }}"></cover-songs>
   </div>
 </div>
