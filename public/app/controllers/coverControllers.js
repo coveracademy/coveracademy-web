@@ -88,43 +88,52 @@ angular
       };
       artistService.saveArtist(artist).then(function(response) {
         alertService.addAlert('success', 'Artist saved successfully');
+        $scope.artistTab.artist = response.data;
       });
     }
   };
   $scope.musicTab = {
+    searchMusics: function(query) {
+      return searchService.searchMusics(query).then(function(response) {
+        response.data.forEach(function(music) {
+          music.displayTitle = music.title + ' by ' + music.artist.name;
+        });
+        return response.data;
+      });
+    },
+    selectMusic: function(music) {
+      $scope.musicTab.music = music;
+      $scope.musicTab.music.artist = $scope.musicTab.music.artist.name;
+    },
     searchArtists: function(query) {
       return searchService.searchArtists(query).then(function(response) {
         return response.data;
       });
     },
     selectArtist: function(artist) {
-      $scope.artistTab.artist = artist;
-    },
-    searchMusics: function(query) {
-      return searchService.searchMusics(query).then(function(response) {
-        return response.data;
-      });
-    },
-    selectMusic: function(music) {
-      $scope.musicTab.music = music;
+      $scope.musicTab.music.artist = artist.name;
     },
     saveMusic: function() {
       var music = {
         id: $scope.musicTab.music.id,
         title: $scope.musicTab.music.title,
-        artist_id: $scope.musicTab.music.artist.id,
+        artist: $scope.musicTab.music.artist,
         small_thumbnail: $scope.musicTab.music.small_thumbnail,
         medium_thumbnail: $scope.musicTab.music.medium_thumbnail,
         large_thumbnail: $scope.musicTab.music.large_thumbnail,
       };
       musicService.saveMusic(music).then(function(response) {
         alertService.addAlert('success', 'Music saved successfully');
+        $scope.musicTab.music = response.data;
+        $scope.musicTab.music.artist = $scope.musicTab.music.artist.name
       });
     }
   };
 }])
-.controller('indexController', ['$scope', '$state', '$filter', 'backendResponse', 'seoService', function($scope, $state, $filter, backendResponse, seoService) {
-  seoService.setTitle('The best covers in one place');
+.controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
+  $translate('SEO.INDEX').then(function(message) {
+    seoService.setTitle(message);
+  });
 
   $scope.latestCovers = backendResponse.data.latestCovers;
   $scope.bestCovers = backendResponse.data.bestCovers;
@@ -141,7 +150,7 @@ angular
     $scope.carouselSlides[index] = {item: $scope.carouselSlides[index], active: false};
   }
 }])
-.controller('searchController', ['$scope', '$stateParams', 'backendResponse', 'seoService', function($scope, $stateParams, backendResponse, seoService) {
+.controller('searchController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, backendResponse, seoService) {
   $scope.searchQuery = $stateParams.q;
   $scope.artists = backendResponse.data.artists;
   $scope.musics = backendResponse.data.musics;
@@ -149,10 +158,14 @@ angular
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
   $scope.totalResults = $scope.artists.length + $scope.musics.length;
 
-  seoService.setTitle('Search results for "' + $scope.searchQuery + '"');
+  $translate('SEO.SEARCH', {searchQuery: $scope.searchQuery}).then(function(message) {
+    seoService.setTitle(message);
+  });
 }])
-.controller('addCoverController', ['$scope', '$state', 'backendResponse', 'seoService', 'alertService', 'coverService', 'searchService', function($scope, $state, backendResponse, seoService, alertService, coverService, searchService) {
-  seoService.setTitle('Add a new cover');
+.controller('addCoverController', ['$scope', '$state', '$translate', 'backendResponse', 'seoService', 'alertService', 'coverService', 'searchService', function($scope, $state, $translate, backendResponse, seoService, alertService, coverService, searchService) {
+  $translate('SEO.ADD_COVER').then(function(message) {
+    seoService.setTitle(message);
+  });
 
   $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
   $scope.musicGenres = backendResponse.data.musicGenres;
@@ -189,14 +202,18 @@ angular
     });
   };
 }])
-.controller('coverController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'constants', function($scope, $stateParams, backendResponse, seoService, constants) {
+.controller('coverController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'constants', function($scope, $stateParams, $translate, backendResponse, seoService, constants) {
   $scope.cover = backendResponse.data.cover;
   $scope.bestCoversOfMusic = backendResponse.data.bestCoversOfMusic;
   $scope.bestCoversByArtist = backendResponse.data.bestCoversByArtist;
-  $scope.domain = constants.DOMAIN;
-  seoService.setTitle($scope.cover.author + '\'s cover of "' + $scope.cover.music.title + '" by ' + $scope.cover.artist.name);
+  $scope.siteUrl = constants.SITE_URL;
+
+  $translate('SEO.COVER', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
+  seoService.setImage($scope.cover.medium_thumbnail);
 }])
-.controller('coversRankController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, backendResponse, seoService, coverService) {
+.controller('coversRankController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
   $scope.rankType = $stateParams.rank;
   $scope.coversRank = backendResponse.data.coversRank;
   $scope.totalCoversRank = backendResponse.data.totalCoversRank;
@@ -205,7 +222,9 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  seoService.setTitle('The ' + $scope.rankType + ' covers from this week');
+  $translate('SEO.COVERS_RANK', {rankType: $scope.rankType}).then(function(message) {
+    seoService.setTitle(message);
+  });
 
   $scope.pageChanged = function() {
     var nextPage = $scope.rankType === 'best' ? coverService.bestCovers($scope.currentPage) : coverService.latestCovers($scope.currentPage);
@@ -217,20 +236,23 @@ angular
     return $scope.rankType === type;
   };
 }])
-.controller('artistController', ['$scope', '$stateParams', 'backendResponse', 'seoService', function($scope, $stateParams, backendResponse, seoService) {
+.controller('artistController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, backendResponse, seoService) {
   $scope.rankType = $stateParams.rank ? $stateParams.rank : 'best';
   $scope.artist = backendResponse.data.artist;
   $scope.totalMusicsByArtist = backendResponse.data.totalMusicsByArtist;
   $scope.musicsByArtist = backendResponse.data.musicsByArtist;
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
 
-  seoService.setTitle('The ' + $scope.rankType + ' covers of musics by ' + $scope.artist.name);
+  $translate('SEO.ARTIST', {rankType: $scope.rankType, artist: $scope.artist.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
+  seoService.setImage($scope.artist.medium_thumbnail);
 
   $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
 }])
-.controller('artistsController', ['$scope', 'backendResponse', 'seoService', 'coverService', 'artistService', function($scope, backendResponse, seoService, coverService, artistService) {
+.controller('artistsController', ['$scope', '$translate', 'backendResponse', 'seoService', 'coverService', 'artistService', function($scope, $translate, backendResponse, seoService, coverService, artistService) {
   $scope.musicGenre = backendResponse.data.musicGenre;
   $scope.artists = backendResponse.data.artists;
   $scope.totalArtists = backendResponse.data.totalArtists;
@@ -238,7 +260,11 @@ angular
   $scope.currentPage = 1;
   $scope.artistsPerPage = 60;
 
-  seoService.setTitle(($scope.musicGenre ? $scope.musicGenre.name : 'All') + ' artists');
+  var titleTranslationKey = $scope.musicGenre ? 'SEO.ARTISTS_MUSIC_GENRE' : 'SEO.ARTISTS_ALL';
+  var titleTranslationVars = $scope.musicGenre ? {musicGenre: $scope.musicGenre.name} : {};
+  $translate(titleTranslationKey, titleTranslationVars).then(function(message) {
+    seoService.setTitle(message);
+  })
 
   $scope.pageChanged = function() {
     artistService.listArtists($scope.musicGenre, $scope.currentPage).then(function(response) {
@@ -246,7 +272,7 @@ angular
     });
   };
 }])
-.controller('musicController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, backendResponse, seoService, coverService) {
+.controller('musicController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
   $scope.rankType = $stateParams.rank ? $stateParams.rank : 'best';
   $scope.music = backendResponse.data.music;
   $scope.totalCoversOfMusic = backendResponse.data.totalCoversOfMusic;
@@ -255,7 +281,10 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  seoService.setTitle('The ' + $scope.rankType + ' covers of "' + $scope.music.title + '" by ' + $scope.music.artist.name);
+  $translate('SEO.MUSIC', {rankType: $scope.rankType, music: $scope.music.title, artist: $scope.music.artist.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
+  seoService.setImage($scope.music.medium_thumbnail);
 
   $scope.pageChanged = function() {
     var nextPage = $scope.rankType === 'best' ? coverService.bestCoversOfMusic($scope.music, $scope.currentPage) : coverService.latestCoversOfMusic($scope.music, $scope.currentPage);
@@ -268,15 +297,18 @@ angular
     return $scope.rankType === type;
   };
 }])
-.controller('musicGenreController', ['$scope', 'backendResponse', 'seoService', function($scope, backendResponse, seoService) {
+.controller('musicGenreController', ['$scope', '$translate', 'constants', 'backendResponse', 'seoService', function($scope, $translate, constants, backendResponse, seoService) {
   $scope.musicGenre = backendResponse.data.musicGenre;
   $scope.bestArtistsOfMusicGenre = backendResponse.data.bestArtistsOfMusicGenre;
   $scope.bestCoversOfMusicGenre = backendResponse.data.bestCoversOfMusicGenre;
   $scope.latestCoversOfMusicGenre = backendResponse.data.latestCoversOfMusicGenre;
 
-  seoService.setTitle($scope.musicGenre.name + ' cover songs');
+  $translate('SEO.MUSIC_GENRE', {musicGenre: $scope.musicGenre.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
+  seoService.setImage(constants.SITE_URL + '/img/genres/' + $scope.musicGenre.image);
 }])
-.controller('musicGenreRankController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, backendResponse, seoService, coverService) {
+.controller('musicGenreRankController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
   $scope.rankType = $stateParams.rank;
   $scope.musicGenre = backendResponse.data.musicGenre;
   $scope.coversOfMusicGenre = backendResponse.data.coversOfMusicGenre;
@@ -285,7 +317,9 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  seoService.setTitle('The ' + $scope.rankType + ' ' + $scope.musicGenre.name + ' cover songs')
+  $translate('SEO.MUSIC_GENRE_RANK', {rankType: $scope.rankType, musicGenre: $scope.musicGenre.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
 
   $scope.pageChanged = function() {
     var nextPage = $scope.rankType === 'best' ? coverService.bestCoversOfMusicGenre($scope.musicGenre, $scope.currentPage) : coverService.latestCoversOfMusicGenre($scope.musicGenre, $scope.currentPage);

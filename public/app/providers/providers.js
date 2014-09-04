@@ -19,7 +19,7 @@ angular
       COVER_VIDEO_TITLE: '{{ author }}\'s cover of "{{ music.title }}" by {{ artist.name }}',
       FOLLOW_US: 'Follow us',
       GIVE_US_YOUR_FEEDBACK: 'Give us your Feedback',
-      HELP_US_TO_IMPROVE: 'Help us to improve much more the Cover Challenge',
+      HELP_US_TO_IMPROVE: 'Help us to further improve the Cover Challenge',
       LATEST_COVERS: 'Latest covers',
       LATEST_COVERS_WEEK: 'Latest covers from this week',
       MORE_COVERS: 'More covers',
@@ -66,6 +66,20 @@ angular
         REGGAE: 'Reggae',
         RHYTHM_AND_BLUES: 'Rhythm and blues',
         ROCK: 'Rock'
+      },
+      SEO: {
+        ADD_COVER: 'Add a new cover',
+        ARTIST: 'The {{ rankType }} covers of musics by {{ artist }}',
+        ARTISTS_ALL: 'All artists',
+        ARTISTS_MUSIC_GENRE: '{{ musicGenre }} artists',
+        CONTACT: 'Contact us',
+        COVER: '{{ author }}\'s cover of "{{ music }}" by {{ artist }}',
+        COVERS_RANK: 'The {{ rankType }} covers from this week',
+        INDEX: 'The best covers in one place',
+        MUSIC: 'The {{ rankType }} covers of "{{ music }}" by {{ artist }}',
+        MUSIC_GENRE: '{{ musicGenre }} cover songs',
+        MUSIC_GENRE_RANK: 'The {{ rankType }} {{ musicGenre }} cover songs',
+        SEARCH: 'Search results for "{{ searchQuery }}"'
       }
     }
   };
@@ -134,6 +148,20 @@ angular
         REGGAE: 'Reggae',
         RHYTHM_AND_BLUES: 'Rhythm and blues',
         ROCK: 'Rock'
+      },
+      SEO: {
+        ADD_COVER: 'Adicione um novo cover',
+        ARTIST: 'Os {{ rankType }} covers das músicas de {{ artist }}',
+        ARTISTS_ALL: 'Todos os artistas',
+        ARTISTS_MUSIC_GENRE: 'Artistas {{ musicGenre }}',
+        CONTACT: 'Entre em contato conosco',
+        COVER: 'Cover de {{ author }} da música "{{ music }}" de {{ artist }}',
+        COVERS_RANK: 'Os {{ rankType }} covers da semana',
+        INDEX: 'Os melhores covers em um só lugar',
+        MUSIC: 'Os {{ rankType }} covers da música "{{ music }}" de {{ artist }}',
+        MUSIC_GENRE: 'Covers de {{ musicGenre }}',
+        MUSIC_GENRE_RANK: 'Os {{ rankType }} covers de {{ musicGenre }}',
+        SEARCH: 'Resultados da busca por "{{ searchQuery }}"'
       }
     }
   };

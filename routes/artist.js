@@ -19,7 +19,7 @@ module.exports = function(router, app) {
   router.post('/', isAdmin, function(req, res, next) {
     var artist = Artist.forge(req.param('artist'));
     coverService.saveArtist(artist).then(function(artist) {
-      res.send(200);
+      res.json(artist);
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);

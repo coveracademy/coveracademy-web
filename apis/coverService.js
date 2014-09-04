@@ -303,6 +303,10 @@ exports.getArtist = function(name) {
   return this.getArtistBySlug(slug.slugify(name));
 }
 
+exports.getArtistById = function(id) {
+  return Artist.query({where: ['id', id]}).fetch({withRelated: defaultArtistRelated});
+}
+
 exports.getArtistBySlug = function(slug) {
   return Artist.query({where: ['slug', slug]}).fetch({withRelated: defaultArtistRelated});
 }
@@ -427,6 +431,10 @@ exports.getMusic = function(artist, title) {
   return this.getMusicBySlug(slugified);
 }
 
+exports.getMusicById = function(id) {
+  return Music.query({where: ['id', id]}).fetch({withRelated: ['artist']});
+}
+
 exports.getMusicBySlug = function(slug) {
   return Music.query({where: ['slug', slug]}).fetch({withRelated: ['artist']});
 }
@@ -522,9 +530,17 @@ exports.refuseCover = function(potentialCover) {
 }
 
 exports.saveArtist = function(artist) {
-  return artist.save();
+  return artist.save().then(function(artist) {
+    return $.getArtistById(artist.id);
+  });
 }
 
-exports.saveMusic = function(music) {
-  return music.save();
+exports.saveMusic = function(musicData) {
+  musicData.artist = _.str.trim(musicData.artist);
+  musicData.title = _.str.trim(musicData.title);
+  return $.discoverArtist(musicData.artist).then(function(artist) {
+    return $.discoverMusic(artist, musicData.title);
+  }).then(function(music) {
+    return $.getMusicById(music.id);
+  });
 }

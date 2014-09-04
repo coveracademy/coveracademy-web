@@ -1,27 +1,34 @@
 <div class="row">
   <div class="col-md-12">
-    <div class="media">
-      <div ng-if="music.small_thumbnail" class="pull-left">
-        <img class="medium-thumbnail" ng-src="{{ music.small_thumbnail }}">
-      </div>
-      <div class="media-body">
-        <h1 class="media-heading">
-          {{ music.title }} {{ 'BY_LOWERCASE' | translate }}
-          <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">{{ music.artist.name }}</a>
-        </h1>
-        <p class="font-biggest">
-          <span class="label label-info">{{ totalCoversOfMusic }} covers</span>
-        </p>
-        <div class="pull-right">
-          <div class="btn-group">
-            <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-              {{ 'BEST_COVERS' | translate }}
-            </a>
-            <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-              {{ 'LATEST_COVERS' | translate }}
-            </a>
-          </div>
+    <div class="special-header">
+      <div class="content">
+        <div ng-if="music.medium_thumbnail" class="thumbnail">
+          <img ng-src="{{ music.medium_thumbnail }}">
         </div>
+        <div>
+          <h1 class="bolder-text">
+            {{ music.title }} {{ 'BY_LOWERCASE' | translate }}
+            <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">{{ music.artist.name }}</a>
+          </h1>
+          <h2>
+            <span class="label label-info">{{ totalCoversOfMusic }} covers</span>
+          </h2>
+        </div>
+      </div>
+      <img ng-if="music.large_thumbnail" ng-src="{{ music.large_thumbnail }}">
+    </div>
+  </div>
+</div>
+<div class="row padding">
+  <div class="col-md-12">
+    <div class="pull-right">
+      <div class="btn-group">
+        <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
+          {{ 'BEST_COVERS' | translate }}
+        </a>
+        <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
+          {{ 'LATEST_COVERS' | translate }}
+        </a>
       </div>
     </div>
   </div>

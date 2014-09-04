@@ -1,11 +1,17 @@
 angular
 .module('coverChallengeApp.services', [])
-.service('seoService', [function() {
-  var title = '';
-  var description = '';
-  var keywords = '';
-  var image = '';
+.service('seoService', ['$location', 'constants', function($location, constants) {
+  var title = null;
+  var description = null;
+  var keywords = null;
+  var image = null;
 
+  this.getSiteName = function() {
+    return constants.SITE_NAME;
+  };
+  this.getUrl = function() {
+    return $location.absUrl();;
+  };
   this.getTitle = function() {
     return title;
   };
@@ -41,9 +47,10 @@ angular
     return keywords;
   };
   this.reset = function() {
-    title = '';
-    description = '';
-    keywords = '';
+    title = null;
+    description = null;
+    keywords = null;
+    image = null;
   };
 }])
 .service('alertService', ['$timeout', function($timeout) {

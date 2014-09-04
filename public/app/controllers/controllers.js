@@ -2,9 +2,15 @@ angular
 .module('coverChallengeApp.controllers', [])
 .controller('applicationController', ['$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'seoService', function($scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, seoService) {
   $scope.locale = $translate.use;
+
+  // SEO
+  $scope.siteName = seoService.getSiteName;
+  $scope.pageUrl = seoService.getUrl;
   $scope.pageTitle = seoService.getTitle;
   $scope.metaDescription = seoService.getDescription;
   $scope.metaKeywords = seoService.getKeywords;
+  $scope.metaImage = seoService.getImage;
+
   $scope.user = authenticationService.getUser;
   $scope.login = authenticationService.ensureAuth;
   $scope.logout = authenticationService.logout;
@@ -37,6 +43,9 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $state.transitionTo($state.current, $stateParams, {reload: true, inherit: false, notify: true});
   });
+}])
+.controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
+  $state.go('app.index', {locale: $translate.use()});
 }])
 .controller('loginController', ['$rootScope', '$scope', '$state', 'authEvents', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authEvents, authenticationService, alertService) {
   $scope.login = function(provider) {
@@ -84,7 +93,11 @@ angular
   $scope.alerts = alertService.getAlerts();
   $scope.closeAlert = alertService.closeAlert;
 }])
-.controller('contactController', ['$scope', '$translate', 'alertService', 'userService', function($scope, $translate, alertService, userService) {
+.controller('contactController', ['$scope', '$translate', 'seoService', 'alertService', 'userService', function($scope, $translate, seoService, alertService, userService) {
+  $translate('SEO.CONTACT').then(function(message) {
+    seoService.setTitle(message);
+  });
+
   $scope.sendEmail = function() {
     userService.sendEmail($scope.name, $scope.email, $scope.subject, $scope.message).then(function(response) {
       $translate('CONTACT_FORM.EMAIL_SENDED').then(function(message) {

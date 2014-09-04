@@ -1,14 +1,17 @@
 <div class="row">
   <div class="col-md-12">
-    <div class="media">
-      <div class="pull-left">
-        <img class="medium-thumbnail" ng-src="/img/genres/{{ musicGenre.image }}">
+    <div class="special-header">
+      <div class="content" ng->
+        <div class="thumbnail">
+          <img ng-src="/img/genres/{{ musicGenre.image }}">
+        </div>
+        <div>
+          <h1 class="bolder-text">
+            <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
+          </h1>
+        </div>
       </div>
-      <div class="media-body">
-        <h1 class="media-heading">
-          <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
-        </h1>
-      </div>
+      <img ng-src="/img/genres/{{ musicGenre.image }}">
     </div>
   </div>
 </div>

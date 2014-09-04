@@ -2,9 +2,9 @@
   <tab heading="Potential covers">
     <div class="row">
       <div class="col-md-12 align-right">
-        <button class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale})">
+        <a class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale()})">
           {{ 'ADD_NEW_COVER_VIDEO' | translate }}
-        </button>
+        </a>
       </div>
     </div>
     <div class="row padding">
@@ -147,7 +147,7 @@
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
         <div class="form-group">
-          <input type="search" name="search_query" ng-model="musicTab.searchQuery" typeahead="music.title for music in musicTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectMusic($item)" placeholder="Search for musics" class="form-control" required>
+          <input type="search" name="search_query" ng-model="musicTab.searchQuery" typeahead="music.displayTitle for music in musicTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectMusic($item)" placeholder="Search for musics" class="form-control" required>
         </div>
         <hr/>
         <div ng-if="musicTab.music">

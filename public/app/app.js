@@ -15,8 +15,9 @@ angular
   'videosharing-embed'
 ])
 .constant('constants', {
-  DOMAIN: 'http://www.promessadepolitico.com.br',
-  USER_COOKIE: 'coverChallenge.user'
+  SITE_NAME: 'Cover Ninja',
+  SITE_URL: 'http://www.promessadepolitico.com.br',
+  USER_COOKIE: 'CoverNinja.user'
 })
 .constant('authEvents', {
   LOGIN_SUCCESS: 'loginSuccess',
@@ -50,6 +51,11 @@ angular
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
   $stateProvider
+    .state('root', {
+      url: '/',
+      controller: 'rootController',
+      accessLevel: accessLevel.PUBLIC
+    })
     .state('app', {
       url: '/:locale',
       abstract: true,
@@ -100,11 +106,11 @@ angular
         }
       }
     })
-    .state('app.about', {
-      url: '/about',
-      templateUrl: '/app/partials/about.html',
-      accessLevel: accessLevel.PUBLIC
-    })
+    // .state('app.about', {
+    //   url: '/about',
+    //   templateUrl: '/app/partials/about.html',
+    //   accessLevel: accessLevel.PUBLIC
+    // })
     .state('app.contact', {
       url: '/contact',
       templateUrl: '/app/partials/contact.html',
@@ -235,13 +241,15 @@ angular
   // Ui-Router events
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     // Check if locale param is a supported language
-    if(!$languages.contains(toParams.locale)) {
+    if(toState.name !== 'root' && !$languages.contains(toParams.locale)) {
       event.preventDefault();
       $state.go('app.404', {locale: $translate.use()}, {location: false});
       return;
     }
     // Force angular-translate to emit $translateChangeSuccess and set the language
-    $translate.use(toParams.locale);
+    if($translate.use() !== toParams.locale) {
+      $translate.use(toParams.locale);
+    }
     // Check if user has permission to access a view
     if (!authenticationService.isAuthorized(toState.accessLevel)) {
       event.preventDefault();

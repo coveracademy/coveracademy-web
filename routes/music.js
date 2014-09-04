@@ -6,9 +6,9 @@ var coverService = require('../apis/coverService'),
 module.exports = function(router, app) {
 
   router.post('/', isAdmin, function(req, res, next) {
-    var music = Music.forge(req.param('music'));
-    coverService.saveMusic(music).then(function(music) {
-      res.send(200);
+    var musicData = req.param('music');
+    coverService.saveMusic(musicData).then(function(music) {
+      res.json(music);
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);
