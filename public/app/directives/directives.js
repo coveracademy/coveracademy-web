@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp.directives', [])
+.module('coverAcademy.directives', [])
 .directive('coverSongs', function() {
   return {
     templateUrl: 'app/partials/widgets/cover-songs.html',

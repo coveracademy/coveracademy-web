@@ -7,7 +7,7 @@
         </div>
         <div>
           <h1 class="bolder-text">
-            {{ music.title }} {{ 'BY_LOWERCASE' | translate }}
+            {{ music.title }} {{ 'by_lowercase' | translate }}
             <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">{{ music.artist.name }}</a>
           </h1>
           <h2>
@@ -24,10 +24,10 @@
     <div class="pull-right">
       <div class="btn-group">
         <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-          {{ 'BEST_COVERS' | translate }}
+          {{ 'best_covers' | translate }}
         </a>
         <a class="btn btn-default" ui-sref="app.music({locale: locale(), music: music.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-          {{ 'LATEST_COVERS' | translate }}
+          {{ 'latest_covers' | translate }}
         </a>
       </div>
     </div>

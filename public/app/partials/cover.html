@@ -2,7 +2,7 @@
   <div class="col-md-12 align-center">
     <div class="page-title">
       <h1 class="title">
-        {{ 'COVER_VIDEO_TITLE' | translate: cover }}
+        {{ 'cover_video_title' | translate: cover }}
       </h1>
     </div>
   </div>
@@ -23,18 +23,18 @@
     <div class="row padding">
       <div class="col-md-9 font-big">
         <p>
-          {{ 'COVER_BY' | translate }} {{ cover.author }}
+          {{ 'cover_by' | translate }} {{ cover.author }}
         </p>
         <p>
-          {{ 'ADDED' | translate }} <span am-time-ago="cover.registration_date"></span>
+          {{ 'added' | translate }} <span am-time-ago="cover.registration_date"></span>
           • <span am-time-ago="cover.video_date"></span>
-          <a ng-href="{{ cover.url }}">{{ 'ON_YOUTUBE' | translate }}</a>
+          <a ng-href="{{ cover.url }}">{{ 'on_youtube' | translate }}</a>
         </p>
       </div>
       <div class="col-md-3 align-right">
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'SHARE_ON' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
+        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
+        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
+        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
       </div>
     </div>
   </div>
@@ -46,7 +46,7 @@
   <div class="col-md-12">
     <div class="page-title">
       <h3>
-        {{ 'MORE_COVERS_OF' | translate }}
+        {{ 'more_covers_of' | translate }}
         <a ui-sref="app.music({locale: locale(), music: cover.music.slug})">
           {{ cover.music.title }}
         </a>
@@ -59,7 +59,7 @@
   <div class="col-md-12">
     <div class="page-title">
       <h3>
-        {{ 'MORE_COVERS_BY' | translate }}
+        {{ 'more_covers_by' | translate }}
         <a ui-sref="app.artist({locale: locale(), artist: cover.artist.slug})">
           {{ cover.artist.name }}
         </a>

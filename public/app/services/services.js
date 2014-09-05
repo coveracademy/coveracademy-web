@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp.services', [])
+.module('coverAcademy.services', [])
 .service('seoService', ['$location', 'constants', function($location, constants) {
   var title = null;
   var description = null;

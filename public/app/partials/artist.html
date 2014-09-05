@@ -9,7 +9,7 @@
           <h1 class="bolder-text">{{ artist.name }}</h1>
           <h2>
             <span class="label label-success">{{ artist.musicGenre.name }}</span>
-            <span class="label label-info">{{ totalMusicsByArtist }} {{ 'MUSICS' | translate }}</span>
+            <span class="label label-info">{{ totalMusicsByArtist }} {{ 'musics' | translate }}</span>
           </h2>
         </div>
       </div>
@@ -22,10 +22,10 @@
     <div class="pull-right">
       <div class="btn-group">
         <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-          {{ 'BEST_COVERS' | translate }}
+          {{ 'best_covers' | translate }}
         </a>
         <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-          {{ 'LATEST_COVERS' | translate }}
+          {{ 'latest_covers' | translate }}
         </a>
       </div>
     </div>

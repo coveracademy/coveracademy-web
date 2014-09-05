@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt" ng-app="coverChallengeApp" ng-controller="applicationController">
+<html lang="pt" ng-app="coverAcademy" ng-controller="applicationController">
   <head>
     <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
     <base href="/">
@@ -46,13 +46,13 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" ng-href="/{{ locale() }}/">
-            Cover <i class="glyphicon glyphicon-star-empty"></i> Ninja
+            {{ siteName }}
           </a>
         </div>
         <div class="navbar-collapse collapse">
           <form name="searchForm" class="navbar-form navbar-left" novalidate>
             <div class="input-group">
-              <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="{{ 'SEARCH_FOR_MUSICS_OR_ARTISTS' | translate }}" class="form-control" style="width: 400px;" required>
+              <input type="search" name="search_query" ng-model="searchQuery" typeahead="item.displayName for item in searchMusicOrArtist($viewValue)" typeahead-min-length="2" typeahead-wait-ms="500" typeahead-on-select="selectItem($item)" placeholder="{{ 'search_for_musics_or_artists' | translate }}" class="form-control" style="width: 400px;" required>
               <span class="input-group-btn">
                 <button ng-click="submitSearch()" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
                   <span class="glyphicon glyphicon-search"></span>
@@ -62,10 +62,10 @@
           </form>
           <ul class="nav navbar-nav">
             <!-- <li ng-class="{'active': isSectionActive('about')}">
-              <a ui-sref="app.about({locale: locale()})">{{ 'ABOUT' | translate }}</a>
+              <a ui-sref="app.about({locale: locale()})">{{ 'about' | translate }}</a>
             </li> -->
             <li ng-class="{'active': isSectionActive('contact')}">
-              <a ui-sref="app.contact({locale: locale()})">{{ 'CONTACT' | translate }}</a>
+              <a ui-sref="app.contact({locale: locale()})">{{ 'contact' | translate }}</a>
             </li>
           </ul>
           <ul class="languages nav navbar-nav navbar-left">
@@ -87,7 +87,7 @@
             </li>
           </ul>
           <form ng-show="!isLoginState() && !user()" class="navbar-form navbar-right">
-            <button ng-click="login()" class="btn btn-success">{{ 'SIGNIN_BUTTON' | translate }}</button>
+            <button ng-click="login()" class="btn btn-success">{{ 'signin_button' | translate }}</button>
           </form>
         </div>
       </div>
@@ -100,14 +100,14 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <h4>{{ 'THE_PROJECT' | translate }}</h4>
+            <h4>{{ 'the_project' | translate }}</h4>
             <ul>
-              <!-- <li><a ui-sref="app.about({locale: locale()})">{{ 'ABOUT' | translate }}</a></li> -->
-              <li><a ui-sref="app.contact({locale: locale()})">{{ 'CONTACT' | translate }}</a></li>
+              <!-- <li><a ui-sref="app.about({locale: locale()})">{{ 'about' | translate }}</a></li> -->
+              <li><a ui-sref="app.contact({locale: locale()})">{{ 'contact' | translate }}</a></li>
             </ul>
           </div>
           <div class="col-md-4">
-            <h4>{{ 'FOLLOW_US' | translate }}</h4>
+            <h4>{{ 'follow_us' | translate }}</h4>
             <ul>
               <li><a href="http://www.facebook.com/promessadepolitico">Facebook</a></li>
               <!--<li><a href="http://www.twitter.com/promessadepolitico">Twitter</a></li>-->

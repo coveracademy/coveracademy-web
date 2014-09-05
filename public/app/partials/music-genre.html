@@ -24,7 +24,7 @@
       <h3 class="title">
         <small>
           <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
-            {{ 'SEE_ALL_MUSIC_GENRE_ARTISTS' | translate: musicGenre }}
+            {{ 'see_all_music_genre_artists' | translate: musicGenre }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>
@@ -41,14 +41,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        {{ 'THE_BEST_MUSIC_GENRE_COVERS' | translate: musicGenre }}
+        {{ 'the_best_music_genre_covers' | translate: musicGenre }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
-            {{ 'MORE_COVERS' | translate }}
+            {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>
@@ -61,14 +61,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="title">
-        {{ 'THE_LATEST_MUSIC_GENRE_COVERS' | translate: musicGenre }}
+        {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
       </h3>
     </div>
     <div class="col-md-4 align-right">
       <h3 class="title">
         <small>
           <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
-            {{ 'MORE_COVERS' | translate }}
+            {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </small>

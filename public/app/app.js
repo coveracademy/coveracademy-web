@@ -1,11 +1,11 @@
 angular
-.module('coverChallengeApp', [
-  'coverChallengeApp.providers',
-  'coverChallengeApp.factories',
-  'coverChallengeApp.services',
-  'coverChallengeApp.directives',
-  'coverChallengeApp.filters',
-  'coverChallengeApp.controllers',
+.module('coverAcademy', [
+  'coverAcademy.providers',
+  'coverAcademy.factories',
+  'coverAcademy.services',
+  'coverAcademy.directives',
+  'coverAcademy.filters',
+  'coverAcademy.controllers',
   'angularMoment',
   'ngCookies',
   'ngProgress',
@@ -15,9 +15,9 @@ angular
   'videosharing-embed'
 ])
 .constant('constants', {
-  SITE_NAME: 'Cover Ninja',
-  SITE_URL: 'http://www.promessadepolitico.com.br',
-  USER_COOKIE: 'CoverNinja.user'
+  SITE_NAME: 'Cover Academy',
+  SITE_URL: 'http://www.coveracademy.com',
+  USER_COOKIE: 'CoverAcademy.user'
 })
 .constant('authEvents', {
   LOGIN_SUCCESS: 'loginSuccess',

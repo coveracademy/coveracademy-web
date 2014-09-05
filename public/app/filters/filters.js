@@ -1,5 +1,5 @@
 angular
-.module('coverChallengeApp.filters', [])
+.module('coverAcademy.filters', [])
 .filter('partition', function() {
   var cache = {};
   return function(arr, size) {

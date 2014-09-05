@@ -1,7 +1,10 @@
 angular
-.module('coverChallengeApp.controllers')
-.controller('adminController', ['$scope', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
-  seoService.setTitle('Administration console');
+.module('coverAcademy.controllers')
+.controller('adminController', ['$scope', '$translate', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $translate, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
+  $translate('seo.admin').then(function(message) {
+    seoService.setTitle(message);
+  });
+
   $scope.potentialCoversTab = {
     potentialCovers: backendResponse.data.potentialCovers,
     acceptCover: function(potentialCover) {
@@ -131,7 +134,7 @@ angular
   };
 }])
 .controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
-  $translate('SEO.INDEX').then(function(message) {
+  $translate('seo.index').then(function(message) {
     seoService.setTitle(message);
   });
 
@@ -158,12 +161,12 @@ angular
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
   $scope.totalResults = $scope.artists.length + $scope.musics.length;
 
-  $translate('SEO.SEARCH', {searchQuery: $scope.searchQuery}).then(function(message) {
+  $translate('seo.search', {searchQuery: $scope.searchQuery}).then(function(message) {
     seoService.setTitle(message);
   });
 }])
 .controller('addCoverController', ['$scope', '$state', '$translate', 'backendResponse', 'seoService', 'alertService', 'coverService', 'searchService', function($scope, $state, $translate, backendResponse, seoService, alertService, coverService, searchService) {
-  $translate('SEO.ADD_COVER').then(function(message) {
+  $translate('seo.add_cover').then(function(message) {
     seoService.setTitle(message);
   });
 
@@ -208,7 +211,7 @@ angular
   $scope.bestCoversByArtist = backendResponse.data.bestCoversByArtist;
   $scope.siteUrl = constants.SITE_URL;
 
-  $translate('SEO.COVER', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(message) {
+  $translate('seo.cover', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(message) {
     seoService.setTitle(message);
   });
   seoService.setImage($scope.cover.medium_thumbnail);
@@ -222,9 +225,12 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  $translate('SEO.COVERS_RANK', {rankType: $scope.rankType}).then(function(message) {
-    seoService.setTitle(message);
+  $translate('rank_type.' + $scope.rankType).then(function(rankType) {
+    $translate('seo.covers_rank', {rankType: rankType}).then(function(message) {
+      seoService.setTitle(message);
+    });
   });
+
 
   $scope.pageChanged = function() {
     var nextPage = $scope.rankType === 'best' ? coverService.bestCovers($scope.currentPage) : coverService.latestCovers($scope.currentPage);
@@ -243,8 +249,10 @@ angular
   $scope.musicsByArtist = backendResponse.data.musicsByArtist;
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
 
-  $translate('SEO.ARTIST', {rankType: $scope.rankType, artist: $scope.artist.name}).then(function(message) {
-    seoService.setTitle(message);
+  $translate('rank_type.' + $scope.rankType).then(function(rankType) {
+    $translate('seo.artist', {rankType: rankType, artist: $scope.artist.name}).then(function(message) {
+      seoService.setTitle(message);
+    });
   });
   seoService.setImage($scope.artist.medium_thumbnail);
 
@@ -260,7 +268,7 @@ angular
   $scope.currentPage = 1;
   $scope.artistsPerPage = 60;
 
-  var titleTranslationKey = $scope.musicGenre ? 'SEO.ARTISTS_MUSIC_GENRE' : 'SEO.ARTISTS_ALL';
+  var titleTranslationKey = $scope.musicGenre ? 'seo.artists_music_genre' : 'seo.artists_all';
   var titleTranslationVars = $scope.musicGenre ? {musicGenre: $scope.musicGenre.name} : {};
   $translate(titleTranslationKey, titleTranslationVars).then(function(message) {
     seoService.setTitle(message);
@@ -281,8 +289,10 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  $translate('SEO.MUSIC', {rankType: $scope.rankType, music: $scope.music.title, artist: $scope.music.artist.name}).then(function(message) {
-    seoService.setTitle(message);
+  $translate('rank_type.' + $scope.rankType).then(function(rankType) {
+    $translate('seo.music', {rankType: rankType, music: $scope.music.title, artist: $scope.music.artist.name}).then(function(message) {
+      seoService.setTitle(message);
+    });
   });
   seoService.setImage($scope.music.medium_thumbnail);
 
@@ -303,7 +313,7 @@ angular
   $scope.bestCoversOfMusicGenre = backendResponse.data.bestCoversOfMusicGenre;
   $scope.latestCoversOfMusicGenre = backendResponse.data.latestCoversOfMusicGenre;
 
-  $translate('SEO.MUSIC_GENRE', {musicGenre: $scope.musicGenre.name}).then(function(message) {
+  $translate('seo.music_genre', {musicGenre: $scope.musicGenre.name}).then(function(message) {
     seoService.setTitle(message);
   });
   seoService.setImage(constants.SITE_URL + '/img/genres/' + $scope.musicGenre.image);
@@ -317,8 +327,10 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 20;
 
-  $translate('SEO.MUSIC_GENRE_RANK', {rankType: $scope.rankType, musicGenre: $scope.musicGenre.name}).then(function(message) {
-    seoService.setTitle(message);
+  $translate('rank_type.' + $scope.rankType).then(function(rankType) {
+    $translate('seo.music_genre_rank', {rankType: rankType, musicGenre: $scope.musicGenre.name}).then(function(message) {
+      seoService.setTitle(message);
+    });
   });
 
   $scope.pageChanged = function() {

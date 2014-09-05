@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12 align-right">
         <a class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale()})">
-          {{ 'ADD_NEW_COVER_VIDEO' | translate }}
+          {{ 'add_new_cover_video' | translate }}
         </a>
       </div>
     </div>
@@ -16,7 +16,7 @@
                 <embed-video href="{{ potentialCover.url }}"></embed-video>
               </div>
               <div class="caption">
-                <form class="form-horizontal compacted" role="form">
+                <form class="form-horizontal compacted">
                   <div class="form-group">
                     <label for="artist-{{ potentialCover.id }}" class="col-md-2 control-label">Artist</label>
                     <div class="col-md-10">
@@ -50,19 +50,19 @@
   <tab heading="Covers">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <form name="coverForm" class="form-horizontal">
-          <div class="form-group">
-            <div class="input-group">
-              <input type="search" name="search_id" ng-model="coverTab.searchID" placeholder="Search a cover song by ID" class="form-control" required>
-              <span class="input-group-btn">
-                <button ng-click="coverTab.searchCoverByID(coverTab.searchID)" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
-              </span>
-            </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="search" name="search_id" ng-model="coverTab.searchID" placeholder="Search a cover song by ID" class="form-control" required>
+            <span class="input-group-btn">
+              <button ng-click="coverTab.searchCoverByID(coverTab.searchID)" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
           </div>
-          <hr/>
-          <div ng-if="coverTab.cover">
+        </div>
+        <hr/>
+        <div ng-if="coverTab.cover">
+          <form name="coverForm" class="form-horizontal">
             <div class="form-group embed-container">
               <embed-video ng-href="{{ coverTab.cover.url }}"></embed-video>
             </div>
@@ -91,8 +91,8 @@
                 </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </tab>
