@@ -6,7 +6,7 @@ var settings   = require('../../configs/settings'),
 var lastfm = new LastFmNode({
   api_key: settings.lastfmKey,
   secret: settings.lastfmSecret,
-  useragent: 'cover_challenge'
+  useragent: settings.domain
 });
 
 var genres = {

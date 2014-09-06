@@ -4,74 +4,58 @@ var path = require('path'),
     _nodePort = process.env.NODE_PORT || 3000,
     _publicPath = path.join(__dirname, '../public'),
     _viewsPath = path.join(__dirname, '../views'),
-    _oembedApiKey = '1e9d27d76b02e60bc0afdf',
+    _oembedAPIKey = '0d7e9ac5890d98a8fa0c47',
     _lastfmKey = '33623b4ad36e7ce8591b5247c2c51f72',
     _lastfmSecret = '06bb829a0c65fdd087fc0d89f1f7e9f3',
-    _googleAPIKey = 'AIzaSyDgwFGHZugs6o5eFGIssOqLeYjnxSAcDns',
+    _googleAPIKey = 'AIzaSyCuzyRHXYYPKj3eNaiKlrK2e0cnYrrFLiY',
+    _siteUrl = 'http://www.coveracademy.com',
+    _domain = 'coveracademy.com',
+    _facebook = {
+      clientID: '329761620528304',
+      clientSecret: '9331e1f0ee96c8ea7789a22e55aacdba',
+      callbackURL: _siteUrl + '/api/auth/facebook/callback',
+      profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails']
+    },
+    _twitter = {
+      consumerKey: '0mB4ErjFy98T1b2POJKSuqTOH',
+      consumerSecret: 'AQC63tuLcet6uopVS5GQ87hknHAYd3GOfNDyedyOT1gEr0W5Vb',
+      callbackURL: _siteUrl + '/api/auth/twitter/callback'
+    },
+    _google = {
+      clientID: '787515950155-dpukm9vvm6u7ei2ma91nrhmvnsmusptn.apps.googleusercontent.com',
+      clientSecret: 'gvSQc8Ewwf7aQz4eq6nYlPwI',
+      callbackURL: _siteUrl + '/api/auth/google/callback'
+    },
     _envs = {
       dev: {
         email: {
           contact: 'sandro.csimas@gmail.com',
-          apiKey: 'key-8k25kie96mv1wpdi01gnqu47-nos-0y1',
-          domain: 'coverchallenge.com'
+          apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
         },
         database: {
           dialect: 'mysql',
           host: 'localhost',
           user: 'root',
           password: 'sandroa1s2d3',
-          schema: 'cover_challenge',
+          schema: 'cover_academy',
           charset: 'utf8',
           debug: true
-        },
-        facebook: {
-          clientID: '235774129950285',
-          clientSecret: 'fde644d264f2f57360db07b4ca040e32',
-          callbackURL: 'http://www.promessadepolitico.com.br:' + _nodePort + '/api/auth/facebook/callback',
-          profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails']
-        },
-        twitter: {
-          consumerKey: 'SXAZVFlQalUVp1hZwFX2gYK0l',
-          consumerSecret: '0gmtYviV8VpASXmtLG5cLB41jI8ofcAVIP7Wfy16tIGoUXAGmX',
-          callbackURL: 'http://www.promessadepolitico.com.br:' + _nodePort + '/api/auth/twitter/callback'
-        },
-        google: {
-          clientID: '37782263354-thqn9d44li64finmomvf5es38h0f4r73.apps.googleusercontent.com',
-          clientSecret: 'x1TrI6h07SjHyWzQA_Tjpsk1',
-          callbackURL: 'http://www.promessadepolitico.com.br:' + _nodePort + '/api/auth/google/callback'
         }
       },
       prod: {
         prerenderServiceURL: "http://127.0.0.1:9000",
         email: {
           contact: 'sandro.csimas@gmail.com',
-          apiKey: 'key-8k25kie96mv1wpdi01gnqu47-nos-0y1',
-          domain: 'coverchallenge.com'
+          apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
         },
         database: {
           dialect: 'mysql',
           host: 'localhost',
           user: 'root',
           password: 'roota1s2d3',
-          schema: 'cover_challenge',
+          schema: 'cover_academy',
           charset: 'utf8',
           debug: false
-        },
-        facebook: {
-          clientID: '235774129950285',
-          clientSecret: '329ada86e67ca322ae5c56af8f5a167d',
-          callbackURL: 'http://www.coverchallenge.com/auth/facebook/callback',
-          profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails']
-        },
-        twitter: {
-          consumerKey: 'SXAZVFlQalUVp1hZwFX2gYK0l',
-          consumerSecret: '0gmtYviV8VpASXmtLG5cLB41jI8ofcAVIP7Wfy16tIGoUXAGmX',
-          callbackURL: 'http://www.coverchallenge.com/auth/twitter/callback'
-        },
-        google: {
-          clientID: '37782263354-thqn9d44li64finmomvf5es38h0f4r73.apps.googleusercontent.com',
-          clientSecret: 'x1TrI6h07SjHyWzQA_Tjpsk1',
-          callbackURL: 'http://www.coverchallenge.com/auth/google/callback'
         }
       }
     }
@@ -83,10 +67,16 @@ exports.nodePort = _nodePort;
 exports.nodeIP = _nodeIP;
 exports.publicPath = _publicPath;
 exports.viewsPath = _viewsPath;
-exports.oembedApiKey = _oembedApiKey;
+exports.oembedApiKey = _oembedAPIKey;
 exports.lastfmKey = _lastfmKey;
 exports.lastfmSecret = _lastfmSecret;
 exports.googleAPIKey = _googleAPIKey;
+exports.siteUrl = _siteUrl;
+exports.domain = _domain;
+
+exports.facebook = _facebook;
+exports.twitter = _twitter;
+exports.google = _google;
 
 var env = _envs[_nodeEnv];
 for(property in env) {

@@ -365,6 +365,7 @@ form.compacted .form-group {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 10px;
 }
 
 .special-header a {
