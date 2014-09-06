@@ -5,7 +5,6 @@ angular
     templateUrl: 'app/partials/widgets/cover-songs.html',
     restrict: 'E',
     require: 'ngModel',
-    transclude: true,
     scope: {
       thumbSize: '@',
       locale: '@',
@@ -34,7 +33,6 @@ angular
   return {
     templateUrl: 'app/partials/widgets/cover.html',
     restrict: 'E',
-    transclude: true,
     scope: {
       link: '@',
       legend: '@',
@@ -50,4 +48,18 @@ angular
       }
     }
   };
-});
+})
+.directive('fbLikeBox', ['$sce', function($sce) {
+  return {
+    template: '<iframe ng-src="{{ fbLikeBoxUrl }}" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width: {{ width }}px; height:{{ height }}px;" allowTransparency="true"></iframe>',
+    restrict: 'E',
+    scope: {
+      link: '@',
+      width: '@',
+      height: '@',
+    },
+    link: function(scope, element, attrs, ctrl) {
+      scope.fbLikeBoxUrl = $sce.trustAsResourceUrl('//www.facebook.com/plugins/likebox.php?href=' + scope.link + '&amp;width=' + scope.width + '&amp;height=' + scope.height + '&amp;colorscheme=light&amp;show_faces=true&amp;header=false&amp;stream=false&amp;show_border=true&amp;appId=329761620528304');
+    }
+  }
+}]);
