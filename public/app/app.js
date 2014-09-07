@@ -244,19 +244,19 @@ angular
     if(toState.name !== 'root' && !$languages.contains(toParams.locale)) {
       event.preventDefault();
       $state.go('app.404', {locale: $translate.use()}, {location: false});
-      return;
-    }
-    // Force angular-translate to emit $translateChangeSuccess and set the language
-    if($translate.use() !== toParams.locale) {
-      $translate.use(toParams.locale);
-    }
-    // Check if user has permission to access a view
-    if (!authenticationService.isAuthorized(toState.accessLevel)) {
-      event.preventDefault();
-      if (authenticationService.isAuthenticated()) {
-        $rootScope.$broadcast(authEvents.NOT_AUTHORIZED);
-      } else {
-        $rootScope.$broadcast(authEvents.NOT_AUTHENTICATED);
+    } else {
+      // Force angular-translate to emit $translateChangeSuccess and set the language
+      if($translate.use() !== toParams.locale) {
+        $translate.use(toParams.locale);
+      }
+      // Check if user has permission to access a view
+      if (!authenticationService.isAuthorized(toState.accessLevel)) {
+        event.preventDefault();
+        if (authenticationService.isAuthenticated()) {
+          $rootScope.$broadcast(authEvents.NOT_AUTHORIZED);
+        } else {
+          $rootScope.$broadcast(authEvents.NOT_AUTHENTICATED);
+        }
       }
     }
   });

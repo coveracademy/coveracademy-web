@@ -106,7 +106,7 @@ angular
       cover_video_title: 'Cover de {{ author }} da música "{{ music.title }}" de {{ artist.name }}',
       follow_us: 'Siga-nos',
       give_us_your_feedback: 'Nos dê o seu Feedback',
-      help_us_to_improve: 'Ajude-nos a melhorar cada vez mais o {{ siteName }}',
+      help_us_to_improve: 'Ajude-nos a melhorar ainda mais o {{ siteName }}',
       latest_covers: 'Últimos covers',
       latest_covers_week: 'Últimos covers da semana',
       more_covers: 'Mais covers',
