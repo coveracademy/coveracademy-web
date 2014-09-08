@@ -1,18 +1,22 @@
 angular
 .module('coverAcademy.controllers')
-.controller('adminController', ['$scope', '$translate', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $translate, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
+.controller('adminController', ['$scope', '$filter', '$translate', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $filter, $translate, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
   $translate('seo.admin').then(function(message) {
     seoService.setTitle(message);
   });
-
+  var partitionPotentialCovers = function(potentialCovers) {
+    return $filter('partition')(potentialCovers, 3);
+  };
   $scope.potentialCoversTab = {
     potentialCovers: backendResponse.data.potentialCovers,
+    potentialCoversPartitioned: partitionPotentialCovers(backendResponse.data.potentialCovers),
     acceptCover: function(potentialCover) {
       coverService.acceptCover(potentialCover).then(function(response) {
         alertService.addAlert('success', 'Potential cover accepted successfully');
         $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
           return potentialCover.id == cover.id;
         });
+        $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
       });
     },
     refuseCover: function(potentialCover) {
@@ -21,6 +25,7 @@ angular
         $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
           return potentialCover.id == cover.id;
         });
+        $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
       });
     }
   };

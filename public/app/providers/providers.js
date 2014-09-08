@@ -42,7 +42,6 @@ angular
       the_cover_author: 'The cover author',
       the_latest_music_genre_covers: 'The latest {{ name }} covers',
       the_music_title: 'The music title',
-      the_project: 'The project',
       alerts: {
         not_authorized: 'You are not authorized to access this section!',
         not_authenticated: 'You are trying to access an privileged section, please sign in with your social account!',
@@ -129,7 +128,6 @@ angular
       the_cover_author: 'O autor do cover',
       the_latest_music_genre_covers: 'Os últimos covers de {{ name }}',
       the_music_title: 'O título da música',
-      the_project: 'O projeto',
       alerts: {
         not_authorized: 'Você não tem autorização para acessar esta seção!',
         not_authenticated: 'Você está tentando acessar uma seção privilegiada, por favor acesse sua conta de rede social!',
