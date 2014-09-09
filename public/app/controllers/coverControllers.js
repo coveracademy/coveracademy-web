@@ -196,7 +196,7 @@ angular
     $scope.cover.music = null;
   };
   $scope.searchMusics = function(query) {
-    return searchService.searchMusics($scope.cover.artist, query).then(function(response) {
+    return searchService.searchMusics(query, $scope.cover.artist).then(function(response) {
       return response.data;
     });
   };
@@ -206,7 +206,7 @@ angular
   $scope.addCover = function() {
     coverService.addCover($scope.cover).then(function(response) {
       alertService.addAlert('success', 'Cover added successfully');
-      $state.go('app.cover', {locale: $scope.locale(), id : response.data.id, slug: response.data.slug});
+      $state.go('app.cover', {locale: $scope.locale(), id: response.data.id, slug: response.data.slug});
     });
   };
 }])
@@ -303,7 +303,6 @@ angular
 
   $scope.pageChanged = function() {
     var nextPage = $scope.rankType === 'best' ? coverService.bestCoversOfMusic($scope.music, $scope.currentPage) : coverService.latestCoversOfMusic($scope.music, $scope.currentPage);
-    console.log(nextPage)
     nextPage.then(function(response) {
       $scope.coversOfMusic = response.data;
     });
