@@ -56,6 +56,7 @@ angular
 }])
 .controller('headerController', ['$scope', '$state', '$languages', 'constants', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, constants, authenticationService, coverService, searchService) {
   $scope.siteName = constants.SITE_NAME;
+  $scope.searchQuery = '';
   $scope.languages = $languages.all;
   $scope.isSectionActive = function(section) {
     return $state.current.name === 'app.' + section;

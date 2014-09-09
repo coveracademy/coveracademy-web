@@ -35,7 +35,7 @@
     <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" ng-href="/{{ locale() }}/">
+          <a class="navbar-brand" ui-sref="index({locale: locale()})">
             {{ siteName }}
           </a>
         </div>
