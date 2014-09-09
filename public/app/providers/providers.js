@@ -88,8 +88,8 @@ angular
     }
   };
   var portuguese = {
-    id: 'pt',
-    image: 'pt.png',
+    id: 'pt-br',
+    image: 'pt-br.png',
     table: {
       about: 'Sobre',
       add_cover: 'Adicionar cover',
