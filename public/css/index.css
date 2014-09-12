@@ -380,6 +380,10 @@ form.compacted .form-group {
   color: #fff;
 }
 
+.special-header h1.big {
+  font-size: 60px;
+}
+
 .special-header > .content {
   padding-top: 20px;
   width: 100%;

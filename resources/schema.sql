@@ -103,14 +103,14 @@ create table potential_cover (
 ) engine = innodb default charset = utf8;
 
 create table competition (
-  id int(11) not null auto_increment,
-  name varchar(255) not null,
-  description text not null,
-  start_date timestamp not null,
-  end_date timestamp not null,
+  id                int(11) not null auto_increment,
+  name              varchar(255) not null,
+  description       text not null,
+  start_date        timestamp null default null,
+  end_date          timestamp null default null,
   registration_date timestamp not null default current_timestamp,
   primary key (id)
-)
+) engine = innodb default charset = utf8;
 
 create table audition (
   id                int(11) not null auto_increment,
@@ -127,14 +127,14 @@ create table audition (
   large_thumbnail   varchar(255) default null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
-  unique key `uq_cover_url` (`url`),
-  unique key `uq_cover_competition_id_user_id` (`competition_id`, `user_id`),
-  key `fk_cover_competition_id` (`competition_id`),
-  key `fk_cover_user_id` (`user_id`),
-  key `fk_cover_artist_id` (`artist_id`),
-  key `fk_cover_music_id` (`music_id`),
-  constraint `fk_cover_competition_id` foreign key (`competition_id`) references `competition` (`id`),
-  constraint `fk_cover_user_id` foreign key (`user_id`) references `user` (`id`),
-  constraint `fk_cover_artist_id` foreign key (`artist_id`) references `artist` (`id`),
-  constraint `fk_cover_music_id` foreign key (`music_id`) references `music` (`id`)
-)
+  unique key `uq_audition_url` (`url`),
+  unique key `uq_audition_competition_id_user_id` (`competition_id`, `user_id`),
+  key `fk_audition_competition_id` (`competition_id`),
+  key `fk_audition_user_id` (`user_id`),
+  key `fk_audition_artist_id` (`artist_id`),
+  key `fk_audition_music_id` (`music_id`),
+  constraint `fk_audition_competition_id` foreign key (`competition_id`) references `competition` (`id`),
+  constraint `fk_audition_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_audition_artist_id` foreign key (`artist_id`) references `artist` (`id`),
+  constraint `fk_audition_music_id` foreign key (`music_id`) references `music` (`id`)
+) engine = innodb default charset = utf8;
