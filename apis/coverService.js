@@ -12,8 +12,8 @@ var Cover          = require('../models/models').Cover,
     request        = require('request'),
     Promise        = require('bluebird'),
     _              = require('underscore'),
+    _.str          = require('underscore.string'),
     $              = this;
-    _.str          = require('underscore.string');
 
 var defaultCoverRelated = ['artist', 'music'];
 var defaultCoverAllRelated = ['artist', 'artist.musicGenre', 'music'];

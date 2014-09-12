@@ -2,8 +2,8 @@ var settings   = require('../../configs/settings'),
     youtubeAPI = require('youtube-api'),
     Promise    = require('bluebird'),
     _          = require('underscore'),
+    _.str      = require('underscore.string'),
     $          = this;
-    _.str      = require('underscore.string');
 
 youtubeAPI.authenticate({
   type: 'key',
