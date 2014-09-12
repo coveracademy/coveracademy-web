@@ -83,8 +83,10 @@ create table cover (
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_cover_url` (`url`),
+  key `fk_cover_user_id` (`user_id`),
   key `fk_cover_artist_id` (`artist_id`),
   key `fk_cover_music_id` (`music_id`),
+  constraint `fk_cover_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_cover_artist_id` foreign key (`artist_id`) references `artist` (`id`),
   constraint `fk_cover_music_id` foreign key (`music_id`) references `music` (`id`)
 ) engine = innodb default charset = utf8;
@@ -99,3 +101,40 @@ create table potential_cover (
   primary key (id),
   unique key `uq_potential_cover_url` (`url`)
 ) engine = innodb default charset = utf8;
+
+create table competition (
+  id int(11) not null auto_increment,
+  name varchar(255) not null,
+  description text not null,
+  start_date timestamp not null,
+  end_date timestamp not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id)
+)
+
+create table audition (
+  id                int(11) not null auto_increment,
+  competition_id    int(11) not null,
+  user_id           int(11) not null,
+  artist_id         int(11) not null,
+  music_id          int(11) not null,
+  slug              varchar(255) not null,
+  url               varchar(255) not null,
+  embed_url         varchar(255) not null,
+  video_id          varchar(255) not null,
+  small_thumbnail   varchar(255) default null,
+  medium_thumbnail  varchar(255) default null,
+  large_thumbnail   varchar(255) default null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id),
+  unique key `uq_cover_url` (`url`),
+  unique key `uq_cover_competition_id_user_id` (`competition_id`, `user_id`),
+  key `fk_cover_competition_id` (`competition_id`),
+  key `fk_cover_user_id` (`user_id`),
+  key `fk_cover_artist_id` (`artist_id`),
+  key `fk_cover_music_id` (`music_id`),
+  constraint `fk_cover_competition_id` foreign key (`competition_id`) references `competition` (`id`),
+  constraint `fk_cover_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_cover_artist_id` foreign key (`artist_id`) references `artist` (`id`),
+  constraint `fk_cover_music_id` foreign key (`music_id`) references `music` (`id`)
+)

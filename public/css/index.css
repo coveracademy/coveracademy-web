@@ -20,6 +20,9 @@ footer {
   width: 100%;
   height: 150px;
   background-color: #2f3f4e;
+}
+
+footer h4 {
   color: #fff;
 }
 
@@ -373,10 +376,13 @@ form.compacted .form-group {
   text-decoration: underline;
 }
 
+.special-header h1 {
+  color: #fff;
+}
+
 .special-header > .content {
   padding-top: 20px;
   width: 100%;
-  color: #fff;
   text-align: center;
   position: absolute;
   text-shadow: 2px 2px 5px #000000;
