@@ -59,6 +59,16 @@ var PotentialCover = Bookshelf.Model.extend({
   tableName: 'potential_cover'
 });
 
+var Competition = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'competition'
+});
+
+var Audition = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'audition'
+});
+
 module.exports = {
   User: User,
   Cover: Cover,
@@ -66,5 +76,7 @@ module.exports = {
   MusicGenre: MusicGenre,
   Artist: Artist,
   Music: Music,
+  Competition: Competition,
+  Audition: Audition,
   Bookshelf: Bookshelf
 }

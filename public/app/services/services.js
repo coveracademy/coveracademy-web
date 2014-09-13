@@ -248,6 +248,9 @@ angular
   this.searchView = function(query) {
     return $http.get('/view/search', {params: {query: query}});
   };
+  this.competitionView = function(id, slug) {
+    return $http.get('/view/competition/' + id + '/' + slug);
+  };
 }])
 .service('coverService', ['$http', function($http) {
   this.acceptCover = function(potentialCover) {

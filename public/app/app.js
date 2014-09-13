@@ -213,6 +213,18 @@ angular
         }
       }
     })
+    .state('app.competition', {
+      url: '/competition/:id/:slug',
+      templateUrl: '/app/partials/competition.html',
+      controller: 'competitionController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.competitionView($stateParams.id, $stateParams.slug);
+        }
+      }
+    })
     // Error states
     .state('app.404', {
       templateUrl: '/app/partials/errors/404.html'

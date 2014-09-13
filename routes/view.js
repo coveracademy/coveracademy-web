@@ -1,8 +1,9 @@
-var coverService = require('../apis/coverService'),
-    constants    = require('../apis/constants'),
-    isAdmin      = require('../utils/authorization').isAdmin,
-    math         = require('../utils/math'),
-    Promise      = require('bluebird');
+var coverService       = require('../apis/coverService'),
+    competitionService = require('../apis/competitionService'),
+    constants          = require('../apis/constants'),
+    isAdmin            = require('../utils/authorization').isAdmin,
+    math               = require('../utils/math'),
+    Promise            = require('bluebird');
 
 module.exports = function(router, app) {
 
@@ -250,6 +251,29 @@ module.exports = function(router, app) {
     }).bind({});
   });
 
+  router.get('/competition/:id/:slug', function(req, res, next) {
+    var id = req.param('id');
+    competitionService.getCompetition(id).then(function(competition) {
+      if(!competition) {
+        res.send(404);
+      } else {
+        Promise.all([competitionService.bestAuditions(competition, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), competitionService.totalAuditions(competition)])
+        .spread(function(auditions, totalAuditions) {
+          this.auditions = auditions;
+          return competitionService.votesByAudition(auditions);
+        }).then(function(votesByAudition) {
+          res.json({
+            competition: competition,
+            auditions: this.auditions,
+            votesByAudition: votesByAudition
+          });
+        }).bind({});
+      }
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    })
+  });
   app.use('/view', router);
 
 }

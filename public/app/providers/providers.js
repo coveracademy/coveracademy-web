@@ -55,6 +55,10 @@ angular
         message: 'Message',
         subject: 'Subject'
       },
+      errors: {
+        page_not_found: 'Page not found',
+        internal_error: 'Internal error'
+      },
       music_genre: {
         acoustic: 'Acoustic',
         blues_or_jazz: 'Blues of Jazz',
@@ -140,6 +144,10 @@ angular
         name: 'Nome',
         message: 'Mensagem',
         subject: 'Assunto'
+      },
+      errors: {
+        page_not_found: 'Página não encontrada',
+        internal_error: 'Erro interno'
       },
       music_genre: {
         acoustic: 'Acústico',
