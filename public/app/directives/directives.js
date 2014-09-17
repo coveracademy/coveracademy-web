@@ -1,5 +1,16 @@
 angular
 .module('coverAcademy.directives', [])
+.directive('auditions', function() {
+  return {
+    templateUrl: 'app/partials/widgets/auditions.html',
+    restrict: 'E',
+    require: 'ngModel',
+    scope: {
+      locale: '@',
+      auditions: '=ngModel'
+    }
+  };
+})
 .directive('coverSongs', function() {
   return {
     templateUrl: 'app/partials/widgets/cover-songs.html',

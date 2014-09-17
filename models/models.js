@@ -59,14 +59,23 @@ var PotentialCover = Bookshelf.Model.extend({
   tableName: 'potential_cover'
 });
 
-var Competition = Bookshelf.Model.extend({
+var Contest = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'competition'
+  tableName: 'contest'
 });
 
 var Audition = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'audition'
+  tableName: 'audition',
+  artist: function() {
+    return this.belongsTo(Artist, 'artist_id');
+  },
+  music: function() {
+    return this.belongsTo(Music, 'music_id');
+  },
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  }
 });
 
 module.exports = {
@@ -76,7 +85,7 @@ module.exports = {
   MusicGenre: MusicGenre,
   Artist: Artist,
   Music: Music,
-  Competition: Competition,
+  Contest: Contest,
   Audition: Audition,
   Bookshelf: Bookshelf
 }

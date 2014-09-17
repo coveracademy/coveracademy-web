@@ -310,7 +310,7 @@ input.big {
 
   background-image: url('/img/gradient.png');
   background-repeat: repeat-x;
-  background-position-y: 45px;
+  background-position: center bottom;
 }
 
 .cover img {
@@ -368,7 +368,6 @@ form.compacted .form-group {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-radius: 5px;
 }
 
 .special-header a {
@@ -376,7 +375,7 @@ form.compacted .form-group {
   text-decoration: underline;
 }
 
-.special-header h1 {
+.special-header h1, .special-header h2, .special-header h3, .special-header h4, .special-header h5 {
   color: #fff;
 }
 
@@ -406,6 +405,46 @@ form.compacted .form-group {
   width: 100%;
   opacity: 0.5;
   margin-top: -200px;
+}
+
+.progress {
+  position: relative;
+  height: 25px;
+}
+.progress > .progress-type {
+  position: absolute;
+  left: 0px;
+  font-weight: bold;
+  padding: 1px 20px 0px 20px;
+  color: #fff;
+  background-color: rgba(25, 25, 25, 0.2);
+}
+
+.progress > .progress-completed {
+  position: absolute;
+  right: 0px;
+  font-weight: bold;
+  padding: 0px 20px 0px 20px;
+}
+
+.progress-bar:last-child {
+  border-radius: 0px 0px 0px 0px;
+}
+
+.audition > .caption {
+  background-color: #000;
+  color: #fff;
+}
+
+.bs-callout {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+
+.bs-callout-info {
+  border-left-color: #2196f3;;
 }
 
 /* Social buttons START */

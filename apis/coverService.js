@@ -16,9 +16,9 @@ var Cover          = require('../models/models').Cover,
 
 _.str = require('underscore.string');
 
-var defaultCoverRelated = ['artist', 'music'];
-var defaultCoverAllRelated = ['artist', 'artist.musicGenre', 'music'];
-var defaultArtistRelated = ['musicGenre'];
+var coverRelated = {withRelated: ['artist', 'music']};
+var coverAllRelated = {withRelated: ['artist', 'artist.musicGenre', 'music']};
+var artistRelated = {withRelated: ['musicGenre']};
 
 var calculatePeriod = function(period) {
   var endDate = new Date();
@@ -57,7 +57,7 @@ var coversOfMusic = function(rankType, music, page, pageSize) {
     .limit(pageSize);
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
+  }).fetch(coverRelated);
 }
 
 var coversByArtists = function(rankType, artists, pageSize) {
@@ -90,7 +90,7 @@ var coversByArtist = function(rankType, artist, page, pageSize) {
     .limit(pageSize);
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
+  }).fetch(coverRelated);
 }
 
 var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
@@ -103,7 +103,7 @@ var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
     .limit(pageSize);
 
     rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.score', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
+  }).fetch(coverRelated);
 }
 
 var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
@@ -130,7 +130,7 @@ var listCovers = function(rankType, period, page, pageSize) {
     .limit(pageSize);
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
-  }).fetch({withRelated: defaultCoverRelated});
+  }).fetch(coverRelated);
 }
 
 exports.addCover = function(user, coverData) {
@@ -181,7 +181,7 @@ exports.removeCover = function(cover) {
 }
 
 exports.getCover = function(id) {
-  return Cover.forge({id: id}).fetch({withRelated: defaultCoverAllRelated});
+  return Cover.forge({id: id}).fetch(coverAllRelated);
 }
 
 exports.topCover = function() {
@@ -305,15 +305,15 @@ exports.getArtist = function(name) {
 }
 
 exports.getArtistById = function(id) {
-  return Artist.query({where: ['id', id]}).fetch({withRelated: defaultArtistRelated});
+  return Artist.query({where: ['id', id]}).fetch(artistRelated);
 }
 
 exports.getArtistBySlug = function(slug) {
-  return Artist.query({where: ['slug', slug]}).fetch({withRelated: defaultArtistRelated});
+  return Artist.query({where: ['slug', slug]}).fetch(artistRelated);
 }
 
 exports.searchArtists = function(query, related) {
-  return Artist.collection().query({where: ['name', 'like', '%' + query + '%']}).fetch({withRelated: related});
+  return Artist.collection().query({where: ['name', 'like', '%' + query + '%']}).fetch(related);
 }
 
 exports.latestArtists = function(page, pageSize) {
@@ -410,7 +410,7 @@ exports.listArtists = function(musicGenre, page, pageSize) {
     qb.orderBy('name', 'asc')
     .offset((page - 1) * pageSize)
     .limit(pageSize);
-  }).fetch({withRelated: defaultArtistRelated});
+  }).fetch(artistRelated);
 }
 
 exports.totalArtists = function(musicGenre) {
@@ -433,15 +433,15 @@ exports.getMusic = function(artist, title) {
 }
 
 exports.getMusicById = function(id) {
-  return Music.query({where: ['id', id]}).fetch({withRelated: ['artist']});
+  return Music.query({where: ['id', id]}).fetch(['artist']);
 }
 
 exports.getMusicBySlug = function(slug) {
-  return Music.query({where: ['slug', slug]}).fetch({withRelated: ['artist']});
+  return Music.query({where: ['slug', slug]}).fetch(['artist']);
 }
 
 exports.searchMusics = function(query) {
-  return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch({withRelated: ['artist']});
+  return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch(['artist']);
 }
 
 exports.searchMusicsOfArtist = function(artistName, query) {

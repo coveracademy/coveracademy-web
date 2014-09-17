@@ -1,9 +1,9 @@
-var coverService       = require('../apis/coverService'),
-    competitionService = require('../apis/competitionService'),
-    constants          = require('../apis/constants'),
-    isAdmin            = require('../utils/authorization').isAdmin,
-    math               = require('../utils/math'),
-    Promise            = require('bluebird');
+var coverService   = require('../apis/coverService'),
+    contestService = require('../apis/contestService'),
+    constants      = require('../apis/constants'),
+    isAdmin        = require('../utils/authorization').isAdmin,
+    math           = require('../utils/math'),
+    Promise        = require('bluebird');
 
 module.exports = function(router, app) {
 
@@ -251,23 +251,46 @@ module.exports = function(router, app) {
     }).bind({});
   });
 
-  router.get('/competition/:id/:slug', function(req, res, next) {
+  router.get('/contest/:id/:slug', function(req, res, next) {
     var id = req.param('id');
-    competitionService.getCompetition(id).then(function(competition) {
-      if(!competition) {
+    var rankType = req.param('rank') || 'best';
+    contestService.getContest(id).then(function(contest) {
+      if(!contest) {
         res.send(404);
       } else {
-        Promise.all([competitionService.bestAuditions(competition, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), competitionService.totalAuditions(competition)])
+        var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
+        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest)])
         .spread(function(auditions, totalAuditions) {
           this.auditions = auditions;
-          return competitionService.votesByAudition(auditions);
+          return contestService.votesByAudition(auditions);
         }).then(function(votesByAudition) {
           res.json({
-            competition: competition,
+            contest: contest,
             auditions: this.auditions,
-            votesByAudition: votesByAudition
+            votesByAudition: votesByAudition,
+            rankType: rankType
           });
         }).bind({});
+      }
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    })
+  });
+
+  router.get('/audition/:id/:slug', function(req, res, next) {
+    var id = req.param('id');
+    var slug = req.param('slug');
+    contestService.getAudition(id).then(function(audition) {
+      if(!audition) {
+        res.send(404);
+      } else {
+        contestService.getAuditionVotes(audition).then(function(votes) {
+          res.json({
+            audition: audition,
+            votes: votes,
+          });
+        });
       }
     }).catch(function(err) {
       console.log(err.stack);

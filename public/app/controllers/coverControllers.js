@@ -248,7 +248,7 @@ angular
   };
 }])
 .controller('artistController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, backendResponse, seoService) {
-  $scope.rankType = $stateParams.rank ? $stateParams.rank : 'best';
+  $scope.rankType = $stateParams.rank || 'best';
   $scope.artist = backendResponse.data.artist;
   $scope.totalMusicsByArtist = backendResponse.data.totalMusicsByArtist;
   $scope.musicsByArtist = backendResponse.data.musicsByArtist;
@@ -286,7 +286,7 @@ angular
   };
 }])
 .controller('musicController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
-  $scope.rankType = $stateParams.rank ? $stateParams.rank : 'best';
+  $scope.rankType = $stateParams.rank || 'best';
   $scope.music = backendResponse.data.music;
   $scope.totalCoversOfMusic = backendResponse.data.totalCoversOfMusic;
   $scope.coversOfMusic = backendResponse.data.coversOfMusic;

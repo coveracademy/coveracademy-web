@@ -213,15 +213,27 @@ angular
         }
       }
     })
-    .state('app.competition', {
-      url: '/competition/:id/:slug',
-      templateUrl: '/app/partials/competition.html',
-      controller: 'competitionController',
+    .state('app.contest', {
+      url: '/contest/:id/:slug?rank',
+      templateUrl: '/app/partials/contest.html',
+      controller: 'contestController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.competitionView($stateParams.id, $stateParams.slug);
+          return viewService.contestView($stateParams.id, $stateParams.slug);
+        }
+      }
+    })
+    .state('app.audition', {
+      url: '/audition/:id/:slug?rank',
+      templateUrl: '/app/partials/audition.html',
+      controller: 'auditionController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.auditionView($stateParams.id, $stateParams.slug);
         }
       }
     })

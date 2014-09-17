@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="special-header">
+      <div class="content" ng->
+        <div>
+          <h1 class="bolder-text">
+            <span>{{ contest.name }}</span>
+          </h1>
+          <h3>{{ contest.description }}</h3>
+        </div>
+      </div>
+      <img ng-src="/img/contests/contest.jpg">
+    </div>
+  </div>
+</div>
+<div class="progress">
+  <div class="progress-bar progress-bar-striped active" style="width: 45%">
+    <span class="sr-only">45% Completo</span>
+  </div>
+  <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="bs-callout bs-callout-info">
+      <h4>
+        O concurso começou dia {{ contest.start_date | date: 'dd/MM/yyyy' }} e termina dia {{ contest.end_date | date: 'dd/MM/yyyy' }}
+      </h4>
+      <button class="btn btn-primary btn-lg">Participe agora!</button>
+      <button class="btn btn-success btn-lg">Confira os prêmios!</button>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <h1>
+      <span ng-if="isRanked('best')">
+        Best auditions
+      </span>
+      <span ng-if="isRanked('latest')">
+        Latest auditions
+      </span>
+    </h1>
+  </div>
+  <div class="col-md-4 align-right" style="padding-top: 36px;">
+    <h4>
+      <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
+        See the latest auditions
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+      <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
+        See the best auditions
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </h4>
+  </div>
+</div>
+<div class="align-center">
+  <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+</div>
+<auditions ng-model="auditions"></auditions>
+<div class="align-center">
+  <pagination total-items="totalArtists" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+</div>

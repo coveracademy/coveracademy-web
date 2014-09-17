@@ -248,8 +248,11 @@ angular
   this.searchView = function(query) {
     return $http.get('/view/search', {params: {query: query}});
   };
-  this.competitionView = function(id, slug) {
-    return $http.get('/view/competition/' + id + '/' + slug);
+  this.contestView = function(id, slug) {
+    return $http.get('/view/contest/' + id + '/' + slug);
+  };
+  this.auditionView = function(id, slug) {
+    return $http.get('/view/audition/' + id + '/' + slug);
   };
 }])
 .service('coverService', ['$http', function($http) {
