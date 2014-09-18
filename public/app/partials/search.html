@@ -7,31 +7,31 @@
   <div class="row" ng-repeat="artist in artists">
     <div class="col-md-12">
       <div class="page-title">
-        <h3>
-          <a ng-if="artist.small_thumbnail" ui-sref="app.artist({locale: locale(), artist: artist.slug})">
-            <img class="small-thumbnail" ng-src="{{ artist.small_thumbnail }}">
-          </a>
+        <h2>
+          <img class="small-thumbnail" ng-src="{{ artist.small_thumbnail }}">
           <a ui-sref="artist({artist: artist.slug})">
             {{ artist.name }}
           </a>
-        </h3>
+        </h2>
       </div>
-      <cover-songs ng-model="coversByArtists[artist.id]" locale="{{ locale() }}" thumb-size="small"></cover-songs>
+      <cover-songs ng-model="coversByArtists[artist.id]" locale="{{ locale() }}"></cover-songs>
     </div>
   </div>
   <div class="row" ng-repeat="music in musics">
     <div class="col-md-12">
       <div class="page-title">
-        <h3>
-          <a ng-if="music.small_thumbnail" ui-sref="app.music({locale: locale(), music: music.slug})">
-            <img class="small-thumbnail" ng-src="{{ music.small_thumbnail }}">
+        <h2>
+          <img class="small-thumbnail" ng-src="{{ music.small_thumbnail }}">
+          <a ui-sref="app.music({locale: locale(), music: music.slug})">
+            {{ music.title }}
           </a>
-          <a ui-sref="app.music({locale: locale(), music: music.slug})">{{ music.title }}</a>
           by
-          <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">{{ music.artist.name }}</a>
-        </h3>
+          <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">
+            {{ music.artist.name }}
+          </a>
+        </h2>
       </div>
-      <cover-songs ng-model="coversOfMusics[music.id]" locale="{{ locale() }}" thumb-size="small"></cover-songs>
+      <cover-songs ng-model="coversOfMusics[music.id]" locale="{{ locale() }}"></cover-songs>
     </div>
   </div>
 </div>

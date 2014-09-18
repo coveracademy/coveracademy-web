@@ -348,6 +348,10 @@ input.big {
   opacity: 0.8;
 }
 
+.carousel-genres .carousel-indicators {
+  display: none;
+}
+
 .carousel-genres .carousel-control:hover, .carousel-genres .carousel-control:focus {
   color: #f30;
 }
