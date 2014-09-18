@@ -1,50 +1,49 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="special-header">
-      <div class="content">
-        <div ng-if="artist.medium_thumbnail" class="thumbnail">
-          <img ng-src="{{ artist.medium_thumbnail }}">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="special-header">
+        <div class="content">
+          <div ng-if="artist.medium_thumbnail" class="thumbnail">
+            <img ng-src="{{ artist.medium_thumbnail }}">
+          </div>
+          <div>
+            <h1 class="bolder-text">{{ artist.name }}</h1>
+            <h2>
+              <span class="label label-danger">{{ artist.musicGenre.name }}</span>
+              <span class="label label-primary">{{ totalMusicsByArtist }} {{ 'musics' | translate }}</span>
+            </h2>
+          </div>
         </div>
-        <div>
-          <h1 class="bolder-text">{{ artist.name }}</h1>
-          <h2>
-            <span class="label label-danger">{{ artist.musicGenre.name }}</span>
-            <span class="label label-primary">{{ totalMusicsByArtist }} {{ 'musics' | translate }}</span>
-          </h2>
-        </div>
-      </div>
-      <img ng-if="artist.large_thumbnail" ng-src="{{ artist.large_thumbnail }}">
-    </div>
-  </div>
-</div>
-<div class="row padding">
-  <div class="col-md-12">
-    <div class="pull-right">
-      <div class="btn-group">
-        <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
-          {{ 'best_covers' | translate }}
-        </a>
-        <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
-          {{ 'latest_covers' | translate }}
-        </a>
+        <img ng-if="artist.large_thumbnail" ng-src="{{ artist.large_thumbnail }}">
       </div>
     </div>
   </div>
-</div>
-<div class="page-section">
-  <div class="panel panel-default" ng-repeat="musicByArtist in musicsByArtist">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <a ng-if="musicByArtist.small_thumbnail" ui-sref="app.music({locale: locale(), music: musicByArtist.slug})">
-          <img class="small-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
-        </a>
+  <div class="row padding">
+    <div class="col-md-12">
+      <div class="pull-right">
+        <div class="btn-group">
+          <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'best'})" ng-class="{'active': isRanked('best')}">
+            {{ 'best_covers' | translate }}
+          </a>
+          <a class="btn btn-default" ui-sref="app.artist({locale: locale(), artist: artist.slug, rank: 'latest'})" ng-class="{'active': isRanked('latest')}">
+            {{ 'latest_covers' | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-section">
+    <div ng-repeat="musicByArtist in musicsByArtist">
+      <h2>
+        <img class="medium-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
         <a class="default-link" ui-sref="app.music({locale: locale(), music: musicByArtist.slug})">
           {{ musicByArtist.title }}
         </a>
-      </h3>
-    </div>
-    <div class="panel-body">
-      <cover-songs ng-model="coversOfMusics[musicByArtist.id]" locale="{{ locale() }}"></cover-songs>
+      </h2>
+      <hr/>
+      <div>
+        <cover-songs ng-model="coversOfMusics[musicByArtist.id]" locale="{{ locale() }}"></cover-songs>
+      </div>
     </div>
   </div>
 </div>

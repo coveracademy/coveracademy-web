@@ -1,193 +1,195 @@
-<tabset justified="true" type="pills">
-  <tab heading="Potential covers">
-    <div class="row">
-      <div class="col-md-12 align-right">
-        <a class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale()})">
-          {{ 'add_new_cover_video' | translate }}
-        </a>
+<div class="container">
+  <tabset justified="true" type="pills">
+    <tab heading="Potential covers">
+      <div class="row">
+        <div class="col-md-12 align-right">
+          <a class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale()})">
+            {{ 'add_new_cover_video' | translate }}
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="row padding">
-      <div class="col-md-12">
-        <div ng-repeat="row in potentialCoversTab.potentialCoversPartitioned" class="row">
-          <div ng-repeat="potentialCover in row" class="col-md-4">
-            <div class="thumbnail">
-              <div class="embed-container">
-                <embed-video href="{{ potentialCover.url }}"></embed-video>
-              </div>
-              <div class="caption">
-                <form class="form-horizontal compacted">
-                  <div class="form-group">
-                    <label for="artist-{{ potentialCover.id }}" class="col-md-2 control-label">Artist</label>
-                    <div class="col-md-10">
-                      <input ng-model="potentialCover.artist" type="text" id="artist-{{ potentialCover.id }}" class="form-control" placeholder="The artist">
+      <div class="row padding">
+        <div class="col-md-12">
+          <div ng-repeat="row in potentialCoversTab.potentialCoversPartitioned" class="row">
+            <div ng-repeat="potentialCover in row" class="col-md-4">
+              <div class="thumbnail">
+                <div class="embed-container">
+                  <embed-video href="{{ potentialCover.url }}"></embed-video>
+                </div>
+                <div class="caption">
+                  <form class="form-horizontal compacted">
+                    <div class="form-group">
+                      <label for="artist-{{ potentialCover.id }}" class="col-md-2 control-label">Artist</label>
+                      <div class="col-md-10">
+                        <input ng-model="potentialCover.artist" type="text" id="artist-{{ potentialCover.id }}" class="form-control" placeholder="The artist">
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="music-{{ potentialCover.id }}" class="col-md-2 control-label">Music</label>
-                    <div class="col-md-10">
-                      <input ng-model="potentialCover.music" type="text" id="music-{{ potentialCover.id }}" class="form-control"placeholder="The music title">
+                    <div class="form-group">
+                      <label for="music-{{ potentialCover.id }}" class="col-md-2 control-label">Music</label>
+                      <div class="col-md-10">
+                        <input ng-model="potentialCover.music" type="text" id="music-{{ potentialCover.id }}" class="form-control"placeholder="The music title">
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="author-{{ potentialCover.id }}" class="col-md-2 control-label">Author</label>
-                    <div class="col-md-10">
-                      <input ng-model="potentialCover.author" type="text" id="author-{{ potentialCover.id }}" class="form-control" placeholder="The cover author">
+                    <div class="form-group">
+                      <label for="author-{{ potentialCover.id }}" class="col-md-2 control-label">Author</label>
+                      <div class="col-md-10">
+                        <input ng-model="potentialCover.author" type="text" id="author-{{ potentialCover.id }}" class="form-control" placeholder="The cover author">
+                      </div>
                     </div>
-                  </div>
-                  <div class="align-right">
-                    <button type="button" ng-click="potentialCoversTab.acceptCover(potentialCover)" class="btn btn-success"><span class="glyphicon glyphicon-ok"/></button>
-                    <button type="button" ng-click="potentialCoversTab.refuseCover(potentialCover)" class="btn btn-danger"><span class="glyphicon glyphicon-remove"/></button>
-                  </div>
-                </form>
+                    <div class="align-right">
+                      <button type="button" ng-click="potentialCoversTab.acceptCover(potentialCover)" class="btn btn-success"><span class="glyphicon glyphicon-ok"/></button>
+                      <button type="button" ng-click="potentialCoversTab.refuseCover(potentialCover)" class="btn btn-danger"><span class="glyphicon glyphicon-remove"/></button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </tab>
-  <tab heading="Covers">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <div class="form-group">
-          <div class="input-group">
-            <input type="search" name="search_id" ng-model="coverTab.searchID" placeholder="Search a cover song by ID" class="form-control" required>
-            <span class="input-group-btn">
-              <button ng-click="coverTab.searchCoverByID(coverTab.searchID)" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
-                <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
+    </tab>
+    <tab heading="Covers">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="search" name="search_id" ng-model="coverTab.searchID" placeholder="Search a cover song by ID" class="form-control" required>
+              <span class="input-group-btn">
+                <button ng-click="coverTab.searchCoverByID(coverTab.searchID)" ng-disabled="searchForm.$invalid" class="btn btn-default" type="submit">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+            </div>
+          </div>
+          <hr/>
+          <div ng-if="coverTab.cover">
+            <form name="coverForm" class="form-horizontal">
+              <div class="form-group embed-container">
+                <embed-video ng-href="{{ coverTab.cover.url }}"></embed-video>
+              </div>
+              <div class="form-group" ng-class="{'has-error': coverForm.artist.$invalid && !coverForm.artist.$pristine}">
+                <input ng-model="coverTab.cover.artist" type="text" name="artist" typeahead="artist.name for artist in coverTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="coverTab.selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
+              </div>
+              <div ng-if="coverTab.cover.artist">
+                <div class="form-group" ng-class="{'has-error': coverForm.music.$invalid && !coverForm.music.$pristine}">
+                  <input ng-model="coverTab.cover.music" type="text" name="music" typeahead="music.title for music in coverTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="coverTab.selectMusic($item)" placeholder="The music title" class="form-control" required>
+                </div>
+                <div class="form-group" ng-class="{'has-error': coverForm.author.$invalid && !coverForm.author.$pristine}">
+                  <input ng-model="coverTab.cover.author" type="text" name="author" placeholder="The cover author" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6">
+                    <button ng-click="coverTab.saveCover()" ng-disabled="coverForm.$invalid" class="btn btn-primary btn-block btn-lg">
+                      Save cover
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <button ng-click="coverTab.removeCover()" ng-disabled="coverForm.$invalid" class="btn btn-danger btn-block btn-lg">
+                      Remove cover
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-        <hr/>
-        <div ng-if="coverTab.cover">
-          <form name="coverForm" class="form-horizontal">
-            <div class="form-group embed-container">
-              <embed-video ng-href="{{ coverTab.cover.url }}"></embed-video>
-            </div>
-            <div class="form-group" ng-class="{'has-error': coverForm.artist.$invalid && !coverForm.artist.$pristine}">
-              <input ng-model="coverTab.cover.artist" type="text" name="artist" typeahead="artist.name for artist in coverTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="coverTab.selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
-            </div>
-            <div ng-if="coverTab.cover.artist">
-              <div class="form-group" ng-class="{'has-error': coverForm.music.$invalid && !coverForm.music.$pristine}">
-                <input ng-model="coverTab.cover.music" type="text" name="music" typeahead="music.title for music in coverTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="coverTab.selectMusic($item)" placeholder="The music title" class="form-control" required>
-              </div>
-              <div class="form-group" ng-class="{'has-error': coverForm.author.$invalid && !coverForm.author.$pristine}">
-                <input ng-model="coverTab.cover.author" type="text" name="author" placeholder="The cover author" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <button ng-click="coverTab.saveCover()" ng-disabled="coverForm.$invalid" class="btn btn-primary btn-block btn-lg">
-                    Save cover
-                  </button>
-                </div>
-                <div class="col-md-6">
-                  <button ng-click="coverTab.removeCover()" ng-disabled="coverForm.$invalid" class="btn btn-danger btn-block btn-lg">
-                    Remove cover
-                  </button>
+      </div>
+    </tab>
+    <tab heading="Artists">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="form-group">
+            <input type="search" name="search_query" ng-model="artistTab.searchQuery" typeahead="artist.name for artist in artistTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="artistTab.selectArtist($item)" placeholder="Search for artists" class="form-control" required>
+          </div>
+          <hr/>
+          <div ng-if="artistTab.artist">
+            <form name="artistForm" class="form-horizontal">
+              <div class="form-group" ng-class="{'has-error': artistForm.artist.$invalid && !artistForm.artist.$pristine}">
+                <label for="name" class="col-md-3 control-label">Artist name</label>
+                <div class="col-md-9">
+                  <input type="text" name="artist" ng-model="artistTab.artist.name" placeholder="The artist name" class="form-control" required>
                 </div>
               </div>
-            </div>
-          </form>
+              <div class="form-group" ng-class="{'has-error': artistForm.musicGenre.$invalid && !artistForm.musicGenre.$pristine}">
+                <label for="musicGenre" class="col-md-3 control-label">Artist genre</label>
+                <div class="col-md-9">
+                  <select ng-options="musicGenre.name for musicGenre in artistTab.musicGenres track by musicGenre.id" ng-model="artistTab.artist.musicGenre" name="musicGenre" class="form-control" required></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img ng-src="{{ artistTab.artist.small_thumbnail }}" width="175">
+                    <input type="text" name="small_thumbnail" ng-model="artistTab.artist.small_thumbnail" placeholder="Small thumbnail" class="form-control">
+                  </div>
+                  <div class="col-md-4">
+                    <img ng-src="{{ artistTab.artist.medium_thumbnail }}" width="175">
+                    <input type="text" name="medium_thumbnail" ng-model="artistTab.artist.medium_thumbnail" placeholder="Medium thumbnail" class="form-control">
+                  </div>
+                  <div class="col-md-4">
+                    <img ng-src="{{ artistTab.artist.large_thumbnail }}" width="175">
+                    <input type="text" name="large_thumbnail" ng-model="artistTab.artist.large_thumbnail" placeholder="Large thumbnail" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button ng-click="artistTab.saveArtist()" ng-disabled="artistForm.$invalid" class="btn btn-primary btn-block btn-lg">
+                  Save artist
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  </tab>
-  <tab heading="Artists">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <div class="form-group">
-          <input type="search" name="search_query" ng-model="artistTab.searchQuery" typeahead="artist.name for artist in artistTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="artistTab.selectArtist($item)" placeholder="Search for artists" class="form-control" required>
-        </div>
-        <hr/>
-        <div ng-if="artistTab.artist">
-          <form name="artistForm" class="form-horizontal">
-            <div class="form-group" ng-class="{'has-error': artistForm.artist.$invalid && !artistForm.artist.$pristine}">
-              <label for="name" class="col-md-3 control-label">Artist name</label>
-              <div class="col-md-9">
-                <input type="text" name="artist" ng-model="artistTab.artist.name" placeholder="The artist name" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': artistForm.musicGenre.$invalid && !artistForm.musicGenre.$pristine}">
-              <label for="musicGenre" class="col-md-3 control-label">Artist genre</label>
-              <div class="col-md-9">
-                <select ng-options="musicGenre.name for musicGenre in artistTab.musicGenres track by musicGenre.id" ng-model="artistTab.artist.musicGenre" name="musicGenre" class="form-control" required></select>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-4">
-                  <img ng-src="{{ artistTab.artist.small_thumbnail }}" width="175">
-                  <input type="text" name="small_thumbnail" ng-model="artistTab.artist.small_thumbnail" placeholder="Small thumbnail" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <img ng-src="{{ artistTab.artist.medium_thumbnail }}" width="175">
-                  <input type="text" name="medium_thumbnail" ng-model="artistTab.artist.medium_thumbnail" placeholder="Medium thumbnail" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <img ng-src="{{ artistTab.artist.large_thumbnail }}" width="175">
-                  <input type="text" name="large_thumbnail" ng-model="artistTab.artist.large_thumbnail" placeholder="Large thumbnail" class="form-control">
+    </tab>
+    <tab heading="Musics">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="form-group">
+            <input type="search" name="search_query" ng-model="musicTab.searchQuery" typeahead="music.displayTitle for music in musicTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectMusic($item)" placeholder="Search for musics" class="form-control" required>
+          </div>
+          <hr/>
+          <div ng-if="musicTab.music">
+            <form name="musicForm" class="form-horizontal">
+              <div class="form-group" ng-class="{'has-error': musicForm.music.$invalid && !musicForm.music.$pristine}">
+                <label for="name" class="col-md-3 control-label">Music title</label>
+                <div class="col-md-9">
+                  <input type="text" name="music" ng-model="musicTab.music.title" placeholder="The music title" class="form-control" required>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <button ng-click="artistTab.saveArtist()" ng-disabled="artistForm.$invalid" class="btn btn-primary btn-block btn-lg">
-                Save artist
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </tab>
-  <tab heading="Musics">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <div class="form-group">
-          <input type="search" name="search_query" ng-model="musicTab.searchQuery" typeahead="music.displayTitle for music in musicTab.searchMusics($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectMusic($item)" placeholder="Search for musics" class="form-control" required>
-        </div>
-        <hr/>
-        <div ng-if="musicTab.music">
-          <form name="musicForm" class="form-horizontal">
-            <div class="form-group" ng-class="{'has-error': musicForm.music.$invalid && !musicForm.music.$pristine}">
-              <label for="name" class="col-md-3 control-label">Music title</label>
-              <div class="col-md-9">
-                <input type="text" name="music" ng-model="musicTab.music.title" placeholder="The music title" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': musicForm.artist.$invalid && !musicForm.artist.$pristine}">
-              <label for="name" class="col-md-3 control-label">Artist name</label>
-              <div class="col-md-9">
-                <input ng-model="musicTab.music.artist" type="text" name="artist" typeahead="artist.name for artist in musicTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-4">
-                  <img ng-src="{{ musicTab.music.small_thumbnail }}" width="175">
-                  <input type="text" name="small_thumbnail" ng-model="musicTab.music.small_thumbnail" placeholder="Small thumbnail" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <img ng-src="{{ musicTab.music.medium_thumbnail }}" width="175">
-                  <input type="text" name="medium_thumbnail" ng-model="musicTab.music.medium_thumbnail" placeholder="Medium thumbnail" class="form-control">
-                </div>
-                <div class="col-md-4">
-                  <img ng-src="{{ musicTab.music.large_thumbnail }}" width="175">
-                  <input type="text" name="large_thumbnail" ng-model="musicTab.music.large_thumbnail" placeholder="Large thumbnail" class="form-control">
+              <div class="form-group" ng-class="{'has-error': musicForm.artist.$invalid && !musicForm.artist.$pristine}">
+                <label for="name" class="col-md-3 control-label">Artist name</label>
+                <div class="col-md-9">
+                  <input ng-model="musicTab.music.artist" type="text" name="artist" typeahead="artist.name for artist in musicTab.searchArtists($viewValue)" typeahead-min-length="2" typeahead-on-select="musicTab.selectArtist($item)" placeholder="The artist or band name" class="form-control" required>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <button ng-click="musicTab.saveMusic()" ng-disabled="musicForm.$invalid" class="btn btn-primary btn-block btn-lg">
-                Save music
-              </button>
-            </div>
-          </form>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img ng-src="{{ musicTab.music.small_thumbnail }}" width="175">
+                    <input type="text" name="small_thumbnail" ng-model="musicTab.music.small_thumbnail" placeholder="Small thumbnail" class="form-control">
+                  </div>
+                  <div class="col-md-4">
+                    <img ng-src="{{ musicTab.music.medium_thumbnail }}" width="175">
+                    <input type="text" name="medium_thumbnail" ng-model="musicTab.music.medium_thumbnail" placeholder="Medium thumbnail" class="form-control">
+                  </div>
+                  <div class="col-md-4">
+                    <img ng-src="{{ musicTab.music.large_thumbnail }}" width="175">
+                    <input type="text" name="large_thumbnail" ng-model="musicTab.music.large_thumbnail" placeholder="Large thumbnail" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button ng-click="musicTab.saveMusic()" ng-disabled="musicForm.$invalid" class="btn btn-primary btn-block btn-lg">
+                  Save music
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  </tab>
-</tabset>
+    </tab>
+  </tabset>
+</div>

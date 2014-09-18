@@ -1,54 +1,56 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="special-header">
-      <div class="content" ng->
-        <div class="thumbnail">
-          <img ng-src="/img/genres/{{ musicGenre.image }}">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="special-header">
+        <div class="content" ng->
+          <div class="thumbnail">
+            <img ng-src="/img/genres/{{ musicGenre.image }}">
+          </div>
+          <div>
+            <h1 class="bolder-text big">
+              <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
+            </h1>
+          </div>
         </div>
-        <div>
-          <h1 class="bolder-text big">
-            <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
-          </h1>
-        </div>
+        <img ng-src="/img/genres/{{ musicGenre.image }}">
       </div>
-      <img ng-src="/img/genres/{{ musicGenre.image }}">
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="page-title">
-      <div class="row">
-        <div class="col-md-8">
-          <h1>
-            <span ng-if="isRanked('best')">
-              {{ 'best_music_genre_covers' | translate: musicGenre }}
-            </span>
-            <span ng-if="isRanked('latest')">
-              {{ 'latest_music_genre_covers' | translate: musicGenre }}
-            </span>
-          </h1>
-        </div>
-        <div class="col-md-4 align-right" style="padding-top: 36px;">
-          <h4>
-            <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
-              {{ 'see_the_latest_music_genre_covers' | translate: musicGenre }}
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-            <a ng-if="isRanked('latest')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
-              {{ 'see_the_best_music_genre_covers' | translate: musicGenre }}
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-          </h4>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <div class="row">
+          <div class="col-md-8">
+            <h1>
+              <span ng-if="isRanked('best')">
+                {{ 'best_music_genre_covers' | translate: musicGenre }}
+              </span>
+              <span ng-if="isRanked('latest')">
+                {{ 'latest_music_genre_covers' | translate: musicGenre }}
+              </span>
+            </h1>
+          </div>
+          <div class="col-md-4 align-right" style="padding-top: 36px;">
+            <h4>
+              <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
+                {{ 'see_the_latest_music_genre_covers' | translate: musicGenre }}
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+              <a ng-if="isRanked('latest')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
+                {{ 'see_the_best_music_genre_covers' | translate: musicGenre }}
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </h4>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="align-center">
-      <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-    </div>
-    <cover-songs ng-model="coversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
-    <div class="align-center">
-      <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+      <div class="align-center">
+        <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+      </div>
+      <cover-songs ng-model="coversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
+      <div class="align-center">
+        <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+      </div>
     </div>
   </div>
 </div>

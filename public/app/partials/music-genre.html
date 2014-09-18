@@ -1,79 +1,81 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="special-header">
-      <div class="content" ng->
-        <div class="thumbnail">
-          <img ng-src="/img/genres/{{ musicGenre.image }}">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="special-header">
+        <div class="content" ng->
+          <div class="thumbnail">
+            <img ng-src="/img/genres/{{ musicGenre.image }}">
+          </div>
+          <div>
+            <h1 class="bolder-text big">
+              {{ musicGenre.name }}
+            </h1>
+          </div>
         </div>
-        <div>
-          <h1 class="bolder-text big">
-            {{ musicGenre.name }}
-          </h1>
-        </div>
+        <img ng-src="/img/genres/{{ musicGenre.image }}">
       </div>
-      <img ng-src="/img/genres/{{ musicGenre.image }}">
     </div>
   </div>
-</div>
-<div class="page-title">
-  <div class="row">
-    <div class="col-md-8">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
 
-    </div>
-    <div class="col-md-4 align-right">
-      <h3 class="title">
-        <small>
-          <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
-            {{ 'see_all_music_genre_artists' | translate: musicGenre }}
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
-        </small>
-      </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
+              {{ 'see_all_music_genre_artists' | translate: musicGenre }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <div ng-repeat="artist in bestArtistsOfMusicGenre" class="col-md-2">
-    <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
-  </div>
-</div>
-<div class="page-title">
   <div class="row">
-    <div class="col-md-8">
-      <h3 class="title">
-        {{ 'the_best_music_genre_covers' | translate: musicGenre }}
-      </h3>
-    </div>
-    <div class="col-md-4 align-right">
-      <h3 class="title">
-        <small>
-          <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
-            {{ 'more_covers' | translate }}
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
-        </small>
-      </h3>
+    <div ng-repeat="artist in bestArtistsOfMusicGenre" class="col-md-2">
+      <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
     </div>
   </div>
-</div>
-<cover-songs ng-model="bestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
-<div class="page-title">
-  <div class="row">
-    <div class="col-md-8">
-      <h3 class="title">
-        {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
-      </h3>
-    </div>
-    <div class="col-md-4 align-right">
-      <h3 class="title">
-        <small>
-          <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
-            {{ 'more_covers' | translate }}
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
-        </small>
-      </h3>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          {{ 'the_best_music_genre_covers' | translate: musicGenre }}
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
+              {{ 'more_covers' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
     </div>
   </div>
+  <cover-songs ng-model="bestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
+  <div class="page-title">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="title">
+          {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
+        </h3>
+      </div>
+      <div class="col-md-4 align-right">
+        <h3 class="title">
+          <small>
+            <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
+              {{ 'more_covers' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </small>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <cover-songs ng-model="latestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
 </div>
-<cover-songs ng-model="latestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>

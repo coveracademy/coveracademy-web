@@ -1,29 +1,31 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="special-header">
-      <div class="content" ng->
-        <div ng-if="musicGenre" class="thumbnail">
-          <img ng-src="/img/genres/{{ musicGenre.image }}">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="special-header">
+        <div class="content" ng->
+          <div ng-if="musicGenre" class="thumbnail">
+            <img ng-src="/img/genres/{{ musicGenre.image }}">
+          </div>
+          <div>
+            <h1 class="bolder-text big">
+              <span ng-if="musicGenre">{{ 'music_genre_artists' | translate: musicGenre }}</span>
+              <span ng-if="!musicGenre">{{ 'all_artists' | translate }}</span>
+            </h1>
+          </div>
         </div>
-        <div>
-          <h1 class="bolder-text big">
-            <span ng-if="musicGenre">{{ 'music_genre_artists' | translate: musicGenre }}</span>
-            <span ng-if="!musicGenre">{{ 'all_artists' | translate }}</span>
-          </h1>
-        </div>
+        <img ng-if="musicGenre" ng-src="/img/genres/{{ musicGenre.image }}">
       </div>
-      <img ng-if="musicGenre" ng-src="/img/genres/{{ musicGenre.image }}">
     </div>
   </div>
-</div>
-<div class="align-center">
-  <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-</div>
-<div ng-repeat="row in artists | partition: 4" class="row text-center">
-  <div ng-repeat="artist in row" class="col-md-3">
-    <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="180"></cover>
+  <div class="align-center">
+    <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
-</div>
-<div class="align-center">
-  <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  <div ng-repeat="row in artists | partition: 4" class="row text-center">
+    <div ng-repeat="artist in row" class="col-md-3">
+      <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="180"></cover>
+    </div>
+  </div>
+  <div class="align-center">
+    <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  </div>
 </div>

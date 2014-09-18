@@ -19,6 +19,7 @@ _.str = require('underscore.string');
 var coverRelated = {withRelated: ['artist', 'music']};
 var coverAllRelated = {withRelated: ['artist', 'artist.musicGenre', 'music']};
 var artistRelated = {withRelated: ['musicGenre']};
+var musicRelated = {withRelated: ['artist']};
 
 var calculatePeriod = function(period) {
   var endDate = new Date();
@@ -433,15 +434,15 @@ exports.getMusic = function(artist, title) {
 }
 
 exports.getMusicById = function(id) {
-  return Music.query({where: ['id', id]}).fetch(['artist']);
+  return Music.query({where: ['id', id]}).fetch(musicRelated);
 }
 
 exports.getMusicBySlug = function(slug) {
-  return Music.query({where: ['slug', slug]}).fetch(['artist']);
+  return Music.query({where: ['slug', slug]}).fetch(musicRelated);
 }
 
 exports.searchMusics = function(query) {
-  return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch(['artist']);
+  return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch(musicRelated);
 }
 
 exports.searchMusicsOfArtist = function(artistName, query) {
