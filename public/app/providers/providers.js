@@ -20,7 +20,7 @@ angular
       cover_video_title: '{{ author }}\'s cover of "{{ music.title }}" by {{ artist.name }}',
       follow_us: 'Follow us',
       give_us_your_feedback: 'Give us your Feedback',
-      help_us_to_improve: 'Help us to further improve the {{ siteName }}',
+      help_us_to_improve: 'Help us to further improve {{ siteName }}',
       latest_covers: 'Latest covers',
       latest_covers_week: 'Latest covers from this week',
       latest_music_genre_covers: 'Latest {{ name }} covers',
