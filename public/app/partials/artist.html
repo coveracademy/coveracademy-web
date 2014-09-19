@@ -1,8 +1,8 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="special-header">
-        <div class="content">
+<div class="special-header">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
           <div ng-if="artist.medium_thumbnail" class="thumbnail">
             <img ng-src="{{ artist.medium_thumbnail }}">
           </div>
@@ -14,10 +14,12 @@
             </h2>
           </div>
         </div>
-        <img ng-if="artist.large_thumbnail" ng-src="{{ artist.large_thumbnail }}">
       </div>
     </div>
   </div>
+  <img ng-if="artist.large_thumbnail" ng-src="{{ artist.large_thumbnail }}">
+</div>
+<div class="container">
   <div class="row padding">
     <div class="col-md-12">
       <div class="pull-right">

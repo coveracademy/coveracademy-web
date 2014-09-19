@@ -1,8 +1,8 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="special-header">
-        <div class="content" ng->
+<div class="special-header">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
           <div ng-if="musicGenre" class="thumbnail">
             <img ng-src="/img/genres/{{ musicGenre.image }}">
           </div>
@@ -13,10 +13,12 @@
             </h1>
           </div>
         </div>
-        <img ng-if="musicGenre" ng-src="/img/genres/{{ musicGenre.image }}">
       </div>
     </div>
   </div>
+  <img ng-if="musicGenre" ng-src="/img/genres/{{ musicGenre.image }}">
+</div>
+<div class="container">
   <div class="align-center">
     <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
