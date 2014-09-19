@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-5">
+    <div id="artists" class="col-md-5">
       <div class="row">
         <div class="col-md-6">
           <cover ng-if="firstArtist" image="{{ firstArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ firstArtist.slug }}'})" legend="{{ firstArtist.name }}" height="155" border="false"></cover>
