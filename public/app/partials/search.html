@@ -9,7 +9,7 @@
       <div class="page-title">
         <h2>
           <img class="small-thumbnail" ng-src="{{ artist.small_thumbnail }}">
-          <a ui-sref="artist({artist: artist.slug})">
+          <a ui-sref="app.artist({locale: locale(), artist: artist.slug})">
             {{ artist.name }}
           </a>
         </h2>
