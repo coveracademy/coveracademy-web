@@ -22,17 +22,17 @@
     <div class="col-md-12">
       <div class="page-title">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-7">
             <h1>
               <span ng-if="isRanked('best')">
-                {{ 'best_music_genre_covers' | translate: musicGenre }}
+                {{ 'the_best_music_genre_covers' | translate: musicGenre }}
               </span>
               <span ng-if="isRanked('latest')">
-                {{ 'latest_music_genre_covers' | translate: musicGenre }}
+                {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
               </span>
             </h1>
           </div>
-          <div class="col-md-4 align-right" style="padding-top: 36px;">
+          <div class="col-md-5 align-right" style="padding-top: 36px;">
             <h4>
               <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
                 {{ 'see_the_latest_music_genre_covers' | translate: musicGenre }}
