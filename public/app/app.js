@@ -15,7 +15,7 @@ angular
   'videosharing-embed'
 ])
 .constant('constants', {
-  SITE_NAME: 'CoverAcademy',
+  SITE_NAME: 'Cover Academy',
   SITE_URL: 'http://www.coveracademy.com',
   USER_COOKIE: 'CoverAcademy.user'
 })
