@@ -27,7 +27,7 @@
         <h3 class="title">
           <small>
             <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
-              {{ 'see_all_music_genre_artists' | translate: musicGenre }}
+              {{ 'see_all_music_genre_artists' | translate: {musicGenre: musicGenre.name} }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </small>
@@ -44,7 +44,7 @@
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">
-          {{ 'the_best_music_genre_covers' | translate: musicGenre }}
+          {{ 'the_best_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
       <div class="col-md-4 align-right">
@@ -64,7 +64,7 @@
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">
-          {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
+          {{ 'the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
       <div class="col-md-4 align-right">

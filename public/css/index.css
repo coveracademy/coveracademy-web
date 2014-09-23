@@ -16,6 +16,9 @@ h1, h2, h3, h4, h5, p {
 
 header.navbar-default {
   background-color: #444;
+  box-shadow: -1px 3px 5px #6f6f6f;
+  -moz-box-shadow: -1px 3px 5px #6f6f6f;
+  -webkit-box-shadow: -1px 3px 5px #6f6f6f;
 }
 
 header.navbar-default .navbar-brand {

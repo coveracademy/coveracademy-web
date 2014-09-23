@@ -25,21 +25,21 @@
           <div class="col-md-7">
             <h1>
               <span ng-if="isRanked('best')">
-                {{ 'the_best_music_genre_covers' | translate: musicGenre }}
+                {{ 'the_best_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
               </span>
               <span ng-if="isRanked('latest')">
-                {{ 'the_latest_music_genre_covers' | translate: musicGenre }}
+                {{ 'the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
               </span>
             </h1>
           </div>
           <div class="col-md-5 align-right" style="padding-top: 36px;">
             <h4>
               <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
-                {{ 'see_the_latest_music_genre_covers' | translate: musicGenre }}
+                {{ 'see_the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </a>
               <a ng-if="isRanked('latest')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
-                {{ 'see_the_best_music_genre_covers' | translate: musicGenre }}
+                {{ 'see_the_best_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </a>
             </h4>
