@@ -36,7 +36,7 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" ui-sref="app.index({locale: locale()})">
-            {{ CoverAcademy }}
+            {{ siteName }}
           </a>
         </div>
         <div class="navbar-collapse collapse">
@@ -86,7 +86,7 @@
     <main class="content" ui-view>
     </main>
 
-    <footer>
+    <footer ng-controller="footerController">
       <div class="container">
         <div class="row">
           <div class="col-md-4">

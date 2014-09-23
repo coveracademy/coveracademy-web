@@ -91,6 +91,9 @@ angular
     $state.go('app.search', {locale: $scope.locale(), q: $scope.searchQuery});
   };
 }])
+.controller('footerController', ['$scope', 'constants', function($scope, constants) {
+  $scope.siteName = constants.SITE_NAME;
+}])
 .controller('alertController', ['$scope', 'alertService', function($scope, alertService) {
   $scope.alerts = alertService.getAlerts();
   $scope.closeAlert = alertService.closeAlert;
