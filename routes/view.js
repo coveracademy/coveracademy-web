@@ -278,6 +278,18 @@ module.exports = function(router, app) {
     })
   });
 
+  router.get('/contest/:id/:slug/join', function(req, res, next) {
+    var id = req.param('id');
+    contestService.getContest(id).then(function(contest) {
+      res.json({
+        contest: contest
+      });
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    })
+  });
+
   router.get('/audition/:id/:slug', function(req, res, next) {
     var id = req.param('id');
     var slug = req.param('slug');

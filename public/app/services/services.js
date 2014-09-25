@@ -251,6 +251,9 @@ angular
   this.contestView = function(id, slug) {
     return $http.get('/view/contest/' + id + '/' + slug);
   };
+  this.joinContestView = function(id, slug) {
+    return $http.get('/view/contest/' + id + '/' + slug + '/join');
+  };
   this.auditionView = function(id, slug) {
     return $http.get('/view/audition/' + id + '/' + slug);
   };
@@ -309,5 +312,10 @@ angular
   };
   this.searchMusics = function(query, artist) {
     return $http.get('/api/search/music', {params: {artist: artist, query: query}});
+  };
+}])
+.service('contestService', ['$http', function($http) {
+  this.joinContest = function(audition) {
+    return $http.get('/api/contest/join', {params: {audition: audition}});
   };
 }]);

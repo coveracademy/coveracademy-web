@@ -1,0 +1,29 @@
+<div class="special-header">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-if="music.medium_thumbnail" class="thumbnail">
+            <img ng-src="{{ music.medium_thumbnail }}">
+          </div>
+          <div>
+            <h1 class="bolder-text">
+              {{ contest.name }}
+            </h1>
+            <h3>{{ contest.description }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <img ng-src="/img/contests/contest.jpg">
+</div>
+<div class="progress">
+  <div class="progress-bar progress-bar-striped active" style="width: 45%">
+    <span class="sr-only">45% Completo</span>
+  </div>
+  <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
+</div>
+<div class="container">
+
+</div>

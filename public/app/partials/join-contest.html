@@ -1,0 +1,47 @@
+<div class="special-header">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-if="music.medium_thumbnail" class="thumbnail">
+            <img ng-src="{{ music.medium_thumbnail }}">
+          </div>
+          <div>
+            <h1 class="bolder-text">
+              {{ contest.name }}
+            </h1>
+            <h3>{{ contest.description }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <img ng-src="/img/contests/contest.jpg">
+</div>
+<div class="progress">
+  <div class="progress-bar progress-bar-striped active" style="width: 45%">
+    <span class="sr-only">45% Completo</span>
+  </div>
+  <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
+</div>
+<div class="container">
+  <form name="auditionForm" class="form-horizontal">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form-group" ng-class="{'has-error': auditionForm.url.$invalid && !auditionForm.url.$pristine}">
+          <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control big" placeholder="{{ 'paste_here_the_video_url' | translate}}" required/>
+        </div>
+        <div ng-if="audition.url">
+          <div class="form-group embed-container">
+            <embed-video ng-href="{{ audition.url }}"></embed-video>
+          </div>
+          <div class="form-group">
+            <button ng-click="joinContest()" ng-disabled="auditionForm.$invalid" class="btn btn-primary btn-block btn-lg">
+              {{ 'join_contest' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

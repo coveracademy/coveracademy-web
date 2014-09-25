@@ -225,6 +225,18 @@ angular
         }
       }
     })
+    .state('app.joinContest', {
+      url: '/contest/:id/:slug/join',
+      templateUrl: '/app/partials/join-contest.html',
+      controller: 'joinContestController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.joinContestView($stateParams.id, $stateParams.slug);
+        }
+      }
+    })
     .state('app.audition', {
       url: '/audition/:id/:slug?rank',
       templateUrl: '/app/partials/audition.html',
