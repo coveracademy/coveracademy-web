@@ -44,12 +44,15 @@ angular
   $translateProvider.fallbackLanguage($languagesProvider.getFallbackLanguage().id);
   $translateProvider.useCookieStorage();
 
-  // Routes
+  // Interceptors
   $httpProvider.interceptors.push('authHttpInterceptor');
   // $httpProvider.interceptors.push('ngProgressHttpInterceptor');
+  
   $locationProvider.html5Mode(true);
+  $locationProvider.hashPrefix('!');
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
+  // Routes
   $stateProvider
     .state('root', {
       url: '/',
