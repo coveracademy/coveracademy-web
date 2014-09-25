@@ -29,8 +29,8 @@ app.use(cookieParser());
 app.use(session({secret: 'coveracademy', saveUninitialized: true, resave: true}));
 app.use(express.static(app.get('public')));
 
-engine.configure(app);
 middlewares.configure(app);
+engine.configure(app);
 authentication.configure(app, passport);
 routes.configure(express, app, passport);
 
