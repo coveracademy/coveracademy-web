@@ -68,9 +68,15 @@ angular
       link: '@',
       width: '@',
       height: '@',
+      theme: '@',
+      border: '@',
+      faces: '@'
     },
     link: function(scope, element, attrs, ctrl) {
-      scope.fbLikeBoxUrl = $sce.trustAsResourceUrl('//www.facebook.com/plugins/likebox.php?href=' + scope.link + '&amp;width=' + scope.width + '&amp;height=' + scope.height + '&amp;colorscheme=light&amp;show_faces=true&amp;header=false&amp;stream=false&amp;show_border=true&amp;appId=329761620528304');
+      scope.colorScheme = scope.theme || 'dark';
+      scope.showBorder = scope.border || 'false';
+      scope.showFaces = scope.faces || 'false';
+      scope.fbLikeBoxUrl = $sce.trustAsResourceUrl('//www.facebook.com/plugins/likebox.php?href=' + scope.link + '&width=' + scope.width + '&height=' + scope.height + '&colorscheme=' + scope.colorScheme + '&show_faces=' + scope.showFaces + '&header=false&stream=false&show_border=' + scope.showBorder + '&appId=329761620528304');
     }
   }
 }]);

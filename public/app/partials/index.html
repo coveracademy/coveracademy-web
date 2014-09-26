@@ -28,18 +28,10 @@
       </div>
     </div>
     <div id="artists" class="col-md-5">
-      <div class="row">
-        <div class="col-md-6">
-          <cover ng-if="firstArtist" image="{{ firstArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ firstArtist.slug }}'})" legend="{{ firstArtist.name }}" height="155" border="false"></cover>
-          <cover ng-if="secondArtist" image="{{ secondArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ secondArtist.slug }}'})" legend="{{ secondArtist.name }}" height="155" border="false"></cover>
-        </div>
-        <div class="col-md-6">
-          <fb-like-box link="https://www.facebook.com/pages/Cover-Academy/437459529726897" width="212" height="272"></fb-like-box>
-        </div>
-      </div>
-      <div class="row">
-        <div ng-repeat="artist in thirdAndFourthArtists" class="col-md-6">
-          <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155" border="false"></cover>
+      <div class="row" ng-repeat="row in bestArtistsOfMusicGenre | partition: 2">
+        <div class="col-md-6" ng-repeat="bestArtist in row">
+          <cover image="{{ bestArtist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ bestArtist.slug }}'})" legend="{{ bestArtist.name }}" height="155" border="false">
+          </cover>
         </div>
       </div>
     </div>

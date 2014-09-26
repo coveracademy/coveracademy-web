@@ -46,7 +46,7 @@ module.exports = function(router, app) {
       this.musicGenres = musicGenres;
 
       var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
-      return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, 4);
+      return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
     }).then(function(bestArtistsOfMusicGenre) {
       res.json({
         topCover: this.topCover,
