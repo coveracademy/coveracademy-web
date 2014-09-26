@@ -6,7 +6,7 @@ html {
 body {
   font-family: 'Ubuntu', 'sans-serif';
   /* Margin bottom by footer height */
-  margin-bottom: 470px;
+  margin-bottom: 540px;
 }
 
 header.navbar-default {
