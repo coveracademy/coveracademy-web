@@ -10,10 +10,7 @@ body {
 }
 
 header.navbar-default {
-  background-color: #555;
-  box-shadow: -1px 3px 5px #6f6f6f;
-  -moz-box-shadow: -1px 3px 5px #6f6f6f;
-  -webkit-box-shadow: -1px 3px 5px #6f6f6f;
+  background-color: #363b3f;
 }
 
 header.navbar-default .navbar-brand {
@@ -42,7 +39,7 @@ main {
 }
 
 footer {
-  background-color: #444;
+  background-color: #363b3f;
   bottom: 0;
   height: 450px;
   position: absolute;
@@ -59,7 +56,7 @@ footer .container {
 }
 
 footer .extra {
-  background-color: #555;
+  background-color: #2a3034;
 }
 
 footer .info ul {

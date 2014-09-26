@@ -21,7 +21,7 @@ angular
       follow_us: 'Follow us',
       give_us_your_feedback: 'Give us your Feedback',
       help_us_to_improve: 'Help us to further improve {{ siteName }}',
-      indicate_cover: 'Do you know an awesome cover song?',
+      indicate_cover: 'Do you know an amazing cover song?',
       indicate_cover_steps: 'Visit our Facebook page and leave us a message',
       join_contest: 'Join contest',
       latest_covers: 'Latest covers',
