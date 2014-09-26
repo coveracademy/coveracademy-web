@@ -77,7 +77,9 @@
             </li>
           </ul>
           <form ng-show="!isLoginState() && !user()" class="navbar-form navbar-right">
-            <button ng-click="login()" class="btn btn-primary">{{ 'signin_button' | translate }}</button>
+            <button ng-click="login()" class="btn btn-primary bolder-text">
+              {{ 'signin_button' | translate }}
+            </button>
           </form>
         </div>
       </div>
@@ -125,7 +127,7 @@
               <fb-like-box link="https://www.facebook.com/pages/Cover-Academy/437459529726897" width="280" height="70"></fb-like-box>
             </div>
             <div class="col-md-8 align-right">
-              © Cover Academy 2014
+              © {{ siteName }} 2014
             </div>
           </div>
         </div>
