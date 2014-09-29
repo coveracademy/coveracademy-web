@@ -35,8 +35,8 @@
     <header ng-controller="headerController" class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" ui-sref="app.index({locale: locale()})">
-            CoverAcademy
+          <a class="" ui-sref="app.index({locale: locale()})">
+            <img src="/img/logo/white-logo.png">
           </a>
         </div>
         <div class="navbar-collapse collapse">
@@ -104,6 +104,9 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
+              <a ui-sref="app.index({locale: locale()})">
+                <img src="/img/logo/white-logo-footer.png">
+              </a>
             </div>
             <div class="col-md-3">
               <h4 class="bolder-text">{{ 'support' | translate | uppercase }}</h4>
