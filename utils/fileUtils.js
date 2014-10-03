@@ -32,27 +32,6 @@ exports.downloadUserPhoto = function(uri, user, extensionsAccepted) {
   });
 }
 
-exports.politicianPhotoFilename = function(politician, extension) {
-  return politician.id + '_' + new Date().getTime() + (extension ? extension : '');
-}
-
-exports.politicianPhotoFilePath = function(politicianPhotoFilename) {
-  return path.join(settings.publicPath, 'img/politicians/', politicianPhotoFilename ? politicianPhotoFilename : '');
-}
-
-exports.downloadPoliticianPhoto = function(uri, politician, extensionsAccepted) {
-  return new Promise(function(resolve, reject) {
-    var photoFilename = $.politicianPhotoFilename(politician);
-    var photoPath = $.politicianPhotoFilePath();
-    $.download(uri, photoPath, photoFilename, extensionsAccepted).then(function(filenameWithExtension) {
-      politician.set('photo_filename', filenameWithExtension);
-      resolve(politician);
-    }).catch(function(err) {
-      reject(err);
-    });
-  });
-}
-
 exports.download = function(uri, filePath, filename, extensionsAccepted) {
   return new Promise(function(resolve, reject) {
     request.head(uri, function(err, res, body) {
