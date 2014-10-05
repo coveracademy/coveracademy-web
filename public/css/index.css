@@ -332,13 +332,30 @@ input.big {
   font-size: 28px;
 }
 
-.cover {
+.box {
   position: relative;
 }
 
-.cover .background {
+.box .background {
    display: block;
    background-size: cover;
+}
+
+.box .legend {
+  background-color: #000;
+  bottom: 3px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  left: 3px;
+  padding: 2px 5px 2px 5px;
+  position: absolute;
+
+}
+
+.cover {
+  position: relative;
 }
 
 .cover .legend {
@@ -455,6 +472,7 @@ form.compacted .form-group {
 
 .special-header > .content .thumbnail {
   position: absolute;
+  z-index: -1;
 }
 
 .special-header > .content .thumbnail > img {
