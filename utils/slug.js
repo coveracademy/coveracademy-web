@@ -13,7 +13,7 @@ slug.charmap['’'] = ' ';
 slug.charmap[','] = ' ';
 slug.charmap['!'] = ' ';
 slug.charmap['@'] = ' ';
-slug.charmap['&'] = 'e';
+slug.charmap['&'] = 'and';
 slug.charmap['\''] = ' ';
 
 exports.slugify = function(str) {

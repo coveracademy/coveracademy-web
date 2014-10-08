@@ -47,7 +47,7 @@ function findGenre(tags) {
 
 exports.getArtistInfos = function(artistName) {
   return new Promise(function(resolve, reject) {
-    lastfm.info("artist", {
+    lastfm.info('artist', {
       artist: artistName,
       autocorrect: 1,
       handlers: {
@@ -77,7 +77,7 @@ exports.getArtistInfos = function(artistName) {
 
 exports.getMusicInfos = function(artistName, musicTitle) {
   return new Promise(function(resolve, reject) {
-    lastfm.info("track", {
+    lastfm.info('track', {
       artist: artistName,
       track: musicTitle,
       autocorrect: 1,
