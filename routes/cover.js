@@ -136,4 +136,5 @@ module.exports = function(router, app) {
   });
 
   app.use('/api/cover', router);
+
 }

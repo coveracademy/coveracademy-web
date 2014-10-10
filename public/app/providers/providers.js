@@ -24,6 +24,10 @@ angular
       indicate_cover: 'Do you know an amazing cover song?',
       indicate_cover_steps: 'Visit our Facebook page and leave us a message',
       join_contest: 'Join contest',
+      join_contest_signin_google_account: 'Please sign in with your Google account to join the contest',
+      join_contest_signin_youtube_account_title: 'This is your first time?',
+      join_contest_signin_youtube_account: 'Please let us associate your YouTube account with your Google account',
+      join_contest_paste_video_url: 'OK, now you just need to paste your cover video URL from YouTube below',
       latest_covers: 'Latest covers',
       latest_covers_week: 'Latest covers from this week',
       like_us_on_facebook: 'Like us on Facebook',
@@ -65,7 +69,8 @@ angular
       },
       errors: {
         page_not_found: 'Page not found',
-        internal_error: 'Internal error'
+        internal_error: 'Internal error',
+        contest_join_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you'
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -162,7 +167,8 @@ angular
       },
       errors: {
         page_not_found: 'Página não encontrada',
-        internal_error: 'Erro interno'
+        internal_error: 'Erro interno',
+        contest_join_video_not_owned_by_user: 'Você não pode participar de um campeonato com um vídeo publicado em outra conta'
       },
       music_genre: {
         acoustic: 'Acústico',

@@ -2,6 +2,9 @@ var Contest   = require('../models/models').Contest,
     Audition  = require('../models/models').Audition,
     Bookshelf = require('../models/models').Bookshelf,
     settings  = require('../configs/settings'),
+    slug      = require('../utils/slug'),
+    APIError  = require('./errors/apiErrors').APIError,
+    youtube   = require('./third/youtube'),
     Promise   = require('bluebird'),
     _         = require('underscore'),
     $         = this;
@@ -28,6 +31,29 @@ var listAuditions = function(rankType, contest, page, pageSize) {
 
 exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
+}
+
+exports.joinContest = function(user, auditionData) {
+  return new Promise(function(resolve, reject) {
+    youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
+      if(videoInfos.channelId === user.get('youtube_account')) {
+        var audition = Audition.forge(auditionData);
+        audition.set('user_id', user.id);
+        audition.set('url', videoInfos.url);
+        audition.set('embed_url', videoInfos.embedUrl);
+        audition.set('video_id', videoInfos.id);
+        audition.set('small_thumbnail', videoInfos.thumbnails.small);
+        audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
+        audition.set('large_thumbnail', videoInfos.thumbnails.large);
+        audition.set('slug', slug.slugify(audition.get('video_title')) + '-' + slug.slugify(user.get('name')));
+        resolve(audition.save());
+      } else {
+        reject(new APIError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
+      }
+    }).catch(function(err) {
+      reject(new APIError(400, 'contest.join.errorGettingVideoInfos'));
+    });
+  });
 }
 
 exports.getAudition = function(id) {
@@ -59,4 +85,8 @@ exports.votesByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
     resolve({});
   });
+}
+
+exports.getAuditionVideoInfos = function(url) {
+  return youtube.getVideoInfos(url);
 }

@@ -158,7 +158,7 @@ exports.addCover = function(user, coverData) {
       video_dislikes: videoInfos.dislikes,
       video_views: videoInfos.views,
       video_date: videoInfos.date,
-      author: coverData.author ? coverData.author : videoInfos.author,
+      author: coverData.author ? coverData.author : videoInfos.channelTitle,
       score: wilsonScore(videoInfos.views, videoInfos.dislikes),
       small_thumbnail: videoInfos.thumbnails.small,
       medium_thumbnail: videoInfos.thumbnails.medium,

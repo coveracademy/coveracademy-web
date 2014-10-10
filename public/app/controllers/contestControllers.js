@@ -19,22 +19,44 @@ angular
     return $scope.rankType === type;
   };
 }])
-.controller('joinContestController', ['$scope', '$stateParams', 'backendResponse', 'seoService', 'contestService', function($scope, $stateParams, backendResponse, seoService, contestService) {
+.controller('joinContestController', ['$scope', '$state', '$stateParams', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
   $scope.contest = backendResponse.data.contest;
+  $scope.audition = {contest_id: $scope.contest.id};
+  $scope.usingGoogleAccount = false;
+  $scope.usingYoutubeAccount = false;
   $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
 
+  $scope.signinWithGoogle = function() {
+    authenticationService.login('google').then(function(user) {
+      $scope.usingGoogleAccount = true;
+      if(user.youtube_account) {
+        $scope.usingYoutubeAccount = true;
+      }
+    });
+  };
+  $scope.signinWithYoutube = function() {
+    authenticationService.login('youtube').then(function(user) {
+      $scope.usingYoutubeAccount = true;
+    });
+  };
   $scope.videoUrlPasted = function(event) {
-    $scope.audition = {};
     var url = event.clipboardData.getData("text/plain");
-    if($scope.youtubeRegex.test(url)) {
+    contestService.getAuditionVideoInfos(url).then(function(response) {
       $scope.audition.url = url;
-    } else {
+      $scope.audition.video_title = response.data.title;
+      $scope.audition.video_description = response.data.description;
+    }).catch(function(err) {
       alertService.addAlert('warning', 'For now we support only Youtube videos =(');
-    }
+    });
   };
   $scope.joinContest = function() {
     contestService.joinContest($scope.audition).then(function(response) {
-
+      var audition = response.data;
+      $state.go('app.audition', {id: audition.id, slug: audition.slug});
+    }).catch(function(err) {
+      translationService.translateError(err.data).then(function(message) {
+        alertService.addAlert('danger', message);
+      });
     });
   };
 }]);

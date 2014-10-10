@@ -47,7 +47,7 @@ angular
   // Interceptors
   $httpProvider.interceptors.push('authHttpInterceptor');
   // $httpProvider.interceptors.push('ngProgressHttpInterceptor');
-  
+
   $locationProvider.html5Mode(true);
   $locationProvider.hashPrefix('!');
   $uiViewScrollProvider.useAnchorScroll();
@@ -241,7 +241,7 @@ angular
       }
     })
     .state('app.audition', {
-      url: '/audition/:id/:slug?rank',
+      url: '/audition/:id/:slug',
       templateUrl: '/app/partials/audition.html',
       controller: 'auditionController',
       accessLevel: accessLevel.PUBLIC,

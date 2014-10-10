@@ -27,4 +27,5 @@ module.exports = function(router, app) {
   });
 
   app.use('/api/artist', router);
+
 }

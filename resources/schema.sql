@@ -8,12 +8,14 @@ create table user (
   facebook_account  varchar(255) default null,
   twitter_account   varchar(255) default null,
   google_account    varchar(255) default null,
+  youtube_account   varchar(255) default null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_email` (`email`),
   unique key `uq_user_facebook_account` (`facebook_account`),
   unique key `uq_user_twitter_account` (`twitter_account`),
-  unique key `uq_user_google_account` (`google_account`)
+  unique key `uq_user_google_account` (`google_account`),
+  unique key `uq_user_youtube_account` (`youtube_account`)
 ) engine = innodb default charset = utf8;
 
 create table music_genre (
@@ -117,12 +119,12 @@ create table audition (
   id                int(11) not null auto_increment,
   contest_id        int(11) not null,
   user_id           int(11) not null,
-  artist_id         int(11) not null,
-  music_id          int(11) not null,
   slug              varchar(255) not null,
   url               varchar(255) not null,
   embed_url         varchar(255) not null,
   video_id          varchar(255) not null,
+  video_title       varchar(255) default null,
+  video_description text default null,
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
@@ -132,10 +134,6 @@ create table audition (
   unique key `uq_audition_contest_id_user_id` (`contest_id`, `user_id`),
   key `fk_audition_contest_id` (`contest_id`),
   key `fk_audition_user_id` (`user_id`),
-  key `fk_audition_artist_id` (`artist_id`),
-  key `fk_audition_music_id` (`music_id`),
   constraint `fk_audition_contest_id` foreign key (`contest_id`) references `contest` (`id`),
   constraint `fk_audition_user_id` foreign key (`user_id`) references `user` (`id`),
-  constraint `fk_audition_artist_id` foreign key (`artist_id`) references `artist` (`id`),
-  constraint `fk_audition_music_id` foreign key (`music_id`) references `music` (`id`)
 ) engine = innodb default charset = utf8;

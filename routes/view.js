@@ -309,6 +309,7 @@ module.exports = function(router, app) {
       res.send(500);
     })
   });
+
   app.use('/view', router);
 
 }

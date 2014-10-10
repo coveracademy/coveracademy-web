@@ -100,7 +100,7 @@ angular
     var deferred = $q.defer();
     var left = ($window.screen.width / 2) - (780 / 2);
     var top = ($window.screen.height / 2) - (410 / 2);
-    var win = $window.open(userService.loginEndpoint(provider), "SignIn", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=" + left + ",top=" + top);
+    var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
     win.focus();
     $window.authResult = function(result) {
       if(result === 'success') {
@@ -194,6 +194,22 @@ angular
     };
     return $modal.open(extendedOptions).result;
   };
+}])
+.service('translationService', ['$q', '$translate', function($q, $translate) {
+  var errorKeys = {
+    'contest.join.videoNotOwnedByUser': 'errors.contest_join_video_not_owned_by_user'
+  }
+
+  this.translateError = function(err) {
+    var deferred = $q.defer();
+    var translationKey = errorKeys[err.errorKey];
+    if(translationKey) {
+      deferred.resolve($translate(translationKey));
+    } else {
+      deferred.resolve(err.errorMessage);
+    }
+    return deferred.promise;
+  }
 }])
 .service('userService', ['$http', function($http) {
   this.loginEndpoint = function(provider) {
@@ -315,7 +331,10 @@ angular
   };
 }])
 .service('contestService', ['$http', function($http) {
+  this.getAuditionVideoInfos = function(url) {
+    return $http.get('/api/contest/audition/videoInfos', {params: {url: url}});
+  };
   this.joinContest = function(audition) {
-    return $http.get('/api/contest/join', {params: {audition: audition}});
+    return $http.post('/api/contest/join', {audition: audition});
   };
 }]);

@@ -14,7 +14,8 @@ var path = require('path'),
       clientID: '329761620528304',
       clientSecret: '9331e1f0ee96c8ea7789a22e55aacdba',
       callbackURL: _siteUrl + '/api/auth/facebook/callback',
-      profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails']
+      profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails'],
+      scope: ['email']
     },
     _twitter = {
       consumerKey: '0mB4ErjFy98T1b2POJKSuqTOH',
@@ -24,7 +25,15 @@ var path = require('path'),
     _google = {
       clientID: '787515950155-dpukm9vvm6u7ei2ma91nrhmvnsmusptn.apps.googleusercontent.com',
       clientSecret: 'gvSQc8Ewwf7aQz4eq6nYlPwI',
-      callbackURL: _siteUrl + '/api/auth/google/callback'
+      callbackURL: _siteUrl + '/api/auth/google/callback',
+      scope: ['email']
+    },
+    _youtube = {
+      clientID: '787515950155-j2a0kdrlr9cut1vmi78bin0673cvap86.apps.googleusercontent.com',
+      clientSecret: 'Te2kt4UghFIlrWV3U6MSOETt',
+      callbackURL: _siteUrl + '/api/auth/youtube/callback',
+      profileURL: 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&mine=true',
+      scope: ['https://www.googleapis.com/auth/youtube.readonly']
     },
     _envs = {
       dev: {
@@ -77,6 +86,7 @@ exports.domain = _domain;
 exports.facebook = _facebook;
 exports.twitter = _twitter;
 exports.google = _google;
+exports.youtube = _youtube;
 
 var env = _envs[_nodeEnv];
 for(property in env) {

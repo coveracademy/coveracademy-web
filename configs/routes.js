@@ -3,6 +3,7 @@ exports.configure = function(express, app, passport) {
 
   require('../routes/authentication')(express.Router(), app, passport);
   require('../routes/view')(express.Router(), app);
+  require('../routes/contest')(express.Router(), app);
   require('../routes/cover')(express.Router(), app);
   require('../routes/artist')(express.Router(), app);
   require('../routes/music')(express.Router(), app);

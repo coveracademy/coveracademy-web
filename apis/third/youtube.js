@@ -94,7 +94,6 @@ exports.getVideoInfos = function(uri) {
     if(isYoutubeURL(uri) === true) {
       var videoId = getIdFromURL(uri);
       getVideoData(videoId, ['snippet', 'statistics', 'contentDetails']).then(function(videoData) {
-        console.log(videoData);
         var videoInfos = {};
         videoInfos.id = videoData.id;
         videoInfos.url = youtubeVideoUrlPattern.replace('[VIDEO_ID]', videoInfos.id);
@@ -105,7 +104,8 @@ exports.getVideoInfos = function(uri) {
         videoInfos.views = parseInt(videoData.statistics.viewCount);
         videoInfos.likes = parseInt(videoData.statistics.likeCount);
         videoInfos.dislikes = parseInt(videoData.statistics.dislikeCount);
-        videoInfos.author = videoData.snippet.channelTitle;
+        videoInfos.channelId = videoData.snippet.channelId;
+        videoInfos.channelTitle = videoData.snippet.channelTitle;
         videoInfos.date = new Date(videoData.snippet.publishedAt);
 
         videoInfos.thumbnails = {};
@@ -117,7 +117,7 @@ exports.getVideoInfos = function(uri) {
         reject(err);
       });
     } else {
-      reject(new Error('This is not a YouTube URL'));
+      reject(new Error('This is not a YouTube video URL'));
     }
   });
 }
