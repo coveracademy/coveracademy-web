@@ -3,9 +3,6 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <div ng-if="music.medium_thumbnail" class="thumbnail">
-            <img ng-src="{{ music.medium_thumbnail }}">
-          </div>
           <div>
             <h1 class="bolder-text">
               {{ contest.name }}
@@ -63,7 +60,8 @@
   <div class="align-center">
     <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
-  <auditions ng-model="auditions"></auditions>
+  <auditions ng-model="auditions" locale="{{ locale() }}" votes-by-audition="getVotesByAudition">
+  </auditions>
   <div class="align-center">
     <pagination total-items="totalArtists" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>

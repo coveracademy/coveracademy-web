@@ -135,5 +135,16 @@ create table audition (
   key `fk_audition_contest_id` (`contest_id`),
   key `fk_audition_user_id` (`user_id`),
   constraint `fk_audition_contest_id` foreign key (`contest_id`) references `contest` (`id`),
-  constraint `fk_audition_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_audition_user_id` foreign key (`user_id`) references `user` (`id`)
+) engine = innodb default charset = utf8;
+
+create table audition_user_vote (
+  id                int(11) not null auto_increment,
+  user_id           int(11) not null,
+  audition_id       int(11) not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id),
+  unique key `uq_audition_user_vote_user_id_audition_id` (`user_id`, `audition_id`),
+  constraint `fk_audition_user_vote_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_audition_user_vote_audition_id` foreign key (`audition_id`) references `audition` (`id`)
 ) engine = innodb default charset = utf8;

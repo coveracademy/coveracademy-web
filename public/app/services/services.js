@@ -197,7 +197,9 @@ angular
 }])
 .service('translationService', ['$q', '$translate', function($q, $translate) {
   var errorKeys = {
-    'contest.join.videoNotOwnedByUser': 'errors.contest_join_video_not_owned_by_user'
+    'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
+    'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
+    'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest'
   }
 
   this.translateError = function(err) {

@@ -25,5 +25,51 @@
   <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
 </div>
 <div class="container">
-
+  <div class="row">
+    <div class="col-md-12 align-center">
+      <div class="page-title">
+        <h1 class="title">
+          {{ audition.video_title }}
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="embed-container">
+            <embed-video ng-href="{{ audition.url }}"></embed-video>
+          </div>
+        </div>
+      </div>
+      <div class="row padding">
+        <div class="col-md-9 font-big">
+          <p>
+            {{ audition.user.name }}
+          </p>
+          <p>
+            {{ 'published' | translate }} <span am-time-ago="audition.registration_date"></span>
+          </p>
+        </div>
+        <div class="col-md-3 align-right">
+          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
+          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
+          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>
+          {{ 'more_videos_of_the_contestants' | translate }}
+        </h3>
+      </div>
+      <cover-songs ng-model="contestantsVideos" locale="{{ locale() }}"></cover-songs>
+    </div>
+  </div>
 </div>

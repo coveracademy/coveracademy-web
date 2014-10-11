@@ -1,18 +1,20 @@
-var Contest   = require('../models/models').Contest,
-    Audition  = require('../models/models').Audition,
-    Bookshelf = require('../models/models').Bookshelf,
-    settings  = require('../configs/settings'),
-    slug      = require('../utils/slug'),
-    APIError  = require('./errors/apiErrors').APIError,
-    youtube   = require('./third/youtube'),
-    Promise   = require('bluebird'),
-    _         = require('underscore'),
-    $         = this;
+var Contest    = require('../models/models').Contest,
+    Audition   = require('../models/models').Audition,
+    Bookshelf  = require('../models/models').Bookshelf,
+    settings   = require('../configs/settings'),
+    slug       = require('../utils/slug'),
+    modelUtils = require('../utils/modelUtils'),
+    apiErrors  = require('./errors/apiErrors'),
+    APIError   = require('./errors/apiErrors').APIError,
+    youtube    = require('./third/youtube'),
+    Promise    = require('bluebird'),
+    _          = require('underscore'),
+    $          = this;
 
 _.str = require('underscore.string');
 
-var auditionsRelated = {withRelated: ['user', 'music', 'artist']};
-var auditionsWithContestRelated = {withRelated: ['contest', 'user', 'music', 'artist']};
+var auditionsRelated = {withRelated: ['user']};
+var auditionsWithContestRelated = {withRelated: ['contest', 'user']};
 
 var listAuditions = function(rankType, contest, page, pageSize) {
   page = parseInt(page);
@@ -46,7 +48,15 @@ exports.joinContest = function(user, auditionData) {
         audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
         audition.set('large_thumbnail', videoInfos.thumbnails.large);
         audition.set('slug', slug.slugify(audition.get('video_title')) + '-' + slug.slugify(user.get('name')));
-        resolve(audition.save());
+        audition.save().then(function(audition) {
+          resolve(audition);
+        }).catch(function(err) {
+          if(err.code === 'ER_DUP_ENTRY') {
+            reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest'));
+          } else {
+            reject(apiErrors.fromDatabaseError('audition', err, 'Error adding audition in contest'));
+          }
+        });
       } else {
         reject(new APIError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
       }
@@ -81,12 +91,30 @@ exports.totalAuditions = function(contest) {
   });
 }
 
-exports.votesByAudition = function(auditions) {
+exports.getVotesByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
-    resolve({});
+    Bookshelf.knex('audition_user_vote')
+    .select(Bookshelf.knex.raw('audition_id, count(*) as votes'))
+    .whereIn('audition_id', modelUtils.getIds(auditions))
+    .groupBy('audition_id')
+    .then(function(usersVotesCounts) {
+      var votesByAudition = {};
+      usersVotesCounts.forEach(function(usersVotesCount) {
+        votesByAudition[usersVotesCount.audition_id] = usersVotesCount.votes;
+      });
+      resolve(votesByAudition);
+    }).catch(function(err) {
+      reject(err);
+    });
   });
 }
 
 exports.getAuditionVideoInfos = function(url) {
   return youtube.getVideoInfos(url);
+}
+
+exports.getAuditionVotes = function(audition) {
+  return $.getVotesByAudition([audition]).then(function(votesByAudition) {
+    return votesByAudition[audition.id];
+  });
 }

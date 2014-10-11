@@ -7,7 +7,8 @@ angular
     require: 'ngModel',
     scope: {
       locale: '@',
-      auditions: '=ngModel'
+      auditions: '=ngModel',
+      votesByAudition: '&'
     }
   };
 })

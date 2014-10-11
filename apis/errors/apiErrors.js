@@ -42,7 +42,7 @@ function PermissionError(entity, permissionKey, errorMessage) {
 util.inherits(PermissionError, APIError);
 
 function fromDatabaseError(entity, err, errorMessage) {
-  var errorType = errorMapping[err.clientError.cause.code];
+  var errorType = errorMapping[err.code];
   if(errorType) {
     return new errorType(entity);
   } else {

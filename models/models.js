@@ -67,16 +67,25 @@ var Contest = Bookshelf.Model.extend({
 var Audition = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'audition',
-  artist: function() {
-    return this.belongsTo(Artist, 'artist_id');
-  },
-  music: function() {
-    return this.belongsTo(Music, 'music_id');
+  contest: function() {
+    return this.belongsTo(Contest, 'contest_id');
   },
   user: function() {
     return this.belongsTo(User, 'user_id');
   }
 });
+
+var AuditionUserVote = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'audition_user_vote',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  },
+  audition: function() {
+    return this.belongsTo(Audition, 'audition_id');
+  }
+});
+
 
 module.exports = {
   User: User,

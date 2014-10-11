@@ -1,11 +1,9 @@
-<div class="special-header">
+<div class="special-header clickable">
+  <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})" class="link"></a>
   <div class="content">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <div ng-if="music.medium_thumbnail" class="thumbnail">
-            <img ng-src="{{ music.medium_thumbnail }}">
-          </div>
           <div>
             <h1 class="bolder-text">
               {{ contest.name }}

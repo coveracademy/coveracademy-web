@@ -262,11 +262,13 @@ module.exports = function(router, app) {
         Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest)])
         .spread(function(auditions, totalAuditions) {
           this.auditions = auditions;
-          return contestService.votesByAudition(auditions);
+          this.totalAuditions = totalAuditions;
+          return contestService.getVotesByAudition(auditions);
         }).then(function(votesByAudition) {
           res.json({
             contest: contest,
             auditions: this.auditions,
+            totalAuditions: this.totalAuditions,
             votesByAudition: votesByAudition,
             rankType: rankType
           });
@@ -281,9 +283,13 @@ module.exports = function(router, app) {
   router.get('/contest/:id/:slug/join', function(req, res, next) {
     var id = req.param('id');
     contestService.getContest(id).then(function(contest) {
-      res.json({
-        contest: contest
-      });
+      if(!contest) {
+        res.send(404);
+      } else {
+        res.json({
+          contest: contest
+        });
+      }
     }).catch(function(err) {
       console.log(err.stack);
       res.send(500);
@@ -300,6 +306,7 @@ module.exports = function(router, app) {
         contestService.getAuditionVotes(audition).then(function(votes) {
           res.json({
             audition: audition,
+            contest: audition.related('contest'),
             votes: votes,
           });
         });

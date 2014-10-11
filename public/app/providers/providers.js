@@ -27,17 +27,19 @@ angular
       join_contest_signin_google_account: 'Please sign in with your Google account to join the contest',
       join_contest_signin_youtube_account_title: 'This is your first time?',
       join_contest_signin_youtube_account: 'Please let us associate your YouTube account with your Google account',
-      join_contest_paste_video_url: 'OK, now you just need to paste your cover video URL from YouTube below',
+      join_contest_paste_video_url: 'OK, now you just need to paste your cover video URL from YouTube below!',
       latest_covers: 'Latest covers',
       latest_covers_week: 'Latest covers from this week',
       like_us_on_facebook: 'Like us on Facebook',
       more_covers: 'More covers',
       more_covers_by: 'More covers by',
       more_covers_of: 'More covers of',
+      more_videos_of_the_contestants: 'More videos of the contestants',
       music_genre_artists: '{{ musicGenre }} artists',
       musics: 'musics',
       on_youtube: 'on YouTube',
       paste_here_the_video_url: 'Paste here the video URL',
+      published: 'Published',
       results_for: 'results for',
       search_for_musics_or_artists: 'Search for musics or artists',
       see_all_music_genre_artists: 'See all {{ musicGenre }} artists',
@@ -54,6 +56,7 @@ angular
       the_cover_author: 'The cover author',
       the_latest_music_genre_covers: 'The latest {{ musicGenre }} covers',
       the_music_title: 'The music title',
+      votes: 'votes',
       alerts: {
         not_authorized: 'You are not authorized to access this section!',
         not_authenticated: 'You are trying to access an privileged section, please sign in with your social account!',
@@ -70,7 +73,9 @@ angular
       errors: {
         page_not_found: 'Page not found',
         internal_error: 'Internal error',
-        contest_join_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you'
+        join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
+        join_contest_video_url_not_valid: 'For now we support only Youtube videos =(',
+        join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us'
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -126,16 +131,22 @@ angular
       indicate_cover: 'Você conhece um cover incrível?',
       indicate_cover_steps: 'Visite a nossa página no Facebook e nos deixe uma mensagem',
       join_contest: 'Entrar no concurso',
+      join_contest_signin_google_account: 'Por favor acesse sua conta do Google para poder entrar no concurso',
+      join_contest_signin_youtube_account_title: 'Essa é a sua primeira vez?',
+      join_contest_signin_youtube_account: 'Por favor deixe-nos associar sua conta do YouTube com a sua conta do Google',
+      join_contest_paste_video_url: 'OK, agora você só precisa colar a URL do vídeo do YouTube abaixo!',
       latest_covers: 'Últimos covers',
       latest_covers_week: 'Últimos covers da semana',
       like_us_on_facebook: 'Curta no Facebook',
       more_covers: 'Mais covers',
       more_covers_by: 'Mais covers de',
       more_covers_of: 'Mais covers de',
+      more_videos_of_the_contestants: 'Mais vídeos dos participantes do concurso',
       music_genre_artists: 'Artistas {{ musicGenre }}',
       musics: 'musicas',
       on_youtube: 'no YouTube',
       paste_here_the_video_url: 'Cole aqui a URL do vídeo',
+      published: 'Publicado',
       results_for: 'resultados para',
       search_for_musics_or_artists: 'Busque por músicas ou artistas',
       see_all_music_genre_artists: 'Veja todos os artistas {{ musicGenre }}',
@@ -152,6 +163,7 @@ angular
       the_cover_author: 'O autor do cover',
       the_latest_music_genre_covers: 'Os últimos covers {{ musicGenre }}',
       the_music_title: 'O título da música',
+      votes: 'votos',
       alerts: {
         not_authorized: 'Você não tem autorização para acessar esta seção!',
         not_authenticated: 'Você está tentando acessar uma seção privilegiada, por favor acesse sua conta de rede social!',
@@ -168,7 +180,9 @@ angular
       errors: {
         page_not_found: 'Página não encontrada',
         internal_error: 'Erro interno',
-        contest_join_video_not_owned_by_user: 'Você não pode participar de um campeonato com um vídeo publicado em outra conta'
+        join_contest_video_not_owned_by_user: 'Você não pode participar de um campeonato com um vídeo publicado em outra conta',
+        join_contest_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =(',
+        join_contest_user_already_in_contest: 'Você já está participando deste concurso. Caso tenha dúvidas entre em contato'
       },
       music_genre: {
         acoustic: 'Acústico',

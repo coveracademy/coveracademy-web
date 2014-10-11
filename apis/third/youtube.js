@@ -1,4 +1,5 @@
 var settings   = require('../../configs/settings'),
+    APIError   = require('../errors/apiErrors').APIError,
     youtubeAPI = require('youtube-api'),
     Promise    = require('bluebird'),
     _          = require('underscore'),
@@ -117,7 +118,7 @@ exports.getVideoInfos = function(uri) {
         reject(err);
       });
     } else {
-      reject(new Error('This is not a YouTube video URL'));
+      reject(new APIError(400, 'contest.join.videoURLNotValid', 'This is not a YouTube video URL'));
     }
   });
 }

@@ -6,7 +6,7 @@
         <div class="darken"></div>
         <img ng-src="{{ audition.medium_thumbnail }}">
         <div class="caption font-big">
-          {{ audition.artist.name }} - {{ audition.music.title }}
+          {{ audition.video_title }}
           <div>
             {{ 'by' | translate }} {{ audition.user.name }}
           </div>
@@ -15,7 +15,10 @@
           </div>
         </div>
         <div class="legend">
-          <span class="label label-primary font-big">53 votos</span>
+          <span class="label label-primary font-big">
+            {{ votesByAudition }}
+            {{ votesByAudition(audition) }} {{ 'votes' | translate }}
+          </span>
         </div>
       </div>
     </div>
