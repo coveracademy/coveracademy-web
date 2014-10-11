@@ -56,6 +56,7 @@ angular
       the_cover_author: 'The cover author',
       the_latest_music_genre_covers: 'The latest {{ musicGenre }} covers',
       the_music_title: 'The music title',
+      vote_now: 'Vote now',
       votes: 'votes',
       alerts: {
         not_authorized: 'You are not authorized to access this section!',
