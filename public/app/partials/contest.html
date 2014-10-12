@@ -5,8 +5,8 @@
         <div class="col-md-3">
           <div class="join">
             <h4 class="align-left nomargin">{{ 'remaining_time' | translate }}</h4>
-            <h2 class="margin10">
-              10D 20H 10M
+            <h2 class="margin10 bolder-text">
+              <timer end-time="contest.end_date">{{ days }}D {{ hours }}H {{ minutes }}M {{ seconds }}S</timer>
             </h2>
             <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}

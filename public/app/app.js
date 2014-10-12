@@ -10,6 +10,7 @@ angular
   'ngCookies',
   'ngProgress',
   'pascalprecht.translate',
+  'timer',
   'ui.router',
   'ui.bootstrap',
   'videosharing-embed'
