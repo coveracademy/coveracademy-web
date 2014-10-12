@@ -1,13 +1,12 @@
-<div class="special-header clickable">
-  <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})" class="link"></a>
+<div class="special-header contest">
   <div class="content">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div>
-            <h1 class="bolder-text">
-              {{ contest.name }}
-            </h1>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+          <div class="title">
+            <h1 class="bolder-text">{{ contest.name }}</h1>
             <h3>{{ contest.description }}</h3>
           </div>
         </div>
@@ -15,12 +14,6 @@
     </div>
   </div>
   <img ng-src="/img/contests/contest.jpg">
-</div>
-<div class="progress">
-  <div class="progress-bar progress-bar-striped active" style="width: 45%">
-    <span class="sr-only">45% Completo</span>
-  </div>
-  <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
 </div>
 <div class="container">
   <div ng-if="!usingGoogleAccount">

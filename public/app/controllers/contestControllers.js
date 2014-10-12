@@ -71,8 +71,31 @@ angular
     });
   };
 }])
-.controller('auditionController', ['$scope', 'backendResponse', 'seoService', function($scope, backendResponse, seoService) {
+.controller('auditionController', ['$scope', 'authEvents', 'backendResponse', 'seoService', 'contestService', function($scope, authEvents, backendResponse, seoService, contestService) {
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
-  $scope.votes = backendResponse.data.votes;
+  $scope.auditionVote = backendResponse.data.auditionVote;
+  $scope.votes = backendResponse.data.votes || 0;
+
+  $scope.$on(authEvents.LOGIN_SUCCESS, function() {
+    contestService.getAuditionVote($scope.audition).then(function(response) {
+      $scope.auditionVote = response.data;
+    });
+  });
+  $scope.vote = function(audition) {
+    contestService.voteInAudition(audition).then(function(response) {
+      $scope.auditionVote = response.data;
+      $scope.votes++;
+    }).catch(function(err) {
+
+    });
+  };
+  $scope.removeVote = function(audition) {
+    contestService.removeVoteInAudition(audition).then(function(response) {
+      $scope.auditionVote = null;
+      $scope.votes--;
+    }).catch(function(err) {
+
+    });
+  };
 }]);

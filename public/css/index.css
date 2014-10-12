@@ -139,6 +139,10 @@ a:hover {
   margin: 10px;
 }
 
+.nomargin {
+  margin: 0px;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -448,6 +452,14 @@ form.compacted .form-group {
   position: relative;
 }
 
+.special-header.small {
+  height: 100px;
+}
+
+.special-header.small .title {
+  padding-top: 0px;
+}
+
 .special-header a {
   color: #fff;
   text-decoration: underline;
@@ -483,6 +495,28 @@ form.compacted .form-group {
   width: 100%;
   opacity: 0.5;
   margin-top: -200px;
+}
+
+.contest > img {
+  opacity: 0.3;
+}
+
+.contest > .content {
+  padding-top: 0px;
+  text-shadow: none;
+}
+
+.contest .join {
+  padding-top: 20px;
+}
+
+.contest .join a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.contest .title {
+  padding-top: 40px;
 }
 
 .progress {

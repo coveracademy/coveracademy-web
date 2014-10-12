@@ -75,9 +75,9 @@ var Audition = Bookshelf.Model.extend({
   }
 });
 
-var AuditionUserVote = Bookshelf.Model.extend({
+var AuditionVote = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'audition_user_vote',
+  tableName: 'audition_vote',
   user: function() {
     return this.belongsTo(User, 'user_id');
   },
@@ -85,7 +85,6 @@ var AuditionUserVote = Bookshelf.Model.extend({
     return this.belongsTo(Audition, 'audition_id');
   }
 });
-
 
 module.exports = {
   User: User,
@@ -96,5 +95,6 @@ module.exports = {
   Music: Music,
   Contest: Contest,
   Audition: Audition,
+  AuditionVote: AuditionVote,
   Bookshelf: Bookshelf
 }

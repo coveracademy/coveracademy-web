@@ -1,28 +1,18 @@
-<div class="special-header">
+<div class="special-header contest small">
   <div class="content">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div ng-if="music.medium_thumbnail" class="thumbnail">
-            <img ng-src="{{ music.medium_thumbnail }}">
-          </div>
-          <div>
-            <h1 class="bolder-text">
-              {{ contest.name }}
-            </h1>
-            <h3>{{ contest.description }}</h3>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+          <div class="title">
+            <h1 class="bolder-text">{{ contest.name }}</h1>
           </div>
         </div>
       </div>
     </div>
   </div>
   <img ng-src="/img/contests/contest.jpg">
-</div>
-<div class="progress">
-  <div class="progress-bar progress-bar-striped active" style="width: 45%">
-    <span class="sr-only">45% Completo</span>
-  </div>
-  <span class="progress-type">Faltam 10 dias para finalizar o concurso</span>
 </div>
 <div class="container">
   <div class="row">
@@ -31,6 +21,12 @@
         <h1 class="title">
           {{ audition.video_title }}
         </h1>
+        <p class="font-biggest">
+          {{ 'published' | translate }}
+          <span am-time-ago="audition.registration_date"></span>
+          {{ 'by_lowercase' | translate }}
+          <a ui-sref="app.user({locale: locale(), id: audition.user.id})">{{ audition.user.name }}</a>
+        </p>
       </div>
     </div>
   </div>
@@ -45,25 +41,14 @@
           </div>
         </div>
       </div>
-      <div class="row padding">
-        <div class="col-md-9 font-big">
-          <p>
-            {{ audition.user.name }}
-          </p>
-          <p>
-            {{ 'published' | translate }} <span am-time-ago="audition.registration_date"></span>
-          </p>
-        </div>
-        <div class="col-md-3 align-right">
-          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
-          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
-          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
-        </div>
-      </div>
     </div>
     <div class="col-md-3">
-      <button class="btn btn-success btn-lg btn-block">
+      <h1 class="align-center">{{ votes }} {{ 'votes' | translate }}</h1>
+      <button ng-if="!auditionVote" class="btn btn-success btn-lg btn-block" ng-click="vote(audition)">
         {{ 'vote_now' | translate }}
+      </button>
+      <button ng-if="auditionVote" class="btn btn-info btn-lg btn-block" ng-click="removeVote(audition)">
+        {{ 'you_voted' | translate }}
       </button>
     </div>
   </div>

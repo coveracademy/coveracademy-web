@@ -1,15 +1,16 @@
-var Contest    = require('../models/models').Contest,
-    Audition   = require('../models/models').Audition,
-    Bookshelf  = require('../models/models').Bookshelf,
-    settings   = require('../configs/settings'),
-    slug       = require('../utils/slug'),
-    modelUtils = require('../utils/modelUtils'),
-    apiErrors  = require('./errors/apiErrors'),
-    APIError   = require('./errors/apiErrors').APIError,
-    youtube    = require('./third/youtube'),
-    Promise    = require('bluebird'),
-    _          = require('underscore'),
-    $          = this;
+var Contest      = require('../models/models').Contest,
+    Audition     = require('../models/models').Audition,
+    AuditionVote = require('../models/models').AuditionVote,
+    Bookshelf    = require('../models/models').Bookshelf,
+    settings     = require('../configs/settings'),
+    slug         = require('../utils/slug'),
+    modelUtils   = require('../utils/modelUtils'),
+    apiErrors    = require('./errors/apiErrors'),
+    APIError     = require('./errors/apiErrors').APIError,
+    youtube      = require('./third/youtube'),
+    Promise      = require('bluebird'),
+    _            = require('underscore'),
+    $            = this;
 
 _.str = require('underscore.string');
 
@@ -61,7 +62,7 @@ exports.joinContest = function(user, auditionData) {
         reject(new APIError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
       }
     }).catch(function(err) {
-      reject(new APIError(400, 'contest.join.errorGettingVideoInfos'));
+      reject(new APIError(400, 'contest.join.errorGettingVideoInfos', 'Error getting video information'));
     });
   });
 }
@@ -93,14 +94,14 @@ exports.totalAuditions = function(contest) {
 
 exports.getVotesByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
-    Bookshelf.knex('audition_user_vote')
+    Bookshelf.knex('audition_vote')
     .select(Bookshelf.knex.raw('audition_id, count(*) as votes'))
     .whereIn('audition_id', modelUtils.getIds(auditions))
     .groupBy('audition_id')
-    .then(function(usersVotesCounts) {
+    .then(function(votesCounts) {
       var votesByAudition = {};
-      usersVotesCounts.forEach(function(usersVotesCount) {
-        votesByAudition[usersVotesCount.audition_id] = usersVotesCount.votes;
+      votesCounts.forEach(function(votesCount) {
+        votesByAudition[votesCount.audition_id] = votesCount.votes;
       });
       resolve(votesByAudition);
     }).catch(function(err) {
@@ -116,5 +117,50 @@ exports.getAuditionVideoInfos = function(url) {
 exports.getAuditionVotes = function(audition) {
   return $.getVotesByAudition([audition]).then(function(votesByAudition) {
     return votesByAudition[audition.id];
+  });
+}
+
+exports.getAuditionVote = function(user, audition) {
+  return new Promise(function(resolve, reject) {
+    if(!user) {
+      resolve();
+    } else {
+      AuditionVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(auditionVote) {
+        resolve(auditionVote);
+      }).catch(function(err) {
+        reject(new APIError(400, 'audition.vote.unknown'));
+      });
+    }
+  });
+}
+
+exports.vote = function(user, audition) {
+  return new Promise(function(resolve, reject) {
+    var auditionVote = AuditionVote.forge({user_id: user.id, audition_id: audition.id});
+    auditionVote.save().then(function(auditionVote) {
+      resolve(auditionVote);
+    }).catch(function(err) {
+      if(err.code === 'ER_DUP_ENTRY') {
+        reject(new APIError(400, 'audition.vote.userAlreadyVoted'));
+      } else {
+        reject(new APIError(400, 'audition.vote.unknown'));
+      }
+    });
+  });
+}
+
+exports.removeVote = function(user, audition) {
+  return new Promise(function(resolve, reject) {
+    AuditionVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(auditionVote) {
+      if(auditionVote) {
+        auditionVote.destroy().then(function(auditionVote) {
+          resolve();
+        })
+      } else {
+        reject(new APIError(400, 'audition.vote.userHasNotVoted'));
+      }
+    }).catch(function(err) {
+      reject(new APIError(400, 'audition.vote.unknown'));
+    });
   });
 }

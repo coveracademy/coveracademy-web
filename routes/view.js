@@ -303,9 +303,10 @@ module.exports = function(router, app) {
       if(!audition) {
         res.send(404);
       } else {
-        contestService.getAuditionVotes(audition).then(function(votes) {
+        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition)]).spread(function(auditionVote, votes) {
           res.json({
             audition: audition,
+            auditionVote: auditionVote,
             contest: audition.related('contest'),
             votes: votes,
           });

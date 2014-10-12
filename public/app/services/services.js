@@ -339,4 +339,13 @@ angular
   this.joinContest = function(audition) {
     return $http.post('/api/contest/join', {audition: audition});
   };
+  this.voteInAudition = function(audition) {
+    return $http.post('/api/contest/audition/vote', {audition_id: audition.id});
+  };
+  this.removeVoteInAudition = function(audition) {
+    return $http.post('/api/contest/audition/removeVote', {audition_id: audition.id});
+  };
+  this.getAuditionVote = function(audition) {
+    return $http.get('/api/contest/audition/vote', {params: {audition_id: audition.id}});
+  };
 }]);
