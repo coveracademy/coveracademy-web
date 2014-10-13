@@ -17,7 +17,7 @@ exports.configure = function(app, passport) {
   });
 
   passport.deserializeUser(function(id, done) {
-    userService.findByID(id).then(function(user) {
+    userService.findById(id).then(function(user) {
       if(user) {
         return user;
       }
@@ -49,7 +49,7 @@ exports.configure = function(app, passport) {
           userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
           }).then(function(user) {
-            return userService.update(user, ['photo_filename']);
+            return userService.update(user, ['image']);
           }).then(function(user) {
             return user;
           }).catch(function(err) {
@@ -78,7 +78,7 @@ exports.configure = function(app, passport) {
         userService.createByTwitterAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
           return fileUtils.downloadUserPhoto(profileInfos.picture, user);
         }).then(function(user) {
-          return userService.update(user, ['photo_filename']);
+          return userService.update(user, ['image']);
         }).then(function(user) {
           return user;
         }).catch(function(err) {
@@ -112,7 +112,7 @@ exports.configure = function(app, passport) {
           userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
           }).then(function(user) {
-            return userService.update(user, ['photo_filename']);
+            return userService.update(user, ['image']);
           }).then(function(user) {
             return user;
           }).catch(function(err) {

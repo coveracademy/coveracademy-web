@@ -55,7 +55,7 @@ angular
       $scope.audition.video_title = response.data.title;
       $scope.audition.video_description = response.data.description;
     }).catch(function(err) {
-      translationService.translateError(err.data).then(function(message) {
+      translationService.translateError(err).then(function(message) {
         alertService.addAlert('warning', message);
       });
     });
@@ -63,9 +63,9 @@ angular
   $scope.joinContest = function() {
     contestService.joinContest($scope.audition).then(function(response) {
       var audition = response.data;
-      $state.go('app.audition', {locale: locale(), id: audition.id, slug: audition.slug});
+      $state.go('app.audition', {locale: $scope.locale(), id: audition.id, slug: audition.slug});
     }).catch(function(err) {
-      translationService.translateError(err.data).then(function(message) {
+      translationService.translateError(err).then(function(message) {
         alertService.addAlert('danger', message);
       });
     });

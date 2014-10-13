@@ -15,6 +15,7 @@ angular
       best_music_genre_covers: 'Best {{ musicGenre }} covers',
       by: 'By',
       by_lowercase: 'by',
+      by_user: 'by',
       contact: 'Contact',
       cover_by: 'Cover by',
       cover_video_title: '{{ author }}\'s cover of "{{ music.title }}" by {{ artist.name }}',
@@ -55,6 +56,8 @@ angular
       signin_message: 'Please sign in with your social network account',
       support: 'Support',
       the_artist_or_band_name: 'The artist or band name',
+      the_audition_video_description: 'Write something interesting about your video',
+      the_audition_video_title: 'The audition title',
       the_best_music_genre_covers: 'The best {{ musicGenre }} covers',
       the_cover_author: 'The cover author',
       the_latest_music_genre_covers: 'The latest {{ musicGenre }} covers',
@@ -76,11 +79,13 @@ angular
         subject: 'Subject'
       },
       errors: {
+        authentication_required: 'You can\'t continue because you are logged out, please login to continue',
         page_not_found: 'Page not found',
         internal_error: 'Internal error',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
         join_contest_video_url_not_valid: 'For now we support only Youtube videos =(',
-        join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us'
+        join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us',
+        unexpected_error: 'An unexpected error happened, please try again later'
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -127,6 +132,7 @@ angular
       best_covers_week: 'Melhores covers da semana',
       by: 'Por',
       by_lowercase: 'de',
+      by_user: 'por',
       contact: 'Contato',
       cover_by: 'Cover de',
       cover_video_title: 'Cover de {{ author }} da música "{{ music.title }}" de {{ artist.name }}',
@@ -167,6 +173,8 @@ angular
       signin_message: 'Por favor acesse com sua conta de rede social',
       support: 'Suporte',
       the_artist_or_band_name: 'O nome do artista ou da banda',
+      the_audition_video_description: 'Escreva algo interessante sobre seu vídeo',
+      the_audition_video_title: 'O título do vídeo',
       the_best_music_genre_covers: 'Os melhores covers {{ musicGenre }}',
       the_cover_author: 'O autor do cover',
       the_latest_music_genre_covers: 'Os últimos covers {{ musicGenre }}',

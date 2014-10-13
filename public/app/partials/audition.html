@@ -5,14 +5,16 @@
         <div class="col-md-3">
         </div>
         <div class="col-md-6">
-          <div class="title">
-            <h1 class="bolder-text">{{ contest.name }}</h1>
-          </div>
+          <h1 class="bolder-text">
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+            </a>
+          </h1>
         </div>
       </div>
     </div>
   </div>
-  <img ng-src="/img/contests/contest.jpg">
+  <img ng-src="/img/contests/{{ contest.image }}">
 </div>
 <div class="container">
   <div class="row">
@@ -24,7 +26,7 @@
         <p class="font-biggest">
           {{ 'published' | translate }}
           <span am-time-ago="audition.registration_date"></span>
-          {{ 'by_lowercase' | translate }}
+          {{ 'by_user' | translate }}
           <a ui-sref="app.user({locale: locale(), id: audition.user.id})">{{ audition.user.name }}</a>
         </p>
       </div>

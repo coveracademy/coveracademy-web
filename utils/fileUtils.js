@@ -7,16 +7,21 @@ var settings = require('../configs/settings'),
     _        = require('underscore'),
     $        = this;
 
+var usersPhotosPath = path.join(settings.publicPath, 'img/users/');
+if(!fs.existsSync(usersPhotosPath)) {
+  fs.mkdirSync(usersPhotosPath);
+}
+
 exports.extensions = {
   image: ['jpg', 'jpeg', 'png', 'gif']
 }
 
 exports.userPhotoFilename = function(user, extension) {
-  return user.id + '_' + new Date().getTime() + (extension ? extension : '');
+  return user.id + (extension ? extension : '');
 }
 
 exports.userPhotoFilePath = function(userPhotoFilename) {
-  return path.join(settings.publicPath, 'img/users/', userPhotoFilename ? userPhotoFilename : '');
+  return path.join(usersPhotosPath, userPhotoFilename ? userPhotoFilename : '');
 }
 
 exports.downloadUserPhoto = function(uri, user, extensionsAccepted) {
@@ -24,7 +29,7 @@ exports.downloadUserPhoto = function(uri, user, extensionsAccepted) {
     var photoFilename = $.userPhotoFilename(user);
     var photoPath = $.userPhotoFilePath();
     $.download(uri, photoPath, photoFilename, extensionsAccepted).then(function(filenameWithExtension) {
-      user.set('photo_filename', filenameWithExtension);
+      user.set('image', filenameWithExtension);
       resolve(user);
     }).catch(function(err) {
       reject(err);

@@ -6,14 +6,18 @@
         </div>
         <div class="col-md-6">
           <div class="title">
-            <h1 class="bolder-text">{{ contest.name }}</h1>
+            <h1 class="bolder-text">
+              <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+                {{ contest.name }}
+              </a>
+            </h1>
             <h3>{{ contest.description }}</h3>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <img ng-src="/img/contests/contest.jpg">
+  <img ng-src="/img/contests/{{ contest.image }}">
 </div>
 <div class="container">
   <div ng-if="!usingGoogleAccount">

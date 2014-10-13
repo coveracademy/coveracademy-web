@@ -253,6 +253,18 @@ angular
         }
       }
     })
+    .state('app.user', {
+      url: '/user/:id',
+      templateUrl: '/app/partials/user.html',
+      controller: 'userController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.userView($stateParams.id);
+        }
+      }
+    })
     // Error states
     .state('app.404', {
       templateUrl: '/app/partials/errors/404.html'
@@ -312,9 +324,9 @@ angular
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     seoService.reset();
     // Force angular-translate to emit $translateChangeSuccess and set the language
-    if($translate.use() !== toParams.locale) {
+    // if($translate.use() !== toParams.locale) {
       $translate.use(toParams.locale);
-    }
+    // }
   });
   $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams) {
     $state.go('app.404', {locale: $translate.use()}, {location: false});

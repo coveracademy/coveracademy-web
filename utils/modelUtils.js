@@ -19,9 +19,9 @@ exports.filterAttributes = function(modelName, data) {
   var result = null;
   var attributes = this.modelsAttributes[modelName];
   if(attributes) {
-    if(Array.isArray(data)) {
+    if(_.isArray(data)) {
       result = [];
-      data.forEach(function(singleData) {
+      _.forEach(data, function(singleData) {
         result.push(filter(singleData, attributes));
       });
     } else {

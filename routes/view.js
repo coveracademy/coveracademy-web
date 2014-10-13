@@ -1,5 +1,6 @@
 var coverService   = require('../apis/coverService'),
     contestService = require('../apis/contestService'),
+    userService    = require('../apis/userService'),
     constants      = require('../apis/constants'),
     isAdmin        = require('../utils/authorization').isAdmin,
     math           = require('../utils/math'),
@@ -310,6 +311,22 @@ module.exports = function(router, app) {
             contest: audition.related('contest'),
             votes: votes,
           });
+        });
+      }
+    }).catch(function(err) {
+      console.log(err.stack);
+      res.send(500);
+    })
+  });
+
+  router.get('/user/:id', function(req, res, next) {
+    var id = req.param('id');
+    userService.getUser(id).then(function(user) {
+      if(!user) {
+        res.send(404);
+      } else {
+        res.json({
+          user: user
         });
       }
     }).catch(function(err) {

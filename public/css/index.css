@@ -206,7 +206,7 @@ a:hover {
 
 .alert {
   position: relative;
-  width: 400px;
+  max-width: 500px;
   margin-bottom: 10px;
 }
 
@@ -355,7 +355,6 @@ input.big {
   left: 3px;
   padding: 2px 5px 2px 5px;
   position: absolute;
-
 }
 
 .cover {
@@ -385,7 +384,6 @@ input.big {
   font-weight: bold;
   text-align: center;
   text-shadow: 2px 2px 5px #000000;
-
   background-image: url('/img/gradient.png');
   background-repeat: repeat-x;
   background-position: center bottom;
@@ -497,26 +495,35 @@ form.compacted .form-group {
   margin-top: -200px;
 }
 
-.contest > img {
+.special-header.contest a {
+  text-decoration: none;
+}
+
+.special-header.contest > img {
   opacity: 0.3;
 }
 
-.contest > .content {
+.special-header.contest > .content {
   padding-top: 0px;
   text-shadow: none;
 }
 
-.contest .join {
+.special-header.contest .join {
   padding-top: 20px;
 }
 
-.contest .join a {
+.special-header.contest .join a {
   color: #fff;
   text-decoration: none;
 }
 
-.contest .title {
+.special-header.contest .title {
   padding-top: 40px;
+}
+
+.special-header.user > .content {
+  text-align: left;
+  text-shadow: none;
 }
 
 .progress {

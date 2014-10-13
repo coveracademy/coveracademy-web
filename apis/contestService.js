@@ -94,19 +94,23 @@ exports.totalAuditions = function(contest) {
 
 exports.getVotesByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
-    Bookshelf.knex('audition_vote')
-    .select(Bookshelf.knex.raw('audition_id, count(*) as votes'))
-    .whereIn('audition_id', modelUtils.getIds(auditions))
-    .groupBy('audition_id')
-    .then(function(votesCounts) {
-      var votesByAudition = {};
-      votesCounts.forEach(function(votesCount) {
-        votesByAudition[votesCount.audition_id] = votesCount.votes;
+    if(auditions.isEmpty()) {
+      resolve({});
+    } else {
+      Bookshelf.knex('audition_vote')
+      .select(Bookshelf.knex.raw('audition_id, count(*) as votes'))
+      .whereIn('audition_id', modelUtils.getIds(auditions))
+      .groupBy('audition_id')
+      .then(function(votesCounts) {
+        var votesByAudition = {};
+        votesCounts.forEach(function(votesCount) {
+          votesByAudition[votesCount.audition_id] = votesCount.votes;
+        });
+        resolve(votesByAudition);
+      }).catch(function(err) {
+        reject(err);
       });
-      resolve(votesByAudition);
-    }).catch(function(err) {
-      reject(err);
-    });
+    }
   });
 }
 
@@ -115,7 +119,8 @@ exports.getAuditionVideoInfos = function(url) {
 }
 
 exports.getAuditionVotes = function(audition) {
-  return $.getVotesByAudition([audition]).then(function(votesByAudition) {
+  var collection = Audition.collection().add(audition);
+  return $.getVotesByAudition(collection).then(function(votesByAudition) {
     return votesByAudition[audition.id];
   });
 }

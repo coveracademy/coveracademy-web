@@ -199,16 +199,23 @@ angular
   var errorKeys = {
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
-    'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest'
+    'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
+    'status.401': 'errors.authentication_required',
+    'status.500': 'errors.unexpected_error'
   }
 
   this.translateError = function(err) {
     var deferred = $q.defer();
-    var translationKey = errorKeys[err.errorKey];
+    var translationKey = errorKeys[err.data.errorKey];
     if(translationKey) {
       deferred.resolve($translate(translationKey));
     } else {
-      deferred.resolve(err.errorMessage);
+      if(err.status == 400) {
+        deferred.resolve(err.errorMessage);
+      } else {
+        translationKey = errorKeys['status.' + err.status];
+        deferred.resolve($translate(translationKey));
+      }
     }
     return deferred.promise;
   }
@@ -274,6 +281,9 @@ angular
   };
   this.auditionView = function(id, slug) {
     return $http.get('/view/audition/' + id + '/' + slug);
+  };
+  this.userView = function(id) {
+    return $http.get('/view/user/' + id);
   };
 }])
 .service('coverService', ['$http', function($http) {

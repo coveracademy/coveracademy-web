@@ -33,12 +33,22 @@ exports.update = function(user, attributes) {
   return user.save(user.pick(attributes), {patch: true});
 }
 
+exports.getUser = function(id) {
+  return $.findById(id, true).then(function(user) {
+    return user;
+  }).catch(function(err) {
+    return $.findByUsername(id);
+  }).then(function(user) {
+    return user;
+  })
+}
+
 exports.findAll = function() {
   return User.forge().fetch();
 }
 
-exports.findByID = function(id) {
-  return User.forge({id: id}).fetch();
+exports.findById = function(id, required) {
+  return User.forge({id: id}).fetch({require: required});
 }
 
 exports.findByFacebookAccount = function(facebook_account) {
