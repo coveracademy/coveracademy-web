@@ -108,14 +108,15 @@ create table potential_cover (
 ) engine = innodb default charset = utf8;
 
 create table contest (
-  id                int(11) not null auto_increment,
-  name              varchar(255) not null,
-  slug              varchar(255) not null,
-  description       text not null,
-  image             varchar(255) not null,
-  start_date        timestamp null default null,
-  end_date          timestamp null default null,
-  registration_date timestamp not null default current_timestamp,
+  id                  int(11) not null auto_increment,
+  name                varchar(255) not null,
+  slug                varchar(255) not null,
+  description         text not null,
+  image               varchar(255) not null,
+  minimum_contestants int(4) not null,
+  start_date          timestamp null default null,
+  end_date            timestamp null default null,
+  registration_date   timestamp not null default current_timestamp,
   primary key (id)
 ) engine = innodb default charset = utf8;
 

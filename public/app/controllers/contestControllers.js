@@ -71,7 +71,7 @@ angular
     });
   };
 }])
-.controller('auditionController', ['$scope', 'authEvents', 'backendResponse', 'seoService', 'contestService', function($scope, authEvents, backendResponse, seoService, contestService) {
+.controller('auditionController', ['$scope', 'authEvents', 'backendResponse', 'authenticationService', 'seoService', 'contestService', function($scope, authEvents, backendResponse, authenticationService, seoService, contestService) {
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
   $scope.auditionVote = backendResponse.data.auditionVote;
@@ -82,12 +82,17 @@ angular
       $scope.auditionVote = response.data;
     });
   });
+  $scope.canVote = function() {
+    return !authenticationService.getUser() || (authenticationService.getUser().id === $scope.audition.user.id);
+  };
   $scope.vote = function(audition) {
     contestService.voteInAudition(audition).then(function(response) {
       $scope.auditionVote = response.data;
       $scope.votes++;
     }).catch(function(err) {
-
+      translationService.translateError(err).then(function(message) {
+        alertService.addAlert('danger', message);
+      });
     });
   };
   $scope.removeVote = function(audition) {
@@ -95,7 +100,9 @@ angular
       $scope.auditionVote = null;
       $scope.votes--;
     }).catch(function(err) {
-
+      translationService.translateError(err).then(function(message) {
+        alertService.addAlert('danger', message);
+      });
     });
   };
 }]);

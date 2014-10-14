@@ -80,6 +80,7 @@ angular
       },
       errors: {
         authentication_required: 'You can\'t continue because you are logged out, please login to continue',
+        audition_vote_cant_vote_yourself: 'You cant\'t vote yourself',
         page_not_found: 'Page not found',
         internal_error: 'Internal error',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
@@ -196,11 +197,14 @@ angular
         subject: 'Assunto'
       },
       errors: {
+        authentication_required: 'Você não pode continuar porque não está logado, por favor faça login para continuar',
+        audition_vote_cant_vote_yourself: 'Você não pode votar em si mesmo',
         page_not_found: 'Página não encontrada',
         internal_error: 'Erro interno',
         join_contest_video_not_owned_by_user: 'Você não pode participar de um campeonato com um vídeo publicado em outra conta',
         join_contest_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =(',
-        join_contest_user_already_in_contest: 'Você já está participando deste concurso. Caso tenha dúvidas entre em contato'
+        join_contest_user_already_in_contest: 'Você já está participando deste concurso. Caso tenha dúvidas entre em contato',
+        unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente'
       },
       music_genre: {
         acoustic: 'Acústico',

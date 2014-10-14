@@ -46,12 +46,12 @@
     </div>
     <div class="col-md-3">
       <h1 class="align-center">{{ votes }} {{ 'votes' | translate }}</h1>
-      <button ng-if="!auditionVote" class="btn btn-success btn-lg btn-block" ng-click="vote(audition)">
+      <button ng-if="canVote() && !auditionVote" class="btn btn-success btn-lg btn-block" ng-click="vote(audition)">
         {{ 'vote_now' | translate }}
       </button>
-      <button ng-if="auditionVote" class="btn btn-info btn-lg btn-block" ng-click="removeVote(audition)">
+      <button ng-if="canVote() && auditionVote" class="btn btn-info btn-lg btn-block" ng-click="removeVote(audition)">
         {{ 'you_voted' | translate }}
-      </button>
+      </button>      
     </div>
   </div>
   <div class="row">

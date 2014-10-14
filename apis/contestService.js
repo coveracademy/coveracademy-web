@@ -141,16 +141,24 @@ exports.getAuditionVote = function(user, audition) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    var auditionVote = AuditionVote.forge({user_id: user.id, audition_id: audition.id});
-    auditionVote.save().then(function(auditionVote) {
-      resolve(auditionVote);
-    }).catch(function(err) {
-      if(err.code === 'ER_DUP_ENTRY') {
-        reject(new APIError(400, 'audition.vote.userAlreadyVoted'));
+    audition.load(['user']).then(function(audition) {
+      if(user.id === audition.related('user').id) {
+        var auditionVote = AuditionVote.forge({user_id: user.id, audition_id: audition.id});
+        auditionVote.save().then(function(auditionVote) {
+          resolve(auditionVote);
+        }).catch(function(err) {
+          if(err.code === 'ER_DUP_ENTRY') {
+            reject(new APIError(400, 'audition.vote.userAlreadyVoted'));
+          } else {
+            reject(new APIError(400, 'audition.vote.unknown'));
+          }
+        });
       } else {
-        reject(new APIError(400, 'audition.vote.unknown'));
+        reject(new APIError(400, 'audition.vote.cantVoteYourself'));
       }
-    });
+    }).catch(function(err) {
+      reject(new APIError(400, 'audition.vote.unknown'));
+    })
   });
 }
 
