@@ -62,8 +62,10 @@ angular
       the_cover_author: 'The cover author',
       the_latest_music_genre_covers: 'The latest {{ musicGenre }} covers',
       the_music_title: 'The music title',
+      this_contest_is_not_going_yet: 'This contest is not goind yet!',
       vote_now: 'Vote now!',
       votes: 'votes',
+      we_need_more_contestants: 'We need {{ contestantsRemaining }} more contestants',
       you_voted: 'You voted!',
       alerts: {
         not_authorized: 'You are not authorized to access this section!',
@@ -180,8 +182,10 @@ angular
       the_cover_author: 'O autor do cover',
       the_latest_music_genre_covers: 'Os últimos covers {{ musicGenre }}',
       the_music_title: 'O título da música',
+      this_contest_is_not_going_yet: 'Este campeonato ainda não está acontecendo!',
       vote_now: 'Vote agora!',
       votes: 'votos',
+      we_need_more_contestants: 'Nós precisamos de mais {{ contestantsRemaining }} participantes',
       you_voted: 'Você votou!',
       alerts: {
         not_authorized: 'Você não tem autorização para acessar esta seção!',

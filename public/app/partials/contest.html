@@ -4,10 +4,12 @@
       <div class="row">
         <div class="col-md-3">
           <div class="join">
-            <h4 class="align-left nomargin">{{ 'remaining_time' | translate }}</h4>
-            <h2 class="margin10 bolder-text">
-              <timer end-time="contest.end_date">{{ days }}D {{ hours }}H {{ minutes }}M {{ seconds }}S</timer>
-            </h2>
+            <div ng-if="contestIsGoing()">
+              <h4 class="align-left nomargin">{{ 'remaining_time' | translate }}</h4>
+              <h2 class="margin10 bolder-text">
+                <timer end-time="contest.end_date">{{ days }}D {{ hours }}H {{ minutes }}M {{ seconds }}S</timer>
+              </h2>
+            </div>
             <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
@@ -29,7 +31,7 @@
   </div>
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
-<div class="container">
+<div ng-if="contestIsGoing()" class="container">
   <div class="row">
     <div class="col-md-8">
       <h1>
@@ -58,5 +60,16 @@
   </auditions>
   <div class="align-center">
     <pagination total-items="totalArtists" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  </div>
+</div>
+<div ng-if="!contestIsGoing()" class="container">
+  <div class="jumbotron margin10">
+    <h1>{{ 'this_contest_is_not_going_yet' | translate }}</h1>
+    <h2 class="bolder-text">
+      {{ 'we_need_more_contestants' | translate: {contestantsRemaining: contestantsRemaining()} }}
+    </h2>
+    <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block bolder-text">
+      {{ 'join_now' | translate }}
+    </a>
   </div>
 </div>

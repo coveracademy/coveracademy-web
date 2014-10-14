@@ -27,6 +27,15 @@ angular
     }
     return votes;
   };
+  $scope.contestIsGoing = function() {
+    var startDate = new Date($scope.contest.start_date);
+    var endDate = new Date($scope.contest.end_date);
+    var now = new Date();
+    return $scope.contest.start_date && now > startDate && now < endDate;
+  };
+  $scope.contestantsRemaining = function() {
+    return 10;
+  }
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
   $scope.contest = backendResponse.data.contest;
