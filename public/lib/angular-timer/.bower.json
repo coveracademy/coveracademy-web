@@ -28,6 +28,6 @@
     "commit": "a1286aa417c85e1a4d4107055e2e6e45c9455320"
   },
   "_source": "git://github.com/siddii/angular-timer.git",
-  "_target": "*",
+  "_target": "~1.1.7",
   "_originalSource": "angular-timer"
 }

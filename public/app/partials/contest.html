@@ -7,7 +7,14 @@
             <div ng-if="contestIsGoing()">
               <h4 class="align-left nomargin">{{ 'remaining_time' | translate }}</h4>
               <h2 class="margin10 bolder-text">
-                <timer end-time="contest.end_date">{{ days }}D {{ hours }}H {{ minutes }}M {{ seconds }}S</timer>
+                <timer end-time="contest.end_date">
+                  <span ng-if="remainingOneDay(days)">
+                    {{ hours }} {{ 'hours' }} {{ minutes }} {{ 'minutes' | translate }}
+                  </span>
+                  <span ng-if="!remainingOneDay(days)">
+                    {{ days }} {{ 'days' | translate }} {{ hours }} {{ 'hours' | translate }}
+                  </span>
+                </timer>
               </h2>
             </div>
             <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">

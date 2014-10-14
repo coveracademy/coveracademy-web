@@ -18,6 +18,10 @@ angular
   $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
+  $scope.remainingOneDay = function(days) {
+    console.log(days)
+    return parseInt(days) === 0;
+  };
   $scope.getVotesByAudition = function(audition) {
     console.log($scope.votesByAudition)
     console.log(audition)

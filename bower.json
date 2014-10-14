@@ -11,8 +11,9 @@
     "angular-translate-storage-cookie": "~2.2.0",
     "angular-ui-router": "~0.2.10",
     "bootstrap": "~3.2.0",
+    "bootstrap-social": "~4.8.0",
     "bootswatch": "v3.2.0+3",
-    "font-awesome": "~4.1.0",
+    "font-awesome": "~4.2.0",
     "ng-videosharing-embed": "~0.2.1",
     "ngprogress": "~1.0.4",
     "underscore": "~1.6.0"

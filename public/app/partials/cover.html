@@ -33,9 +33,15 @@
           </p>
         </div>
         <div class="col-md-3 align-right">
-          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Facebook" class="icon icon-facebook" target="_blank"></a>
-          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Twitter" class="icon icon-twitter"target="_blank"></a>
-          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" title="{{ 'share_on' | translate }} Google+" class="icon icon-googleplus"target="_blank"></a>
+          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" class="btn btn-social-icon btn-twitter" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/cover/{{ cover.id }}/{{ cover.slug }}" class="btn btn-social-icon btn-google-plus" title="{{ 'share_on' | translate }} Google+" target="_blank">
+            <i class="fa fa-google-plus"></i>
+          </a>
         </div>
       </div>
     </div>
