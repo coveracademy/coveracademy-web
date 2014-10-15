@@ -22,7 +22,6 @@ angular
       } else if($scope.thumbSizeFinal === 'small') {
         $scope.auditionsPerRow = 4;
         $scope.columnSize = 12/$scope.auditionsPerRow;
-        $scope.fontSizeCss = 'font-small';
       }
       $scope.isThumbSize = function(size) {
         return $scope.thumbSizeFinal === size;

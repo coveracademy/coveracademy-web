@@ -128,7 +128,7 @@ create table audition (
   url               varchar(255) not null,
   embed_url         varchar(255) not null,
   video_id          varchar(255) not null,
-  title             varchar(255) default null,
+  title             varchar(255) not null,
   description       text default null,
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
