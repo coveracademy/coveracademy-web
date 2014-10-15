@@ -260,10 +260,11 @@ module.exports = function(router, app) {
         res.send(404);
       } else {
         var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
-        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest)])
-        .spread(function(auditions, totalAuditions) {
+        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.isContestant(req.user, contest)])
+        .spread(function(auditions, totalAuditions, isContestant) {
           this.auditions = auditions;
           this.totalAuditions = totalAuditions;
+          this.isContestant = isContestant;
           return contestService.getVotesByAudition(auditions);
         }).then(function(votesByAudition) {
           res.json({
@@ -271,6 +272,7 @@ module.exports = function(router, app) {
             auditions: this.auditions,
             totalAuditions: this.totalAuditions,
             votesByAudition: votesByAudition,
+            isContestant: isContestant,
             rankType: rankType
           });
         }).bind({});
@@ -304,11 +306,14 @@ module.exports = function(router, app) {
       if(!audition) {
         res.send(404);
       } else {
-        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition)]).spread(function(auditionVote, votes) {
+        var contest = audition.related('contest');
+        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8)]).spread(function(auditionVote, votes, bestAuditions, latestAuditions) {
           res.json({
+            contest: contest,
             audition: audition,
             auditionVote: auditionVote,
-            contest: audition.related('contest'),
+            bestAuditions: bestAuditions,
+            latestAuditions: latestAuditions,
             votes: votes,
           });
         });

@@ -4,20 +4,35 @@
       <div class="row">
         <div class="col-md-3">
           <div class="join">
+            <div ng-if="!contestIsGoing()">
+              <div class="bs-callout bs-callout-info margin-top">
+                <h4 class="align-left nomargin">
+                  {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
+                </h4>
+              </div>
+            </div>
             <div ng-if="contestIsGoing()">
-              <h4 class="align-left nomargin">{{ 'remaining_time' | translate }}</h4>
+              <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
               <h2 class="margin10 bolder-text">
-                <timer end-time="contest.end_date">
-                  <span ng-if="remainingOneDay(days)">
-                    {{ hours }} {{ 'hours' }} {{ minutes }} {{ 'minutes' | translate }}
-                  </span>
-                  <span ng-if="!remainingOneDay(days)">
-                    {{ days }} {{ 'days' | translate }} {{ hours }} {{ 'hours' | translate }}
-                  </span>
-                </timer>
+                <span ng-if="remainingOneDay()">
+                  <timer interval="60000" end-time="contest.end_date">
+                    {{ hours }}
+                    <small>{{ 'hours' | translate }}</small>
+                    {{ minutes }}
+                    <small>{{ 'minutes' | translate }}</small>
+                  </timer>
+                </span>
+                <span ng-if="!remainingOneDay()">
+                  <timer interval="60000" end-time="contest.end_date">
+                    {{ days }}
+                    <small>{{ 'days' | translate }}</small>
+                    {{ hours }}
+                    <small>{{ 'hours' | translate }}</small>
+                  </timer>
+                </span>
               </h2>
             </div>
-            <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
+            <a ng-if="!isContestant" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
             <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
@@ -31,6 +46,25 @@
               {{ contest.name }}
             </h1>
             <h3>{{ contest.description }}</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="share">
+            <h4>{{ 'share_this_contest' | translate }}:</h4>
+            <div>
+              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </div>
+          </div>
+          <div class="contestant" ng-if="isContestant">
+            <p><i class="glyphicon glyphicon-ok margin10" title="{{ 'you_are_participating' | translate }}"></i></p>
           </div>
         </div>
       </div>
@@ -70,13 +104,15 @@
   </div>
 </div>
 <div ng-if="!contestIsGoing()" class="container">
-  <div class="jumbotron margin10">
-    <h1>{{ 'this_contest_is_not_going_yet' | translate }}</h1>
-    <h2 class="bolder-text">
-      {{ 'we_need_more_contestants' | translate: {contestantsRemaining: contestantsRemaining()} }}
+  <div class="jumbotron margin10 align-center">
+    <h2>{{ 'this_contest_is_not_going_yet' | translate }}</h2>
+    <h2>
+      {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
-    <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block bolder-text">
-      {{ 'join_now' | translate }}
-    </a>
+    <div ng-if="!isContestant" class="padding-top">
+      <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
+        {{ 'join_now' | translate }}
+      </a>
+    </div>
   </div>
 </div>

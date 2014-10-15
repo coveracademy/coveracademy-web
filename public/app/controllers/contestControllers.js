@@ -1,8 +1,11 @@
 angular
 .module('coverAcademy.controllers')
-.controller('contestController', ['$scope', '$stateParams', 'backendResponse', 'seoService', function($scope, $stateParams, backendResponse, seoService) {
+.controller('contestController', ['$scope', '$stateParams', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, constants, backendResponse, seoService) {
+  $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
+  $scope.isContestant = backendResponse.data.isContestant;
+  $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.auditions = backendResponse.data.auditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
@@ -18,13 +21,12 @@ angular
   $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
-  $scope.remainingOneDay = function(days) {
-    console.log(days)
-    return parseInt(days) === 0;
+  $scope.remainingOneDay = function() {
+    var now = new Date();
+    var endDate = new Date($scope.contest.end_date);
+    return now.getTime() - endDate.getTime() < 24 * 60 * 1000;
   };
   $scope.getVotesByAudition = function(audition) {
-    console.log($scope.votesByAudition)
-    console.log(audition)
     var votes = $scope.votesByAudition[audition.id];
     if(!votes) {
       votes = 0;
@@ -84,10 +86,13 @@ angular
     });
   };
 }])
-.controller('auditionController', ['$scope', 'authEvents', 'backendResponse', 'authenticationService', 'seoService', 'contestService', function($scope, authEvents, backendResponse, authenticationService, seoService, contestService) {
+.controller('auditionController', ['$scope', 'authEvents', 'constants', 'backendResponse', 'authenticationService', 'translationService', 'alertService', 'seoService', 'contestService', function($scope, authEvents, constants, backendResponse, authenticationService, translationService, alertService, seoService, contestService) {
+  $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
   $scope.auditionVote = backendResponse.data.auditionVote;
+  $scope.bestAuditions = backendResponse.data.bestAuditions;
+  $scope.latestAuditions = backendResponse.data.latestAuditions;
   $scope.votes = backendResponse.data.votes || 0;
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
@@ -96,7 +101,7 @@ angular
     });
   });
   $scope.canVote = function() {
-    return !authenticationService.getUser() || (authenticationService.getUser().id === $scope.audition.user.id);
+    return !authenticationService.getUser() || (authenticationService.getUser().id !== $scope.audition.user.id);
   };
   $scope.vote = function(audition) {
     contestService.voteInAudition(audition).then(function(response) {

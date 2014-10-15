@@ -100,6 +100,13 @@ a:hover {
   cursor: pointer;
 }
 
+.btn-largest {
+  padding: 20px 32px;
+  font-size: 36px;
+  line-height: 1.33;
+  border-radius: 3px;
+}
+
 .row.padding {
   padding-top: 10px;
 }
@@ -135,8 +142,16 @@ a:hover {
   padding: 10px;
 }
 
+.padding-top {
+  padding-top: 10px;
+}
+
 .margin10 {
   margin: 10px;
+}
+
+.margin-top {
+  margin-top: 10px;
 }
 
 .nomargin {
@@ -393,15 +408,15 @@ input.big {
   width: 100%;
 }
 
-.small-thumbnail {
+img.small-thumbnail {
   width: 50px;
 }
 
-.medium-thumbnail {
+img.medium-thumbnail {
   width: 126px;
 }
 
-.default-link {
+a.default-link {
   color: #428bca !important;
 }
 
@@ -463,7 +478,7 @@ form.compacted .form-group {
   text-decoration: underline;
 }
 
-.special-header h1, .special-header h2, .special-header h3, .special-header h4, .special-header h5 {
+.special-header p, .special-header h1, .special-header h2, .special-header h3, .special-header h4, .special-header h5 {
   color: #fff;
 }
 
@@ -517,8 +532,21 @@ form.compacted .form-group {
   text-decoration: none;
 }
 
+.special-header.contest .join .bs-callout {
+  background-color: #333;
+  margin-bottom: 10px;
+}
+
 .special-header.contest .title {
   padding-top: 40px;
+}
+
+.special-header.contest .share {
+  padding-top: 20px;
+}
+
+.special-header.contest .contestant i.glyphicon-ok {
+  font-size: 100px;
 }
 
 .special-header.user > .content {

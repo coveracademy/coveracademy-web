@@ -1,12 +1,12 @@
-<div class="row" ng-repeat="row in auditions | partition: 3">
-  <div ng-repeat="audition in row" class="col-md-4">
+<div class="row" ng-repeat="row in auditions | partition: auditionsPerRow">
+  <div ng-repeat="audition in row" class="col-md-{{ columnSize }}">
     <div class="audition thumbnail clickable">
       <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})" class="link"></a>
       <div class="cover">
         <div class="darken"></div>
         <img ng-src="{{ audition.medium_thumbnail }}">
-        <div class="caption font-big">
-          {{ audition.video_title }}
+        <div class="caption {{ fontSizeCss }}">
+          {{ audition.title }}
           <div>
             {{ 'by' | translate }} {{ audition.user.name }}
           </div>
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="legend">
-          <span class="label label-primary font-big">
+          <span class="label label-primary {{ fontSizeCss }}" ng-if="isShowVotes">
             {{ votesByAudition }}
             {{ votesByAudition(audition) }} {{ 'votes' | translate }}
           </span>

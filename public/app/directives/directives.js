@@ -7,8 +7,29 @@ angular
     require: 'ngModel',
     scope: {
       locale: '@',
+      showVotes: '@',
+      thumbSize: '@',
       auditions: '=ngModel',
       votesByAudition: '&'
+    },
+    controller: ['$scope', function($scope) {
+      $scope.isShowVotes = $scope.showVotes ? $scope.showVotes : 'true';
+      $scope.thumbSizeFinal = $scope.thumbSize ? $scope.thumbSize : 'normal';
+      if($scope.thumbSizeFinal === 'normal') {
+        $scope.auditionsPerRow = 3;
+        $scope.columnSize = 12/$scope.auditionsPerRow;
+        $scope.fontSizeCss = 'font-big';
+      } else if($scope.thumbSizeFinal === 'small') {
+        $scope.auditionsPerRow = 4;
+        $scope.columnSize = 12/$scope.auditionsPerRow;
+        $scope.fontSizeCss = 'font-small';
+      }
+      $scope.isThumbSize = function(size) {
+        return $scope.thumbSizeFinal === size;
+      };
+    }],
+    link: function(scope, element, attrs, ctrl) {
+
     }
   };
 })

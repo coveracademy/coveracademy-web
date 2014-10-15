@@ -44,7 +44,9 @@
         </div>
       </div>
       <div ng-if="audition.description">
-        <h3>"{{ audition.description }}"</h3>
+        <div class="bs-callout bs-callout-info margin-top">
+          <h4>{{ audition.description }}</h4>
+        </div>
       </div>
     </div>
     <div class="col-md-3">
@@ -58,17 +60,29 @@
         </button>
       </div>
       <div>
-        <h3>{{ 'help' | translate }} {{ audition.user.name }}:</h3>
-        <!-- <h4>{{ 'share_' | translate }}</h4> -->
-        <a class="btn btn-social-icon btn-facebook btn-lg">
+        <h3>{{ 'help_sharing' | translate }}</h3>
+        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
           <i class="fa fa-facebook"></i>
         </a>
-        <a class="btn btn-social-icon btn-twitter btn-lg">
+        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
           <i class="fa fa-twitter"></i>
         </a>
-        <a class="btn btn-social-icon btn-google-plus btn-lg">
+        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
           <i class="fa fa-google-plus"></i>
         </a>
+      </div>
+      <div>
+        <h3>{{ 'contestant' | translate }}</h3>
+        <div ng-class="{'thumbnail': border}">
+          <div class="box">
+            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+            </a>
+            <div class="legend">
+              <span>{{ audition.user.name }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -76,10 +90,22 @@
     <div class="col-md-12">
       <div class="page-title">
         <h3>
-          {{ 'more_videos_of_the_contestants' | translate }}
+          {{ 'the_latest_contestants' | translate }}
         </h3>
       </div>
-      <cover-songs ng-model="contestantsVideos" locale="{{ locale() }}"></cover-songs>
+      <auditions ng-model="latestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
+      </auditions>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>
+          {{ 'the_better_contestants_right_now' | translate }}
+        </h3>
+      </div>
+      <auditions ng-model="bestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
+      </auditions>
     </div>
   </div>
 </div>

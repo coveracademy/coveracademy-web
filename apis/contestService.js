@@ -71,7 +71,7 @@ exports.getAudition = function(id) {
   return Audition.forge({id: id}).fetch(auditionsWithContestRelated);
 }
 
-exports.latestAuditions = function(period, page, pageSize) {
+exports.latestAuditions = function(contest, page, pageSize) {
   return listAuditions('latest', contest, page, pageSize);
 }
 
@@ -154,7 +154,7 @@ exports.vote = function(user, audition) {
           }
         });
       } else {
-        reject(new APIError(400, 'audition.vote.cantVoteYourself'));
+        reject(new APIError(400, 'audition.vote.canNotVoteForYourself'));
       }
     }).catch(function(err) {
       reject(new APIError(400, 'audition.vote.unknown'));
@@ -175,5 +175,24 @@ exports.removeVote = function(user, audition) {
     }).catch(function(err) {
       reject(new APIError(400, 'audition.vote.unknown'));
     });
+  });
+}
+
+exports.isContestant = function(user, contest) {
+  return new Promise(function(resolve, reject) {
+    if(user) {
+      Bookshelf.knex('audition')
+      .select(Bookshelf.knex.raw('count(*) as total_auditions'))
+      .join('contest', 'audition.contest_id', 'contest.id')
+      .where('user_id', user.id)
+      .where('contest_id', contest.id)
+      .then(function(totalAuditionsResult) {
+        resolve(parseInt(totalAuditionsResult[0].total_auditions) > 0 ? true : false);
+      }).catch(function(err) {
+        reject(err);
+      });
+    } else {
+      resolve(false);
+    }
   });
 }

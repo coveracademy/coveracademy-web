@@ -200,7 +200,7 @@ angular
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
-    'audition.vote.cantVoteYourself': 'errors.audition_vote_cant_vote_yourself',
+    'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
     'status.401': 'errors.authentication_required',
     'status.500': 'errors.unexpected_error'
   }
