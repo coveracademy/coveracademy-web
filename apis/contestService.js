@@ -9,6 +9,7 @@ var Contest      = require('../models/models').Contest,
     APIError     = require('./errors/apiErrors').APIError,
     youtube      = require('./third/youtube'),
     Promise      = require('bluebird'),
+    moment       = require('moment'),
     _            = require('underscore'),
     $            = this;
 
@@ -36,7 +37,23 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
-exports.joinContest = function(user, auditionData) {
+var startContest = function(contest, transaction) {
+  return new Promise(function(resolve, reject) {
+    if(!contest.isHappening()) {
+      contest.set('start_date', moment().toDate());
+      contest.set('end_date', moment().add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
+      contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
+        resolve(contest);
+      }).catch(function(err) {
+        reject(new APIError(400, 'contest.errorStarting', 'Error starting the contest'));
+      })
+    } else {
+      reject(new APIError(400, 'contest.alreadyHappening', 'The contest is already happening'));
+    }
+  });
+}
+
+var createAudition = function(user, auditionData, transaction) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
@@ -48,8 +65,8 @@ exports.joinContest = function(user, auditionData) {
         audition.set('small_thumbnail', videoInfos.thumbnails.small);
         audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
         audition.set('large_thumbnail', videoInfos.thumbnails.large);
-        audition.set('slug', slug.slugify(audition.get('video_title')) + '-' + slug.slugify(user.get('name')));
-        audition.save().then(function(audition) {
+        audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
+        audition.save(null, {transacting: transaction}).then(function(audition) {
           resolve(audition);
         }).catch(function(err) {
           if(err.code === 'ER_DUP_ENTRY') {
@@ -63,6 +80,32 @@ exports.joinContest = function(user, auditionData) {
       }
     }).catch(function(err) {
       reject(new APIError(400, 'contest.join.errorGettingVideoInfos', 'Error getting video information'));
+    });
+  });
+}
+
+exports.joinContest = function(user, auditionData) {
+  return new Promise(function(resolve, reject) {
+    Bookshelf.transaction(function(transaction) {
+      var result = {};
+      return createAudition(user, auditionData, transaction).then(function(audition) {
+        return audition.load(['contest']);
+      }).then(function(audition) {
+        var contest = audition.related('contest');
+        result.audition = audition;
+        result.contest = contest;
+        if($.totalAuditions(audition) < parseInt(contest.get('minimum_contestants'))) {
+          return startContest(contest, transaction);
+        } else {
+          return null;
+        }
+      }).then(function(contest) {
+        return result;
+      });
+    }).then(function(result) {
+      resolve(result);
+    }).catch(function(err) {
+      reject(err);
     });
   });
 }
@@ -85,7 +128,7 @@ exports.totalAuditions = function(contest) {
     .count('id as total_auditions')
     .where('contest_id', contest.id)
     .then(function(rows) {
-      resolve(rows[0].total_auditions);
+      resolve(parseInt(rows[0].total_auditions));
     }).catch(function(err) {
       reject(err);
     });

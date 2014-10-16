@@ -117,7 +117,9 @@ create table contest (
   start_date          timestamp null default null,
   end_date            timestamp null default null,
   registration_date   timestamp not null default current_timestamp,
-  primary key (id)
+  duration            int(2) not null,
+  primary key (id),
+  unique key `uq_contest_slug` (`slug`)
 ) engine = innodb default charset = utf8;
 
 create table audition (

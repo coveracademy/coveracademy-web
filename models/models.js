@@ -12,7 +12,7 @@ var knex = require('knex')({
 });
 
 var Bookshelf = require('bookshelf')(knex);
-Bookshelf.plugin('virtuals')
+Bookshelf.plugin('virtuals');
 
 var User = Bookshelf.Model.extend({
   idAttribute: 'id',
@@ -61,7 +61,17 @@ var PotentialCover = Bookshelf.Model.extend({
 
 var Contest = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'contest'
+  tableName: 'contest',
+  isHappening: function() {
+    if(this.get('start_date') && this.get('end_date')) {
+      var start = new Date(this.get('start_date'));
+      var end = new Date(this.get('end_date'));
+      var now = new Date();
+      return now > start && now < end;
+    } else {
+      return false;
+    }
+  }
 });
 
 var Audition = Bookshelf.Model.extend({

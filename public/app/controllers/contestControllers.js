@@ -13,6 +13,34 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 40;
 
+  $scope.contestIsHappening = function() {
+    if($scope.contest.start_date && $scope.contest.end_date) {
+      var start = new Date($scope.contest.start_date);
+      var end = new Date($scope.contest.end_date);
+      var now = new Date();
+      return now > start && now < end;
+    } else {
+      return false;
+    }
+  };
+  $scope.remainingOneDay = function() {
+    if($scope.contestIsHappening()) {
+      var now = new Date();
+      var end = new Date($scope.contest.end_date);
+      return now.getTime() - end.getTime() < 24 * 60 * 60 * 1000;
+    } else {
+      return false;
+    }
+  };
+  $scope.contestantsRemaining = function() {
+    var totalAuditions = parseInt($scope.totalAuditions);
+    var minimumContestants = parseInt($scope.contest.minimum_contestants);
+    if(totalAuditions < minimumContestants) {
+      return minimumContestants - totalAuditions;
+    } else {
+      return 0;
+    }
+  };
   $scope.pageChanged = function() {
     contestService.bestAuditions($scope.contest, $scope.currentPage).then(function(response) {
       $scope.auditions = response.data;
@@ -21,11 +49,6 @@ angular
   $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
-  $scope.remainingOneDay = function() {
-    var now = new Date();
-    var endDate = new Date($scope.contest.end_date);
-    return now.getTime() - endDate.getTime() < 24 * 60 * 1000;
-  };
   $scope.getVotesByAudition = function(audition) {
     var votes = $scope.votesByAudition[audition.id];
     if(!votes) {
@@ -33,22 +56,12 @@ angular
     }
     return votes;
   };
-  $scope.contestIsGoing = function() {
-    var startDate = new Date($scope.contest.start_date);
-    var endDate = new Date($scope.contest.end_date);
-    var now = new Date();
-    return $scope.contest.start_date && now > startDate && now < endDate;
-  };
-  $scope.contestantsRemaining = function() {
-    return 10;
-  }
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.usingGoogleAccount = false;
   $scope.usingYoutubeAccount = false;
-  $scope.youtubeRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
 
   $scope.signinWithGoogle = function() {
     authenticationService.login('google').then(function(user) {
@@ -67,8 +80,8 @@ angular
     var url = event.clipboardData.getData("text/plain");
     contestService.getAuditionVideoInfos(url).then(function(response) {
       $scope.audition.url = url;
-      $scope.audition.video_title = response.data.title;
-      $scope.audition.video_description = response.data.description;
+      $scope.audition.title = response.data.title;
+      $scope.audition.description = response.data.description;
     }).catch(function(err) {
       translationService.translateError(err).then(function(message) {
         alertService.addAlert('warning', message);
