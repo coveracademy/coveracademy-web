@@ -146,6 +146,10 @@ a:hover {
   padding-top: 10px;
 }
 
+.nopadding {
+  padding: 0px;
+}
+
 .margin10 {
   margin: 10px;
 }

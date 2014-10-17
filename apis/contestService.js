@@ -39,7 +39,7 @@ exports.getContest = function(id) {
 
 var startContest = function(contest, transaction) {
   return new Promise(function(resolve, reject) {
-    if(!contest.isHappening()) {
+    if(contest.getStatus() === 'waiting') {
       contest.set('start_date', moment().toDate());
       contest.set('end_date', moment().add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
       contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
@@ -93,17 +93,16 @@ exports.joinContest = function(user, auditionData) {
       }).then(function(audition) {
         var contest = audition.related('contest');
         result.audition = audition;
-        result.contest = contest;
         if($.totalAuditions(audition) < parseInt(contest.get('minimum_contestants'))) {
           return startContest(contest, transaction);
         } else {
           return null;
         }
       }).then(function(contest) {
-        return result;
+        return result.audition;
       });
-    }).then(function(result) {
-      resolve(result);
+    }).then(function(audition) {
+      resolve(audition);
     }).catch(function(err) {
       reject(err);
     });

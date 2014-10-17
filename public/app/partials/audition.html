@@ -2,9 +2,7 @@
   <div class="content">
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-12 align-center">
           <h1 class="bolder-text">
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
               {{ contest.name }}
@@ -32,7 +30,8 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div ng-if="isContestStatus('running')">
+    <div class="row">
     <div class="col-md-1">
     </div>
     <div class="col-md-8">
@@ -84,28 +83,52 @@
           </div>
         </div>
       </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-title">
+          <h3>
+            {{ 'the_latest_contestants' | translate }}
+          </h3>
+        </div>
+        <auditions ng-model="latestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
+        </auditions>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-title">
+          <h3>
+            {{ 'the_better_contestants_right_now' | translate }}
+          </h3>
+        </div>
+        <auditions ng-model="bestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
+        </auditions>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-title">
-        <h3>
-          {{ 'the_latest_contestants' | translate }}
-        </h3>
+  <div ng-if="isContestStatus('waiting')">
+    <div class="jumbotron margin10 align-center">
+      <h2 class="bolder-text">{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
+      <h2 class="align-left">
+        {{ 'please_dont_share_this_audition_yet' | translate }}.
+        {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
+      </h2>
+      <h2 class="bolder-text">
+        {{ 'help_us_sharing_this_contest' | translate }}:
+      </h2>
+      <div>
+        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+            <i class="fa fa-facebook"></i>
+          </a>
+        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+          <i class="fa fa-google-plus"></i>
+        </a>
       </div>
-      <auditions ng-model="latestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
-      </auditions>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-title">
-        <h3>
-          {{ 'the_better_contestants_right_now' | translate }}
-        </h3>
-      </div>
-      <auditions ng-model="bestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
-      </auditions>
     </div>
   </div>
 </div>

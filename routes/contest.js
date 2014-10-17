@@ -19,8 +19,8 @@ module.exports = function(router, app) {
 
   router.post('/join', isAuthenticated, function(req, res, next) {
     var auditionData = req.param('audition');
-    contestService.joinContest(req.user, auditionData).then(function(result) {
-      res.json({audition: result.audition, contestIsHappening: result.contest.isHappening()});
+    contestService.joinContest(req.user, auditionData).then(function(audition) {
+      res.json(audition);
     }).catch(function(err) {
       console.log(err.stack);
       apiErrors.formatResponse(err, res);

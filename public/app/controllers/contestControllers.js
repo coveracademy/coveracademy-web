@@ -13,18 +13,11 @@ angular
   $scope.currentPage = 1;
   $scope.coversPerPage = 40;
 
-  $scope.contestIsHappening = function() {
-    if($scope.contest.start_date && $scope.contest.end_date) {
-      var start = new Date($scope.contest.start_date);
-      var end = new Date($scope.contest.end_date);
-      var now = new Date();
-      return now > start && now < end;
-    } else {
-      return false;
-    }
+  $scope.isContestStatus = function(expectedStatus) {
+    return $scope.contest.status === expectedStatus;
   };
   $scope.remainingOneDay = function() {
-    if($scope.contestIsHappening()) {
+    if($scope.isContestStatus('running')) {
       var now = new Date();
       var end = new Date($scope.contest.end_date);
       return now.getTime() - end.getTime() < 24 * 60 * 60 * 1000;
@@ -33,10 +26,14 @@ angular
     }
   };
   $scope.contestantsRemaining = function() {
-    var totalAuditions = parseInt($scope.totalAuditions);
-    var minimumContestants = parseInt($scope.contest.minimum_contestants);
-    if(totalAuditions < minimumContestants) {
-      return minimumContestants - totalAuditions;
+    if($scope.isContestStatus('waiting')) {
+      var totalAuditions = parseInt($scope.totalAuditions);
+      var minimumContestants = parseInt($scope.contest.minimum_contestants);
+      if(totalAuditions < minimumContestants) {
+        return minimumContestants - totalAuditions;
+      } else {
+        return 0;
+      }
     } else {
       return 0;
     }
@@ -57,7 +54,7 @@ angular
     return votes;
   };
 }])
-.controller('joinContestController', ['$scope', '$state', '$stateParams', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
+.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.usingGoogleAccount = false;
@@ -92,6 +89,9 @@ angular
     contestService.joinContest($scope.audition).then(function(response) {
       var audition = response.data;
       $state.go('app.audition', {locale: $scope.locale(), id: audition.id, slug: audition.slug});
+      $translate('alerts.congratulations_now_you_are_in_the_contest').then(function(message) {
+        alertService.addAlert('info', message)
+      });
     }).catch(function(err) {
       translationService.translateError(err).then(function(message) {
         alertService.addAlert('danger', message);
@@ -106,6 +106,7 @@ angular
   $scope.auditionVote = backendResponse.data.auditionVote;
   $scope.bestAuditions = backendResponse.data.bestAuditions;
   $scope.latestAuditions = backendResponse.data.latestAuditions;
+  $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votes = backendResponse.data.votes || 0;
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
@@ -113,6 +114,22 @@ angular
       $scope.auditionVote = response.data;
     });
   });
+  $scope.isContestStatus = function(expectedStatus) {
+    return $scope.contest.status === expectedStatus;
+  };
+  $scope.contestantsRemaining = function() {
+    if($scope.isContestStatus('waiting')) {
+      var totalAuditions = parseInt($scope.totalAuditions);
+      var minimumContestants = parseInt($scope.contest.minimum_contestants);
+      if(totalAuditions < minimumContestants) {
+        return minimumContestants - totalAuditions;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  };
   $scope.canVote = function() {
     return !authenticationService.getUser() || (authenticationService.getUser().id !== $scope.audition.user.id);
   };
