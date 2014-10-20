@@ -14,12 +14,21 @@
             <h3>{{ contest.description }}</h3>
           </div>
         </div>
+        <div class="col-md-3">
+          <div class="contestant" ng-if="isContestant()">
+            <p>
+              <a ui-sref="app.audition({locale: locale(), id: userAudition.id, slug: userAudition.slug})">
+                <i class="glyphicon glyphicon-ok margin10" title="{{ 'watch_your_audition' | translate }}"></i>
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
-<div ng-if="!contestIsFinished() && !isContestant()" class="container">
+<div ng-if="!isContestProgress('finished') && !isContestant()" class="container">
   <div ng-if="!usingGoogleAccount">
     <h1 class="align-center">{{ 'join_contest_signin_google_account' | translate }}</h1>
     <div class="row padding">
@@ -69,9 +78,9 @@
     </div>
   </form>
 </div>
-<div ng-if="contestIsFinished() || isContestant()" class="container">
+<div ng-if="isContestProgress('finished') || isContestant()" class="container">
   <div class="jumbotron margin10">
-    <div ng-if="contestIsFinished()" class="align-center">
+    <div ng-if="isContestProgress('finished')" class="align-center">
       <h1 class="nomargin">
         {{ 'this_contest_was_finished' | translate }}
       </h1>

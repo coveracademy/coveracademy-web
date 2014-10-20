@@ -32,7 +32,7 @@
                 </span>
               </h2>
             </div>
-            <a ng-if="isContestProgress('running') && !isContestant" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
+            <a ng-if="isContestProgress('running') && !isContestant()" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
             <a ng-if="isContestProgress('running')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
@@ -63,10 +63,11 @@
               </a>
             </div>
           </div>
-          <div class="contestant" ng-if="isContestant">
+          <div class="contestant" ng-if="isContestant()">
             <p>
-              <i ng-if="isContestProgress('running')" class="glyphicon glyphicon-ok margin10" title="{{ 'you_are_participating' | translate }}"></i>
-              <i ng-if="isContestProgress('finished')" class="glyphicon glyphicon-ok margin10" title="{{ 'you_participated' | translate }}"></i>
+              <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
+                <i class="glyphicon glyphicon-ok margin10" title="{{ 'watch_your_audition' | translate }}"></i>
+              </a>
             </p>
           </div>
         </div>
@@ -136,7 +137,7 @@
     <h2>
       {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
-    <div ng-if="!isContestant" class="padding-top">
+    <div ng-if="!isContestant()" class="padding-top">
       <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
         {{ 'join_now' | translate }}
       </a>

@@ -119,7 +119,13 @@ exports.getAudition = function(id) {
 }
 
 exports.getUserAudition = function(user, contest) {
-  return Audition.forge({user_id: user.id, contest_id: contest.id}).fetch();
+  return new Promise(function(resolve, reject) {
+    if(!user) {
+      resolve();
+    } else {
+      return Audition.forge({user_id: user.id, contest_id: contest.id}).fetch();
+    }
+  });
 }
 
 var listAuditions = function(rankType, contest, page, pageSize) {

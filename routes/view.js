@@ -261,19 +261,19 @@ module.exports = function(router, app) {
       } else {
         contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
-        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.isContestant(req.user, contest)])
-        .spread(function(auditions, totalAuditions, isContestant) {
+        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest)])
+        .spread(function(auditions, totalAuditions, audition) {
           this.auditions = auditions;
           this.totalAuditions = totalAuditions;
-          this.isContestant = isContestant;
+          this.audition = audition;
           return contestService.getVotesByAudition(auditions);
         }).then(function(votesByAudition) {
           res.json({
             contest: contest,
             auditions: this.auditions,
+            audition: this.audition,
             totalAuditions: this.totalAuditions,
             votesByAudition: votesByAudition,
-            isContestant: isContestant,
             rankType: rankType
           });
         }).bind({});

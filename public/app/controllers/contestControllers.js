@@ -4,7 +4,7 @@ angular
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
-  $scope.isContestant = backendResponse.data.isContestant;
+  $scope.audition = backendResponse.data.audition;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.auditions = backendResponse.data.auditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
@@ -12,6 +12,9 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
+  $scope.isContestant = function() {
+    return Boolean($scope.audition && angular.isDefined($scope.audition.id))
+  };
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
   }
@@ -78,8 +81,8 @@ angular
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && angular.isDefined($scope.userAudition.id))
   };
-  $scope.contestIsFinished = function() {
-    return $scope.contest.progress === 'finished';
+  $scope.isContestProgress = function(expectedProgress) {
+    return $scope.contest.progress === expectedProgress;
   };
   $scope.signinWithGoogle = function() {
     authenticationService.login('google').then(function(user) {
