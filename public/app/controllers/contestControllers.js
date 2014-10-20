@@ -9,6 +9,7 @@ angular
   $scope.auditions = backendResponse.data.auditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
+  $scope.scoreByAudition = backendResponse.data.scoreByAudition;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
@@ -58,6 +59,13 @@ angular
       votes = 0;
     }
     return votes;
+  };
+  $scope.getScoreByAudition = function(audition) {
+    var score = $scope.scoreByAudition[audition.id];
+    if(!score) {
+      score = 0;
+    }
+    return score;
   };
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {

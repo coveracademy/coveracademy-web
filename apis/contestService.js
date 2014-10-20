@@ -138,9 +138,9 @@ var listAuditions = function(rankType, contest, page, pageSize) {
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {
-      qb.select(Bookshelf.knex.raw('sum(voting_power) as score'))
-      .join('audition_vote', 'audition.id', 'audition_vote.audition_id')
-      .orderBy('score', 'desc');
+      qb.join('audition_vote', 'audition.id', '=', 'audition_vote.audition_id', 'left');
+      qb.groupBy('audition.id');
+      qb.orderBy(Bookshelf.knex.raw('sum(audition_vote.voting_power) desc'));
     }
   }).fetch(auditionRelated);
 }

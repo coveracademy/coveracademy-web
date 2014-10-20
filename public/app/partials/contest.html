@@ -76,37 +76,6 @@
   </div>
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
-<div ng-if="isContestProgress('running') && hasAuditions()" class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h1>
-        <span ng-if="isRanked('best')">
-          Best auditions
-        </span>
-        <span ng-if="isRanked('latest')">
-          Latest auditions
-        </span>
-      </h1>
-    </div>
-    <div class="col-md-4 align-right" style="padding-top: 36px;">
-      <h4>
-        <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
-          See the latest auditions
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-        <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-          See the best auditions
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-      </h4>
-    </div>
-  </div>
-  <auditions ng-model="auditions" locale="{{ locale() }}" votes-by-audition="getVotesByAudition">
-  </auditions>
-  <div class="align-center">
-    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-  </div>
-</div>
 <div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
   <div class="jumbotron margin10 align-center">
     <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
@@ -147,21 +116,35 @@
 <div ng-if="isContestProgress('finished')" class="container">
   <div class="jumbotron margin10">
     <h1 class="nomargin align-center">{{ 'this_contest_was_finished' | translate }}</h1>
-    <h2>{{ 'see_the_winners' | translate }}:</h2>
+    <h2 ng-if="hasAuditions()">{{ 'see_the_winners' | translate }}:</h2>
   </div>
 </div>
-<div ng-if="isContestProgress('finished') && hasAuditions()" class="container">
+<div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions()" class="container">
   <div class="row">
     <div class="col-md-8">
       <h1>
-        Best auditions
+        <span ng-if="isRanked('best')">
+          Best auditions
+        </span>
+        <span ng-if="isRanked('latest')">
+          Latest auditions
+        </span>
       </h1>
     </div>
+    <div class="col-md-4 align-right" style="padding-top: 36px;">
+      <h4>
+        <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
+          See the latest auditions
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
+          See the best auditions
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+      </h4>
+    </div>
   </div>
-  <div class="align-center">
-    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-  </div>
-  <auditions ng-model="auditions" locale="{{ locale() }}" votes-by-audition="getVotesByAudition">
+  <auditions ng-model="auditions" locale="{{ locale() }}" score-by-audition="getScoreByAudition">
   </auditions>
   <div class="align-center">
     <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>

@@ -70,7 +70,7 @@ var path = require('path'),
       }
     }
 
-console.log('Using ' + _nodeEnv + ' environment settings' + _debug);
+console.log('Using ' + _nodeEnv + ' environment settings');
 if(_debug === true) {
   console.log('Debug mode ON');
 }

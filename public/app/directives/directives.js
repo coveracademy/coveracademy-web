@@ -10,7 +10,8 @@ angular
       showVotes: '@',
       thumbSize: '@',
       auditions: '=ngModel',
-      votesByAudition: '&'
+      scoreByAudition: '&',
+      votesByAudition: '&',
     },
     controller: ['$scope', function($scope) {
       $scope.isShowVotes = $scope.showVotes ? $scope.showVotes : 'true';

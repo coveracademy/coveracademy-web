@@ -266,13 +266,14 @@ module.exports = function(router, app) {
           this.auditions = auditions;
           this.totalAuditions = totalAuditions;
           this.audition = audition;
-          return contestService.getVotesByAudition(auditions);
-        }).then(function(votesByAudition) {
+          return Promise.all([contestService.getScoreByAudition(auditions), contestService.getVotesByAudition(auditions)]);
+        }).spread(function(scoreByAudition, votesByAudition) {
           res.json({
             contest: contest,
             auditions: this.auditions,
             audition: this.audition,
             totalAuditions: this.totalAuditions,
+            scoreByAudition: scoreByAudition,
             votesByAudition: votesByAudition,
             rankType: rankType
           });

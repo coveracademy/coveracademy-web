@@ -16,7 +16,8 @@
         </div>
         <div class="legend">
           <span class="label label-primary {{ fontSizeCss }}" ng-if="isShowVotes">
-            {{ votesByAudition }}
+            {{ scoreByAudition(audition) }} {{ 'points' | translate }}
+            -
             {{ votesByAudition(audition) }} {{ 'votes' | translate }}
           </span>
         </div>
