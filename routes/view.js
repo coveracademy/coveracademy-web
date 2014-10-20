@@ -259,7 +259,7 @@ module.exports = function(router, app) {
       if(!contest) {
         res.send(404);
       } else {
-        contest.set('status', contest.getStatus());
+        contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
         Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.isContestant(req.user, contest)])
         .spread(function(auditions, totalAuditions, isContestant) {
@@ -290,7 +290,7 @@ module.exports = function(router, app) {
       if(!contest) {
         res.send(404);
       } else {
-        contest.set('status', contest.getStatus());
+        contest.set('progress', contest.getProgress());
         res.json({
           contest: contest
         });
@@ -309,9 +309,9 @@ module.exports = function(router, app) {
         res.send(404);
       } else {
         var contest = audition.related('contest');
-        contest.set('status', contest.getStatus());
-        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
-        .spread(function(auditionVote, votes, bestAuditions, latestAuditions, totalAuditions) {
+        contest.set('progress', contest.getProgress());
+        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
+        .spread(function(auditionVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
           res.json({
             contest: contest,
             audition: audition,
@@ -320,6 +320,7 @@ module.exports = function(router, app) {
             latestAuditions: latestAuditions,
             totalAuditions: totalAuditions,
             votes: votes,
+            score: score
           });
         });
       }

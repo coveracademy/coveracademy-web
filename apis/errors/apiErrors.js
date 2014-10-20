@@ -1,52 +1,64 @@
-var util    = require('util');
+var settings = require('../../configs/settings'),
+    util     = require('util');
 
 var errorMapping = {
   'ER_DUP_ENTRY': AlreadyExistsError,
   'ER_NO_REFERENCED_ROW_': MissingValueError,
 }
 
-function APIError(statusCode, errorKey, errorMessage) {
+function APIError(statusCode, errorKey, errorMessage, cause) {
   APIError.super_.call(this, errorKey);
   this.statusCode = statusCode;
   this.errorKey = errorKey;
   this.errorMessage = errorMessage;
+  this.cause = cause;
   this.toJSON = function() {
-    return {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
+    var json = {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
+    if(settings.debug === true) {
+      json.cause = cause;
+      console.log("HAHAH");
+    }
+    console.log(json)
+    return json;
   };
 };
 util.inherits(APIError, Error);
 
-function NotFoundError(entity, errorMessage) {
-  NotFoundError.super_.call(this, 404, entity + '.notFound', errorMessage);
+function NotFoundError(entity, errorMessage, cause) {
+  NotFoundError.super_.call(this, 404, entity + '.notFound', errorMessage, cause);
 };
 util.inherits(NotFoundError, APIError);
 
-function AlreadyExistsError(entity, errorMessage) {
-  AlreadyExistsError.super_.call(this, 400, entity + '.alreadyExists', errorMessage);
+function AlreadyExistsError(entity, errorMessage, cause) {
+  AlreadyExistsError.super_.call(this, 400, entity + '.alreadyExists', errorMessage, cause);
 };
 util.inherits(AlreadyExistsError, APIError);
 
-function MissingValueError(entity, errorMessage) {
-  MissingValueError.super_.call(this, 400, entity + '.missingValue', errorMessage);
+function MissingValueError(entity, errorMessage, cause) {
+  MissingValueError.super_.call(this, 400, entity + '.missingValue', errorMessage, cause);
 };
 util.inherits(MissingValueError, APIError);
 
-function ValidationError(entity, validationKey, errorMessage) {
-  ValidationError.super_.call(this, 400, entity + '.validation.' + validationKey, errorMessage);
+function ValidationError(entity, validationKey, errorMessage, cause) {
+  ValidationError.super_.call(this, 400, entity + '.validation.' + validationKey, errorMessage, cause);
 };
 util.inherits(ValidationError, APIError);
 
-function PermissionError(entity, permissionKey, errorMessage) {
-  PermissionError.super_.call(this, 400, entity + '.permission.' + permissionKey, errorMessage);
+function PermissionError(entity, permissionKey, errorMessage, cause) {
+  PermissionError.super_.call(this, 400, entity + '.permission.' + permissionKey, errorMessage, cause);
 }
 util.inherits(PermissionError, APIError);
 
-function fromDatabaseError(entity, err, errorMessage) {
+function unexpectedError(errorMessage, cause) {
+  return new APIError(400, 'unexpectedError', errorMessage, cause);
+}
+
+function fromDatabaseError(entity, errorMessage, cause) {
   var errorType = errorMapping[err.code];
   if(errorType) {
-    return new errorType(entity);
+    return new errorType(entity, errorMessage, cause);
   } else {
-    return new APIError(400, 'unknown', errorMessage);
+    return new APIError(400, 'unexpectedError', errorMessage, cause);
   }
 }
 
@@ -59,6 +71,7 @@ function formatResponse(err, res) {
 }
 
 module.exports = {
+  unexpectedError: unexpectedError,
   fromDatabaseError: fromDatabaseError,
   formatResponse: formatResponse,
   APIError: APIError,

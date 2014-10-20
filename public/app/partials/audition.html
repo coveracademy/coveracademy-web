@@ -6,6 +6,9 @@
           <h1 class="bolder-text">
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
               {{ contest.name }}
+              <small ng-if="isContestProgress('finished')">
+                ({{ 'finished_contest' | translate }})
+              </small>
             </a>
           </h1>
         </div>
@@ -30,62 +33,72 @@
       </div>
     </div>
   </div>
-  <div ng-if="isContestStatus('running')">
+  <div ng-if="isContestProgress('running') || isContestProgress('finished')">
     <div class="row">
-    <div class="col-md-1">
-    </div>
-    <div class="col-md-8">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="embed-container">
-            <embed-video ng-href="{{ audition.url }}"></embed-video>
+      <div class="col-md-9">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="embed-container">
+              <embed-video ng-href="{{ audition.url }}"></embed-video>
+            </div>
+          </div>
+        </div>
+        <div ng-if="audition.description">
+          <div class="bs-callout bs-callout-info margin-top">
+            <h4>{{ audition.description }}</h4>
           </div>
         </div>
       </div>
-      <div ng-if="audition.description">
-        <div class="bs-callout bs-callout-info margin-top">
-          <h4>{{ audition.description }}</h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div>
-        <h1 class="align-center">{{ votes }} {{ 'votes' | translate }}</h1>
-        <button ng-if="canVote() && !auditionVote" class="btn btn-success btn-lg btn-block" ng-click="vote(audition)">
-          {{ 'vote_now' | translate }}
-        </button>
-        <button ng-if="canVote() && auditionVote" class="btn btn-info btn-lg btn-block" ng-click="removeVote(audition)">
-          {{ 'you_voted' | translate }}
-        </button>
-      </div>
-      <div>
-        <h3>{{ 'help_sharing' | translate }}</h3>
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-          <i class="fa fa-facebook"></i>
-        </a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-          <i class="fa fa-google-plus"></i>
-        </a>
-      </div>
-      <div>
-        <h3>{{ 'contestant' | translate }}</h3>
-        <div ng-class="{'thumbnail': border}">
-          <div class="box">
-            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-              <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+      <div class="col-md-3">
+        <div>
+          <div class="align-center">
+            <h1 class="nomargin">
+              {{ score }} {{ 'points' | translate }}
+            </h1>
+            <h2 class="nomargin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
+            <div ng-if="isContestProgress('running')">
+              <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)">
+                {{ 'vote_now' | translate }}
+              </button>
+              <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
+                {{ 'you_voted' | translate }}
+              </button>
+            </div>
+            <div ng-ig="isContestProgress('finished')">
+              <button class="btn btn-default btn-lg btn-block margin-top">
+                {{ 'finished_contest' | translate }}
+              </button>
+            </div>
+          </div>
+          <div ng-if="isContestProgress('running')">
+            <h3>{{ 'help_sharing' | translate }}</h3>
+            <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+              <i class="fa fa-facebook"></i>
             </a>
-            <div class="legend">
-              <span>{{ audition.user.name }}</span>
+            <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h3>{{ 'contestant' | translate }}</h3>
+          <div ng-class="{'thumbnail': border}">
+            <div class="box">
+              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+                <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+              </a>
+              <div class="legend">
+                <span>{{ audition.user.name }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="isContestProgress('running')">
       <div class="col-md-12">
         <div class="page-title">
           <h3>
@@ -99,8 +112,11 @@
     <div class="row">
       <div class="col-md-12">
         <div class="page-title">
-          <h3>
-            {{ 'the_better_contestants_right_now' | translate }}
+          <h3 ng-if="isContestProgress('running')">
+            {{ 'the_best_contestants_right_now' | translate }}
+          </h3>
+          <h3 ng-if="isContestProgress('finished')">
+            {{ 'the_best_contestants' | translate }}
           </h3>
         </div>
         <auditions ng-model="bestAuditions" locale="{{ locale() }}" show-votes="false" thumb-size="small">
@@ -108,11 +124,12 @@
       </div>
     </div>
   </div>
-  <div ng-if="isContestStatus('waiting')">
+  <div ng-if="isContestProgress('waiting')">
     <div class="jumbotron margin10 align-center">
       <h2 class="bolder-text">{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
       <h2 class="align-left">
         {{ 'please_dont_share_this_audition_yet' | translate }}.
+        <br/>
         {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
       </h2>
       <h2 class="bolder-text">

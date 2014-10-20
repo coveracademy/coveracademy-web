@@ -15,37 +15,38 @@ var Contest      = require('../models/models').Contest,
 
 _.str = require('underscore.string');
 
-var auditionsRelated = {withRelated: ['user']};
-var auditionsWithContestRelated = {withRelated: ['contest', 'user']};
-
-var listAuditions = function(rankType, contest, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
-  return Audition.collection().query(function(qb) {
-    qb.where('contest_id', contest.id)
-    .offset((page - 1) * pageSize)
-    .limit(pageSize);
-    if(rankType === 'latest') {
-      qb.orderBy('registration_date', 'desc');
-    } else {
-
-    }
-  }).fetch(auditionsRelated);
-}
+var auditionRelated = {withRelated: ['user']};
+var auditionWithContestRelated = {withRelated: ['contest', 'user']};
+var auditionVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 
 exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
+exports.listUnfinishedContests = function() {
+  return Contest.collection().query(function(qb) {
+    qb.where('finished', 0);
+  }).fetch();
+}
+
+exports.finishContests = function(contests) {
+  contests.forEach(function(contest) {
+    contest.set('finished', 1);
+  });
+  return contests.invokeThen('save', null, null).then(function() {
+    return contests;
+  });
+}
+
 var startContest = function(contest, transaction) {
   return new Promise(function(resolve, reject) {
-    if(contest.getStatus() === 'waiting') {
+    if(contest.getDetailedStatus() === 'waiting') {
       contest.set('start_date', moment().toDate());
       contest.set('end_date', moment().add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
       contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
         resolve(contest);
       }).catch(function(err) {
-        reject(new APIError(400, 'contest.errorStarting', 'Error starting the contest'));
+        reject(new APIError(400, 'contest.errorStarting', 'Error starting the contest', err));
       })
     } else {
       reject(new APIError(400, 'contest.alreadyHappening', 'The contest is already happening'));
@@ -70,16 +71,16 @@ var createAudition = function(user, auditionData, transaction) {
           resolve(audition);
         }).catch(function(err) {
           if(err.code === 'ER_DUP_ENTRY') {
-            reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest'));
+            reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest', err));
           } else {
-            reject(apiErrors.fromDatabaseError('audition', err, 'Error adding audition in contest'));
+            reject(apiErrors.unexpectedError('Error adding audition in contest', err));
           }
         });
       } else {
         reject(new APIError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
       }
     }).catch(function(err) {
-      reject(new APIError(400, 'contest.join.errorGettingVideoInfos', 'Error getting video information'));
+      reject(new APIError(400, 'contest.join.errorGettingVideoInfos', 'Error getting video information', err));
     });
   });
 }
@@ -109,8 +110,33 @@ exports.joinContest = function(user, auditionData) {
   });
 }
 
+exports.getWinnerAuditions = function(contest) {
+
+}
+
 exports.getAudition = function(id) {
-  return Audition.forge({id: id}).fetch(auditionsWithContestRelated);
+  return Audition.forge({id: id}).fetch(auditionWithContestRelated);
+}
+
+exports.getUserAudition = function(user, contest) {
+  return Audition.forge({user_id: user.id, contest_id: contest.id}).fetch();
+}
+
+var listAuditions = function(rankType, contest, page, pageSize) {
+  page = parseInt(page);
+  pageSize = parseInt(pageSize);
+  return Audition.collection().query(function(qb) {
+    qb.where('contest_id', contest.id)
+    .offset((page - 1) * pageSize)
+    .limit(pageSize);
+    if(rankType === 'latest') {
+      qb.orderBy('registration_date', 'desc');
+    } else {
+      qb.select(Bookshelf.knex.raw('sum(voting_power) as score'))
+      .join('audition_vote', 'audition.id', 'audition_vote.audition_id')
+      .orderBy('score', 'desc');
+    }
+  }).fetch(auditionRelated);
 }
 
 exports.latestAuditions = function(contest, page, pageSize) {
@@ -131,6 +157,28 @@ exports.totalAuditions = function(contest) {
     }).catch(function(err) {
       reject(err);
     });
+  });
+}
+
+exports.getScoreByAudition = function(auditions) {
+  return new Promise(function(resolve, reject) {
+    if(auditions.isEmpty()) {
+      resolve({});
+    } else {
+      Bookshelf.knex('audition_vote')
+      .select(Bookshelf.knex.raw('audition_id, sum(voting_power) as score'))
+      .whereIn('audition_id', modelUtils.getIds(auditions))
+      .groupBy('audition_id')
+      .then(function(scoreCounts) {
+        var scoreByAudition = {};
+        scoreCounts.forEach(function(scoreCount) {
+          scoreByAudition[scoreCount.audition_id] = scoreCount.score;
+        });
+        resolve(scoreByAudition);
+      }).catch(function(err) {
+        reject(err);
+      });
+    }
   });
 }
 
@@ -160,6 +208,13 @@ exports.getAuditionVideoInfos = function(url) {
   return youtube.getVideoInfos(url);
 }
 
+exports.getAuditionScore = function(audition) {
+  var collection = Audition.collection().add(audition);
+  return $.getScoreByAudition(collection).then(function(scoreByAudition) {
+    return scoreByAudition[audition.id];
+  });
+}
+
 exports.getAuditionVotes = function(audition) {
   var collection = Audition.collection().add(audition);
   return $.getVotesByAudition(collection).then(function(votesByAudition) {
@@ -175,7 +230,7 @@ exports.getAuditionVote = function(user, audition) {
       AuditionVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(auditionVote) {
         resolve(auditionVote);
       }).catch(function(err) {
-        reject(new APIError(400, 'audition.vote.unknown'));
+        reject(apiErrors.unexpectedError('Error getting user vote', err));
       });
     }
   });
@@ -183,39 +238,53 @@ exports.getAuditionVote = function(user, audition) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    audition.load(['user']).then(function(audition) {
-      if(user.id === audition.related('user').id) {
-        var auditionVote = AuditionVote.forge({user_id: user.id, audition_id: audition.id});
-        auditionVote.save().then(function(auditionVote) {
-          resolve(auditionVote);
-        }).catch(function(err) {
-          if(err.code === 'ER_DUP_ENTRY') {
-            reject(new APIError(400, 'audition.vote.userAlreadyVoted'));
-          } else {
-            reject(new APIError(400, 'audition.vote.unknown'));
-          }
-        });
+    audition.fetch(auditionWithContestRelated).then(function(auditionFetched) {
+      var contest = auditionFetched.related('contest');
+      if(contest.getProgress() === 'finished') {
+        reject(new APIError(400, 'audition.vote.contestWasFinished'));
       } else {
-        reject(new APIError(400, 'audition.vote.canNotVoteForYourself'));
+        var auditionOwner = auditionFetched.related('user');
+        if(user.id !== auditionOwner.id) {
+          var auditionVote = AuditionVote.forge({user_id: user.id, audition_id: auditionFetched.id, voting_power: user.get('voting_power')});
+          auditionVote.save().then(function(auditionVote) {
+            resolve(auditionVote);
+          }).catch(function(err) {
+            if(err.code === 'ER_DUP_ENTRY') {
+              reject(new APIError(400, 'audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
+            } else {
+              reject(apiErrors.unexpectedError('Error voting in audition', err));
+            }
+          });
+        } else {
+          reject(new APIError(400, 'audition.vote.canNotVoteForYourself', 'The user can not vote for yourself', err));
+        }
       }
     }).catch(function(err) {
-      reject(new APIError(400, 'audition.vote.unknown'));
-    })
+      reject(apiErrors.unexpectedError('Error voting in audition', err));
+    });
   });
 }
 
 exports.removeVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    AuditionVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(auditionVote) {
+    AuditionVote.forge({user_id: user.id, audition_id: audition.id}).fetch(auditionVoteWithAuditionAndContestRelated).then(function(auditionVote) {
       if(auditionVote) {
-        auditionVote.destroy().then(function(auditionVote) {
-          resolve();
-        })
+        var contest = auditionVote.related('audition.contest');
+        if(contest.getProgress() === 'finished') {
+          reject(new APIError(400, 'audition.vote.contestWasFinished'));
+        } else {
+          var auditionVoteClone = auditionVote.clone();
+          auditionVote.destroy().then(function() {
+            resolve(auditionVoteClone);
+          }).catch(function(err) {
+            reject(apiErrors.unexpectedError('Error removing vote in audition', err));
+          });
+        }
       } else {
-        reject(new APIError(400, 'audition.vote.userHasNotVoted'));
+        reject(new APIError(400, 'audition.vote.userHasNotVoted', 'The use has not voted'));
       }
     }).catch(function(err) {
-      reject(new APIError(400, 'audition.vote.unknown'));
+      reject(apiErrors.unexpectedError('Error removing vote in audition', err));
     });
   });
 }

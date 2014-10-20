@@ -19,7 +19,7 @@
   </div>
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
-<div class="container">
+<div ng-if="!contestIsFinished() && !isContestant()" class="container">
   <div ng-if="!usingGoogleAccount">
     <h1 class="align-center">{{ 'join_contest_signin_google_account' | translate }}</h1>
     <div class="row padding">
@@ -68,4 +68,34 @@
       </div>
     </div>
   </form>
+</div>
+<div ng-if="contestIsFinished() || isContestant()" class="container">
+  <div class="jumbotron margin10">
+    <div ng-if="contestIsFinished()" class="align-center">
+      <h1 class="nomargin">
+        {{ 'this_contest_was_finished' | translate }}
+      </h1>
+      <h2>
+        <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+          {{ 'back_to_the_contest_page' | translate }}
+        </a>
+      </h2>
+    </div>
+    <div ng-if="isContestant()" class="align-center">
+      <h1 class="nomargin">
+        {{ 'you_are_participating' | translate }}
+      </h1>
+      <h2 class="align-center">
+        <a ui-sref="app.audition({locale: locale(), id: userAudition.id, slug: userAudition.slug})">
+          {{ 'watch_your_audition' | translate }}
+        </a>
+        <br/>
+        {{ 'or' | translate }}
+        <br/>
+        <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+          {{ 'back_to_the_contest_page' | translate }}
+        </a>
+      </h2>
+    </div>
+  </div>
 </div>

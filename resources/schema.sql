@@ -11,6 +11,7 @@ create table user (
   twitter_account   varchar(255) default null,
   google_account    varchar(255) default null,
   youtube_account   varchar(255) default null,
+  voting_power      decimal(4, 1) default 1.0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_username` (`username`),
@@ -118,6 +119,7 @@ create table contest (
   end_date            timestamp null default null,
   registration_date   timestamp not null default current_timestamp,
   duration            int(2) not null,
+  finished            tinyint(1) default 0,
   primary key (id),
   unique key `uq_contest_slug` (`slug`)
 ) engine = innodb default charset = utf8;
@@ -149,6 +151,7 @@ create table audition_vote (
   id                int(11) not null auto_increment,
   user_id           int(11) not null,
   audition_id       int(11) not null,
+  voting_power      decimal(4, 1) default 1.0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_audition_vote_user_id_audition_id` (`user_id`, `audition_id`),

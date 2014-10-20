@@ -31,10 +31,10 @@ angular
     image = newImage;
   };
   this.setKeywords = function(newKeywords) {
-    if(_.isString(newKeywords)) {
+    if(angular.isString(newKeywords)) {
       keywords = newKeywords;
-    } else if(_.isArray(newKeywords)) {
-      _.forEach(newKeywords, function(newKeyword) {
+    } else if(angular.isArray(newKeywords)) {
+      angular.forEach(newKeywords, function(newKeyword) {
         if (keywords === '') {
           keywords += newKeyword;
         } else {
@@ -201,6 +201,8 @@ angular
     'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
+    'audition.vote.contestWasFinished': 'errors.audition_vote_contest_was_finished',
+    'unexpectedError': 'errors.unexpected_error',
     'status.401': 'errors.authentication_required',
     'status.500': 'errors.unexpected_error'
   }
@@ -274,8 +276,8 @@ angular
   this.searchView = function(query) {
     return $http.get('/view/search', {params: {query: query}});
   };
-  this.contestView = function(id, slug) {
-    return $http.get('/view/contest/' + id + '/' + slug);
+  this.contestView = function(id, slug, rank) {
+    return $http.get('/view/contest/' + id + '/' + slug, {params: {rank: rank}});
   };
   this.joinContestView = function(id, slug) {
     return $http.get('/view/contest/' + id + '/' + slug + '/join');
@@ -349,6 +351,12 @@ angular
   };
   this.joinContest = function(audition) {
     return $http.post('/api/contest/join', {audition: audition});
+  };
+  this.isContestant = function(contest) {
+    return $http.get('/api/contest/isContestant', {params: {contest_id: contest.id}});
+  };
+  this.getUserAudition = function(contest) {
+    return $http.get('/api/contest/audition', {params: {contest_id: contest.id}});
   };
   this.voteInAudition = function(audition) {
     return $http.post('/api/contest/audition/vote', {audition_id: audition.id});

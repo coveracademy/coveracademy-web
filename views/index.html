@@ -138,7 +138,7 @@
       </div>
     </footer>
     <div ng-controller="alertController" class="alerts">
-      <alert class="fade-in fade-out bolder-text" ng-repeat="alert in alerts" type="{{ alert.type }}">
+      <alert ng-repeat="alert in alerts" type="{{ alert.type }}">
         {{ alert.msg }}
       </alert>
     </div>

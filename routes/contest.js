@@ -30,9 +30,7 @@ module.exports = function(router, app) {
   router.post('/audition/vote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
     contestService.vote(req.user, audition).then(function(auditionVote) {
-      res.json({
-        auditionVote: auditionVote
-      });
+      res.json(auditionVote);
     }).catch(function(err) {
       console.log(err.stack);
       apiErrors.formatResponse(err, res);
@@ -41,8 +39,8 @@ module.exports = function(router, app) {
 
   router.post('/audition/removeVote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
-    contestService.removeVote(req.user, audition).then(function() {
-      res.json({});
+    contestService.removeVote(req.user, audition).then(function(auditionVote) {
+      res.json(auditionVote);
     }).catch(function(err) {
       console.log(err.stack);
       apiErrors.formatResponse(err, res);
@@ -52,7 +50,27 @@ module.exports = function(router, app) {
   router.get('/audition/vote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
     contestService.getAuditionVote(req.user, audition).then(function(auditionVote) {
-      res.json(auditionVote);
+      res.json(auditionVote ? auditionVote : {});
+    }).catch(function(err) {
+      console.log(err.stack);
+      apiErrors.formatResponse(err, res);
+    });
+  });
+
+  router.get('/isContestant', isAuthenticated, function(req, res, next) {
+    var contest = Contest.forge({id: req.param('contest_id')});
+    contestService.isContestant(req.user, contest).then(function(isContestant) {
+      res.json(isContestant);
+    }).catch(function(err) {
+      console.log(err.stack);
+      apiErrors.formatResponse(err, res);
+    });
+  });
+
+  router.get('/audition', isAuthenticated, function(req, res, next) {
+    var contest = Contest.forge({id: req.param('contest_id')});
+    contestService.getUserAudition(req.user, contest).then(function(userAudition) {
+      res.json(userAudition ? userAudition : {});
     }).catch(function(err) {
       console.log(err.stack);
       apiErrors.formatResponse(err, res);

@@ -1,4 +1,5 @@
 var path = require('path'),
+    _debug = process.env.DEBUG && process.env.DEBUG === 'true' ? true : false,
     _nodeEnv = process.env.NODE_ENV || 'dev',
     _nodeIP = process.env.NODE_IP || '127.0.0.1',
     _nodePort = process.env.NODE_PORT || 3000,
@@ -69,8 +70,12 @@ var path = require('path'),
       }
     }
 
-console.log('Using ' + _nodeEnv + ' environment settings');
+console.log('Using ' + _nodeEnv + ' environment settings' + _debug);
+if(_debug === true) {
+  console.log('Debug mode ON');
+}
 
+exports.debug = _debug;
 exports.nodeEnv = _nodeEnv;
 exports.nodePort = _nodePort;
 exports.nodeIP = _nodeIP;

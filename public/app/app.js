@@ -225,7 +225,7 @@ angular
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.contestView($stateParams.id, $stateParams.slug);
+          return viewService.contestView($stateParams.id, $stateParams.slug, $stateParams.rank);
         }
       }
     })
