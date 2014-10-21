@@ -123,7 +123,7 @@ exports.getUserAudition = function(user, contest) {
     if(!user) {
       resolve();
     } else {
-      return Audition.forge({user_id: user.id, contest_id: contest.id}).fetch();
+      resolve(Audition.forge({user_id: user.id, contest_id: contest.id}).fetch());
     }
   });
 }

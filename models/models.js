@@ -63,7 +63,7 @@ var Contest = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'contest',
   getProgress: function() {
-    if(this.get('status') === 'finished') {
+    if(this.get('finished') === 1) {
       return 'finished';
     } else {
       if(this.get('start_date') && this.get('end_date')) {
@@ -77,7 +77,6 @@ var Contest = Bookshelf.Model.extend({
         } else {
           return 'finished';
         }
-        return now > start && now < end;
       } else {
         return 'waiting';
       }

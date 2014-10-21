@@ -15,9 +15,23 @@
           </div>
         </div>
         <div class="col-md-3">
+          <div ng-if="!isContestProgress('finished')" class="share">
+            <h4>{{ 'share_this_contest' | translate }}:</h4>
+            <div>
+              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </div>
+          </div>
           <div class="contestant" ng-if="isContestant()">
             <p>
-              <a ui-sref="app.audition({locale: locale(), id: userAudition.id, slug: userAudition.slug})">
+              <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
                 <i class="glyphicon glyphicon-ok margin10" title="{{ 'watch_your_audition' | translate }}"></i>
               </a>
             </p>
@@ -92,7 +106,7 @@
     </div>
     <div ng-if="isContestant()" class="align-center">
       <h1 class="nomargin">
-        {{ 'you_are_participating' | translate }}
+        {{ 'you_are_already_in_the_contest' | translate }}
       </h1>
       <h2 class="align-center">
         <a ui-sref="app.audition({locale: locale(), id: userAudition.id, slug: userAudition.slug})">

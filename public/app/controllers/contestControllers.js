@@ -68,7 +68,8 @@ angular
     return score;
   };
 }])
-.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
+.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
+  $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.userAudition = null;
@@ -77,6 +78,7 @@ angular
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
+      console.log(response.data)
       $scope.userAudition = response.data;
     });
   });

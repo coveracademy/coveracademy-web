@@ -35,7 +35,7 @@
             <a ng-if="isContestProgress('running') && !isContestant()" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
-            <a ng-if="isContestProgress('running')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
+            <a ng-if="!isContestProgress('finished')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
               {{ 'see_the_rules' | translate }}
             </a>
           </div>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div ng-if="isContestProgress('running')" class="share">
+          <div ng-if="!isContestProgress('finished')" class="share">
             <h4>{{ 'share_this_contest' | translate }}:</h4>
             <div>
               <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">

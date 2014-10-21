@@ -7,7 +7,7 @@
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
               {{ contest.name }}
               <small ng-if="isContestProgress('finished')">
-                ({{ 'finished_contest' | translate }})
+                ({{ 'contest_finished' | translate }})
               </small>
             </a>
           </h1>
@@ -64,9 +64,9 @@
                 {{ 'you_voted' | translate }}
               </button>
             </div>
-            <div ng-ig="isContestProgress('finished')">
+            <div ng-if="isContestProgress('finished')">
               <button class="btn btn-default btn-lg btn-block margin-top">
-                {{ 'finished_contest' | translate }}
+                {{ 'contest_finished' | translate }}
               </button>
             </div>
           </div>
