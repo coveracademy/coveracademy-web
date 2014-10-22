@@ -142,7 +142,11 @@ exports.joinContest = function(user, auditionData) {
 }
 
 exports.getWinnerAuditions = function(contest) {
-
+  return Audition.collection().query(function(qb) {
+    qb.where('contest_id', contest.id);
+    qb.where('place', '<=', '3');
+    qb.orderBy('place', 'asc');
+  }).fetch(auditionRelated);
 }
 
 exports.getAudition = function(id) {
@@ -169,7 +173,7 @@ var listAuditions = function(rankType, contest, page, pageSize) {
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {
-      qb.join('audition_vote', 'audition.id', '=', 'audition_vote.audition_id', 'left');
+      qb.leftJoin('audition_vote', 'audition.id', '=', 'audition_vote.audition_id');
       qb.groupBy('audition.id');
       qb.orderBy(Bookshelf.knex.raw('sum(audition_vote.voting_power) desc'));
     }

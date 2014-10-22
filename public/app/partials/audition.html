@@ -85,14 +85,12 @@
         </div>
         <div>
           <h3>{{ 'contestant' | translate }}</h3>
-          <div ng-class="{'thumbnail': border}">
-            <div class="box">
-              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-                <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
-              </a>
-              <div class="legend">
-                <span>{{ audition.user.name }}</span>
-              </div>
+          <div class="box">
+            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+            </a>
+            <div class="legend">
+              <span>{{ audition.user.name }}</span>
             </div>
           </div>
         </div>

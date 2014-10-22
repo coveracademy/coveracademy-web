@@ -114,9 +114,60 @@
   </div>
 </div>
 <div ng-if="isContestProgress('finished')" class="container">
-  <div class="jumbotron margin10">
-    <h1 class="nomargin align-center">{{ 'this_contest_was_finished' | translate }}</h1>
-    <h2 ng-if="hasAuditions()">{{ 'see_the_winners' | translate }}:</h2>
+  <div class="jumbotron white margin10">
+    <h2 class="nomargin align-center">{{ 'this_contest_was_finished' | translate }}</h2>
+    <div ng-if="hasWinners()" ng-repeat="row in winnerAuditions | partition: 3" class="row">
+      <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
+      <div ng-repeat="audition in row" class="col-md-4">
+        <div class="thumbnail">
+          <div class="box">
+            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              <img ng-src="/img/users/{{ audition.user.image }}">
+            </a>
+            <div class="legend">
+              <span>{{ audition.user.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="thumbnail align-center">
+          <h4>
+            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
+              {{ 'watch_the_audition' | translate }}
+            </a>
+          </h4>
+        </div>
+      </div>
+    </div>
+    <div ng-if="isContestant()">
+      <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="audition thumbnail clickable">
+            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="link"></a>
+            <div class="cover">
+              <div class="darken"></div>
+              <img ng-src="{{ audition.medium_thumbnail }}">
+              <div class="caption font-big">
+                {{ audition.title }}
+                <div>
+                  {{ 'by' | translate }} {{ audition.user.name }}
+                </div>
+                <div class="video-date">
+                  <span am-time-ago="audition.registration_date"></span>
+                </div>
+              </div>
+              <div class="legend">
+                <span class="label label-primary font-big">
+                  {{ getScoreByAudition(audition) }} {{ 'points' | translate }}
+                  -
+                  {{ getVotesByAudition(audition) }} {{ 'votes' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions()" class="container">

@@ -10,6 +10,7 @@ angular
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
   $scope.scoreByAudition = backendResponse.data.scoreByAudition;
+  $scope.winnerAuditions = backendResponse.data.winnerAuditions;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
@@ -18,6 +19,9 @@ angular
   };
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
+  };
+  $scope.hasWinners = function() {
+    return $scope.winnerAuditions.length > 0;
   }
   $scope.isContestProgress = function(expectedProgress) {
     return $scope.contest.progress === expectedProgress;
