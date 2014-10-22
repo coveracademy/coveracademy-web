@@ -29,12 +29,43 @@ exports.listUnfinishedContests = function() {
   }).fetch();
 }
 
-exports.finishContests = function(contests) {
-  contests.forEach(function(contest) {
-    contest.set('finished', 1);
+var chooseWinners = function(contest, transaction) {
+  return new Promise(function(resolve, reject) {
+    var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(audition_vote.voting_power) as score')).from('audition').join('audition_vote', 'audition.id', 'audition_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');
+    var scores = Bookshelf.knex.sum('audition_vote.voting_power as score').from('audition_vote').join('audition', 'audition_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).groupBy('audition_id');
+    var topScores = Bookshelf.knex.distinct('score').from(scores.as('scores')).orderBy('score', 'desc').limit(3);
+    var winners = Bookshelf.knex.select('*').from(auditionWithScore.as('audition_with_score')).join(topScores.as('top_scores'), 'audition_with_score.score', 'top_scores.score').orderBy('audition_with_score.score', 'desc');
+    var place = 1;
+    var previousWinner = null;
+    var savePromises = [];
+    winners.then(function(winnersRows) {
+      winnersRows.forEach(function(winner) {
+        var audition = Audition.forge(winner);
+        audition.unset('score');
+        if(previousWinner && winner.score !== previousWinner.score) {
+          place++;
+        }
+        savePromises.push(audition.save({place: place}, {patch: true, transacting: transaction}));
+        previousWinner = winner;
+      });
+      Promise.all(savePromises).then(function(winners) {
+        resolve(winners);
+      }).catch(function(err) {
+        reject(err);
+      });
+    }).catch(function(err) {
+      reject(err);
+    });
   });
-  return contests.invokeThen('save', null, null).then(function() {
-    return contests;
+}
+
+exports.finishContest = function(contest) {
+  return Bookshelf.transaction(function(transaction) {
+    return contest.save({finished: 1}, {patch: true, transacting: transaction}).then(function(contest) {
+      return chooseWinners(contest, transaction);
+    }).then(function(winners) {
+      return {contest: contest, winners: winners};
+    });
   });
 }
 

@@ -11,11 +11,15 @@ var finishContests = function() {
         finishedContests.add(contest);
       }
     });
-    contestService.finishContests(finishedContests).then(function(finishedContests) {
-      console.log(finishedContests.size() + ' contests was finished');
+    finishedContests.forEach(function(finishedContest) {
+      contestService.finishContest(finishedContest).then(function(result) {
+        console.log('Contest ' + result.contest.id + ' was finished');
+      }).catch(function(err) {
+        console.log('Error finishing contest ' + finishedContest.id + ': ' + err.message);
+      });
     });
   });
 }
 
-var sched = later.parse.recur().on(0).minute();
+var sched = later.parse.recur().on(22).minute();
 var interval = later.setInterval(finishContests, sched);
