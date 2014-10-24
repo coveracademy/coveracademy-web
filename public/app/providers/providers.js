@@ -244,7 +244,7 @@ angular
       you_are_participating: 'Você está participando!',
       you_participated: 'Você participou!',
       you_voted: 'Você votou!',
-      your_audition: 'Seu vídeo',
+      your_audition: 'Sua audição',
       alerts: {
         congratulations_now_you_are_in_the_contest: 'Parabéns, agora você está participando da competição. Boa sorte!',
         login_failed: 'Erro ao autenticar, por favor tente novamente!',
