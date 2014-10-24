@@ -6,8 +6,7 @@ var FacebookStrategy = require('passport-facebook').Strategy,
     fileUtils        = require('../utils/fileUtils'),
     settings         = require('./settings');
 
-exports.configure = function(app, passport) {
-  console.log('Configuring authentication strategies');
+exports.configure = function(app, passport) {  
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -37,16 +36,16 @@ exports.configure = function(app, passport) {
       if(user) {
         return user;
       }
-      userService.findByEmail(profileInfos.email).then(function(user) {
+      return userService.findByEmail(profileInfos.email).then(function(user) {
         if(user) {
           user.set('facebook_account', profileInfos.id);
-          userService.update(user, ['facebook_account']).then(function(user) {
+          return userService.update(user, ['facebook_account']).then(function(user) {
             return user;
           }).catch(function(err) {
             return new Error('Error associating existing account with Facebook');
           });
         } else {
-          userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+          return userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
           }).then(function(user) {
             return userService.update(user, ['image']);
@@ -75,7 +74,7 @@ exports.configure = function(app, passport) {
         if(user) {
           return user;
         }
-        userService.createByTwitterAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+        return userService.createByTwitterAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
           return fileUtils.downloadUserPhoto(profileInfos.picture, user);
         }).then(function(user) {
           return userService.update(user, ['image']);
@@ -97,43 +96,41 @@ exports.configure = function(app, passport) {
       picture: profile._json.picture
     };
     userService.findByGoogleAccount(profileInfos.id).then(function(user) {
-      if(user) {
+      if(user) {        
         return user;
       }
-      userService.findByEmail(profileInfos.email).then(function(user) {
-        if(user) {
+      return userService.findByEmail(profileInfos.email).then(function(user) {
+        if(user) {          
           user.set('google_account', profileInfos.id);
-          userService.update(user, ['google_account']).then(function(user) {
+          return userService.update(user, ['google_account']).then(function(user) {            
             return user;
-          }).catch(function(err) {
+          }).catch(function(err) {            
             return new Error('Error associating existing account with Google');
           });
         } else {
-          userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+          return userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {            
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
-          }).then(function(user) {
+          }).then(function(user) {            
             return userService.update(user, ['image']);
-          }).then(function(user) {
+          }).then(function(user) {            
             return user;
-          }).catch(function(err) {
+          }).catch(function(err) {            
             return new Error('Error creating account associated with Google');
           });
         }
-      }).catch(function(err) {
+      }).catch(function(err) {        
         return new Error('Error creating account associated with Google');
       });
     }).nodeify(done);
   }));
 
-  passport.use(new YoutubeStrategy(settings.youtube, function(accessToken, refreshToken, profile, done) {
-    console.log(profile._json.contentDetails)
+  passport.use(new YoutubeStrategy(settings.youtube, function(accessToken, refreshToken, profile, done) {    
     var account = profile._json.items[0];
     var googleAccount = account.contentDetails.googlePlusUserId;
     var youtubeAccount = account.id;
     userService.associateYoutubeAccount(googleAccount, youtubeAccount).then(function(user) {
       return user;
-    }).catch(function(err) {
-      console.log(err.stack)
+    }).catch(function(err) {      
       return err;
     }).nodeify(done);
   }));
