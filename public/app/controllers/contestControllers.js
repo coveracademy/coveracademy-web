@@ -214,7 +214,7 @@ angular
       $scope.totalUserVotes++;
       $scope.votes++;
       $scope.score += $scope.userVote.voting_power;
-      $scope.score = Number($scope.score.toFixed(1));
+      $scope.score = Number($scope.score.toFixed(3));
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(message) {
         alertService.addAlert('success', message);
       });
@@ -229,7 +229,7 @@ angular
       $scope.totalUserVotes--;
       $scope.votes--;
       $scope.score -= response.data.voting_power;
-      $scope.score = Number($scope.score.toFixed(1));
+      $scope.score = Number($scope.score.toFixed(3));
       $scope.userVote = null;
     }).catch(function(err) {
       translationService.translateError(err).then(function(message) {
