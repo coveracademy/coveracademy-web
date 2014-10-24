@@ -28,7 +28,7 @@
             <a ng-if="isContestProgress('running') && !isContestant()" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
-            <a ng-if="isContestProgress('running')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
+            <a ng-if="isContestProgress('running')" ui-sref="app.contestRules({locale: locale()})" class="btn btn-success btn-lg btn-block">
               {{ 'see_the_rules' | translate }}
             </a>
           </div>
@@ -106,6 +106,11 @@
       <a ui-sref="app.contestRules({locale: locale()})" class="btn btn-success btn-largest">
         {{ 'see_the_rules' | translate }}
       </a>
+    </div>
+    <div ng-if="isContestant()" class="padding-top">
+      <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
+        {{ 'you_are_participating' | translate }}
+      </a>     
     </div>
   </div>
 </div>
@@ -188,7 +193,7 @@
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
         <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-          {{ 'see_the_best_autitions' | translate }}
+          {{ 'see_the_best_auditions' | translate }}
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
       </h4>

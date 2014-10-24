@@ -72,7 +72,7 @@ exports.finishContest = function(contest) {
 
 var startContest = function(contest, transaction) {
   return new Promise(function(resolve, reject) {
-    if(contest.getDetailedStatus() === 'waiting') {
+    if(contest.getProgress() === 'waiting') {
       contest.set('start_date', moment().toDate());
       contest.set('end_date', moment().add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
       contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
@@ -90,7 +90,9 @@ var createAudition = function(user, contest, auditionData, transaction) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
-        if(videoInfos.date > contest.get('registration_date') && (!_.isDefined(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
+        console.log(videoInfos.date)
+        console.log(contest.get('end_date'))
+        if(videoInfos.date > contest.get('registration_date') && (_.isUndefined(contest.get('end_date')) || _.isNull(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
           var audition = Audition.forge(auditionData);
           audition.set('contest_id', contest.id);
           audition.set('user_id', user.id);
@@ -131,11 +133,13 @@ exports.joinContest = function(user, auditionData) {
         return createAudition(user, contest, auditionData, transaction);
       }).then(function(audition) {
         result.audition = audition;
-        if($.totalAuditions(result.audition) < parseInt(result.contest.get('minimum_contestants'))) {
-          return startContest(result.contest, transaction);
-        } else {
-          return null;
-        }
+        return $.totalAuditions(result.contest).then(function(totalAuditions) {
+          if(totalAuditions < result.contest.get('minimum_contestants')) {
+            return startContest(result.contest, transaction);
+          } else {
+            return null;
+          }
+        });
       }).then(function(contest) {
         return result.audition;
       });
