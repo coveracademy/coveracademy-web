@@ -4,13 +4,6 @@
       <div class="row">
         <div class="col-md-3">
           <div class="join">
-            <div ng-if="isContestProgress('waiting')">
-              <div class="bs-callout bs-callout-info margin-top">
-                <h4 class="align-left nomargin">
-                  {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
-                </h4>
-              </div>
-            </div>
             <div ng-if="isContestProgress('running')">
               <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
               <h2 class="margin10 bolder-text">
@@ -35,7 +28,7 @@
             <a ng-if="isContestProgress('running') && !isContestant()" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
-            <a ng-if="!isContestProgress('finished')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
+            <a ng-if="isContestProgress('running')" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg btn-block">
               {{ 'see_the_rules' | translate }}
             </a>
           </div>
@@ -109,6 +102,9 @@
     <div ng-if="!isContestant()" class="padding-top">
       <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
         {{ 'join_now' | translate }}
+      </a>
+      <a ui-sref="app.contestRules({locale: locale()})" class="btn btn-success btn-largest">
+        {{ 'see_the_rules' | translate }}
       </a>
     </div>
   </div>

@@ -229,6 +229,11 @@ angular
         }
       }
     })
+    .state('app.contestRules', {
+      url: '/contest/rules',
+      templateUrl: '/app/partials/contest-rules.html',
+      accessLevel: accessLevel.PUBLIC
+    })
     .state('app.joinContest', {
       url: '/contest/:id/:slug/join',
       templateUrl: '/app/partials/join-contest.html',
