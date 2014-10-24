@@ -1,35 +1,18 @@
 angular
 .module('coverAcademy.directives', [])
-.directive('auditions', function() {
+.directive('audition', function() {
   return {
-    templateUrl: 'app/partials/widgets/auditions.html',
+    templateUrl: 'app/partials/widgets/audition.html',
     restrict: 'E',
     require: 'ngModel',
     scope: {
       locale: '@',
-      showVotes: '@',
-      thumbSize: '@',
-      auditions: '=ngModel',
-      scoreByAudition: '&',
-      votesByAudition: '&',
+      showScore: '@',
+      audition: '=ngModel',
+      scoreByAudition: '&'
     },
-    controller: ['$scope', function($scope) {
-      $scope.isShowVotes = $scope.showVotes ? $scope.showVotes : 'true';
-      $scope.thumbSizeFinal = $scope.thumbSize ? $scope.thumbSize : 'normal';
-      if($scope.thumbSizeFinal === 'normal') {
-        $scope.auditionsPerRow = 3;
-        $scope.columnSize = 12/$scope.auditionsPerRow;
-        $scope.fontSizeCss = 'font-big';
-      } else if($scope.thumbSizeFinal === 'small') {
-        $scope.auditionsPerRow = 4;
-        $scope.columnSize = 12/$scope.auditionsPerRow;
-      }
-      $scope.isThumbSize = function(size) {
-        return $scope.thumbSizeFinal === size;
-      };
-    }],
     link: function(scope, element, attrs, ctrl) {
-
+      scope.isShowScore = scope.showScore ? scope.showScore : 'true';
     }
   };
 })

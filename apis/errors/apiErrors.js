@@ -16,9 +16,7 @@ function APIError(statusCode, errorKey, errorMessage, cause) {
     var json = {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
     if(settings.debug === true) {
       json.cause = cause;
-      console.log("HAHAH");
     }
-    console.log(json)
     return json;
   };
 };

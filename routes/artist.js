@@ -11,7 +11,7 @@ module.exports = function(router, app) {
     coverService.listArtists(musicGenre, page, constants.ARTISTS_IN_LIST).then(function(artists) {
       res.json(artists);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -21,7 +21,7 @@ module.exports = function(router, app) {
     coverService.saveArtist(artist).then(function(artist) {
       res.json(artist);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });

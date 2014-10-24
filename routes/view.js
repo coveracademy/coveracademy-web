@@ -20,7 +20,7 @@ module.exports = function(router, app) {
         potentialCovers: potentialCovers
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -31,7 +31,7 @@ module.exports = function(router, app) {
         musicGenres: musicGenres
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -57,7 +57,7 @@ module.exports = function(router, app) {
         bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     }).bind();
   });
@@ -78,7 +78,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -102,7 +102,7 @@ module.exports = function(router, app) {
           artistsOfCovers: artistsOfCovers
         });
       }).catch(function(err) {
-        console.log(err.stack);
+        console.log(err);
         res.send(500);
       }).bind({});
     }
@@ -136,7 +136,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -153,7 +153,7 @@ module.exports = function(router, app) {
         totalArtists: totalArtists
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     }).bind({});
   });
@@ -177,7 +177,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -199,7 +199,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -226,7 +226,7 @@ module.exports = function(router, app) {
           });
         }
       }).catch(function(err) {
-        console.log(err.stack);
+        console.log(err);
         res.send(500);
       });
     }
@@ -247,7 +247,7 @@ module.exports = function(router, app) {
         coversOfMusics: coversOfMusics
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     }).bind({});
   });
@@ -283,7 +283,7 @@ module.exports = function(router, app) {
         }).bind({});
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -300,7 +300,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -314,22 +314,24 @@ module.exports = function(router, app) {
       } else {
         var contest = audition.related('contest');
         contest.set('progress', contest.getProgress());
-        Promise.all([contestService.getAuditionVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
-        .spread(function(auditionVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
+        Promise.all([contestService.countUserVotes(req.user, contest), contestService.getUserVote(req.user, audition), contestService.getUserVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
+        .spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
           res.json({
             contest: contest,
             audition: audition,
-            auditionVote: auditionVote,
+            userVote: userVote,
             bestAuditions: bestAuditions,
             latestAuditions: latestAuditions,
             totalAuditions: totalAuditions,
+            totalUserVotes: totalUserVotes,
+            voteLimit: constants.VOTE_LIMIT,
             votes: votes,
             score: score
           });
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -345,7 +347,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });

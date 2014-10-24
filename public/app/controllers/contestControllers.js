@@ -23,6 +23,17 @@ angular
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;
   }
+  $scope.getMedal = function(audition) {
+    var medal;
+    if(audition.place === 1) {
+      medal = 'gold';
+    } else if(audition.place === 2) {
+      medal = 'silver';
+    } else {
+      medal = 'bronze';
+    }
+    return medal;
+  };
   $scope.isContestProgress = function(expectedProgress) {
     return $scope.contest.progress === expectedProgress;
   };
@@ -141,22 +152,40 @@ angular
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
-  $scope.auditionVote = backendResponse.data.auditionVote;
+  $scope.userVote = backendResponse.data.userVote;
   $scope.bestAuditions = backendResponse.data.bestAuditions;
   $scope.latestAuditions = backendResponse.data.latestAuditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
+  $scope.totalUserVotes = backendResponse.data.totalUserVotes;
+  $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
-    contestService.getAuditionVote($scope.audition).then(function(response) {
-      $scope.auditionVote = response.data;
+    contestService.getUserVote($scope.audition).then(function(response) {
+      $scope.userVote = response.data.userVote;
+      $scope.totalUserVotes = response.data.totalUserVotes;
     });
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
-    $scope.auditionVote = null;
+    $scope.userVote = null;
+    $scope.totalUserVotes = 0;
   });
 
+  $scope.isWinner = function() {
+    return angular.isDefined($scope.audition.place) && $scope.audition.place !== null;
+  };
+  $scope.getMedal = function() {
+    var medal;
+    if($scope.audition.place === 1) {
+      medal = 'gold';
+    } else if($scope.audition.place === 2) {
+      medal = 'silver';
+    } else {
+      medal = 'bronze';
+    }
+    return medal;
+  };
   $scope.isContestProgress = function(expectedProgress) {
     return $scope.contest.progress === expectedProgress;
   };
@@ -177,13 +206,14 @@ angular
     return !authenticationService.getUser() || (authenticationService.getUser().id !== $scope.audition.user.id);
   };
   $scope.voted = function() {
-    return Boolean($scope.auditionVote && angular.isDefined($scope.auditionVote.id));
+    return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
   };
   $scope.vote = function(audition) {
     contestService.voteInAudition(audition).then(function(response) {
-      $scope.auditionVote = response.data;
+      $scope.userVote = response.data;
+      $scope.totalUserVotes++;
       $scope.votes++;
-      $scope.score += $scope.auditionVote.voting_power;
+      $scope.score += $scope.userVote.voting_power;
       $scope.score = Number($scope.score.toFixed(1));
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(message) {
         alertService.addAlert('success', message);
@@ -196,10 +226,11 @@ angular
   };
   $scope.removeVote = function(audition) {
     contestService.removeVoteInAudition(audition).then(function(response) {
+      $scope.totalUserVotes--;
       $scope.votes--;
       $scope.score -= response.data.voting_power;
       $scope.score = Number($scope.score.toFixed(1));
-      $scope.auditionVote = null;
+      $scope.userVote = null;
     }).catch(function(err) {
       translationService.translateError(err).then(function(message) {
         alertService.addAlert('danger', message);

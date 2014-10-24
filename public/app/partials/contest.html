@@ -120,13 +120,17 @@
       <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
       <div ng-repeat="audition in row" class="col-md-4">
         <div class="thumbnail">
-          <div class="box">
-            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+          <div class="winner box">
+            <a class="user" ui-sref="app.user({locale: locale(), id: audition.user.id})">
               <img ng-src="/img/users/{{ audition.user.image }}">
+              <div class="text">
+                <h2 class="bolder-text">{{ audition.user.name }}</h2>
+              </div>
             </a>
-            <div class="legend">
-              <span>{{ audition.user.name }}</span>
-            </div>
+            <a class="audition" ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
+              <img ng-src="{{ audition.medium_thumbnail }}">
+            </a>
+            <img class="medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
           </div>
         </div>
         <div class="thumbnail align-center">
@@ -142,29 +146,28 @@
       <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <div class="audition thumbnail clickable">
-            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="link"></a>
-            <div class="cover">
-              <div class="darken"></div>
-              <img ng-src="{{ audition.medium_thumbnail }}">
-              <div class="caption font-big">
-                {{ audition.title }}
-                <div>
-                  {{ 'by' | translate }} {{ audition.user.name }}
+          <div class="audition thumbnail">
+            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
+              <div class="cover">
+                <div class="darken"></div>
+                <img ng-src="{{ audition.medium_thumbnail }}">
+                <div class="caption font-big">
+                  {{ audition.title }}
+                  <div>
+                    {{ 'by' | translate }} {{ audition.user.name }}
+                  </div>
+                  <div class="video-date">
+                    <span am-time-ago="audition.registration_date"></span>
+                  </div>
                 </div>
-                <div class="video-date">
-                  <span am-time-ago="audition.registration_date"></span>
+                <div class="legend">
+                  <span class="label label-primary font-big">
+                    {{ getScoreByAudition(audition) }} {{ 'points' | translate }}
+                  </span>
                 </div>
-              </div>
-              <div class="legend">
-                <span class="label label-primary font-big">
-                  {{ getScoreByAudition(audition) }} {{ 'points' | translate }}
-                  -
-                  {{ getVotesByAudition(audition) }} {{ 'votes' | translate }}
-                </span>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -195,8 +198,12 @@
       </h4>
     </div>
   </div>
-  <auditions ng-model="auditions" locale="{{ locale() }}" score-by-audition="getScoreByAudition">
-  </auditions>
+  <div class="row" ng-repeat="row in auditions | partition: 4">
+    <div ng-repeat="audition in row" class="col-md-3">
+      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+      </audition>
+    </div>
+  </div>
   <div class="align-center">
     <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>

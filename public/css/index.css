@@ -96,6 +96,15 @@ h1, h2, h3, h4, h5, p {
   line-height: 1.5;
 }
 
+.card {
+  margin: 10px 0;
+  border: 0;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 a:hover {
   cursor: pointer;
 }
@@ -312,23 +321,6 @@ a:hover {
   background-color: #000;
 }
 
-div.clickable {
-  position: relative;
-}
-
-div.clickable .link {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  text-decoration: none; /* No underlines on the link */
-  z-index: 10; /* Places the link above everything else in the div */
-  background-color: #FFF; /* Fix to make div clickable in IE */
-  opacity: 0; /* Fix to make div clickable in IE */
-  filter: alpha(opacity=1); /* Fix to make div clickable in IE */
-}
-
 input.big {
   height: 50px;
   font-size: 22px;
@@ -378,6 +370,54 @@ input.big {
   left: 3px;
   padding: 2px 5px 2px 5px;
   position: absolute;
+}
+
+.winner.box .audition {
+  border: 3px solid #000;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  width: 50%;
+}
+
+.winner.box .text {
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}
+
+.winner.box h2 {
+  color: #fff;
+}
+
+.winner.box .caption {
+  color: #fff;
+  font-weight: bold;
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  text-align: center;
+  text-shadow: 2px 2px 5px #000000;
+}
+
+.winner.box .medal {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 90px;
+}
+
+.author.box img.medium-thumbnail {
+  height: 132px;
+}
+
+.author.box .bs-callout {
+  min-height: 132px;
+}
+
+.medium-medal {
+  height: 155px;
 }
 
 .cover {

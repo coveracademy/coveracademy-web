@@ -106,14 +106,15 @@ angular
       },
       errors: {
         authentication_required: 'You are not logged in, please login to continue',
-        audition_vote_can_not_vote_for_yourself: 'You can not vote for yourself',
-        audition_vote_contest_was_finished: 'You can\'t vote because this contest was already finished',
         page_not_found: 'Page not found',
         internal_error: 'Internal error',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
         join_contest_video_url_not_valid: 'For now we support only Youtube videos =(',
         join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us',
-        unexpected_error: 'An unexpected error happened, please try again later'
+        unexpected_error: 'An unexpected error happened, please try again later',
+        user_vote_can_not_vote_for_yourself: 'You can not vote for yourself',
+        user_vote_contest_was_finished: 'You can\'t vote because this contest was already finished',
+        user_vote_reach_vote_limit: 'You reach the maximum of votes per contest'
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -252,14 +253,15 @@ angular
       },
       errors: {
         authentication_required: 'Você não está logado, por favor faça login para continuar',
-        audition_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo',
-        audition_vote_contest_was_finished: 'Você não pode votar porque este campeonato já foi finalizado',
         page_not_found: 'Página não encontrada',
         internal_error: 'Erro interno',
         join_contest_video_not_owned_by_user: 'Você não pode participar de uma competição com um vídeo publicado em outra conta',
         join_contest_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =(',
         join_contest_user_already_in_contest: 'Você já está participando dessa competição. Caso tenha dúvidas entre em contato',
-        unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente'
+        unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente',
+        user_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo',
+        user_vote_contest_was_finished: 'Você não pode votar porque este campeonato já foi finalizado',
+        user_vote_reach_vote_limit: 'Você alcançou o máximo de votos por concurso'
       },
       music_genre: {
         acoustic: 'Acústico',

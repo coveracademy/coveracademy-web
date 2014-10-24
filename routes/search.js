@@ -13,7 +13,7 @@ module.exports = function(router, app) {
         artists: artists
       });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     })
   });
@@ -24,7 +24,7 @@ module.exports = function(router, app) {
     coverService.searchArtists(query, related).then(function(artists) {
       res.json(artists);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -36,7 +36,7 @@ module.exports = function(router, app) {
     promise.then(function(musics) {
       res.json(musics);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });

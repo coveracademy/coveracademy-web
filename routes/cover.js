@@ -13,7 +13,7 @@ module.exports = function(router, app) {
     coverService.addCover(req.user, coverData).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -23,7 +23,7 @@ module.exports = function(router, app) {
     coverService.removeCover(coverData).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -33,7 +33,7 @@ module.exports = function(router, app) {
     coverService.acceptCover(req.user, potentialCover).then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -43,7 +43,7 @@ module.exports = function(router, app) {
     coverService.refuseCover(potentialCover).then(function() {
       res.json({});
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -53,7 +53,7 @@ module.exports = function(router, app) {
     coverService.topCover().then(function(cover) {
       res.json(cover);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -63,7 +63,7 @@ module.exports = function(router, app) {
     coverService.latestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -73,7 +73,7 @@ module.exports = function(router, app) {
     coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -84,7 +84,7 @@ module.exports = function(router, app) {
     coverService.latestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -95,7 +95,7 @@ module.exports = function(router, app) {
     coverService.bestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -106,7 +106,7 @@ module.exports = function(router, app) {
     coverService.latestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -117,7 +117,7 @@ module.exports = function(router, app) {
     coverService.bestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
@@ -130,7 +130,7 @@ module.exports = function(router, app) {
       }
       res.json(cover);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });

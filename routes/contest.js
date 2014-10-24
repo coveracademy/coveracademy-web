@@ -13,7 +13,7 @@ module.exports = function(router, app) {
     contestService.getAuditionVideoInfos(url).then(function(videoInfos) {
       res.json(videoInfos);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
     });
   });
@@ -23,39 +23,48 @@ module.exports = function(router, app) {
     contestService.joinContest(req.user, auditionData).then(function(audition) {
       res.json(audition);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
     });
   });
 
   router.post('/audition/vote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
-    contestService.vote(req.user, audition).then(function(auditionVote) {
-      res.json(auditionVote);
+    contestService.vote(req.user, audition).then(function(userVote) {
+      res.json(userVote);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
     });
   });
 
   router.post('/audition/removeVote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
-    contestService.removeVote(req.user, audition).then(function(auditionVote) {
-      res.json(auditionVote);
+    contestService.removeVote(req.user, audition).then(function(userVote) {
+      res.json(userVote);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err)
+      console.log(err.cause.stack);
       apiErrors.formatResponse(err, res);
     });
   });
 
   router.get('/audition/vote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition_id')});
-    contestService.getAuditionVote(req.user, audition).then(function(auditionVote) {
-      res.json(auditionVote ? auditionVote : {});
+    contestService.getUserVote(req.user, audition).then(function(userVote) {
+      this.userVote = userVote;
+      return contestService.getAudition(audition.id);
+    }).then(function(audition) {
+      return contestService.countUserVotes(req.user, audition.related('contest'));
+    }).then(function(totalUserVotes) {
+      res.json({
+        userVote: this.userVote,
+        totalUserVotes: totalUserVotes
+      });
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
-    });
+    }).bind({});
   });
 
   router.get('/isContestant', isAuthenticated, function(req, res, next) {
@@ -63,7 +72,7 @@ module.exports = function(router, app) {
     contestService.isContestant(req.user, contest).then(function(isContestant) {
       res.json(isContestant);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
     });
   });
@@ -73,7 +82,7 @@ module.exports = function(router, app) {
     contestService.getUserAudition(req.user, contest).then(function(userAudition) {
       res.json(userAudition ? userAudition : {});
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       apiErrors.formatResponse(err, res);
     });
   });

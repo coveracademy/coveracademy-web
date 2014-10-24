@@ -200,8 +200,9 @@ angular
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
-    'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
-    'audition.vote.contestWasFinished': 'errors.audition_vote_contest_was_finished',
+    'audition.vote.canNotVoteForYourself': 'errors.user_vote_can_not_vote_for_yourself',
+    'audition.vote.contestWasFinished': 'errors.user_vote_contest_was_finished',
+    'audition.vote.reachVoteLimit': 'errors.user_vote_reach_vote_limit',
     'unexpectedError': 'errors.unexpected_error',
     'status.401': 'errors.authentication_required',
     'status.500': 'errors.unexpected_error'
@@ -364,7 +365,7 @@ angular
   this.removeVoteInAudition = function(audition) {
     return $http.post('/api/contest/audition/removeVote', {audition_id: audition.id});
   };
-  this.getAuditionVote = function(audition) {
+  this.getUserVote = function(audition) {
     return $http.get('/api/contest/audition/vote', {params: {audition_id: audition.id}});
   };
 }]);

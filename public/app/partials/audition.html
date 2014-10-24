@@ -6,9 +6,6 @@
           <h1 class="bolder-text">
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
               {{ contest.name }}
-              <small ng-if="isContestProgress('finished')">
-                ({{ 'contest_finished' | translate }})
-              </small>
             </a>
           </h1>
         </div>
@@ -43,25 +40,38 @@
             </div>
           </div>
         </div>
-        <div ng-if="audition.description">
-          <div class="bs-callout bs-callout-info margin-top">
-            <h4>{{ audition.description }}</h4>
+        <div class="row padding">
+          <div class="col-md-2">
+            <div class="author box">
+              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+                <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+              </a>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div>
+              <div class="bs-callout bs-callout-info">
+                <h3 class="nomargin bolder-text">{{ audition.user.name }}</h3>
+                <h4 class="nomargin">{{ audition.description }}</h4>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-md-3">
         <div>
           <div class="align-center">
+            <img ng-if="isWinner()" class="medium-medal" src="/img/badges/{{ getMedal(audition) }}-medal.png">
             <h1 class="nomargin">
               {{ score }} {{ 'points' | translate }}
             </h1>
             <h2 class="nomargin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)">
-                {{ 'vote_now' | translate }}
+                {{ 'vote_now' | translate }} ({{ totalUserVotes }}/{{voteLimit }})
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
-                {{ 'you_voted' | translate }}
+                {{ 'you_voted' | translate }} ({{ totalUserVotes }}/{{voteLimit }})
               </button>
             </div>
             <div ng-if="isContestProgress('finished')">
@@ -81,17 +91,6 @@
             <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
               <i class="fa fa-google-plus"></i>
             </a>
-          </div>
-        </div>
-        <div>
-          <h3>{{ 'contestant' | translate }}</h3>
-          <div class="box">
-            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-              <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
-            </a>
-            <div class="legend">
-              <span>{{ audition.user.name }}</span>
-            </div>
           </div>
         </div>
       </div>

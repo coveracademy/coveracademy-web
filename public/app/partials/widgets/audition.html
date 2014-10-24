@@ -1,0 +1,22 @@
+<div class="audition thumbnail">
+  <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})">
+    <div class="cover">
+      <div class="darken"></div>
+      <img ng-src="{{ audition.medium_thumbnail }}">
+      <div class="caption">
+        {{ audition.title }}
+        <div>
+          {{ 'by' | translate }} {{ audition.user.name }}
+        </div>
+        <div class="video-date">
+          <span am-time-ago="audition.registration_date"></span>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="label label-primary" ng-if="isShowScore">
+          {{ scoreByAudition() }} {{ 'points' | translate }}
+        </span>
+      </div>
+    </div>
+  </a>
+</div>

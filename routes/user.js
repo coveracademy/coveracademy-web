@@ -15,7 +15,7 @@ module.exports = function(router, app) {
     mailService.sendEmail(name, email, subject, message).then(function() {
       res.send(200);
     }).catch(function(err) {
-      console.log(err.stack);
+      console.log(err);
       res.send(500);
     });
   });
