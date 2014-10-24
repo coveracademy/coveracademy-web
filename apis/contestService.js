@@ -86,28 +86,33 @@ var startContest = function(contest, transaction) {
   });
 }
 
-var createAudition = function(user, auditionData, transaction) {
+var createAudition = function(user, contest, auditionData, transaction) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
-        var audition = Audition.forge(auditionData);
-        audition.set('user_id', user.id);
-        audition.set('url', videoInfos.url);
-        audition.set('embed_url', videoInfos.embedUrl);
-        audition.set('video_id', videoInfos.id);
-        audition.set('small_thumbnail', videoInfos.thumbnails.small);
-        audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
-        audition.set('large_thumbnail', videoInfos.thumbnails.large);
-        audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
-        audition.save(null, {transacting: transaction}).then(function(audition) {
-          resolve(audition);
-        }).catch(function(err) {
-          if(err.code === 'ER_DUP_ENTRY') {
-            reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest', err));
-          } else {
-            reject(apiErrors.unexpectedError('Error adding audition in contest', err));
-          }
-        });
+        if(videoInfos.date > contest.get('registration_date') && (!_.isDefined(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
+          var audition = Audition.forge(auditionData);
+          audition.set('contest_id', contest.id);
+          audition.set('user_id', user.id);
+          audition.set('url', videoInfos.url);
+          audition.set('embed_url', videoInfos.embedUrl);
+          audition.set('video_id', videoInfos.id);
+          audition.set('small_thumbnail', videoInfos.thumbnails.small);
+          audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
+          audition.set('large_thumbnail', videoInfos.thumbnails.large);
+          audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
+          audition.save(null, {transacting: transaction}).then(function(audition) {
+            resolve(audition);
+          }).catch(function(err) {
+            if(err.code === 'ER_DUP_ENTRY') {
+              reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest', err));
+            } else {
+              reject(apiErrors.unexpectedError('Error adding audition in contest', err));
+            }
+          });
+        } else {
+          reject(new APIError(400, 'contest.join.videoDateIsNotValid', 'The date of this video can not be older or younger than the contest'));
+        }
       } else {
         reject(new APIError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
       }
@@ -121,13 +126,13 @@ exports.joinContest = function(user, auditionData) {
   return new Promise(function(resolve, reject) {
     Bookshelf.transaction(function(transaction) {
       var result = {};
-      return createAudition(user, auditionData, transaction).then(function(audition) {
-        return audition.load(['contest']);
+      return Contest.forge({id: auditionData.contest_id}).fetch().then(function(contest) {
+        result.contest = contest;
+        return createAudition(user, contest, auditionData, transaction);
       }).then(function(audition) {
-        var contest = audition.related('contest');
         result.audition = audition;
-        if($.totalAuditions(audition) < parseInt(contest.get('minimum_contestants'))) {
-          return startContest(contest, transaction);
+        if($.totalAuditions(result.audition) < parseInt(result.contest.get('minimum_contestants'))) {
+          return startContest(result.contest, transaction);
         } else {
           return null;
         }

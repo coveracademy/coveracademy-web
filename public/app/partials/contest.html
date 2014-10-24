@@ -178,21 +178,21 @@
     <div class="col-md-8">
       <h1>
         <span ng-if="isRanked('best')">
-          Best auditions
+          {{ 'best_auditions' | translate }}
         </span>
         <span ng-if="isRanked('latest')">
-          Latest auditions
+          {{ 'latest_auditions' | translate }}
         </span>
       </h1>
     </div>
     <div class="col-md-4 align-right" style="padding-top: 36px;">
       <h4>
         <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
-          See the latest auditions
+          {{ 'see_the_latest_auditions' | translate }}
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
         <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-          See the best auditions
+          {{ 'see_the_best_autitions' | translate }}
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
       </h4>
