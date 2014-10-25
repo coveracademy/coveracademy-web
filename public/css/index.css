@@ -626,7 +626,31 @@ form.compacted .form-group {
   border-radius: 0px 0px 0px 0px;
 }
 
-.audition > .caption {
+.audition .cover {
+  font-size: 18px;
+}
+
+.audition .cover .legend {
+  font-size: 25px;
+}
+
+.audition.big .cover {
+  font-size: 26px;
+}
+
+.audition.big .cover .legend {
+  font-size: 34px;
+}
+
+.audition.small .cover {
+  font-size: 14px;
+}
+
+.audition.small .cover .legend {
+  font-size: 20px;
+}
+
+.audition {
   background-color: #000;
   color: #fff;
 }

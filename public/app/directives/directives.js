@@ -8,9 +8,15 @@ angular
     scope: {
       locale: '@',
       showScore: '@',
+      thumbSize: '@',
       audition: '=ngModel',
       scoreByAudition: '&'
     },
+    controller: ['$scope', function($scope) {
+      $scope.isThumbSize = function(size) {
+        return $scope.thumbSizeFinal === size;
+      };
+    }],
     link: function(scope, element, attrs, ctrl) {
       scope.isShowScore = scope.showScore ? scope.showScore : 'true';
     }
@@ -27,21 +33,20 @@ angular
       covers: '=ngModel'
     },
     controller: ['$scope', function($scope) {
-      $scope.thumbSizeFinal = $scope.thumbSize ? $scope.thumbSize : 'normal';
-      if($scope.thumbSizeFinal === 'normal') {
-        $scope.coversPerRow = 4;
-        $scope.columnSize = 12/$scope.coversPerRow;
-      } else if($scope.thumbSizeFinal === 'small') {
-        $scope.coversPerRow = 6;
-        $scope.columnSize = 12/$scope.coversPerRow;
-        $scope.fontSizeCss = 'font-small';
-      }
       $scope.isThumbSize = function(size) {
         return $scope.thumbSizeFinal === size;
       };
     }],
     link: function(scope, element, attrs, ctrl) {
-
+      scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'normal';
+      if(scope.thumbSizeFinal === 'normal') {
+        scope.coversPerRow = 4;
+        scope.columnSize = 12/scope.coversPerRow;
+      } else if(scope.thumbSizeFinal === 'small') {
+        scope.coversPerRow = 6;
+        scope.columnSize = 12/scope.coversPerRow;
+        scope.fontSizeCss = 'font-small';
+      }
     }
   };
 })

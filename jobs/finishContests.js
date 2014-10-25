@@ -21,5 +21,5 @@ var finishContests = function() {
   });
 }
 
-var sched = later.parse.recur().on(22).minute();
+var sched = later.parse.recur().on(0).minute();
 var interval = later.setInterval(finishContests, sched);

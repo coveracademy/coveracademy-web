@@ -110,7 +110,7 @@
     <div ng-if="isContestant()" class="padding-top">
       <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
         {{ 'you_are_participating' | translate }}
-      </a>     
+      </a>
     </div>
   </div>
 </div>
@@ -147,28 +147,8 @@
       <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <div class="audition thumbnail">
-            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
-              <div class="cover">
-                <div class="darken"></div>
-                <img ng-src="{{ audition.medium_thumbnail }}">
-                <div class="caption font-big">
-                  {{ audition.title }}
-                  <div>
-                    {{ 'by' | translate }} {{ audition.user.name }}
-                  </div>
-                  <div class="video-date">
-                    <span am-time-ago="audition.registration_date"></span>
-                  </div>
-                </div>
-                <div class="legend">
-                  <span class="label label-primary font-big">
-                    {{ getScoreByAudition(audition) }} {{ 'points' | translate }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </a>
+          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="big" score-by-audition="getScoreByAudition(audition)">
+          </audition>
         </div>
       </div>
     </div>
@@ -199,8 +179,8 @@
       </h4>
     </div>
   </div>
-  <div class="row" ng-repeat="row in auditions | partition: 4">
-    <div ng-repeat="audition in row" class="col-md-3">
+  <div class="row" ng-repeat="row in auditions | partition: 3">
+    <div ng-repeat="audition in row" class="col-md-4">
       <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
       </audition>
     </div>
