@@ -28,7 +28,7 @@
             <a ng-if="isContestProgress('running') && !isContestant()" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
               {{ 'join_now' | translate }}
             </a>
-            <a ng-if="isContestProgress('running')" ui-sref="app.contestRules({locale: locale()})" class="btn btn-success btn-lg btn-block">
+            <a ng-if="isContestProgress('running')" ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-lg btn-block">
               {{ 'see_the_rules' | translate }}
             </a>
           </div>
@@ -103,7 +103,7 @@
       <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
         {{ 'join_now' | translate }}
       </a>
-      <a ui-sref="app.contestRules({locale: locale()})" class="btn btn-success btn-largest">
+      <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
         {{ 'see_the_rules' | translate }}
       </a>
     </div>

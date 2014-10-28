@@ -92,7 +92,7 @@ footer h1, footer h2, footer h3, footer h4, footer h5 {
   color: #fff;
 }
 
-h1, h2, h3, h4, h5, p {
+h1, h2, h3, h4, h5 {
   line-height: 1.5;
 }
 
@@ -454,6 +454,15 @@ input.big {
 
 .cover img {
   width: 100%;
+}
+
+.guideline p, .guideline li {
+  font-size: 16px;
+}
+
+.guideline .bs-callout {
+  margin-left: 40px;
+  margin-bottom: 20px;
 }
 
 img.small-thumbnail {

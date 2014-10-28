@@ -199,7 +199,7 @@ angular
       more_covers_by: 'Mais covers de',
       more_covers_of: 'Mais covers de',
       music_genre_artists: 'Artistas {{ musicGenre }}',
-      musics: 'musicas',
+      musics: 'músicas',
       on_youtube: 'no YouTube',
       or: 'ou',
       paste_here_the_video_url: 'Cole aqui a URL do vídeo',
