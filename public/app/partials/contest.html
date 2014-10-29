@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-6 nopadding">
           <div class="title">
-            <h1 class="bolder-text">
+            <h1 class="bolder-text align-center">
               {{ contest.name }}
             </h1>
             <h3>{{ contest.description }}</h3>
@@ -130,7 +130,7 @@
         {{ 'join_now' | translate }}
       </a>
     </div>
-    <h2 class="bolder-text">
+    <h2>
       {{ 'help_us_sharing_this_contest' | translate }}
     </h2>
     <div>
@@ -163,6 +163,20 @@
     <div ng-if="isContestant()" class="padding-top">
       <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
         {{ 'you_are_participating' | translate }}
+      </a>
+    </div>
+    <h2>
+      {{ 'help_us_sharing_this_contest' | translate }}
+    </h2>
+    <div>
+      <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+          <i class="fa fa-facebook"></i>
+        </a>
+      <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+        <i class="fa fa-twitter"></i>
+      </a>
+      <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+        <i class="fa fa-google-plus"></i>
       </a>
     </div>
   </div>

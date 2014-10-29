@@ -1,5 +1,6 @@
 var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
+    apiErrors       = require('../apis/errors/apiErrors'),
     User            = require('../models/models').User,
     isAuthenticated = require('../utils/authorization').isAuthenticated;
 

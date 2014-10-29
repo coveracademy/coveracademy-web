@@ -12,7 +12,7 @@
         <div class="col-md-9">
           <h1 class="nomargin">
             {{ user.name }}
-            <button ng-if="isOwner()" ng-click="editProfile()" class="btn btn-link bolder-text">
+            <button ng-if="isOwner()" ng-click="editProfile()" class="btn btn-link">
               {{ 'edit_profile' | translate }}
             </button>
           </h1>
@@ -38,13 +38,13 @@
         <form class="form-horizontal">
           <div class="col-md-3">
             <div class="thumbnail">
-              <img ng-src="/img/users/{{ user.image }}">
+              <img ng-src="/img/users/{{ editedUser.image }}">
             </div>
           </div>
           <div class="col-md-9">
             <div class="form-group">
               <div class="col-md-4">
-                <input ng-model="user.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}">
+                <input ng-model="editedUser.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}">
               </div>
               <button ng-click="save()" class="btn btn-primary">
                 {{ 'user_form.save' | translate }}
@@ -55,12 +55,12 @@
             </div>
             <div class="form-group">
               <div class="col-md-4">
-                <input ng-model="user.location" type="text" name="location" class="form-control" placeholder="{{ 'user_form.where_are_you' | translate }}">
+                <input ng-model="editedUser.location" type="text" name="location" class="form-control" placeholder="{{ 'user_form.where_are_you' | translate }}">
               </div>
             </div>
             <div class="form-group">
               <div class="col-md-12">
-                <textarea ng-model="user.biography" rows="3" name="biography" class="form-control" placeholder="{{ 'user_form.tell_something_about_you' | translate }}">
+                <textarea ng-model="editedUser.biography" rows="3" name="biography" class="form-control" placeholder="{{ 'user_form.tell_something_about_you' | translate }}">
                 </textarea>
               </div>
             </div>

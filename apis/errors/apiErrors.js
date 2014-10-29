@@ -64,7 +64,8 @@ function formatResponse(err, res) {
   if(err instanceof APIError) {
     res.json(err.statusCode, err.toJSON());
   } else {
-    res.json(500, {statusCode: 500, errorKey: 'internalError'});
+    var internalError = new APIError(500, 'internalError', '', err);
+    res.json(internalError.statusCode, internalError.toJSON());
   }
 }
 

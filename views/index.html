@@ -71,15 +71,24 @@
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><a ng-click="logout()">Sair</a></li>
+                <li ng-if="user()">
+                  <a ui-sref="app.user({locale: locale(), id: user().id})">
+                    {{ 'profile' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a ng-click="logout()">
+                    {{ 'logout' | translate }}
+                  </a>
+                </li>
               </ul>
             </li>
           </ul>
-          <!-- <form ng-show="!isLoginState() && !user()" class="navbar-form navbar-right">
-            <button ng-click="login()" class="btn btn-primary bolder-text">
+          <form ng-if="!isLoginState() && !user()" class="navbar-form navbar-right">
+            <button ng-click="login()" class="btn btn-primary">
               {{ 'signin_button' | translate }}
             </button>
-          </form> -->
+          </form>
         </div>
       </div>
     </header>
