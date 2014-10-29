@@ -16,7 +16,7 @@ var path = require('path'),
       clientSecret: '9331e1f0ee96c8ea7789a22e55aacdba',
       callbackURL: _siteUrl + '/api/auth/facebook/callback',
       profileFields: ['name', 'displayName', 'gender', 'picture.type(small)', 'emails'],
-      scope: ['email']
+      scope: ['email', 'user_about_me', 'user_location']
     },
     _twitter = {
       consumerKey: '0mB4ErjFy98T1b2POJKSuqTOH',

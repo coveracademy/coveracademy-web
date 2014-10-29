@@ -456,13 +456,19 @@ input.big {
   width: 100%;
 }
 
-.guideline p, .guideline li {
+#guideline p, #guideline li {
   font-size: 16px;
+  text-align: justify;
 }
 
-.guideline .bs-callout {
+#guideline .bs-callout {
   margin-left: 40px;
   margin-bottom: 20px;
+}
+
+#guideline #index {
+  background-color: #f9f9f9;
+  margin-top: 40px;
 }
 
 img.small-thumbnail {
@@ -535,7 +541,7 @@ form.compacted .form-group {
   text-decoration: underline;
 }
 
-.special-header p, .special-header h1, .special-header h2, .special-header h3, .special-header h4, .special-header h5 {
+.special-header p, .special-header h1, .special-header h2, .special-header h3, .special-header h4, .special-header h5, .special-header .form-control {
   color: #fff;
 }
 
@@ -606,33 +612,31 @@ form.compacted .form-group {
   font-size: 100px;
 }
 
-.special-header.user > .content {
+.special-header.user {
+  height: 300px;
+}
+
+.special-header.user .container {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.special-header.user .content {
   text-align: left;
   text-shadow: none;
 }
 
-.progress {
-  position: relative;
-  height: 25px;
-}
-.progress > .progress-type {
-  position: absolute;
-  left: 0px;
-  font-weight: bold;
-  padding: 1px 20px 0px 20px;
-  color: #fff;
-  background-color: rgba(25, 25, 25, 0.2);
+.special-header.user > .content .thumbnail {
+  position: static;
+  z-index: -1;
 }
 
-.progress > .progress-completed {
-  position: absolute;
-  right: 0px;
-  font-weight: bold;
-  padding: 0px 20px 0px 20px;
+.special-header.user > .content .thumbnail > img {
+  height: auto;
 }
 
-.progress-bar:last-child {
-  border-radius: 0px 0px 0px 0px;
+.special-header.user > img {
+  opacity: 0.2;
 }
 
 .audition .cover {
@@ -677,6 +681,10 @@ form.compacted .form-group {
 
 #artists .box {
   margin-bottom: 10px;
+}
+
+.user-label {
+  margin-right: 10px;
 }
 
 /* Starting social buttons */

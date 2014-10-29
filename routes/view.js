@@ -342,8 +342,11 @@ module.exports = function(router, app) {
       if(!user) {
         res.send(404);
       } else {
-        res.json({
-          user: user
+        contestService.getUserAuditions(user).then(function(auditions) {
+          res.json({
+            user: user,
+            auditions: auditions
+          });
         });
       }
     }).catch(function(err) {

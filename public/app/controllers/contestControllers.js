@@ -11,6 +11,7 @@ angular
   $scope.votesByAudition = backendResponse.data.votesByAudition;
   $scope.scoreByAudition = backendResponse.data.scoreByAudition;
   $scope.winnerAuditions = backendResponse.data.winnerAuditions;
+  $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 

@@ -173,6 +173,13 @@ exports.getUserAudition = function(user, contest) {
   });
 }
 
+exports.getUserAuditions = function(user) {
+  return Audition.collection().query(function(qb) {
+    qb.where('user_id', user.id);
+    qb.orderBy('registration_date', 'desc');
+  }).fetch(auditionWithContestRelated);
+}
+
 var listAuditions = function(rankType, contest, page, pageSize) {
   page = parseInt(page);
   pageSize = parseInt(pageSize);

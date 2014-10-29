@@ -28,7 +28,6 @@
     <link href="/css/index.css" rel="stylesheet">
 
     <link href="/img/favicon.ico" rel="shortcut icon">
-
     <script src="/lib/angular/angular.min.js"></script>
   </head>
   <body ng-cloak class="ng-cloak">
@@ -103,15 +102,29 @@
       <div class="info">
         <div class="container">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
               <a ui-sref="app.index({locale: locale()})">
                 <img src="/img/logos/white-logo-footer.png">
               </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+              <h4 class="bolder-text">{{ 'contest' | translate | uppercase }}</h4>
+              <ul>
+                <li>
+                  <a ui-sref="app.contestGuideline({locale: locale()})">
+                    {{ 'guideline' | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-2">
               <h4 class="bolder-text">{{ 'support' | translate | uppercase }}</h4>
               <ul>
-                <li><a ui-sref="app.contact({locale: locale()})">{{ 'contact' | translate }}</a></li>
+                <li>
+                  <a ui-sref="app.contact({locale: locale()})">
+                    {{ 'contact' | translate }}
+                  </a>
+                </li>
               </ul>
             </div>
             <div class="col-md-3 social">

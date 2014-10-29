@@ -1,19 +1,21 @@
 var User       = require('../models/models').User,
     modelUtils = require('../utils/modelUtils'),
+    apiErrors  = require('./errors/apiErrors'),
+    APIError   = require('./errors/apiErrors').APIError,
     Promise    = require('bluebird'),
     _          = require('underscore'),
     $          = this;
 
 exports.createByFacebookAccount = function(name, gender, email, facebook_account) {
-  return User.forge(modelUtils.filterAttributes('User', {name: name, gender: gender, email: email, facebook_account: facebook_account})).save();
+  return User.forge({name: name, gender: gender, email: email, facebook_account: facebook_account}).save();
 }
 
 exports.createByTwitterAccount = function(name, gender, email, twitter_account) {
-  return User.forge(modelUtils.filterAttributes('User', {name: name, gender: gender, email: email, twitter_account: twitter_account})).save();
+  return User.forge({name: name, gender: gender, email: email, twitter_account: twitter_account}).save();
 }
 
 exports.createByGoogleAccount = function(name, gender, email, google_account) {
-  return User.forge(modelUtils.filterAttributes('User', {name: name, gender: gender, email: email, google_account: google_account})).save();
+  return User.forge({name: name, gender: gender, email: email, google_account: google_account}).save();
 }
 
 exports.associateYoutubeAccount = function(google_account, youtube_account) {
@@ -31,6 +33,20 @@ exports.associateYoutubeAccount = function(google_account, youtube_account) {
 
 exports.update = function(user, attributes) {
   return user.save(user.pick(attributes), {patch: true});
+}
+
+exports.save = function(user, edited) {
+  return new Promise(function(resolve, reject) {
+    if(user.permission === 'admin' || user.id === edited.id) {
+      edited.save(edited.pick(modelUtils.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(edited) {
+        resolve(edited);
+      }).catch(function(err) {
+        reject(err);
+      });
+    } else {
+      reject(new APIError(400, 'user.edit.noPermission'));
+    }
+  });
 }
 
 exports.getUser = function(id) {

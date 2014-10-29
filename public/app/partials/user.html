@@ -1,20 +1,86 @@
 <div class="special-header user">
   <div class="content">
     <div class="container">
-      <div class="row">
-        <div class="col-md-2">
+      <div ng-if="!editing" class="row">
+        <div class="col-md-3">
           <div class="thumbnail">
-            <img ng-src="/img/users/{{ user.image }}">
+            <a ui-sref="app.user({locale: locale(), id: user.id})">
+              <img ng-src="/img/users/{{ user.image }}">
+            </a>
           </div>
         </div>
-        <div class="col-md-6">
-          <h1 class="nomargin">{{ user.name }}</h1>
-          <h3>{{ user.biography }}</h3>
+        <div class="col-md-9">
+          <h1 class="nomargin">
+            {{ user.name }}
+            <button ng-if="isOwner()" ng-click="editProfile()" class="btn btn-link bolder-text">
+              {{ 'edit_profile' | translate }}
+            </button>
+          </h1>
+          <h4>
+            <span class="user-label label label-warning">
+              <i class="glyphicon glyphicon-screenshot"></i>
+              {{ 'voting_power' | translate }}: {{ user.voting_power }}
+            </span>
+            <span class="user-label label label-info">
+              <i class="glyphicon glyphicon-map-marker"></i> {{ user.location }}
+            </span>
+            <span class="user-label label label-info">
+              <i class="glyphicon glyphicon-time"></i>
+              {{ 'member_since' | translate }} <span am-time-ago="user.registration_date"></span>
+            </span>
+          </h4>
+          <h4>
+            {{ user.biography }}
+          </h4>
         </div>
+      </div>
+      <div ng-if="editing" class="row">
+        <form class="form-horizontal">
+          <div class="col-md-3">
+            <div class="thumbnail">
+              <img ng-src="/img/users/{{ user.image }}">
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <div class="col-md-4">
+                <input ng-model="user.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}">
+              </div>
+              <button ng-click="save()" class="btn btn-primary">
+                {{ 'user_form.save' | translate }}
+              </button>
+              <button ng-click="cancel()" class="btn btn-default">
+                {{ 'user_form.cancel' | translate }}
+              </button>
+            </div>
+            <div class="form-group">
+              <div class="col-md-4">
+                <input ng-model="user.location" type="text" name="location" class="form-control" placeholder="{{ 'user_form.where_are_you' | translate }}">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">
+                <textarea ng-model="user.biography" rows="3" name="biography" class="form-control" placeholder="{{ 'user_form.tell_something_about_you' | translate }}">
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  <img ng-src="/img/users/{{ user.image }}">
+  <img ng-src="/img/backgrounds/user-back1.jpg">
 </div>
 <div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>{{ 'auditions' | translate }}</h1>
+    </div>
+  </div>
+  <div class="row" ng-repeat="row in auditions | partition: 3">
+    <div ng-repeat="audition in row" class="col-md-4">
+      <audition ng-model="audition" locale="{{ locale() }}" show-score="false">
+      </audition>
+    </div>
+  </div>
 </div>

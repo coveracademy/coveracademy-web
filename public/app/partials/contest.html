@@ -29,7 +29,7 @@
               {{ 'join_now' | translate }}
             </a>
             <a ng-if="isContestProgress('running')" ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-lg btn-block">
-              {{ 'see_the_rules' | translate }}
+              {{ 'see_the_guideline' | translate }}
             </a>
           </div>
         </div>
@@ -69,6 +69,59 @@
   </div>
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
+<div class="container">
+  <div class="padding-top">
+    <button class="btn btn-lg btn-block" ng-click="prizesCollapsed = !prizesCollapsed">
+      {{ 'see_the_prizes' | translate }}
+    </button>
+    <div collapse="prizesCollapsed">
+      <div class="row">
+        <div class="col-md-4">
+          <h2>
+            {{ 'first_place' | translate }}
+            <span class="text-muted">R$100</span>
+          </h2>
+          <p>
+            {{ 'first_place_description' | translate }}
+          </p>
+          <p>
+            <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
+              {{ 'view_details' | translate }}
+            </a>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h2>
+            {{ 'second_place' | translate }}
+            <span class="text-muted">R$55</span>
+          </h2>
+          <p>
+            {{ 'second_place_description' | translate }}
+          </p>
+          <p>
+            <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
+              {{ 'view_details' | translate }}
+            </a>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h2>
+            {{ 'third_place' | translate }}
+            <span class="text-muted">R$35</span>
+          </h2>
+          <p>
+            {{ 'third_place_description' | translate }}
+          </p>
+          <p>
+            <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
+              {{ 'view_details' | translate }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
   <div class="jumbotron margin10 align-center">
     <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
@@ -78,7 +131,7 @@
       </a>
     </div>
     <h2 class="bolder-text">
-      {{ 'help_us_sharing_this_contest' | translate }}:
+      {{ 'help_us_sharing_this_contest' | translate }}
     </h2>
     <div>
       <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
@@ -104,7 +157,7 @@
         {{ 'join_now' | translate }}
       </a>
       <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-        {{ 'see_the_rules' | translate }}
+        {{ 'see_the_guideline' | translate }}
       </a>
     </div>
     <div ng-if="isContestant()" class="padding-top">

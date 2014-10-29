@@ -238,6 +238,9 @@ angular
   this.sendEmail = function(name, email, subject, message) {
     return $http.post('/api/user/email', {name: name, email: email, subject: subject, message: message});
   };
+  this.save = function(user) {
+    return $http.post('/api/user', {user: user});
+  };
 }])
 .service('oembedService', ['$http', function($http) {
   this.getOEmbed = function(url) {

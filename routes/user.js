@@ -1,5 +1,7 @@
-var userService = require('../apis/userService'),
-    mailService = require('../apis/mailService');
+var userService     = require('../apis/userService'),
+    mailService     = require('../apis/mailService'),
+    User            = require('../models/models').User,
+    isAuthenticated = require('../utils/authorization').isAuthenticated;
 
 module.exports = function(router, app) {
 
@@ -16,7 +18,17 @@ module.exports = function(router, app) {
       res.send(200);
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      apiErrors.formatResponse(err, res);
+    });
+  });
+
+  router.post('/', isAuthenticated, function(req, res, next) {
+    var user = req.param('user');
+    userService.save(req.user, User.forge(user)).then(function() {
+      res.send(200);
+    }).catch(function(err) {
+      console.log(err);
+      apiErrors.formatResponse(err, res);
     });
   });
 
