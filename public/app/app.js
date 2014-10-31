@@ -329,9 +329,7 @@ angular
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     seoService.reset();
     // Force angular-translate to emit $translateChangeSuccess and set the language
-    // if($translate.use() !== toParams.locale) {
-      $translate.use(toParams.locale);
-    // }
+    $translate.use(toParams.locale);
   });
   $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams) {
     $state.go('app.404', {locale: $translate.use()}, {location: false});

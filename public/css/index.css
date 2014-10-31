@@ -612,30 +612,30 @@ form.compacted .form-group {
   font-size: 100px;
 }
 
-.special-header.user {
+#user.special-header {
   height: 300px;
 }
 
-.special-header.user .container {
+#user.special-header .container {
   padding-left: 100px;
   padding-right: 100px;
 }
 
-.special-header.user .content {
+#user.special-header .content {
   text-align: left;
   text-shadow: none;
 }
 
-.special-header.user > .content .thumbnail {
+#user.special-header > .content .thumbnail {
   position: static;
   z-index: -1;
 }
 
-.special-header.user > .content .thumbnail > img {
-  height: auto;
+#user.special-header > .content .thumbnail img {
+  width: 100%;
 }
 
-.special-header.user > img {
+#user.special-header > img {
   opacity: 0.2;
 }
 

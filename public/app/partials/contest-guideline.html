@@ -3,10 +3,26 @@
     <div class="col-md-3">
       <div id="index" class="affix">
         <ul class="nav nav-stacked">
-          <li><a>Apenas versão cover</a></li>
-          <li><a href="#entering-contest">Entrando na competição</a></li>
-          <li><a>Vencedores</a></li>
-          <li><a>Prêmios</a></li>
+          <li>
+            <a ng-href="{{ locale() }}/contest/guideline#just-covers">
+              Apenas versão cover
+            </a>
+          </li>
+          <li>
+            <a ng-href="{{ locale() }}/contest/guideline#entering-the-contest">
+              Entrando na competição
+            </a>
+          </li>
+          <li>
+            <a ng-href="{{ locale() }}/contest/guideline#winners">
+              Vencedores
+            </a>
+          </li>
+          <li>
+            <a ng-href="{{ locale() }}/contest/guideline#prizes">
+              Prêmios
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -16,19 +32,15 @@
       </h1>
       <h1 class="nomargin"><small>Leia o nosso guia e saiba como participar!</small></h1>
 
-      <h3 class="bolder-text">
-        <a id="just-covers" href="#just-covers">
-          Apenas versão cover
-        </a>
+      <h3 id="just-covers" class="bolder-text">
+        Apenas versão cover
       </h3>
       <p>
         Infelizmente ainda não podemos aceitar músicas de autoria própria porque precisamos evoluir ainda mais o Cover Academy. Caso ache interessante ou tenha alguma outra sugestão, por favor entre em contato conosco. Ficaremos muito felizes em saber a sua opinião!
       </p>
 
-      <h3 class="bolder-text">
-        <a id="entering-contest" href="#entering-contest">
-          Entrando na competição
-        </a>
+      <h3 id="entering-the-contest" class="bolder-text">
+        Entrando na competição
       </h3>
       <p>
         Para participar você deve acessar a página de inscrição na competição e autenticar-se utilizando sua conta já existente no Google e YouTube. Em seguida basta informar a URL do vídeo do YouTube no campo de inscrição, preencher as demais informações e submeter sua audição.
@@ -80,10 +92,8 @@
         Nós detemos o direito de remover a sua audição caso não cumpra as regras apresentadas anteriormente.
       </h4>
 
-      <h3 class="bolder-text">
-        <a id="winners" href="#winners">
-          Vencedores
-        </a>
+      <h3 id="winners" class="bolder-text">
+        Vencedores
       </h3>
       <p>
         O principal critério para definir os vencedores da competição é a quantidade de pontos acumulados por meio de votos dos usuários nas audições. Para votar é necessário estar autenticado com a conta do Facebook, Twitter ou Google.
@@ -106,10 +116,8 @@
         </ul>
       </div>
 
-      <h3 class="bolder-text">
-        <a id="prizes" href="#prizes">
-          Prêmios
-        </a>
+      <h3 id="prizes" class="bolder-text">
+        Prêmios
       </h3>
       <p>
         Os prêmios podem ser em dinheiro ou materiais relacionados à música, como por exemplo, camisetas de bandas, capotrastes, pedais, pedaleiras, instrumentos musicais, etc...
