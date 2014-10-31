@@ -12,8 +12,8 @@ var finishContests = function() {
       }
     });
     finishedContests.forEach(function(finishedContest) {
-      contestService.finishContest(finishedContest).then(function(result) {
-        console.log('Contest ' + result.contest.id + ' was finished');
+      contestService.finishContest(finishedContest).then(function() {
+        console.log('Contest ' + finishedContest.id + ' was finished');
       }).catch(function(err) {
         console.log('Error finishing contest ' + finishedContest.id + ': ' + err.message);
       });

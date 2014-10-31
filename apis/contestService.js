@@ -1,6 +1,7 @@
 var Contest    = require('../models/models').Contest,
     Audition   = require('../models/models').Audition,
     UserVote   = require('../models/models').UserVote,
+    User       = require('../models/models').User,
     Bookshelf  = require('../models/models').Bookshelf,
     settings   = require('../configs/settings'),
     slug       = require('../utils/slug'),
@@ -18,6 +19,7 @@ _.str = require('underscore.string');
 
 var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest', 'user']};
+var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 
 exports.getContest = function(id) {
@@ -50,7 +52,9 @@ var chooseWinners = function(contest, transaction) {
         previousWinner = winner;
       });
       Promise.all(savePromises).then(function(winners) {
-        resolve(winners);
+        var winnersCollection = Audition.collection();
+        winnersCollection.set(winners);
+        resolve(winnersCollection);
       }).catch(function(err) {
         reject(err);
       });
@@ -60,12 +64,44 @@ var chooseWinners = function(contest, transaction) {
   });
 }
 
+var incrementVotingPowers = function(auditions, transaction) {
+  return $.getUsersVotes(auditions).then(function(usersVotes) {
+    var usersWithVotingPowerIncremented = [];
+    var usersPromises = [];
+    var usersVotesSortedByAuditionPlace = usersVotes.sortBy(function(userVote) {
+      return auditions.get(userVote.get('audition_id')).get('place');
+    });
+    usersVotes.reset();
+    usersVotes.set(usersVotesSortedByAuditionPlace);
+    usersVotes.forEach(function(userVote) {
+      var audition = auditions.get(userVote.get('audition_id'));
+      var user = userVote.related('user');
+      if(!_.contains(usersWithVotingPowerIncremented, user.id)) {
+        var increment = 0;
+        if(audition.get('place') === 1) {
+          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_GOLD_MEDAL_VOTER;
+        } else if(audition.get('place') === 2) {
+          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_SILVER_MEDAL_VOTER;
+        } else if(audition.get('place') === 3) {
+          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_BRONZE_MEDAL_VOTER;
+        }
+        user.set('voting_power', user.get('voting_power') + increment);
+        usersWithVotingPowerIncremented.push(user.id);
+        usersPromises.push(user.save({voting_power: user.get('voting_power')}, {patch: true, transacting: transaction}));
+      }
+    });
+    return Promise.all(usersPromises);
+  });
+}
+
 exports.finishContest = function(contest) {
   return Bookshelf.transaction(function(transaction) {
     return contest.save({finished: 1}, {patch: true, transacting: transaction}).then(function(contest) {
       return chooseWinners(contest, transaction);
     }).then(function(winners) {
-      return {contest: contest, winners: winners};
+      return incrementVotingPowers(winners);
+    }).then(function(voters) {
+      return;
     });
   });
 }
@@ -274,11 +310,17 @@ exports.getAuditionScore = function(audition) {
   });
 }
 
-exports.getUserVotes = function(audition) {
+exports.getAuditionVotes = function(audition) {
   var collection = Audition.collection().add(audition);
   return $.getVotesByAudition(collection).then(function(votesByAudition) {
     return votesByAudition[audition.id];
   });
+}
+
+exports.getUsersVotes = function(auditions) {
+  return UserVote.collection().query(function(qb) {
+    qb.whereIn('audition_id', modelUtils.getIds(auditions));
+  }).fetch(userVoteWithUserRelated);
 }
 
 exports.getUserVote = function(user, audition) {

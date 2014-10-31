@@ -314,7 +314,7 @@ module.exports = function(router, app) {
       } else {
         var contest = audition.related('contest');
         contest.set('progress', contest.getProgress());
-        Promise.all([contestService.countUserVotes(req.user, contest), contestService.getUserVote(req.user, audition), contestService.getUserVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
+        Promise.all([contestService.countUserVotes(req.user, contest), contestService.getUserVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
         .spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
           res.json({
             contest: contest,
