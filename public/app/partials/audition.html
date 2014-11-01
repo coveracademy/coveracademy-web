@@ -5,8 +5,8 @@
         <div class="col-md-12 align-center">
           <h1 class="bolder-text">
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
-              {{ contest.name }} 
-              <small ng-if="isContestProgress('finished')">            
+              {{ contest.name }}
+              <small ng-if="isContestProgress('finished')">
                 ({{ 'contest_finished' | translate }})
               </small>
             </a>
@@ -114,7 +114,7 @@
             <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
             </audition>
           </div>
-        </div>      
+        </div>
       </div>
     </div>
     <div class="row">

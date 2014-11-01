@@ -1,5 +1,5 @@
 var FacebookStrategy = require('passport-facebook').Strategy,
-    TwitterStrategy  = require('passport-twitter').Strategy,
+    // TwitterStrategy  = require('passport-twitter').Strategy,
     YoutubeStrategy  = require('passport-youtube-v3').Strategy,
     GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy,
     userService      = require('../apis/userService'),
@@ -61,31 +61,31 @@ exports.configure = function(app, passport) {
     }).nodeify(done);
   }));
 
-  passport.use(new TwitterStrategy(settings.twitter,
-    function(accessToken, refreshToken, profile, done) {
-      var profileInfos = {
-        id: profile.id,
-        email: null,
-        name: profile.displayName,
-        gender: null,
-        picture: profile.photos[0].value
-      };
-      userService.findByTwitterAccount(profileInfos.id).then(function(user) {
-        if(user) {
-          return user;
-        }
-        return userService.createByTwitterAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
-          return fileUtils.downloadUserPhoto(profileInfos.picture, user);
-        }).then(function(user) {
-          return userService.update(user, ['image']);
-        }).then(function(user) {
-          return user;
-        }).catch(function(err) {
-          return new Error('Error creating account associated with Twitter');
-        });
-      }).nodeify(done);
-    }
-  ));
+  // passport.use(new TwitterStrategy(settings.twitter,
+  //   function(accessToken, refreshToken, profile, done) {
+  //     var profileInfos = {
+  //       id: profile.id,
+  //       email: null,
+  //       name: profile.displayName,
+  //       gender: null,
+  //       picture: profile.photos[0].value
+  //     };
+  //     userService.findByTwitterAccount(profileInfos.id).then(function(user) {
+  //       if(user) {
+  //         return user;
+  //       }
+  //       return userService.createByTwitterAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+  //         return fileUtils.downloadUserPhoto(profileInfos.picture, user);
+  //       }).then(function(user) {
+  //         return userService.update(user, ['image']);
+  //       }).then(function(user) {
+  //         return user;
+  //       }).catch(function(err) {
+  //         return new Error('Error creating account associated with Twitter');
+  //       });
+  //     }).nodeify(done);
+  //   }
+  // ));
 
   passport.use(new GoogleStrategy(settings.google, function(accessToken, refreshToken, profile, done) {
     var profileInfos = {

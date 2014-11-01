@@ -24,6 +24,9 @@ angular
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;
   }
+  $scope.isMedal = function(audition, expected) {
+    return $scope.getMedal(audition) === expected;
+  };
   $scope.getMedal = function(audition) {
     var medal;
     if(audition.place === 1) {

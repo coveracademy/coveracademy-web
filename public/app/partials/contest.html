@@ -181,42 +181,49 @@
     </div>
   </div>
 </div>
-<div ng-if="isContestProgress('finished')" class="container">
-  <div class="jumbotron white margin10">
-    <h2 class="nomargin align-center">{{ 'this_contest_was_finished' | translate }}</h2>
-    <div ng-if="hasWinners()" ng-repeat="row in winnerAuditions | partition: 3" class="row">
-      <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
-      <div ng-repeat="audition in row" class="col-md-4">
-        <div class="thumbnail">
-          <div class="winner box">
-            <a class="user" ui-sref="app.user({locale: locale(), id: audition.user.id})">
+<div ng-if="isContestProgress('finished')" class="container margin-top">
+  <h2 class="align-center">{{ 'this_contest_was_finished' | translate }}</h2>
+  <div ng-if="hasWinners()" ng-repeat="row in winnerAuditions | partition: 3" class="winner row">
+    <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
+    <div ng-repeat="audition in row" class="col-md-4">
+      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+      </audition>
+      <div class="medal label label-none">
+        <img class="small-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
+      </div>
+      <div class="row padding">
+        <div class="col-md-3">
+          <div class="author box">
+            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
               <img ng-src="/img/users/{{ audition.user.image }}">
-              <div class="text">
-                <h2 class="bolder-text">{{ audition.user.name }}</h2>
-              </div>
             </a>
-            <a class="audition" ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
-              <img ng-src="{{ audition.medium_thumbnail }}">
-            </a>
-            <img class="medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
           </div>
         </div>
-        <div class="thumbnail align-center">
-          <h4>
-            <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
-              {{ 'watch_the_audition' | translate }}
+        <div class="col-md-9">
+          <h4 class="nomargin">
+            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              {{ audition.user.name }}
             </a>
-          </h4>
+            <span ng-if="isMedal(audition, 'gold')">
+              {{ 'wons_a_gold_medal' | translate }}
+            </span>
+            <span ng-if="isMedal(audition, 'silver')">
+              {{ 'wons_a_silver_medal' | translate }}
+            </span>
+            <span ng-if="isMedal(audition, 'bronze')">
+              {{ 'wons_a_bronze_medal' | translate }}
+            </span>
         </div>
       </div>
     </div>
-    <div ng-if="isContestant()">
-      <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="big" score-by-audition="getScoreByAudition(audition)">
-          </audition>
-        </div>
+  </div>
+  <hr/>
+  <div ng-if="isContestant()">
+    <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="big" score-by-audition="getScoreByAudition(audition)">
+        </audition>
       </div>
     </div>
   </div>

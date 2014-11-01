@@ -96,6 +96,10 @@ h1, h2, h3, h4, h5 {
   line-height: 1.5;
 }
 
+.label-none {
+  background-color: #f9f9f9;
+}
+
 .card {
   margin: 10px 0;
   border: 0;
@@ -372,40 +376,18 @@ input.big {
   position: absolute;
 }
 
-.winner.box .audition {
-  border: 3px solid #000;
-  bottom: 0;
-  position: absolute;
-  right: 0;
-  width: 50%;
+.winner .audition.thumbnail {
+  margin-bottom: 0px;
 }
 
-.winner.box .text {
-  position: absolute;
-  text-align: center;
-  top: 0;
+.winner .author img {
   width: 100%;
 }
 
-.winner.box h2 {
-  color: #fff;
-}
-
-.winner.box .caption {
-  color: #fff;
-  font-weight: bold;
-  top: 0px;
-  left: 0px;
+.winner .medal.label {
   position: absolute;
-  text-align: center;
-  text-shadow: 2px 2px 5px #000000;
-}
-
-.winner.box .medal {
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  width: 90px;
+  top: -22px;
+  right: -6px;
 }
 
 .author.box img.medium-thumbnail {
@@ -414,6 +396,10 @@ input.big {
 
 .author.box .bs-callout {
   min-height: 132px;
+}
+
+.small-medal {
+  height: 65px;
 }
 
 .medium-medal {

@@ -37,7 +37,7 @@
   <div class="page-section">
     <div ng-repeat="musicByArtist in musicsByArtist">
       <h2>
-        <img class="medium-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
+        <img ng-if="musicByArtist.small_thumbnail" class="medium-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">
         <a class="default-link" ui-sref="app.music({locale: locale(), music: musicByArtist.slug})">
           {{ musicByArtist.title }}
         </a>
