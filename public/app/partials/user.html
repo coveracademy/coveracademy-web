@@ -35,21 +35,23 @@
         </div>
       </div>
       <div ng-if="editing" class="row">
-        <form class="form-horizontal">
+        <form name="userForm" class="form-horizontal" flow-init="flowConfig" flow-name="flowModel.flow" flow-file-added="!!{png: 1, gif: 1,jpg: 1, jpeg: 1}[$file.getExtension()]">
           <div class="col-md-3">
             <div class="thumbnail">
-              <img ng-src="/img/users/{{ editedUser.image }}">
+              <div class="image" flow-btn>
+                <img ng-src="/img/users/{{ editedUser.image }}">
+              </div>
             </div>
           </div>
           <div class="col-md-9">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': userForm.name.$invalid}">
               <div class="col-md-4">
-                <input ng-model="editedUser.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}">
+                <input ng-model="editedUser.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}" required>
               </div>
-              <button ng-click="save()" class="btn btn-primary">
+              <button ng-click="save()" ng-disabled="userForm.$invalid" class="btn btn-primary">
                 {{ 'user_form.save' | translate }}
               </button>
-              <button ng-click="cancel()" class="btn btn-default">
+              <button ng-click="cancel()" ng-disabled="userForm.$invalid" class="btn btn-default">
                 {{ 'user_form.cancel' | translate }}
               </button>
             </div>

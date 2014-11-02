@@ -143,16 +143,16 @@
         </audition>
       </div>
       <div class="col-md-7">
-        <h2 class="nomargin">
+        <h2 class="align-center nomargin">
           {{ 'this_contest_is_not_happening_yet' | translate }}
         </h2>
         <h3>
           {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
         </h3>
         <div class="align-center">
-          <h3>
+          <h2>
             {{ 'help_sharing' | translate }}
-          </h3>
+          </h2>
           <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
             <i class="fa fa-facebook"></i>
           </a>

@@ -227,7 +227,7 @@ angular
       latest_covers_week: 'Últimos covers da semana',
       like_us_on_facebook: 'Curta no Facebook',
       logout: 'Sair',
-      member_since: 'Membro desde',
+      member_since: 'Membro há',
       minutes: 'minutos',
       more_covers: 'Mais covers',
       more_covers_by: 'Mais covers de',

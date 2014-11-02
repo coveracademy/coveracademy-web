@@ -25,6 +25,7 @@ exports.configure = function(app, passport) {
   });
 
   passport.use(new FacebookStrategy(settings.facebook, function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
     var profileInfos = {
       id: profile.id,
       name: profile.displayName,

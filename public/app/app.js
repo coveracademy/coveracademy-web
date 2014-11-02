@@ -7,6 +7,7 @@ angular
   'coverAcademy.filters',
   'coverAcademy.controllers',
   'angularMoment',
+  'flow',
   'ngCookies',
   'ngProgress',
   'pascalprecht.translate',
@@ -269,6 +270,11 @@ angular
           return viewService.userView($stateParams.id);
         }
       }
+    })
+    .state('app.privacyPolicy', {
+      url: '/privacy',
+      templateUrl: '/app/partials/privacy-policy.html',
+      accessLevel: accessLevel.PUBLIC
     })
     // Error states
     .state('app.404', {

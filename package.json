@@ -10,6 +10,7 @@
     "body-parser": "~1.0.0",
     "bookshelf": "~0.7.7",
     "cookie-parser": "~1.0.1",
+    "connect-multiparty": "~1.2.5",
     "debug": "~0.7.4",
     "decay": "~1.0.6",
     "express": "~4.2.0",

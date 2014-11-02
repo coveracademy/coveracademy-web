@@ -13,6 +13,7 @@
     "bootstrap": "~3.2.0",
     "bootstrap-social": "~4.8.0",
     "bootswatch": "v3.2.0+3",
+    "ng-flow": "~2.4.3",
     "font-awesome": "~4.2.0",
     "ng-videosharing-embed": "~0.2.1",
     "ngprogress": "~1.0.4",

@@ -4,6 +4,14 @@ angular
   $scope.user = backendResponse.data.user;
   $scope.auditions = backendResponse.data.auditions;
   $scope.editing = false;
+  $scope.flowModel = {};
+  $scope.flowConfig = {
+    target: "/upload/user",
+    singleFile: true,
+    query: function(flowFile, flowChunk) {
+      return {user: $scope.editedUser.id};
+    }
+  };
   $scope.isOwner = function() {
     return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
   };
