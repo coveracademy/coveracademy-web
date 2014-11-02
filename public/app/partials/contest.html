@@ -131,7 +131,7 @@
       </a>
     </div>
     <h2>
-      {{ 'help_us_sharing_this_contest' | translate }}
+      {{ 'help_sharing' | translate }}
     </h2>
     <div>
       <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
@@ -150,7 +150,7 @@
   <div class="jumbotron margin10 align-center">
     <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
     <h2>
-      {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
+      {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
     <div ng-if="!isContestant()" class="padding-top">
       <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
@@ -166,9 +166,9 @@
       </a>
     </div>
     <h2>
-      {{ 'help_us_sharing_this_contest' | translate }}
+      {{ 'help_sharing' | translate }}
     </h2>
-    <div>
+    <div class="padding-top">
       <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
           <i class="fa fa-facebook"></i>
         </a>

@@ -2,7 +2,7 @@
   <div ng-repeat="cover in row" class="col-md-{{ columnSize }}">
     <div class="thumbnail">
       <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})">
-        <div ng-if="isThumbSize('normal')">
+        <div ng-if="isThumbSize('medium')">
           <div class="cover">
             <div class="darken"></div>
             <img ng-src="{{ cover.medium_thumbnail }}">

@@ -1,4 +1,4 @@
-<div class="audition {{ thumbSize }} thumbnail">
+<div class="audition {{ thumbSizeFinal }} thumbnail">
   <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})">
     <div class="cover">
       <div class="darken"></div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="legend">
-        <span class="label label-primary" ng-if="isShowScore">
+        <span class="label label-primary" ng-if="showScoreFinal">
           {{ scoreByAudition() }}
         </span>
       </div>

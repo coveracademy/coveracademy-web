@@ -18,7 +18,8 @@ angular
       };
     }],
     link: function(scope, element, attrs, ctrl) {
-      scope.isShowScore = scope.showScore ? scope.showScore : 'true';
+      scope.showScoreFinal = scope.showScore ? scope.showScore : 'true';
+      scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
     }
   };
 })
@@ -38,8 +39,8 @@ angular
       };
     }],
     link: function(scope, element, attrs, ctrl) {
-      scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'normal';
-      if(scope.thumbSizeFinal === 'normal') {
+      scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
+      if(scope.thumbSizeFinal === 'medium') {
         scope.coversPerRow = 4;
         scope.columnSize = 12/scope.coversPerRow;
       } else if(scope.thumbSizeFinal === 'small') {

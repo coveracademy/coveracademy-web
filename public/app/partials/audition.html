@@ -137,24 +137,32 @@
     </div>
   </div>
   <div ng-if="isContestProgress('waiting')">
-    <div class="jumbotron margin10 align-center">
-      <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
-      <h2>
-        {{ 'we_need_more_contestants_to_start_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
-      </h2>
-      <h2 class="bolder-text">
-        {{ 'help_sharing' | translate }}:
-      </h2>
-      <div>
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+    <div class="row">
+      <div class="col-md-5">
+        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="medium" show-score="false">
+        </audition>
+      </div>
+      <div class="col-md-7">
+        <h2 class="nomargin">
+          {{ 'this_contest_is_not_happening_yet' | translate }}
+        </h2>
+        <h3>
+          {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
+        </h3>
+        <div class="align-center">
+          <h3>
+            {{ 'help_sharing' | translate }}
+          </h3>
+          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
             <i class="fa fa-facebook"></i>
           </a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-          <i class="fa fa-google-plus"></i>
-        </a>
+          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+            <i class="fa fa-google-plus"></i>
+          </a>
+        </div>
       </div>
     </div>
   </div>
