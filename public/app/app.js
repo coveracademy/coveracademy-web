@@ -233,6 +233,7 @@ angular
     .state('app.contestGuideline', {
       url: '/contest/guideline',
       templateUrl: '/app/partials/contest-guideline.html',
+      controller: 'guidelineController',
       accessLevel: accessLevel.PUBLIC
     })
     .state('app.joinContest', {
@@ -274,6 +275,13 @@ angular
     .state('app.privacyPolicy', {
       url: '/privacy',
       templateUrl: '/app/partials/privacy-policy.html',
+      controller: 'privacyPolicyController',
+      accessLevel: accessLevel.PUBLIC
+    })
+    .state('app.termsOfUse', {
+      url: '/terms',
+      templateUrl: '/app/partials/terms-of-use.html',
+      controller: 'termsOfUseController',
       accessLevel: accessLevel.PUBLIC
     })
     // Error states

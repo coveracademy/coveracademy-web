@@ -12,6 +12,9 @@ angular
       return {user: $scope.editedUser.id};
     }
   };
+
+  seoService.setTitle($scope.user.name);
+
   $scope.isOwner = function() {
     return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
   };

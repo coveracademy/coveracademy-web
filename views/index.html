@@ -126,12 +126,22 @@
                 </li>
               </ul>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 nopadding">
               <h4 class="bolder-text">{{ 'support' | translate | uppercase }}</h4>
               <ul>
                 <li>
                   <a ui-sref="app.contact({locale: locale()})">
                     {{ 'contact' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a ui-sref="app.termsOfUse({locale: locale()})">
+                    {{ 'terms_of_use' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a ui-sref="app.privacyPolicy({locale: locale()})">
+                    {{ 'privacy_policy' | translate }}
                   </a>
                 </li>
               </ul>

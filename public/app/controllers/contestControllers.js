@@ -1,6 +1,6 @@
 angular
 .module('coverAcademy.controllers')
-.controller('contestController', ['$scope', '$stateParams', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, constants, backendResponse, seoService) {
+.controller('contestController', ['$scope', '$stateParams', '$translate', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, constants, backendResponse, seoService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
@@ -14,6 +14,10 @@ angular
   $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
+
+  $translate('seo.contest', {contest: $scope.contest.name}).then(function(message) {
+    seoService.setTitle(message);
+  });
 
   $scope.isContestant = function() {
     return Boolean($scope.audition && angular.isDefined($scope.audition.id))
@@ -88,6 +92,10 @@ angular
   };
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
+  $translate('seo.join_contest').then(function(message) {
+    seoService.setTitle(message);
+  });
+
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
@@ -165,6 +173,10 @@ angular
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
 
+  $translate('seo.audition', {audition: $scope.audition.title}).then(function(message) {
+    seoService.setTitle(message);
+  });
+
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserVote($scope.audition).then(function(response) {
       $scope.userVote = response.data.userVote;
@@ -241,4 +253,9 @@ angular
       });
     });
   };
+}])
+.controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
+  $translate('seo.guideline').then(function(message) {
+    seoService.setTitle(message);
+  });
 }]);

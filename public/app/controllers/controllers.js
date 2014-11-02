@@ -121,4 +121,14 @@ angular
       });
     });
   };
+}])
+.controller('termsOfUseController', ['$translate', 'seoService', function($translate, seoService) {
+  $translate('seo.terms_of_use').then(function(message) {
+    seoService.setTitle(message);
+  });
+}])
+.controller('privacyPolicyController', ['$translate', 'seoService', function($translate, seoService) {
+  $translate('seo.privacy_policy').then(function(message) {
+    seoService.setTitle(message);
+  });
 }]);
