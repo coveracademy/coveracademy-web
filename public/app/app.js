@@ -10,6 +10,7 @@ angular
   'flow',
   'ngCookies',
   'ngProgress',
+  'ngSanitize',
   'pascalprecht.translate',
   'timer',
   'ui.router',

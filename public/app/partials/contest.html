@@ -187,10 +187,7 @@
     <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
     <div ng-repeat="audition in row" class="col-md-4">
       <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
-      </audition>
-      <div class="medal label label-none">
-        <img class="small-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
-      </div>
+      </audition>     
       <div class="row padding">
         <div class="col-md-3">
           <div class="author box">
@@ -199,23 +196,25 @@
             </a>
           </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 nopadding-left">
           <h4 class="nomargin">
             <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
               {{ audition.user.name }}
             </a>
-            <span ng-if="isMedal(audition, 'gold')">
-              {{ 'wons_a_gold_medal' | translate }}
+            <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'wons_a_gold_medal' | translate">
             </span>
-            <span ng-if="isMedal(audition, 'silver')">
-              {{ 'wons_a_silver_medal' | translate }}
+            <span ng-if="isMedal(audition, 'silver')" ng-bind-html="'wons_a_silver_medal' | translate">
             </span>
-            <span ng-if="isMedal(audition, 'bronze')">
-              {{ 'wons_a_bronze_medal' | translate }}
+            <span ng-if="isMedal(audition, 'bronze')" ng-bind-html="'wons_a_bronze_medal' | translate">
             </span>
           </h4>
         </div>
       </div>
+    </div>
+  </div>
+  <div ng-if="!hasWinners()">
+    <div class="jumbotron">
+      <h1 class="align-center">{{ 'and_we_have_no_winners' | translate }} =(</h1>
     </div>
   </div>
   <hr/>

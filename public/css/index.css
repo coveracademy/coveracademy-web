@@ -70,7 +70,7 @@ footer .info ul {
 }
 
 footer .info .container {
-  padding: 50px 100px 50px 100px;
+  padding: 50px 100px 0px 100px;
 }
 
 footer .social li {
@@ -167,6 +167,10 @@ a:hover {
   padding: 0px;
 }
 
+.nopadding-left {
+  padding-left: 0px;
+}
+
 .margin10 {
   margin: 10px;
 }
@@ -258,6 +262,18 @@ a:hover {
   -moz-animation: fadeOut 1s;
   -o-animation: fadeOut 1s;
   animation: fadeOut 1s;
+}
+
+.label.label-gold {
+  background-color: #dfbb10;
+}
+
+.label.label-silver {
+  background-color: #888;
+}
+
+.label.label-bronze {
+  background-color: #aa5237;
 }
 
 .btn-none {
@@ -587,7 +603,7 @@ form.compacted .form-group {
 }
 
 .special-header.contest .title {
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 .special-header.contest .share {
