@@ -52,16 +52,12 @@
             </div>
           </div>
           <div class="col-md-10">
-            <div>
-              <div class="bs-callout bs-callout-info">
-                <h3 class="nomargin">
-                  <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-                    {{ audition.user.name }}
-                  </a>
-                </h3>
-                <h4 class="nomargin">{{ audition.description }}</h4>
-              </div>
-            </div>
+            <h3 class="nomargin">
+              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+                {{ audition.user.name }}
+              </a>
+            </h3>
+            <h4 class="nomargin">{{ audition.description }}</h4>
           </div>
         </div>
       </div>
