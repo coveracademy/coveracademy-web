@@ -6,13 +6,18 @@ angular
   $scope.editing = false;
   $scope.flowModel = {};
   $scope.flowConfig = {
-    target: "/upload/user",
+    target: '/api/upload/user',
     singleFile: true,
     query: function(flowFile, flowChunk) {
       return {user: $scope.editedUser.id};
     }
   };
 
+  var fixUserImage = function() {
+    $scope.user.image = $scope.user.image + '?date=' + new Date().getTime();
+  };
+
+  fixUserImage();
   seoService.setTitle($scope.user.name);
 
   $scope.isOwner = function() {
@@ -23,12 +28,19 @@ angular
     $scope.editedUser = angular.copy($scope.user);
   };
   $scope.save = function() {
-    userService.save($scope.editedUser).then(function(backendResponse) {
-      $scope.editing = false;
-      $scope.user = angular.copy($scope.editedUser);
-      $translate('informations_saved_successfully').then(function(message) {
-        alertService.addAlert('success', message);
+    $scope.flowModel.flow.on('complete', function () {
+      userService.get($scope.user.id).then(function(response) {
+        $scope.user = response.data;
+        fixUserImage();
+        $scope.editing = false;
+        $translate('informations_saved_successfully').then(function(message) {
+          alertService.addAlert('success', message);
+        });
       });
+    });
+
+    userService.save($scope.editedUser).then(function(response) {
+      $scope.flowModel.flow.upload();
     }).catch(function(err) {
       translationService.translateError(err).then(function(message) {
         alertService.addAlert('danger', message);

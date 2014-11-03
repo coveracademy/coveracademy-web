@@ -124,14 +124,12 @@ module.exports = flow = function(temporaryFolder) {
               currentTestChunk++;
               if(currentTestChunk > numberOfChunks) {
                 var destiny = fs.createWriteStream(getFinalFilePath(filename));
-                write(identifier, destiny,
-                  {
-                    removeChunks: true,
-                    onDone: function() {
-                      callback('done', filename, originalFilename, identifier);
-                    }
+                write(identifier, destiny, {
+                  removeChunks: true,
+                  onDone: function() {
+                    callback('done', filename, originalFilename, identifier);
                   }
-                );
+                });
               } else {
                 // Recursion
                 testChunkExists();

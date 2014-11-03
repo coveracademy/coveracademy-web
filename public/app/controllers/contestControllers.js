@@ -1,6 +1,6 @@
 angular
 .module('coverAcademy.controllers')
-.controller('contestController', ['$scope', '$stateParams', '$translate', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, constants, backendResponse, seoService) {
+.controller('contestController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, contestService, seoService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
@@ -17,6 +17,15 @@ angular
 
   $translate('seo.contest', {contest: $scope.contest.name}).then(function(message) {
     seoService.setTitle(message);
+  });
+
+  $scope.$on(authEvents.LOGIN_SUCCESS, function() {
+    contestService.getUserAudition($scope.contest).then(function(response) {
+      $scope.audition = response.data;
+    });
+  });
+  $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
+    $scope.audition = null;
   });
 
   $scope.isContestant = function() {

@@ -25,8 +25,18 @@ module.exports = function(router, app) {
 
   router.post('/', isAuthenticated, function(req, res, next) {
     var user = req.param('user');
-    userService.save(req.user, User.forge(user)).then(function() {
-      res.send(200);
+    userService.save(req.user, User.forge(user)).then(function(user) {
+      res.json(user);
+    }).catch(function(err) {
+      console.log(err);
+      apiErrors.formatResponse(err, res);
+    });
+  });
+
+  router.get('/', function(req, res, next) {
+    var id = req.param('id');
+    userService.getUser(id).then(function(user) {
+      res.json(user);
     }).catch(function(err) {
       console.log(err);
       apiErrors.formatResponse(err, res);

@@ -39,7 +39,8 @@
           <div class="col-md-3">
             <div class="thumbnail">
               <div class="image" flow-btn>
-                <img ng-src="/img/users/{{ editedUser.image }}">
+                <img ng-show="!$flow.files.length" ng-src="/img/users/{{ editedUser.image }}">
+                <img ng-show="$flow.files.length" flow-img="$flow.files[0]">
               </div>
             </div>
           </div>

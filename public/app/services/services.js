@@ -241,6 +241,9 @@ angular
   this.save = function(user) {
     return $http.post('/api/user', {user: user});
   };
+  this.get = function(id) {
+    return $http.get('/api/user', {params: {id: id}});
+  };
 }])
 .service('oembedService', ['$http', function($http) {
   this.getOEmbed = function(url) {

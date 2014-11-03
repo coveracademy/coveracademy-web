@@ -618,8 +618,8 @@ form.compacted .form-group {
 }
 
 #user.special-header > .content .thumbnail img {
-  width: 100%;
-  height: 100%;
+  width: 210px;
+  height: 210px;
 }
 
 #user.special-header > img {
