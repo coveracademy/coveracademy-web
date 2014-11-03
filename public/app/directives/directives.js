@@ -18,7 +18,7 @@ angular
       };
     }],
     link: function(scope, element, attrs, ctrl) {
-      scope.showScoreFinal = scope.showScore ? scope.showScore : 'true';
+      scope.showScoreFinal = scope.showScore === 'true' ? true : false;
       scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
     }
   };
@@ -85,8 +85,8 @@ angular
     },
     link: function(scope, element, attrs, ctrl) {
       scope.colorScheme = scope.theme || 'dark';
-      scope.showBorder = scope.border || 'false';
-      scope.showFaces = scope.faces || 'false';
+      scope.showBorder = scope.border === 'true' ? true : false;
+      scope.showFaces = scope.faces === 'true' ? true : false;
       scope.fbLikeBoxUrl = $sce.trustAsResourceUrl('//www.facebook.com/plugins/likebox.php?href=' + scope.link + '&width=' + scope.width + '&height=' + scope.height + '&colorscheme=' + scope.colorScheme + '&show_faces=' + scope.showFaces + '&header=false&stream=false&show_border=' + scope.showBorder + '&appId=329761620528304');
     }
   }

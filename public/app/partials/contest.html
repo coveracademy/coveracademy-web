@@ -201,11 +201,11 @@
             <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
               {{ audition.user.name }}
             </a>
-            <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'wons_a_gold_medal' | translate">
+            <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'won_a_gold_medal' | translate">
             </span>
-            <span ng-if="isMedal(audition, 'silver')" ng-bind-html="'wons_a_silver_medal' | translate">
+            <span ng-if="isMedal(audition, 'silver')" ng-bind-html="'won_a_silver_medal' | translate">
             </span>
-            <span ng-if="isMedal(audition, 'bronze')" ng-bind-html="'wons_a_bronze_medal' | translate">
+            <span ng-if="isMedal(audition, 'bronze')" ng-bind-html="'won_a_bronze_medal' | translate">
             </span>
           </h4>
         </div>
