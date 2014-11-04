@@ -2,7 +2,7 @@ require('newrelic');
 
 var express        = require('express'),
     path           = require('path'),
-    favicon        = require('static-favicon'),
+    favicon        = require('serve-favicon'),
     logger         = require('morgan'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
@@ -21,7 +21,7 @@ app.set('port', settings.nodePort);
 app.set('views', settings.viewsPath);
 app.set('public', settings.publicPath);
 
-app.use(favicon());
+app.use(favicon(settings.publicPath + '/img/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
