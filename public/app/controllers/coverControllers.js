@@ -1,7 +1,7 @@
 angular
 .module('coverAcademy.controllers')
-.controller('adminController', ['$scope', '$filter', '$translate', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $filter, $translate, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
-  $translate('seo.admin').then(function(message) {
+.controller('adminController', ['$scope', '$filter', '$translate', '$underscore', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $filter, $translate, $underscore, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
+  $translate('seo.title.admin').then(function(message) {
     seoService.setTitle(message);
   });
   var partitionPotentialCovers = function(potentialCovers) {
@@ -13,7 +13,7 @@ angular
     acceptCover: function(potentialCover) {
       coverService.acceptCover(potentialCover).then(function(response) {
         alertService.addAlert('success', 'Potential cover accepted successfully');
-        $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+        $scope.potentialCoversTab.potentialCovers = $underscore.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
           return potentialCover.id == cover.id;
         });
         $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
@@ -22,7 +22,7 @@ angular
     refuseCover: function(potentialCover) {
       coverService.refuseCover(potentialCover).then(function(response) {
         alertService.addAlert('success', 'Potential cover refused successfully');
-        $scope.potentialCoversTab.potentialCovers = _.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+        $scope.potentialCoversTab.potentialCovers = $underscore.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
           return potentialCover.id == cover.id;
         });
         $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
@@ -139,7 +139,7 @@ angular
   };
 }])
 .controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
-  $translate('seo.index').then(function(message) {
+  $translate('seo.title.index').then(function(message) {
     seoService.setTitle(message);
   });
 
@@ -163,12 +163,12 @@ angular
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
   $scope.totalResults = $scope.artists.length + $scope.musics.length;
 
-  $translate('seo.search', {searchQuery: $scope.searchQuery}).then(function(message) {
+  $translate('seo.title.search', {searchQuery: $scope.searchQuery}).then(function(message) {
     seoService.setTitle(message);
   });
 }])
 .controller('addCoverController', ['$scope', '$state', '$translate', 'backendResponse', 'seoService', 'alertService', 'coverService', 'searchService', function($scope, $state, $translate, backendResponse, seoService, alertService, coverService, searchService) {
-  $translate('seo.add_cover').then(function(message) {
+  $translate('seo.title.add_cover').then(function(message) {
     seoService.setTitle(message);
   });
 
@@ -213,7 +213,7 @@ angular
   $scope.bestCoversByArtist = backendResponse.data.bestCoversByArtist;
   $scope.siteUrl = constants.SITE_URL;
 
-  $translate('seo.cover', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(message) {
+  $translate('seo.title.cover', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(message) {
     seoService.setTitle(message);
   });
   seoService.setImage($scope.cover.medium_thumbnail);
@@ -228,7 +228,7 @@ angular
   $scope.coversPerPage = 20;
 
   $translate('rank_type.' + $scope.rankType).then(function(rankType) {
-    $translate('seo.covers_rank', {rankType: rankType}).then(function(message) {
+    $translate('seo.title.covers_rank', {rankType: rankType}).then(function(message) {
       seoService.setTitle(message);
     });
   });
@@ -252,7 +252,7 @@ angular
   $scope.coversOfMusics = backendResponse.data.coversOfMusics;
 
   $translate('rank_type.' + $scope.rankType).then(function(rankType) {
-    $translate('seo.artist', {rankType: rankType, artist: $scope.artist.name}).then(function(message) {
+    $translate('seo.title.artist', {rankType: rankType, artist: $scope.artist.name}).then(function(message) {
       seoService.setTitle(message);
     });
   });
@@ -270,7 +270,7 @@ angular
   $scope.currentPage = 1;
   $scope.artistsPerPage = 60;
 
-  var titleTranslationKey = $scope.musicGenre ? 'seo.artists_music_genre' : 'seo.artists_all';
+  var titleTranslationKey = $scope.musicGenre ? 'seo.title.artists_music_genre' : 'seo.title.artists_all';
   var titleTranslationVars = $scope.musicGenre ? {musicGenre: $scope.musicGenre.name} : {};
   $translate(titleTranslationKey, titleTranslationVars).then(function(message) {
     seoService.setTitle(message);
@@ -292,7 +292,7 @@ angular
   $scope.coversPerPage = 20;
 
   $translate('rank_type.' + $scope.rankType).then(function(rankType) {
-    $translate('seo.music', {rankType: rankType, music: $scope.music.title, artist: $scope.music.artist.name}).then(function(message) {
+    $translate('seo.title.music', {rankType: rankType, music: $scope.music.title, artist: $scope.music.artist.name}).then(function(message) {
       seoService.setTitle(message);
     });
   });
@@ -314,10 +314,10 @@ angular
   $scope.bestCoversOfMusicGenre = backendResponse.data.bestCoversOfMusicGenre;
   $scope.latestCoversOfMusicGenre = backendResponse.data.latestCoversOfMusicGenre;
 
-  $translate('seo.music_genre', {musicGenre: $scope.musicGenre.name}).then(function(message) {
+  $translate('seo.title.music_genre', {musicGenre: $scope.musicGenre.name}).then(function(message) {
     seoService.setTitle(message);
   });
-  seoService.setImage(constants.SITE_URL + '/img/genres/' + $scope.musicGenre.image);
+  seoService.setImage('/img/genres/' + $scope.musicGenre.image);
 }])
 .controller('musicGenreRankController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
   $scope.rankType = $stateParams.rank;
@@ -329,7 +329,7 @@ angular
   $scope.coversPerPage = 20;
 
   $translate('rank_type.' + $scope.rankType).then(function(rankType) {
-    $translate('seo.music_genre_rank', {rankType: rankType, musicGenre: $scope.musicGenre.name}).then(function(message) {
+    $translate('seo.title.music_genre_rank', {rankType: rankType, musicGenre: $scope.musicGenre.name}).then(function(message) {
       seoService.setTitle(message);
     });
   });

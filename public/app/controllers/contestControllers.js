@@ -15,9 +15,11 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
-  $translate('seo.contest', {contest: $scope.contest.name}).then(function(message) {
-    seoService.setTitle(message);
+  $translate(['seo.title.contest', 'seo.description.contest'], {contest: $scope.contest.name}).then(function(translations) {
+    seoService.setTitle(translations['seo.title.contest']);
+    seoService.setDescription(translations['seo.description.contest']);
   });
+  seoService.setImage('/img/contests/' + $scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
@@ -101,16 +103,18 @@ angular
   };
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
-  $translate('seo.join_contest').then(function(message) {
-    seoService.setTitle(message);
-  });
-
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.userAudition = null;
   $scope.usingGoogleAccount = false;
   $scope.usingYoutubeAccount = false;
+
+  $translate(['seo.title.join_contest', 'seo.description.join_contest']).then(function(translations) {
+    seoService.setTitle(translations['seo.title.join_contest']);
+    seoService.setDescription(translations['seo.description.join_contest']);
+  });
+  seoService.setImage('/img/contests/' + $scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
@@ -182,9 +186,11 @@ angular
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
 
-  $translate('seo.audition', {audition: $scope.audition.title}).then(function(message) {
+  $translate('seo.title.audition', {audition: $scope.audition.title}).then(function(message) {
     seoService.setTitle(message);
   });
+  seoService.setDescription($scope.audition.description);
+  seoService.setImage($scope.audition.medium_thumbnail);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserVote($scope.audition).then(function(response) {
@@ -264,7 +270,8 @@ angular
   };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
-  $translate('seo.guideline').then(function(message) {
-    seoService.setTitle(message);
+  $translate(['seo.title.guideline', 'seo.description.guideline']).then(function(translations) {
+    seoService.setTitle(translations['seo.title.guideline']);
+    seoService.setDescription(translations['seo.description.guideline']);
   });
 }]);

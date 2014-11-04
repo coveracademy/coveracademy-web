@@ -159,25 +159,32 @@ angular
         latest: 'latest'
       },
       seo: {
-        admin: 'Administration console',
-        add_cover: 'Add a new cover',
-        artist: 'The {{ rankType }} covers of musics by {{ artist }}',
-        artists_all: 'All artists',
-        artists_music_genre: '{{ musicGenre }} artists',
-        audition: 'Audition - {{ audition }}',
-        contact: 'Contact us, give us your feedback',
-        contest: 'Contest - {{ contest }}',
-        cover: '{{ author }}\'s cover of "{{ music }}" by {{ artist }}',
-        covers_rank: 'The {{ rankType }} covers from this week',
-        guideline: 'Contest - Read our guideline and find out how to participate!',
-        index: 'The best covers in one place',
-        join_contest: 'Contest - Join now!',
-        music: 'The {{ rankType }} covers of "{{ music }}" by {{ artist }}',
-        music_genre: '{{ musicGenre }} cover songs',
-        music_genre_rank: 'The {{ rankType }} {{ musicGenre }} cover songs',
-        privacy_policy: 'Privacy policy',
-        search: 'Search results for "{{ searchQuery }}"',
-        terms_of_use: 'Terms of use'
+        title: {
+          admin: 'Administration console',
+          add_cover: 'Add a new cover',
+          artist: 'The {{ rankType }} covers of musics by {{ artist }}',
+          artists_all: 'All artists',
+          artists_music_genre: '{{ musicGenre }} artists',
+          audition: 'Audition: {{ audition }}',
+          contact: 'Contact us, give us your feedback',
+          contest: 'Contest: {{ contest }}',
+          cover: '{{ author }}\'s cover of "{{ music }}" by {{ artist }}',
+          covers_rank: 'The {{ rankType }} covers from this week',
+          guideline: 'Contest - Read our guideline and find out how to participate!',
+          index: 'The best covers in one place',
+          join_contest: 'Contest - Join now!',
+          music: 'The {{ rankType }} covers of "{{ music }}" by {{ artist }}',
+          music_genre: '{{ musicGenre }} cover songs',
+          music_genre_rank: 'The {{ rankType }} {{ musicGenre }} cover songs',
+          privacy_policy: 'Privacy policy',
+          search: 'Search results for "{{ searchQuery }}"',
+          terms_of_use: 'Terms of use'
+        },
+        description: {
+          contest: 'Cover Academy is the first website in Brazil to promote online music competitions. Join and compete for prizes or be a judge and help us pick the winners.',
+          guideline: '@:seo.description.contest',
+          join_contest: '@:seo.description.contest'
+        }
       },
       user_form: {
         cancel: 'Cancel',
@@ -347,25 +354,32 @@ angular
         latest: 'últimos'
       },
       seo: {
-        admin: 'Console de administração',
-        add_cover: 'Adicione um novo cover',
-        artist: 'Os {{ rankType }} covers das músicas de {{ artist }}',
-        artists_all: 'Todos os artistas',
-        artists_music_genre: 'Artistas {{ musicGenre }}',
-        audition: 'Audição - {{ audition }}',
-        contact: 'Entre em contato, nos dê o seu feedback',
-        contest: 'Competição - {{ contest }}',
-        cover: 'Cover de {{ author }} da música "{{ music }}" de {{ artist }}',
-        covers_rank: 'Os {{ rankType }} covers da semana',
-        guideline: 'Competição - Leia o nosso guia e saiba como participar!',
-        index: 'Os melhores covers em um só lugar',
-        join_contest: 'Competição - Participe agora!',
-        music: 'Os {{ rankType }} covers da música "{{ music }}" de {{ artist }}',
-        music_genre: 'Covers {{ musicGenre }}',
-        music_genre_rank: 'Os {{ rankType }} covers {{ musicGenre }}',
-        privacy_policy: 'Política de privacidade',
-        search: 'Resultados da busca por "{{ searchQuery }}"',
-        terms_of_use: 'Termos de uso'
+        title: {
+          admin: 'Console de administração',
+          add_cover: 'Adicione um novo cover',
+          artist: 'Os {{ rankType }} covers das músicas de {{ artist }}',
+          artists_all: 'Todos os artistas',
+          artists_music_genre: 'Artistas {{ musicGenre }}',
+          audition: 'Audição - {{ audition }}',
+          contact: 'Entre em contato, nos dê o seu feedback',
+          contest: 'Competição - {{ contest }}',
+          cover: 'Cover de {{ author }} da música "{{ music }}" de {{ artist }}',
+          covers_rank: 'Os {{ rankType }} covers da semana',
+          guideline: 'Competição - Leia o nosso guia e saiba como participar!',
+          index: 'Os melhores covers em um só lugar',
+          join_contest: 'Competição - Participe agora!',
+          music: 'Os {{ rankType }} covers da música "{{ music }}" de {{ artist }}',
+          music_genre: 'Covers {{ musicGenre }}',
+          music_genre_rank: 'Os {{ rankType }} covers {{ musicGenre }}',
+          privacy_policy: 'Política de privacidade',
+          search: 'Resultados da busca por "{{ searchQuery }}"',
+          terms_of_use: 'Termos de uso'
+        },
+        description: {
+          contest: 'Cover Academy é o primeiro website do Brasil a promover competições online de música. Participe e concorra a prêmios ou seja um juiz e ajude-nos a escolher os vencedores.',
+          guideline: '@:seo.description.contest',
+          join_contest: '@:seo.description.contest'
+        }
       },
       user_form: {
         cancel: 'Cancelar',

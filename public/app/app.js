@@ -20,6 +20,7 @@ angular
 .constant('constants', {
   SITE_NAME: 'Cover Academy',
   SITE_URL: 'http://www.coveracademy.com',
+  LOGO_URL: 'http://www.coveracademy.com/img/logos/pretty-logo.jpg',
   USER_COOKIE: 'CoverAcademy.user'
 })
 .constant('authEvents', {
@@ -297,13 +298,13 @@ angular
   // Angular-Translate events
   $rootScope.$on('$translateChangeSuccess', function() {
     if($translate.use() === 'en') {
-      amMoment.changeLanguage('en');
+      amMoment.changeLocale('en');
       paginationConfig.firstText = 'First';
       paginationConfig.lastText = 'Last';
       paginationConfig.previousText = 'Previous';
       paginationConfig.nextText = 'Next';
     } else {
-      amMoment.changeLanguage('pt-br');
+      amMoment.changeLocale('pt-br');
       paginationConfig.firstText = 'Primeira';
       paginationConfig.lastText = 'Última';
       paginationConfig.previousText = 'Anterior';

@@ -25,10 +25,13 @@ angular
     description = newDescription;
   };
   this.getImage = function() {
+    if(!image) {
+      return constants.LOGO_URL;
+    }
     return image;
   };
   this.setImage = function(newImage) {
-    image = newImage;
+    image = newImage.slice(0, 1) === '/' ? constants.SITE_URL + newImage : newImage;
   };
   this.setKeywords = function(newKeywords) {
     if(angular.isString(newKeywords)) {
@@ -68,7 +71,7 @@ angular
     }, 5000);
   };
 }])
-.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, constants, authEvents, userService) {
+.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
   var changeUser = function(newUser) {
@@ -94,7 +97,7 @@ angular
   };
   this.isAuthorized = function (accessLevel) {
     var userRole = $.isAuthenticated() ? $.getUser().permission : 'public';
-    return !accessLevel || _.contains(accessLevel.roles, userRole);
+    return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
   };
   this.login = function(provider) {
     var deferred = $q.defer();

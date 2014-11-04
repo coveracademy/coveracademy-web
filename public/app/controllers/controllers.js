@@ -101,7 +101,7 @@ angular
 .controller('contactController', ['$scope', '$translate', 'constants', 'seoService', 'alertService', 'userService', function($scope, $translate, constants, seoService, alertService, userService) {
   $scope.siteName = constants.SITE_NAME;
 
-  $translate('seo.contact').then(function(message) {
+  $translate('seo.title.contact').then(function(message) {
     seoService.setTitle(message);
   });
 
@@ -123,12 +123,12 @@ angular
   };
 }])
 .controller('termsOfUseController', ['$translate', 'seoService', function($translate, seoService) {
-  $translate('seo.terms_of_use').then(function(message) {
+  $translate('seo.title.terms_of_use').then(function(message) {
     seoService.setTitle(message);
   });
 }])
 .controller('privacyPolicyController', ['$translate', 'seoService', function($translate, seoService) {
-  $translate('seo.privacy_policy').then(function(message) {
+  $translate('seo.title.privacy_policy').then(function(message) {
     seoService.setTitle(message);
   });
 }]);

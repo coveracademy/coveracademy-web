@@ -1,5 +1,8 @@
 angular
 .module('coverAcademy.factories', [])
+.factory('$underscore', ['$window', function($window) {
+    return $window._;
+}])
 .factory('authHttpInterceptor', ['$rootScope', '$q', 'authEvents', function($rootScope, $q, authEvents) {
   return {
     responseError: function (response) {
