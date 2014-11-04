@@ -187,7 +187,7 @@
     <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
     <div ng-repeat="audition in row" class="col-md-4">
       <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
-      </audition>     
+      </audition>
       <div class="row padding">
         <div class="col-md-3">
           <div class="author box">
@@ -222,7 +222,7 @@
     <h1 class="align-center bolder-text">{{ 'your_audition' | translate }}</h1>
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="big" score-by-audition="getScoreByAudition(audition)">
+        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" score-by-audition="getScoreByAudition(audition)">
         </audition>
       </div>
     </div>
