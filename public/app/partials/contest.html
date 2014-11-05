@@ -7,7 +7,7 @@
             <div ng-if="isContestProgress('running')">
               <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
               <h2 class="margin10 bolder-text">
-                <span ng-if="remainingOneDay()">
+                <span ng-if="remainingOneDay(contest.end_date)">
                   <timer interval="60000" end-time="contest.end_date">
                     {{ hours }}
                     <small>{{ 'hours' | translate }}</small>
@@ -15,7 +15,7 @@
                     <small>{{ 'minutes' | translate }}</small>
                   </timer>
                 </span>
-                <span ng-if="!remainingOneDay()">
+                <span ng-if="!remainingOneDay(contest.end_date)">
                   <timer interval="60000" end-time="contest.end_date">
                     {{ days }}
                     <small>{{ 'days' | translate }}</small>
@@ -146,12 +146,33 @@
     </div>
   </div>
 </div>
-<div ng-if="isContestProgress('waiting')" class="container">
+<div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')" class="container">
   <div class="jumbotron margin10 align-center">
     <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
-    <h2>
+    <h2 ng-if="isContestProgress('waiting')">
       {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
+    <h2 ng-if="isContestProgress('waiting_time')">
+      {{ 'remaining_time' | translate }}:      
+    </h2>
+    <h1 ng-if="isContestProgress('waiting_time')">
+      <span ng-if="remainingOneDay(contest.start_date)">
+        <timer interval="60000" end-time="contest.start_date">
+          {{ hours }}
+          <small>{{ 'hours' | translate }}</small>
+          {{ minutes }}
+          <small>{{ 'minutes' | translate }}</small>
+        </timer>
+      </span>
+      <span ng-if="!remainingOneDay(contest.start_date)">
+        <timer interval="60000" end-time="contest.start_date">
+          {{ days }}
+          <small>{{ 'days' | translate }}</small>
+          {{ hours }}
+          <small>{{ 'hours' | translate }}</small>
+        </timer>
+      </span>
+    </h1>
     <div ng-if="!isContestant()" class="padding-top">
       <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
         {{ 'join_now' | translate }}

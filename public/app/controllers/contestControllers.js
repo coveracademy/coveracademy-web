@@ -54,16 +54,18 @@ angular
     return medal;
   };
   $scope.isContestProgress = function(expectedProgress) {
-    return $scope.contest.progress === expectedProgress;
-  };
-  $scope.remainingOneDay = function() {
-    if($scope.isContestProgress('running')) {
-      var now = new Date();
-      var end = new Date($scope.contest.end_date);
-      return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
+    var progress;
+    if($scope.contest.progress === 'waiting' && $scope.contest.start_date && new Date() < new Date($scope.contest.start_date)) {
+      progress = 'waiting_time';
     } else {
-      return false;
+      progress = $scope.contest.progress;
     }
+    return progress === expectedProgress;
+  };
+  $scope.remainingOneDay = function(date) {
+    var now = new Date();
+    var end = new Date(date);
+    return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
   };
   $scope.contestantsRemaining = function() {
     if($scope.isContestProgress('waiting')) {
@@ -132,7 +134,18 @@ angular
     return Boolean($scope.userAudition && angular.isDefined($scope.userAudition.id))
   };
   $scope.isContestProgress = function(expectedProgress) {
-    return $scope.contest.progress === expectedProgress;
+    var progress;
+    if($scope.contest.progress === 'waiting' && $scope.contest.start_date && new Date() < new Date($scope.contest.start_date)) {
+      progress = 'waiting_time';
+    } else {
+      progress = $scope.contest.progress;
+    }
+    return progress === expectedProgress;
+  };
+  $scope.remainingOneDay = function(date) {
+    var now = new Date();
+    var end = new Date(date);
+    return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
   };
   $scope.signinWithGoogle = function() {
     authenticationService.login('google').then(function(user) {
@@ -218,7 +231,18 @@ angular
     return medal;
   };
   $scope.isContestProgress = function(expectedProgress) {
-    return $scope.contest.progress === expectedProgress;
+    var progress;
+    if($scope.contest.progress === 'waiting' && $scope.contest.start_date && new Date() < new Date($scope.contest.start_date)) {
+      progress = 'waiting_time';
+    } else {
+      progress = $scope.contest.progress;
+    }
+    return progress === expectedProgress;
+  };
+  $scope.remainingOneDay = function(date) {
+    var now = new Date();
+    var end = new Date(date);
+    return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
   };
   $scope.contestantsRemaining = function() {
     if($scope.isContestProgress('waiting')) {

@@ -106,28 +106,38 @@ exports.finishContest = function(contest) {
   });
 }
 
-var startContest = function(contest, transaction) {
+var startContest = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.getProgress() === 'waiting') {
-      var start = contest.get('start_date');
-      var now = new Date();
-      if(!start || now > start) {
-        start = now;
-      }
-      contest.set('start_date', start);
-      contest.set('end_date', moment(start).add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
-      contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
-        resolve(contest);
+      $.totalAuditions(contest).then(function(totalAuditions) {
+        var start = contest.get('start_date');
+        var now = new Date();
+        if(totalAuditions >= contest.get('minimum_contestants') && (!start || now > start)) {
+          if(!start || now > start) {
+            start = now;
+          }
+          contest.set('start_date', start);
+          contest.set('end_date', moment(start).add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
+          contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
+            resolve(contest);
+          }).catch(function(err) {
+            reject(apiErrors.unexpectedError('Error starting the contest', err));
+          });
+        } else {
+          resolve();
+        }
       }).catch(function(err) {
-        reject(new APIError(400, 'contest.errorStarting', 'Error starting the contest', err));
-      })
+        reject(apiErrors.unexpectedError('Error starting the contest', err));
+      });
+    } else if(contest.getProgress() === 'running') {
+      reject(new APIError(400, 'contest.alreadyStarted', 'The contest was already started'));
     } else {
-      reject(new APIError(400, 'contest.alreadyStartedOfFinished', 'The contest was already started or finished'));
+      reject(new APIError(400, 'contest.alreadyFinished', 'The contest was already finished'));
     }
   });
 }
 
-var createAudition = function(user, contest, auditionData, transaction) {
+var createAudition = function(user, contest, auditionData) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
@@ -142,7 +152,7 @@ var createAudition = function(user, contest, auditionData, transaction) {
           audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
           audition.set('large_thumbnail', videoInfos.thumbnails.large);
           audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
-          audition.save(null, {transacting: transaction}).then(function(audition) {
+          audition.save().then(function(audition) {
             resolve(audition);
           }).catch(function(err) {
             if(err.code === 'ER_DUP_ENTRY') {
@@ -165,33 +175,25 @@ var createAudition = function(user, contest, auditionData, transaction) {
 
 exports.joinContest = function(user, auditionData) {
   return new Promise(function(resolve, reject) {
-    Bookshelf.transaction(function(transaction) {
-      var result = {};
-      return Contest.forge({id: auditionData.contest_id}).fetch().then(function(contest) {
-        result.contest = contest;
-        if(contest.getProgress() === 'finished') {
-          throw new APIError(400, 'contest.join.alreadyFinished', 'The contest was already finished');
-        } else {
-          return createAudition(user, contest, auditionData, transaction);
-        }
-      }).then(function(audition) {
-        result.audition = audition;
-        return $.totalAuditions(result.contest).then(function(totalAuditions) {
-          totalAuditions = totalAuditions + 1;
-          if(totalAuditions >= result.contest.get('minimum_contestants')) {
-            return startContest(result.contest, transaction);
-          } else {
-            return null;
-          }
-        });
-      }).then(function(contest) {
-        return result.audition;
-      });
-    }).then(function(audition) {
-      resolve(audition);
+    Contest.forge({id: auditionData.contest_id}).fetch().then(function(contest) {
+      this.contest = contest;
+      if(contest.getProgress() === 'finished') {
+        throw new APIError(400, 'contest.join.alreadyFinished', 'The contest was already finished');
+      } else {
+        return createAudition(user, contest, auditionData);
+      }    
+    }).then(function(audition) { 
+      this.audition = audition;  
+      startContest(this.contest).then(function(contest) {
+        return contest;
+      }).catch(function(err) {
+        return;
+      });       
+    }).then(function(contest) {
+      resolve(this.audition);
     }).catch(function(err) {
       reject(err);
-    });
+    }).bind({});
   });
 }
 

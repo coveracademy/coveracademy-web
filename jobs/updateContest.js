@@ -2,6 +2,10 @@ var contestService = require('../apis/contestService'),
     Contest        = require('../models/models').Contest,
     later          = require('later');
 
+var startContests = function() {
+  console.log('Starting contests');
+}
+
 var finishContests = function() {
   console.log('Finishing contests');
   contestService.listUnfinishedContests().then(function(contests) {
@@ -22,4 +26,5 @@ var finishContests = function() {
 }
 
 var sched = later.parse.recur().on(0).minute();
-var interval = later.setInterval(finishContests, sched);
+var finishContestsInterval = later.setInterval(finishContests, sched);
+var startContestsInterval = later.setInterval(startContests, sched);

@@ -1,5 +1,15 @@
-- sudo apt-get install nginx
-- Nginx's sites available cofiguration:
+- Set up database
+    $ cd cover-academy
+    $ mysql -u <user> -p
+      > create database cover_academy character set utf8 collate utf8_general_ci;
+      > exit
+    $ mysql -u <user -p cover_academy < resources/schema.sql
+    $ mysql -u <user -p cover_academy < resources/data.sql
+
+- Install Nginx
+    $ sudo apt-get install nginx
+
+- Configure Nginx sites availables 
 
     server {
       listen       80;
@@ -22,5 +32,7 @@
     }
 
 - Edit /etc/hosts and add www.coveracademy.com pointing to localhost
-- npm install
-- npm start
+- Install cover-academy dependencies
+    $ npm install
+- Start cover-academy server
+    $ npm start

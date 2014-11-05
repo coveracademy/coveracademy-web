@@ -414,7 +414,7 @@ input.big {
   height: 132px;
 }
 
-.author.box .bs-callout {
+.author.box .callout {
   min-height: 132px;
 }
 
@@ -467,7 +467,7 @@ input.big {
   text-align: justify;
 }
 
-#guideline .bs-callout {
+#guideline .callout {
   margin-left: 40px;
   margin-bottom: 20px;
 }
@@ -601,7 +601,7 @@ form.compacted .form-group {
   text-decoration: none;
 }
 
-.special-header.contest .join .bs-callout {
+.special-header.contest .join .callout {
   background-color: #363b3f;
   margin-bottom: 10px;
 }
@@ -679,14 +679,14 @@ form.compacted .form-group {
   color: #fff;
 }
 
-.bs-callout {
+.callout {
   padding: 20px;
   border: 1px solid #eee;
   border-left-width: 5px;
   border-radius: 3px;
 }
 
-.bs-callout-info {
+.callout-primary {
   border-left-color: #2196f3;;
 }
 
