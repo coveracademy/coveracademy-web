@@ -19,6 +19,7 @@ angular
 
   fixUserImage();
   seoService.setTitle($scope.user.name);
+  seoService.setDescription($scope.user.biography);
 
   $scope.isOwner = function() {
     return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
@@ -33,8 +34,8 @@ angular
         $scope.user = response.data;
         fixUserImage();
         $scope.editing = false;
-        $translate('informations_saved_successfully').then(function(message) {
-          alertService.addAlert('success', message);
+        $translate('informations_saved_successfully').then(function(translation) {
+          alertService.addAlert('success', translation);
         });
       });
     });
@@ -42,8 +43,8 @@ angular
     userService.save($scope.editedUser).then(function(response) {
       $scope.flowModel.flow.upload();
     }).catch(function(err) {
-      translationService.translateError(err).then(function(message) {
-        alertService.addAlert('danger', message);
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
       });
     });
   };

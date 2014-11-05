@@ -109,15 +109,20 @@ exports.finishContest = function(contest) {
 var startContest = function(contest, transaction) {
   return new Promise(function(resolve, reject) {
     if(contest.getProgress() === 'waiting') {
-      contest.set('start_date', moment().toDate());
-      contest.set('end_date', moment().add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
+      var start = contest.get('start_date');
+      var now = new Date();
+      if(!start || now > start) {
+        start = now;
+      }
+      contest.set('start_date', start);
+      contest.set('end_date', moment(start).add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
       contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true, transacting: transaction}).then(function(contest) {
         resolve(contest);
       }).catch(function(err) {
         reject(new APIError(400, 'contest.errorStarting', 'Error starting the contest', err));
       })
     } else {
-      reject(new APIError(400, 'contest.alreadyHappening', 'The contest is already happening'));
+      reject(new APIError(400, 'contest.alreadyStartedOfFinished', 'The contest was already started or finished'));
     }
   });
 }
@@ -126,8 +131,6 @@ var createAudition = function(user, contest, auditionData, transaction) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
-        console.log(videoInfos.date)
-        console.log(contest.get('end_date'))
         if(videoInfos.date > contest.get('registration_date') && (_.isUndefined(contest.get('end_date')) || _.isNull(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
           var audition = Audition.forge(auditionData);
           audition.set('contest_id', contest.id);
@@ -166,11 +169,16 @@ exports.joinContest = function(user, auditionData) {
       var result = {};
       return Contest.forge({id: auditionData.contest_id}).fetch().then(function(contest) {
         result.contest = contest;
-        return createAudition(user, contest, auditionData, transaction);
+        if(contest.getProgress() === 'finished') {
+          throw new APIError(400, 'contest.join.alreadyFinished', 'The contest was already finished');
+        } else {
+          return createAudition(user, contest, auditionData, transaction);
+        }
       }).then(function(audition) {
         result.audition = audition;
         return $.totalAuditions(result.contest).then(function(totalAuditions) {
-          if(totalAuditions < result.contest.get('minimum_contestants')) {
+          totalAuditions = totalAuditions + 1;
+          if(totalAuditions >= result.contest.get('minimum_contestants')) {
             return startContest(result.contest, transaction);
           } else {
             return null;

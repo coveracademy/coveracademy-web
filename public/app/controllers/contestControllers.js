@@ -15,10 +15,10 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
-  $translate(['seo.title.contest', 'seo.description.contest'], {contest: $scope.contest.name}).then(function(translations) {
-    seoService.setTitle(translations['seo.title.contest']);
-    seoService.setDescription(translations['seo.description.contest']);
+  $translate('seo.description.contest').then(function(translation) {
+    seoService.setDescription(translation);
   });
+  seoService.setTitle($scope.contest.name);
   seoService.setImage('/img/contests/' + $scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
@@ -154,8 +154,8 @@ angular
       $scope.audition.title = response.data.title;
       $scope.audition.description = response.data.description;
     }).catch(function(err) {
-      translationService.translateError(err).then(function(message) {
-        alertService.addAlert('warning', message);
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('warning', translation);
       });
     });
   };
@@ -163,12 +163,12 @@ angular
     contestService.joinContest($scope.audition).then(function(response) {
       var audition = response.data;
       $state.go('app.audition', {locale: $scope.locale(), id: audition.id, slug: audition.slug});
-      $translate('alerts.congratulations_now_you_are_in_the_contest').then(function(message) {
-        alertService.addAlert('info', message)
+      $translate('alerts.congratulations_now_you_are_in_the_contest').then(function(translation) {
+        alertService.addAlert('info', translation)
       });
     }).catch(function(err) {
-      translationService.translateError(err).then(function(message) {
-        alertService.addAlert('danger', message);
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
       });
     });
   };
@@ -186,8 +186,8 @@ angular
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
 
-  $translate('seo.title.audition', {audition: $scope.audition.title}).then(function(message) {
-    seoService.setTitle(message);
+  $translate('seo.title.audition', {audition: $scope.audition.title}).then(function(translation) {
+    seoService.setTitle(translation);
   });
   seoService.setDescription($scope.audition.description);
   seoService.setImage($scope.audition.medium_thumbnail);
@@ -246,12 +246,12 @@ angular
       $scope.votes++;
       $scope.score += $scope.userVote.voting_power;
       $scope.score = Number($scope.score.toFixed(3));
-      $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(message) {
-        alertService.addAlert('success', message);
+      $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(translation) {
+        alertService.addAlert('success', translation);
       });
     }).catch(function(err) {
-      translationService.translateError(err).then(function(message) {
-        alertService.addAlert('danger', message);
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
       });
     });
   };
@@ -263,8 +263,8 @@ angular
       $scope.score = Number($scope.score.toFixed(3));
       $scope.userVote = null;
     }).catch(function(err) {
-      translationService.translateError(err).then(function(message) {
-        alertService.addAlert('danger', message);
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
       });
     });
   };

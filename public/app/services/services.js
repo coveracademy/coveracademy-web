@@ -203,6 +203,7 @@ angular
     'audition.vote.canNotVoteForYourself': 'errors.user_vote_can_not_vote_for_yourself',
     'audition.vote.contestWasFinished': 'errors.user_vote_contest_was_finished',
     'audition.vote.reachVoteLimit': 'errors.user_vote_reach_vote_limit',
+    'contest.join.alreadyFinished': 'errors.join_contest_already_finished',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
