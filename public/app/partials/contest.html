@@ -153,7 +153,7 @@
       {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
     <h2 ng-if="isContestProgress('waiting_time')">
-      {{ 'remaining_time' | translate }}:      
+      {{ 'remaining_time' | translate }}:
     </h2>
     <h1 ng-if="isContestProgress('waiting_time')">
       <span ng-if="remainingOneDay(contest.start_date)">
@@ -259,6 +259,7 @@
         <span ng-if="isRanked('latest')">
           {{ 'latest_auditions' | translate }}
         </span>
+        <small>({{ totalAuditions }})</small>
       </h1>
     </div>
     <div class="col-md-4 align-right" style="padding-top: 36px;">

@@ -26,9 +26,23 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
-exports.listUnfinishedContests = function() {
+exports.listContestsToStart = function() {
+  return Contest.collection().query(function(qb) {
+    qb.leftJoin('audition', 'contest.id', 'audition.contest_id')
+    .where('contest.finished', 0)
+    .whereNotNull('contest.start_date')
+    .where('contest.start_date', '<=', new Date())
+    .whereNull('contest.end_date')
+    .groupBy('audition.contest_id')
+    .havingRaw('count(audition.contest_id) >= contest.minimum_contestants');
+  }).fetch();
+}
+
+exports.listContestsToFinish = function() {
   return Contest.collection().query(function(qb) {
     qb.where('finished', 0);
+    qb.whereNotNull('end_date');
+    qb.where('end_date', '<', new Date());
   }).fetch();
 }
 
@@ -106,7 +120,7 @@ exports.finishContest = function(contest) {
   });
 }
 
-var startContest = function(contest) {
+exports.startContest = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.getProgress() === 'waiting') {
       $.totalAuditions(contest).then(function(totalAuditions) {
@@ -181,14 +195,14 @@ exports.joinContest = function(user, auditionData) {
         throw new APIError(400, 'contest.join.alreadyFinished', 'The contest was already finished');
       } else {
         return createAudition(user, contest, auditionData);
-      }    
-    }).then(function(audition) { 
-      this.audition = audition;  
-      startContest(this.contest).then(function(contest) {
+      }
+    }).then(function(audition) {
+      this.audition = audition;
+      $.startContest(this.contest).then(function(contest) {
         return contest;
       }).catch(function(err) {
         return;
-      });       
+      });
     }).then(function(contest) {
       resolve(this.audition);
     }).catch(function(err) {
