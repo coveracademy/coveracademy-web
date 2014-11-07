@@ -610,6 +610,10 @@ form.compacted .form-group {
   padding-top: 20px;
 }
 
+.special-header.contest .title h1 {
+  font-size: 34px;
+}
+
 .special-header.contest .share {
   padding-top: 15px;
 }
