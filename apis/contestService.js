@@ -1,19 +1,20 @@
-var Contest    = require('../models/models').Contest,
-    Audition   = require('../models/models').Audition,
-    UserVote   = require('../models/models').UserVote,
-    User       = require('../models/models').User,
-    Bookshelf  = require('../models/models').Bookshelf,
-    settings   = require('../configs/settings'),
-    slug       = require('../utils/slug'),
-    modelUtils = require('../utils/modelUtils'),
-    apiErrors  = require('./errors/apiErrors'),
-    APIError   = require('./errors/apiErrors').APIError,
-    youtube    = require('./third/youtube'),
-    constants  = require('./constants'),
-    Promise    = require('bluebird'),
-    moment     = require('moment'),
-    _          = require('underscore'),
-    $          = this;
+var Contest     = require('../models/models').Contest,
+    Audition    = require('../models/models').Audition,
+    UserVote    = require('../models/models').UserVote,
+    User        = require('../models/models').User,
+    Bookshelf   = require('../models/models').Bookshelf,
+    settings    = require('../configs/settings'),
+    slug        = require('../utils/slug'),
+    modelUtils  = require('../utils/modelUtils'),
+    apiErrors   = require('./errors/apiErrors'),
+    APIError    = require('./errors/apiErrors').APIError,
+    youtube     = require('./third/youtube'),
+    constants   = require('./constants'),
+    mailService = require('./mailService'),
+    Promise     = require('bluebird'),
+    moment      = require('moment'),
+    _           = require('underscore'),
+    $           = this;
 
 _.str = require('underscore.string');
 
@@ -198,6 +199,9 @@ exports.joinContest = function(user, auditionData) {
       }
     }).then(function(audition) {
       this.audition = audition;
+      mailService.contestJoin(user, this.contest, this.audition).catch(function(err) {
+        console.log('Error sending "contest join" email to user ' + user.id);
+      });
       $.startContest(this.contest).then(function(contest) {
         return contest;
       }).catch(function(err) {

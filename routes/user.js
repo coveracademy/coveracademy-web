@@ -15,7 +15,7 @@ module.exports = function(router, app) {
     var email = req.param('email');
     var subject = req.param('subject');
     var message = req.param('message');
-    mailService.sendEmail(name, email, subject, message).then(function() {
+    mailService.receive(name, email, subject, message).then(function() {
       res.send(200);
     }).catch(function(err) {
       console.log(err);

@@ -3,6 +3,7 @@ var path = require('path'),
     _nodeEnv = process.env.NODE_ENV || 'dev',
     _nodeIP = process.env.NODE_IP || '127.0.0.1',
     _nodePort = process.env.NODE_PORT || 3000,
+    _mailingPort = process.env.MAILING_PORT || 5000,
     _publicPath = path.join(__dirname, '../public'),
     _viewsPath = path.join(__dirname, '../views'),
     _tmpUploadPath = path.join(__dirname, '../tmp'),
@@ -73,7 +74,7 @@ var path = require('path'),
 
 console.log('Using ' + _nodeEnv + ' environment settings');
 if(_debug === true) {
-  console.log('Debug mode ON');
+  console.log('Debug mode is ON');
 }
 
 exports.debug = _debug;
@@ -89,6 +90,7 @@ exports.lastfmSecret = _lastfmSecret;
 exports.googleAPIKey = _googleAPIKey;
 exports.siteUrl = _siteUrl;
 exports.domain = _domain;
+exports.mailingPort = _mailingPort;
 
 exports.facebook = _facebook;
 exports.twitter = _twitter;

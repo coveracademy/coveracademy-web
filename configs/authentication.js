@@ -3,6 +3,7 @@ var FacebookStrategy = require('passport-facebook').Strategy,
     YoutubeStrategy  = require('passport-youtube-v3').Strategy,
     GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy,
     userService      = require('../apis/userService'),
+    mailService      = require('../apis/mailService'),
     fileUtils        = require('../utils/fileUtils'),
     settings         = require('./settings');
 
@@ -46,6 +47,9 @@ exports.configure = function(app, passport) {
           });
         } else {
           return userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+            mailService.userRegistration(user).catch(function(err) {
+              console.log('Error sending "user registration" email to user ' + user.id);
+            });
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
           }).then(function(user) {
             return userService.update(user, ['image']);
@@ -109,6 +113,9 @@ exports.configure = function(app, passport) {
           });
         } else {
           return userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
+            mailService.userRegistration(user).catch(function(err) {
+              console.log('Error sending "user registration" email to user ' + user.id);
+            });
             return fileUtils.downloadUserPhoto(profileInfos.picture, user);
           }).then(function(user) {
             return userService.update(user, ['image']);
