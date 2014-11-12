@@ -65,9 +65,12 @@ module.exports = function(router, app) {
 
   router.get('/cover/:id/:slug', function(req, res, next) {
     var id = req.param('id');
+    var slug = req.param('slug');
     coverService.getCover(id).then(function(cover) {
       if(!cover) {
         messages.respondWithNotFound(res);
+      } else if(slug !== cover.get('slug')) {
+        messages.respondWithMovedPermanently('cover', {id: cover.id, slug: cover.get('slug')}, res);
       } else {
         Promise.all([coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)])
         .spread(function(bestCoversOfMusic, bestCoversByArtist) {
