@@ -2,6 +2,7 @@ var coverService   = require('../apis/coverService'),
     contestService = require('../apis/contestService'),
     userService    = require('../apis/userService'),
     constants      = require('../apis/constants'),
+    messages       = require('../apis/messages'),
     isAdmin        = require('../utils/authorization').isAdmin,
     math           = require('../utils/math'),
     Promise        = require('bluebird');
@@ -21,7 +22,7 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -32,7 +33,7 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 
@@ -58,7 +59,7 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     }).bind();
   });
 
@@ -66,7 +67,7 @@ module.exports = function(router, app) {
     var id = req.param('id');
     coverService.getCover(id).then(function(cover) {
       if(!cover) {
-        res.send(404);
+        messages.respondWithNotFound(res);
       } else {
         Promise.all([coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)])
         .spread(function(bestCoversOfMusic, bestCoversByArtist) {
@@ -79,7 +80,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 
@@ -87,7 +88,7 @@ module.exports = function(router, app) {
     var rank = req.param('rank');
     var page = req.param('page') || constants.FIRST_PAGE;
     if(!validRankType(rank)) {
-      res.send(404);
+      messages.respondWithNotFound(res);
     } else {
       var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
       Promise.all([coversPromise, coverService.totalCovers(constants.WEEK_PERIOD)])
@@ -103,7 +104,7 @@ module.exports = function(router, app) {
         });
       }).catch(function(err) {
         console.log(err);
-        res.send(500);
+        messages.respondWithError(err, res);
       }).bind({});
     }
   });
@@ -113,7 +114,7 @@ module.exports = function(router, app) {
     var rank = req.param('rank') || 'best';
     coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
       if(!artist) {
-        res.send(404);
+        messages.respondWithNotFound(res);
       } else {
         Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)])
         .spread(function(totalMusicsByArtist, musicsByArtist) {
@@ -137,7 +138,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -154,7 +155,7 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     }).bind({});
   });
 
@@ -164,7 +165,7 @@ module.exports = function(router, app) {
     var rank = req.param('rank') || 'best';
     coverService.getMusicBySlug(slug).bind({}).then(function(music) {
       if(!music) {
-        res.send(404);
+        messages.respondWithNotFound(res);
       } else {
         var coversOfMusicPromise = rank === 'best' ? coverService.bestCoversOfMusic : coverService.latestCoversOfMusic;
         Promise.all([coverService.totalCoversOfMusic(music), coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)])
@@ -178,7 +179,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -186,7 +187,7 @@ module.exports = function(router, app) {
     var slug = req.param('slug');
     coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
       if(!musicGenre) {
-        res.send(404);
+        messages.respondWithNotFound(res);
       } else {
         Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_SUMMARIZED_LIST), coverService.bestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)]).bind({})
         .spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
@@ -200,7 +201,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -209,11 +210,11 @@ module.exports = function(router, app) {
     var rank = req.param('rank');
     var page = req.param('page') || constants.FIRST_PAGE;
     if(!validRankType(rank)) {
-      res.send(404);
+      messages.respondWithNotFound(res);
     } else {
       coverService.getMusicGenreBySlug(slug).then(function(musicGenre) {
         if(!musicGenre) {
-          res.send(404);
+          messages.respondWithNotFound(res);
         } else {
           var coversOfMusicGenrePromise = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
           Promise.all([coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
@@ -227,7 +228,7 @@ module.exports = function(router, app) {
         }
       }).catch(function(err) {
         console.log(err);
-        res.send(500);
+        messages.respondWithError(err, res);
       });
     }
   });
@@ -248,16 +249,19 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     }).bind({});
   });
 
   router.get('/contest/:id/:slug', function(req, res, next) {
     var id = req.param('id');
+    var slug = req.param('slug');
     var rankType = req.param('rank') || 'best';
     contestService.getContest(id).then(function(contest) {
       if(!contest) {
-        res.send(404);
+        messages.respondWithNotFound(res);
+      } else if(slug !== contest.get('slug')) {
+        messages.respondWithMovedPermanently('contest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
         contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
@@ -284,15 +288,18 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 
   router.get('/contest/:id/:slug/join', function(req, res, next) {
     var id = req.param('id');
+    var slug = req.param('slug');
     contestService.getContest(id).then(function(contest) {
       if(!contest) {
-        res.send(404);
+        messages.respondWithNotFound(res);
+      } else if(slug !== contest.get('slug')) {
+        messages.respondWithMovedPermanently('contestJoin', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
         contest.set('progress', contest.getProgress());
         res.json({
@@ -301,7 +308,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 
@@ -310,7 +317,9 @@ module.exports = function(router, app) {
     var slug = req.param('slug');
     contestService.getAudition(id).then(function(audition) {
       if(!audition) {
-        res.send(404);
+        messages.respondWithNotFound(res);
+      } else if(slug !== audition.get('slug')) {
+        messages.respondWithMovedPermanently('audition', {id: audition.id, slug: audition.get('slug')}, res);
       } else {
         var contest = audition.related('contest');
         contest.set('progress', contest.getProgress());
@@ -332,7 +341,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 
@@ -340,7 +349,7 @@ module.exports = function(router, app) {
     var id = req.param('id');
     userService.getUser(id).then(function(user) {
       if(!user) {
-        res.send(404);
+        messages.respondWithNotFound(res);
       } else {
         contestService.getUserAuditions(user).then(function(auditions) {
           res.json({
@@ -351,7 +360,7 @@ module.exports = function(router, app) {
       }
     }).catch(function(err) {
       console.log(err);
-      res.send(500);
+      messages.respondWithError(err, res);
     })
   });
 

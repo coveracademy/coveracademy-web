@@ -1,5 +1,5 @@
 var settings   = require('../../configs/settings'),
-    APIError   = require('../errors/apiErrors').APIError,
+    APIError   = require('../messages').APIError,
     youtubeAPI = require('youtube-api'),
     Promise    = require('bluebird'),
     _          = require('underscore'),

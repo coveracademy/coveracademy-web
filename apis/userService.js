@@ -1,7 +1,7 @@
 var User       = require('../models/models').User,
     modelUtils = require('../utils/modelUtils'),
-    apiErrors  = require('./errors/apiErrors'),
-    APIError   = require('./errors/apiErrors').APIError,
+    messages   = require('./messages'),
+    APIError   = require('./messages').APIError,
     Promise    = require('bluebird'),
     _          = require('underscore'),
     $          = this;

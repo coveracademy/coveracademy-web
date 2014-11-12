@@ -1,6 +1,6 @@
 var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
-    apiErrors       = require('../apis/errors/apiErrors'),
+    messages        = require('../apis/messages'),
     User            = require('../models/models').User,
     isAuthenticated = require('../utils/authorization').isAuthenticated;
 
@@ -19,7 +19,7 @@ module.exports = function(router, app) {
       res.send(200);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -29,7 +29,7 @@ module.exports = function(router, app) {
       res.json(user);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -39,7 +39,7 @@ module.exports = function(router, app) {
       res.json(user);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 

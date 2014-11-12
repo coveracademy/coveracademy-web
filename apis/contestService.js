@@ -6,8 +6,8 @@ var Contest     = require('../models/models').Contest,
     settings    = require('../configs/settings'),
     slug        = require('../utils/slug'),
     modelUtils  = require('../utils/modelUtils'),
-    apiErrors   = require('./errors/apiErrors'),
-    APIError    = require('./errors/apiErrors').APIError,
+    messages    = require('./messages'),
+    APIError    = require('./messages').APIError,
     youtube     = require('./third/youtube'),
     constants   = require('./constants'),
     mailService = require('./mailService'),
@@ -136,13 +136,13 @@ exports.startContest = function(contest) {
           contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
             resolve(contest);
           }).catch(function(err) {
-            reject(apiErrors.unexpectedError('Error starting the contest', err));
+            reject(messages.unexpectedError('Error starting the contest', err));
           });
         } else {
           resolve();
         }
       }).catch(function(err) {
-        reject(apiErrors.unexpectedError('Error starting the contest', err));
+        reject(messages.unexpectedError('Error starting the contest', err));
       });
     } else if(contest.getProgress() === 'running') {
       reject(new APIError(400, 'contest.alreadyStarted', 'The contest was already started'));
@@ -173,7 +173,7 @@ var createAudition = function(user, contest, auditionData) {
             if(err.code === 'ER_DUP_ENTRY') {
               reject(new APIError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest', err));
             } else {
-              reject(apiErrors.unexpectedError('Error adding audition in contest', err));
+              reject(messages.unexpectedError('Error adding audition in contest', err));
             }
           });
         } else {
@@ -359,7 +359,7 @@ exports.getUserVote = function(user, audition) {
       UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(userVote) {
         resolve(userVote);
       }).catch(function(err) {
-        reject(apiErrors.unexpectedError('Error getting user vote', err));
+        reject(messages.unexpectedError('Error getting user vote', err));
       });
     }
   });
@@ -400,7 +400,7 @@ exports.vote = function(user, audition) {
                 if(err.code === 'ER_DUP_ENTRY') {
                   reject(new APIError(400, 'audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
                 } else {
-                  reject(apiErrors.unexpectedError('Error voting in audition', err));
+                  reject(messages.unexpectedError('Error voting in audition', err));
                 }
               });
             } else {
@@ -413,10 +413,10 @@ exports.vote = function(user, audition) {
           reject(new APIError(400, 'audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
         }
       }).catch(function(err) {
-        reject(apiErrors.unexpectedError('Error voting in audition', err));
+        reject(messages.unexpectedError('Error voting in audition', err));
       });
     }).catch(function(err) {
-      reject(apiErrors.unexpectedError('Error voting in audition', err));
+      reject(messages.unexpectedError('Error voting in audition', err));
     });
   });
 }
@@ -431,7 +431,7 @@ exports.removeVote = function(user, audition) {
           userVote.destroy().then(function() {
             resolve(userVoteClone);
           }).catch(function(err) {
-            reject(apiErrors.unexpectedError('Error removing vote in audition', err));
+            reject(messages.unexpectedError('Error removing vote in audition', err));
           });
         } else {
           reject(new APIError(400, 'audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
@@ -440,7 +440,7 @@ exports.removeVote = function(user, audition) {
         reject(new APIError(400, 'audition.vote.userHasNotVoted', 'The user has not voted'));
       }
     }).catch(function(err) {
-      reject(apiErrors.unexpectedError('Error removing vote in audition', err));
+      reject(messages.unexpectedError('Error removing vote in audition', err));
     });
   });
 }

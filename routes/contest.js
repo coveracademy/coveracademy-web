@@ -1,7 +1,7 @@
 var contestService  = require('../apis/contestService'),
     constants       = require('../apis/constants'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
-    apiErrors       = require('../apis/errors/apiErrors'),
+    messages        = require('../apis/messages'),
     Audition        = require('../models/models').Audition,
     Contest         = require('../models/models').Contest;
 
@@ -14,7 +14,7 @@ module.exports = function(router, app) {
       res.json(videoInfos);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -24,7 +24,7 @@ module.exports = function(router, app) {
       res.json(audition);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -34,7 +34,7 @@ module.exports = function(router, app) {
       res.json(userVote);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -45,7 +45,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err)
       console.log(err.cause.stack);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -63,7 +63,7 @@ module.exports = function(router, app) {
       });
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     }).bind({});
   });
 
@@ -73,7 +73,7 @@ module.exports = function(router, app) {
       res.json(isContestant);
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -83,7 +83,7 @@ module.exports = function(router, app) {
       res.json(userAudition ? userAudition : {});
     }).catch(function(err) {
       console.log(err);
-      apiErrors.formatResponse(err, res);
+      messages.respondWithError(err, res);
     });
   });
 

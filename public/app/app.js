@@ -39,6 +39,10 @@ angular
   PUBLIC: {name: 'public', roles: ['public', 'user', 'admin']},
   ANONYMOUS: {name: 'anonymous', roles: ['public']}
 })
+.constant('redirections', {
+  contest: 'app.contest',
+  audition: 'app.audition'
+})
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
   // Internationalization
   $languagesProvider.getLanguages().forEach(function(language) {
@@ -294,7 +298,7 @@ angular
       templateUrl: '/app/partials/errors/500.html'
     });
 }])
-.run(['$rootScope', '$state', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'authenticationService', 'seoService', function($rootScope, $state, $translate, $languages, amMoment, paginationConfig, authEvents, authenticationService, seoService) {
+.run(['$rootScope', '$state', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'redirections', 'authenticationService', 'seoService', function($rootScope, $state, $translate, $languages, amMoment, paginationConfig, authEvents, redirections, authenticationService, seoService) {
   // Angular-Translate events
   $rootScope.$on('$translateChangeSuccess', function() {
     if($translate.use() === 'en') {
@@ -340,6 +344,8 @@ angular
       $state.go('app.404', {locale: $translate.use()}, {location: false});
     } else if(error.status === 500) {
       $state.go('app.500', {locale: $translate.use()}, {location: false});
+    } else if(error.status === 301) {
+      $state.go(redirections[error.data.toView], angular.extend(error.data.toParams, {locale: $translate.use()}));
     }
   });
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
