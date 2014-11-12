@@ -40,8 +40,10 @@ angular
   ANONYMOUS: {name: 'anonymous', roles: ['public']}
 })
 .constant('redirections', {
+  audition: 'app.audition',
   contest: 'app.contest',
-  audition: 'app.audition'
+  cover: 'app.cover',
+  joinContest: 'app.joinContest'
 })
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
   // Internationalization

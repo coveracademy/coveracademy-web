@@ -299,7 +299,7 @@ module.exports = function(router, app) {
       if(!contest) {
         messages.respondWithNotFound(res);
       } else if(slug !== contest.get('slug')) {
-        messages.respondWithMovedPermanently('contestJoin', {id: contest.id, slug: contest.get('slug')}, res);
+        messages.respondWithMovedPermanently('joinContest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
         contest.set('progress', contest.getProgress());
         res.json({
