@@ -15,8 +15,9 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 20;
 
-  $translate('seo.description.contest').then(function(translation) {
-    seoService.setDescription(translation);
+  $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
+    seoService.setDescription(translations['seo.description.contest']);
+    seoService.setKeywords(translations['seo.keywords.contest']);
   });
   seoService.setTitle($scope.contest.name);
   seoService.setImage('/img/contests/' + $scope.contest.image);
@@ -112,9 +113,10 @@ angular
   $scope.usingGoogleAccount = false;
   $scope.usingYoutubeAccount = false;
 
-  $translate(['seo.title.join_contest', 'seo.description.join_contest']).then(function(translations) {
+  $translate(['seo.title.join_contest', 'seo.description.join_contest', 'seo.keywords.join_contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.join_contest']);
     seoService.setDescription(translations['seo.description.join_contest']);
+    seoService.setKeywords(translations['seo.keywords.join_contest']);
   });
   seoService.setImage('/img/contests/' + $scope.contest.image);
 
@@ -294,8 +296,9 @@ angular
   };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
-  $translate(['seo.title.guideline', 'seo.description.guideline']).then(function(translations) {
+  $translate(['seo.title.guideline', 'seo.description.guideline', 'seo.keywords.guideline']).then(function(translations) {
     seoService.setTitle(translations['seo.title.guideline']);
     seoService.setDescription(translations['seo.description.guideline']);
+    seoService.setKeywords(translations['seo.keywords.guideline']);
   });
 }]);

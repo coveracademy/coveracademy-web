@@ -184,6 +184,11 @@ angular
           contest: 'Cover Academy is the first website in Brazil to promote online music competitions. Join and compete for prizes or be a judge and help us pick the winners.',
           guideline: '@:seo.description.contest',
           join_contest: '@:seo.description.contest'
+        },
+        keywords: {
+          contest: 'singing contest, music contest, singing competition, music competition, singing battle, music battle, cover battle, cover competition, cover contest, music contest, music competition, online music contest, online singing contest, online music competition, online singing competition, talent show, cover music, cover song',
+          guideline: '@:seo.keywords.contest',
+          join_contest: '@:seo.keywords.contest'
         }
       },
       user_form: {
@@ -379,6 +384,11 @@ angular
           contest: 'Cover Academy é o primeiro website do Brasil a promover competições online de música. Participe e concorra a prêmios ou seja um juiz e ajude-nos a escolher os vencedores.',
           guideline: '@:seo.description.contest',
           join_contest: '@:seo.description.contest'
+        },
+        keywords: {
+          contest: 'competição de canto, competição de música, concurso de canto, concurso de música, batalha de canto, batalha de música, batalha cover, competição cover, campeonato cover, campeonato de música, campeonato online de música, concurso online de música, competição online de música, show de talentos, música cover',
+          guideline: '@:seo.keywords.contest',
+          join_contest: '@:seo.keywords.contest'
         }
       },
       user_form: {
