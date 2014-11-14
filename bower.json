@@ -11,6 +11,7 @@
     "angular-translate": "~2.4.2",
     "angular-translate-storage-cookie": "~2.4.2",
     "angular-ui-router": "~0.2.11",
+    "angulartics": "~0.17.1",
     "bootstrap": "~3.2.0",
     "bootstrap-social": "~4.8.0",
     "bootswatch": "v3.2.0+3",

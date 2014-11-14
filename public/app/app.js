@@ -7,6 +7,8 @@ angular
   'coverAcademy.filters',
   'coverAcademy.controllers',
   'angularMoment',
+  'angulartics',
+  'angulartics.google.analytics',
   'flow',
   'ngCookies',
   'ngProgress',
