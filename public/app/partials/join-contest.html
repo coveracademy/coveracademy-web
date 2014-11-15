@@ -66,6 +66,7 @@
   </div>
   <form ng-if="usingGoogleAccount && usingYoutubeAccount" name="auditionForm" class="form-horizontal">
     <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
+    {{ contest.registration_date }}
     <div class="row">
       <div class="col-md-12 align-center">
         <alert type="info">
