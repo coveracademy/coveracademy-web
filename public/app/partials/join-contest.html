@@ -67,6 +67,18 @@
   <form ng-if="usingGoogleAccount && usingYoutubeAccount" name="auditionForm" class="form-horizontal">
     <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
     <div class="row">
+      <div class="col-md-12 align-center">
+        <alert type="info">
+          <p class="font-big nomargin">
+            {{ 'the_publish_date_must_be_since' | translate }}
+            <b class="font-biggest">
+              {{ contest.registration_date | amDateFormat: 'LL' }}
+            </b>
+          </p>
+        </alert>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-6 col-md-offset-3">
         <div class="form-group" ng-class="{'has-error': auditionForm.url.$invalid && !auditionForm.url.$pristine}">
           <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control big" placeholder="{{ 'paste_here_the_video_url' | translate}}" required/>

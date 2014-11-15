@@ -134,49 +134,54 @@
   </div>
   <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')">
     <div class="row">
-      <div class="col-md-5">
-        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="medium" show-score="false">
-        </audition>
+      <div class="col-md-12">
+        <alert type="warning">
+          <div class="font-biggest">
+            <p class="nomargin align-center">
+              {{ 'this_contest_is_not_happening_yet' | translate }}
+            </p>
+            <p class="nomargin" ng-if="isContestProgress('waiting_time')">
+              {{ 'time_remaining_to_start' | translate }}:
+              <span ng-if="remainingOneDay(contest.start_date)">
+                <timer interval="60000" end-time="contest.start_date">
+                  {{ hours }}
+                  <small>{{ 'hours' | translate }}</small>
+                  {{ minutes }}
+                  <small>{{ 'minutes' | translate }}</small>
+                </timer>
+              </span>
+              <span ng-if="!remainingOneDay(contest.start_date)">
+                <timer interval="60000" end-time="contest.start_date">
+                  {{ days }}
+                  <small>{{ 'days' | translate }}</small>
+                  {{ hours }}
+                  <small>{{ 'hours' | translate }}</small>
+                </timer>
+              </span>
+            </p>
+            <p class="nomargin" ng-if="isContestProgress('waiting')">
+              {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
+            </p>
+            <div>
+              {{ 'help_sharing' | translate }}:
+              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </div>
+          </div>
+        </alert>
       </div>
-      <div class="col-md-7">
-        <h2 class="nomargin">
-          {{ 'this_contest_is_not_happening_yet' | translate }}
-        </h2>
-        <h3 ng-if="isContestProgress('waiting')">
-          {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
-        </h3>
-        <h2 class="nomargin" ng-if="isContestProgress('waiting_time')">
-          {{ 'remaining_time' | translate }}:
-          <span ng-if="remainingOneDay(contest.start_date)">
-            <timer interval="60000" end-time="contest.start_date">
-              {{ hours }}
-              <small>{{ 'hours' | translate }}</small>
-              {{ minutes }}
-              <small>{{ 'minutes' | translate }}</small>
-            </timer>
-          </span>
-          <span ng-if="!remainingOneDay(contest.start_date)">
-            <timer interval="60000" end-time="contest.start_date">
-              {{ days }}
-              <small>{{ 'days' | translate }}</small>
-              {{ hours }}
-              <small>{{ 'hours' | translate }}</small>
-            </timer>
-          </span>
-        </h2>
-        <div>
-          <h2>
-            {{ 'help_sharing' | translate }}
-          </h2>
-          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-            <i class="fa fa-facebook"></i>
-          </a>
-          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-            <i class="fa fa-twitter"></i>
-          </a>
-          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-            <i class="fa fa-google-plus"></i>
-          </a>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="embed-container">
+          <embed-video ng-href="{{ audition.url }}"></embed-video>
         </div>
       </div>
     </div>

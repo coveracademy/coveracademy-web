@@ -43,6 +43,10 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $state.transitionTo($state.current, $stateParams, {reload: true, inherit: false, notify: true});
   });
+
+  $scope.isLocale = function(locale) {
+    return $translate.use() === locale;
+  };
 }])
 .controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
   $state.go('app.index', {locale: $translate.use()});
