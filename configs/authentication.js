@@ -13,6 +13,7 @@ exports.configure = function(app, passport) {
   app.use(passport.session());
 
   passport.serializeUser(function(user, done) {
+    console.log("USEEEEEEERRRRRRR: " + user);
     done(null, user.id);
   });
 
