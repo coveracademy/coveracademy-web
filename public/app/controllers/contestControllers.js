@@ -122,7 +122,6 @@ angular
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
-      console.log(response.data)
       $scope.userAudition = response.data;
     });
   });
