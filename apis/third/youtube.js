@@ -118,7 +118,7 @@ exports.getVideoInfos = function(uri) {
         reject(err);
       });
     } else {
-      reject(messages.apiError(400, 'contest.join.videoURLNotValid', 'This is not a YouTube video URL'));
+      reject(messages.apiError('youtube.videoURLNotValid', 'This is not a YouTube video URL'));
     }
   });
 }

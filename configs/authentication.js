@@ -32,7 +32,7 @@ exports.configure = function(app, passport) {
       if(user) {
         return user;
       }
-      throw messages.apiError(400, 'user.auth.errorDeserializingUserFromSession', 'Error deserializing user with id ' + id);
+      throw messages.apiError('user.auth.errorDeserializingUserFromSession', 'Error deserializing user with id ' + id);
     }).nodeify(done);
   });
 
@@ -54,7 +54,7 @@ exports.configure = function(app, passport) {
           return userService.update(user, ['facebook_account']).then(function(user) {
             return user;
           }).catch(function(err) {
-            throw messages.apiError(400, 'user.auth.errorAssociatingAccountWithFacebook', 'Error associating existing account with Facebook');
+            throw messages.apiError('user.auth.errorAssociatingAccountWithFacebook', 'Error associating existing account with Facebook');
           });
         } else {
           return userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
@@ -67,11 +67,11 @@ exports.configure = function(app, passport) {
           }).then(function(user) {
             return user;
           }).catch(function(err) {
-            throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
+            throw messages.apiError('user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
           });
         }
       }).catch(function(err) {
-        throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
+        throw messages.apiError('user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
       });
     }).nodeify(new CustomDone(done).done);
   }));
@@ -96,7 +96,7 @@ exports.configure = function(app, passport) {
   //       }).then(function(user) {
   //         return user;
   //       }).catch(function(err) {
-  //         throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithTwitter', 'Error creating account associated with Twitter');
+  //         throw messages.apiError('user.auth.errorCreatingAccountAssociatedWithTwitter', 'Error creating account associated with Twitter');
   //       });
   //     }).nodeify(new CustomDone(done).done);
   //   }
@@ -120,7 +120,7 @@ exports.configure = function(app, passport) {
           return userService.update(user, ['google_account']).then(function(user) {
             return user;
           }).catch(function(err) {
-            throw messages.apiError(400, 'user.auth.errorAssociatingAccountWithGoogle', 'Error associating existing account with Google');
+            throw messages.apiError('user.auth.errorAssociatingAccountWithGoogle', 'Error associating existing account with Google');
           });
         } else {
           return userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
@@ -133,11 +133,11 @@ exports.configure = function(app, passport) {
           }).then(function(user) {
             return user;
           }).catch(function(err) {
-            throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
+            throw messages.apiError('user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
           });
         }
       }).catch(function(err) {
-        throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
+        throw messages.apiError('user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
       });
     }).nodeify(new CustomDone(done).done);
   }));

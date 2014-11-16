@@ -25,20 +25,28 @@ function getErrorKey(err) {
   }
 }
 
-function apiError(statusCode, errorKey, errorMessage, cause) {
+function apiError(errorKey, errorMessage, cause) {
+  return new APIError(400, errorKey, errorMessage, cause);
+}
+
+function apiErrorWithCode(statusCode, errorKey, errorMessage, cause) {
   return new APIError(statusCode, errorKey, errorMessage, cause);
 }
 
 function unexpectedError(errorMessage, cause) {
-  return apiError(400, 'unexpectedError', errorMessage, cause);
+  return apiError('unexpectedError', errorMessage, cause);
+}
+
+function internalError(errorMessage, cause) {
+  return apiErrorWithCode(500, 'internalError', errorMessage, cause);
 }
 
 function respondWithError(err, res) {
   if(err instanceof APIError) {
     res.json(err.statusCode, err.toJSON());
   } else {
-    var internalError = apiError(500, 'internalError', '', err);
-    res.json(internalError.statusCode, internalError.toJSON());
+    var internal = internalError(err.message, err);
+    res.json(internal.statusCode, internal.toJSON());
   }
 }
 
@@ -53,7 +61,9 @@ function respondWithMovedPermanently(toView, toParams, res) {
 module.exports = {
   getErrorKey: getErrorKey,
   apiError: apiError,
+  apiErrorWithCode: apiErrorWithCode,
   unexpectedError: unexpectedError,
+  internalError: internalError,
   respondWithError: respondWithError,
   respondWithNotFound: respondWithNotFound,
   respondWithMovedPermanently: respondWithMovedPermanently,

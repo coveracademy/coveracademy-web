@@ -24,10 +24,10 @@ exports.associateYoutubeAccount = function(google_account, youtube_account) {
         user.set('youtube_account', youtube_account);
         resolve(user.save());
       } else {
-        reject(messages.apiError(400, 'user.auth.youtubeAccountOwnerDoesNotMatchTheGoogleAccount', 'The YouTube account owner does not match the Google Account'));
+        reject(messages.apiError('user.auth.youtubeAccountOwnerDoesNotMatchTheGoogleAccount', 'The YouTube account owner does not match the Google Account'));
       }
     }).catch(function(err) {
-      reject(messages.apiError(400, 'user.auth.errorAssociatingYouTubeAndGoogleAccounts', 'Error associating Youtube account with Google Account'));
+      reject(messages.apiError('user.auth.errorAssociatingYouTubeAndGoogleAccounts', 'Error associating Youtube account with Google Account'));
     });
   });
 }
@@ -45,7 +45,7 @@ exports.save = function(user, edited) {
         reject(err);
       });
     } else {
-      reject(messages.apiError(400, 'user.edit.noPermission', 'The user informations cannot be edited because has no permission'));
+      reject(messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because has no permission'));
     }
   });
 }

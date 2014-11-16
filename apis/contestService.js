@@ -144,9 +144,9 @@ exports.startContest = function(contest) {
         reject(messages.unexpectedError('Error starting the contest', err));
       });
     } else if(contest.getProgress() === 'running') {
-      reject(messages.apiError(400, 'contest.alreadyStarted', 'The contest was already started'));
+      reject(messages.apiError('contest.alreadyStarted', 'The contest was already started'));
     } else {
-      reject(messages.apiError(400, 'contest.alreadyFinished', 'The contest was already finished'));
+      reject(messages.apiError('contest.alreadyFinished', 'The contest was already finished'));
     }
   });
 }
@@ -170,19 +170,19 @@ var createAudition = function(user, contest, auditionData) {
             resolve(audition);
           }).catch(function(err) {
             if(err.code === 'ER_DUP_ENTRY') {
-              reject(messages.apiError(400, 'contest.join.userAlreadyInContest', 'The user is already in contest', err));
+              reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
             } else {
               reject(messages.unexpectedError('Error adding audition in contest', err));
             }
           });
         } else {
-          reject(messages.apiError(400, 'contest.join.videoDateIsNotValid', 'The date of this video can not be older or younger than the contest'));
+          reject(messages.apiError('contest.join.videoDateIsNotValid', 'The date of this video can not be older or younger than the contest'));
         }
       } else {
-        reject(messages.apiError(400, 'contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
+        reject(messages.apiError('contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
       }
     }).catch(function(err) {
-      reject(messages.apiError(400, 'contest.join.errorGettingVideoInfos', 'Error getting video information', err));
+      reject(messages.apiError('contest.join.errorGettingVideoInfos', 'Error getting video information', err));
     });
   });
 }
@@ -192,7 +192,7 @@ exports.joinContest = function(user, auditionData) {
     Contest.forge({id: auditionData.contest_id}).fetch().then(function(contest) {
       this.contest = contest;
       if(contest.getProgress() === 'finished') {
-        throw messages.apiError(400, 'contest.join.alreadyFinished', 'The contest was already finished');
+        throw messages.apiError('contest.join.alreadyFinished', 'The contest was already finished');
       } else {
         return createAudition(user, contest, auditionData);
       }
@@ -397,19 +397,19 @@ exports.vote = function(user, audition) {
                 resolve(userVote);
               }).catch(function(err) {
                 if(err.code === 'ER_DUP_ENTRY') {
-                  reject(messages.apiError(400, 'audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
+                  reject(messages.apiError('audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
                 } else {
                   reject(messages.unexpectedError('Error voting in audition', err));
                 }
               });
             } else {
-              reject(messages.apiError(400, 'audition.vote.canNotVoteForYourself', 'The user can not vote for yourself', err));
+              reject(messages.apiError('audition.vote.canNotVoteForYourself', 'The user can not vote for yourself', err));
             }
           } else {
-            reject(messages.apiError(400, 'audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
+            reject(messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
           }
         } else {
-          reject(messages.apiError(400, 'audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
+          reject(messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
         }
       }).catch(function(err) {
         reject(messages.unexpectedError('Error voting in audition', err));
@@ -433,10 +433,10 @@ exports.removeVote = function(user, audition) {
             reject(messages.unexpectedError('Error removing vote in audition', err));
           });
         } else {
-          reject(messages.apiError(400, 'audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
+          reject(messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
         }
       } else {
-        reject(messages.apiError(400, 'audition.vote.userHasNotVoted', 'The user has not voted'));
+        reject(messages.apiError('audition.vote.userHasNotVoted', 'The user has not voted'));
       }
     }).catch(function(err) {
       reject(messages.unexpectedError('Error removing vote in audition', err));
