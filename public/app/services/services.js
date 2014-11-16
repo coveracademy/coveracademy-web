@@ -222,7 +222,7 @@ angular
     'status.500': 'errors.unexpected_error'
   };
   this.translateError = function(err) {
-    var isError = err instanceof Error;
+    var isError = Boolean(angular.isObject(err) && err.data && err.status);
     var translationKey = errorKeys[isError ? err.data.errorKey : err];
     if(!translationKey) {
       if(isError) {
