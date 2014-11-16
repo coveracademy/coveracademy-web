@@ -4,6 +4,7 @@ var express        = require('express'),
     path           = require('path'),
     favicon        = require('serve-favicon'),
     logger         = require('morgan'),
+    flash          = require('connect-flash'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
     session        = require('express-session'),
@@ -26,6 +27,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(flash());
 app.use(session({secret: 'coveracademy', saveUninitialized: true, resave: true}));
 app.use(express.static(app.get('public')));
 

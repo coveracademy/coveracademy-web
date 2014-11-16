@@ -1,7 +1,6 @@
 var User       = require('../models/models').User,
     modelUtils = require('../utils/modelUtils'),
     messages   = require('./messages'),
-    APIError   = require('./messages').APIError,
     Promise    = require('bluebird'),
     _          = require('underscore'),
     $          = this;
@@ -20,13 +19,15 @@ exports.createByGoogleAccount = function(name, gender, email, google_account) {
 
 exports.associateYoutubeAccount = function(google_account, youtube_account) {
   return new Promise(function(resolve, reject) {
-    $.findByGoogleAccount(google_account, true).then(function(user) {
-      user.set('youtube_account', youtube_account);
-      return user.save();
-    }).then(function(user) {
-      resolve(user);
+    $.findByGoogleAccount(google_account).then(function(user) {
+      if(user) {
+        user.set('youtube_account', youtube_account);
+        resolve(user.save());
+      } else {
+        reject(messages.apiError(400, 'user.auth.youtubeAccountOwnerDoesNotMatchTheGoogleAccount', 'The YouTube account owner does not match the Google Account'));
+      }
     }).catch(function(err) {
-      reject(new Error('Error associating Youtube account with Google Account'));
+      reject(messages.apiError(400, 'user.auth.errorAssociatingYouTubeAndGoogleAccounts', 'Error associating Youtube account with Google Account'));
     });
   });
 }
@@ -44,7 +45,7 @@ exports.save = function(user, edited) {
         reject(err);
       });
     } else {
-      reject(new APIError(400, 'user.edit.noPermission'));
+      reject(messages.apiError(400, 'user.edit.noPermission', 'The user informations cannot be edited because has no permission'));
     }
   });
 }
@@ -56,7 +57,7 @@ exports.getUser = function(id) {
     return $.findByUsername(id);
   }).then(function(user) {
     return user;
-  })
+  });
 }
 
 exports.findAll = function() {

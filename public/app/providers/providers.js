@@ -139,12 +139,18 @@ angular
         join_contest_already_finished: 'The contest was already finished =(',
         join_contest_video_date_is_not_valid: 'The video can not be older or younger than the contest',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
-        join_contest_video_url_not_valid: 'For now we support only Youtube videos =(',
         join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us',
         unexpected_error: 'An unexpected error happened, please try again later',
+        user_auth_error_associating_account_with_facebook: 'Error associating your account with Facebook, please try again later',
+        user_auth_error_associating_account_with_google: 'Error associating your account with Google, please try again later',
+        user_auth_error_associating_youtube_and_google_accounts: 'Error associating your YouTube and Google accounts, please try again later',
+        user_auth_error_creating_account_associated_with_facebook: 'Error creating account associated with Facebook, please try again later',
+        user_auth_error_creating_account_associated_with_google: 'Error creating account associated with Google, please try again later',
+        user_auth_youtube_account_owner_does_not_match_the_google_account: 'This YouTube account does not belong to the same Google account owner, please log out of both accounts and try again',
         user_vote_can_not_vote_for_yourself: 'You can not vote for yourself',
         user_vote_contest_was_finished: 'You can\'t vote because this contest was already finished',
-        user_vote_reach_vote_limit: 'You reach the maximum of votes per contest'
+        user_vote_reach_vote_limit: 'You reach the maximum of votes per contest',
+        youtube_video_url_not_valid: 'For now we support only Youtube videos =('
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -341,12 +347,18 @@ angular
         join_contest_already_finished: 'A competição já foi finalizada =(',
         join_contest_video_date_is_not_valid: 'O vídeo não pode ser mais antigo ou mais novo que a competição',
         join_contest_video_not_owned_by_user: 'Você não pode participar de uma competição com um vídeo publicado em outra conta',
-        join_contest_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =(',
         join_contest_user_already_in_contest: 'Você já está participando dessa competição. Caso tenha dúvidas entre em contato',
         unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente',
+        user_auth_error_associating_account_with_facebook: 'Erro ao associar sua conta com o Facebook, por favor tente novamente mais tarde',
+        user_auth_error_associating_account_with_google: 'Erro ao associar sua conta com o Google, por favor tente novamente mais tarde',
+        user_auth_error_associating_youtube_and_google_accounts: 'Erro ao associar sua conta do YouTube com a do Google, por favor tente novamente mais tarde',
+        user_auth_error_creating_account_associated_with_facebook: 'Erro ao criar conta associada com o Facebook, por favor tente novamente mais tarde',
+        user_auth_error_creating_account_associated_with_google: 'Erro ao criar conta associada com o Google, por favor tente novamente mais tarde',
+        user_auth_youtube_account_owner_does_not_match_the_google_account: 'Esta conta do YouTube não pertence ao mesmo dono da conta do Google, por favor faça log out das duas contas e tente novamente',
         user_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo',
         user_vote_contest_was_finished: 'Você não pode votar porque esta competição já foi finalizado',
-        user_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição'
+        user_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição',
+        youtube_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =('
       },
       music_genre: {
         acoustic: 'Acústico',

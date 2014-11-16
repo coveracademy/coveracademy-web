@@ -5,15 +5,25 @@ var FacebookStrategy = require('passport-facebook').Strategy,
     userService      = require('../apis/userService'),
     mailService      = require('../apis/mailService'),
     fileUtils        = require('../utils/fileUtils'),
-    settings         = require('./settings');
+    settings         = require('./settings'),
+    messages         = require('../apis/messages');
 
 exports.configure = function(app, passport) {
+
+  var CustomDone = function(originalDone) {
+    this.done = function(err, obj) {
+      if(err) {
+        originalDone(null, false, {message: messages.getErrorKey(err)});
+      } else {
+        originalDone(null, obj);
+      }
+    };
+  }
 
   app.use(passport.initialize());
   app.use(passport.session());
 
   passport.serializeUser(function(user, done) {
-    console.log("USEEEEEEERRRRRRR: " + user);
     done(null, user.id);
   });
 
@@ -22,7 +32,7 @@ exports.configure = function(app, passport) {
       if(user) {
         return user;
       }
-      throw new Error('Error deserializing user with id ' + id);
+      throw messages.apiError(400, 'user.auth.errorDeserializingUserFromSession', 'Error deserializing user with id ' + id);
     }).nodeify(done);
   });
 
@@ -44,7 +54,7 @@ exports.configure = function(app, passport) {
           return userService.update(user, ['facebook_account']).then(function(user) {
             return user;
           }).catch(function(err) {
-            return new Error('Error associating existing account with Facebook');
+            throw messages.apiError(400, 'user.auth.errorAssociatingAccountWithFacebook', 'Error associating existing account with Facebook');
           });
         } else {
           return userService.createByFacebookAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
@@ -57,13 +67,13 @@ exports.configure = function(app, passport) {
           }).then(function(user) {
             return user;
           }).catch(function(err) {
-            return new Error('Error creating account associated with Facebook');
+            throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
           });
         }
       }).catch(function(err) {
-        return new Error('Error creating account associated with Facebook');
+        throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithFacebook', 'Error creating account associated with Facebook');
       });
-    }).nodeify(done);
+    }).nodeify(new CustomDone(done).done);
   }));
 
   // passport.use(new TwitterStrategy(settings.twitter,
@@ -86,9 +96,9 @@ exports.configure = function(app, passport) {
   //       }).then(function(user) {
   //         return user;
   //       }).catch(function(err) {
-  //         return new Error('Error creating account associated with Twitter');
+  //         throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithTwitter', 'Error creating account associated with Twitter');
   //       });
-  //     }).nodeify(done);
+  //     }).nodeify(new CustomDone(done).done);
   //   }
   // ));
 
@@ -110,7 +120,7 @@ exports.configure = function(app, passport) {
           return userService.update(user, ['google_account']).then(function(user) {
             return user;
           }).catch(function(err) {
-            return new Error('Error associating existing account with Google');
+            throw messages.apiError(400, 'user.auth.errorAssociatingAccountWithGoogle', 'Error associating existing account with Google');
           });
         } else {
           return userService.createByGoogleAccount(profileInfos.name, profileInfos.gender, profileInfos.email, profileInfos.id).then(function(user) {
@@ -123,23 +133,19 @@ exports.configure = function(app, passport) {
           }).then(function(user) {
             return user;
           }).catch(function(err) {
-            return new Error('Error creating account associated with Google');
+            throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
           });
         }
       }).catch(function(err) {
-        return new Error('Error creating account associated with Google');
+        throw messages.apiError(400, 'user.auth.errorCreatingAccountAssociatedWithGoogle', 'Error creating account associated with Google');
       });
-    }).nodeify(done);
+    }).nodeify(new CustomDone(done).done);
   }));
 
   passport.use(new YoutubeStrategy(settings.youtube, function(accessToken, refreshToken, profile, done) {
     var account = profile._json.items[0];
     var googleAccount = account.contentDetails.googlePlusUserId;
     var youtubeAccount = account.id;
-    userService.associateYoutubeAccount(googleAccount, youtubeAccount).then(function(user) {
-      return user;
-    }).catch(function(err) {
-      return err;
-    }).nodeify(done);
+    userService.associateYoutubeAccount(googleAccount, youtubeAccount).nodeify(new CustomDone(done).done);
   }));
 }

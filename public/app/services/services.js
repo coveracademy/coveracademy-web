@@ -68,7 +68,7 @@ angular
     $.getAlerts().push(alert);
     $timeout(function() {
       $.getAlerts().splice(that.getAlerts().indexOf(alert), 1);
-    }, 5000);
+    }, 8000);
   };
 }])
 .service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
@@ -105,7 +105,7 @@ angular
     var top = ($window.screen.height / 2) - (410 / 2);
     var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
     win.focus();
-    $window.authResult = function(result) {
+    $window.authResult = function(result, message) {
       if(result === 'success') {
         userService.getAuthenticatedUser().then(function(response) {
           changeUser(response.data);
@@ -117,8 +117,9 @@ angular
         });
       } else if(result === 'fail') {
         deferred.reject();
-        $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+        $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
       }
+      win.close();
     }
     return deferred.promise;
   };
@@ -207,27 +208,33 @@ angular
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
-    'contest.join.videoURLNotValid': 'errors.join_contest_video_url_not_valid',
+    'user.auth.errorAssociatingAccountWithFacebook': 'errors.user_auth_error_associating_account_with_facebook',
+    'user.auth.errorAssociatingAccountWithGoogle': 'errors.user_auth_error_associating_account_with_google',
+    'user.auth.errorAssociatingYouTubeAndGoogleAccounts': 'errors.user_auth_error_associating_youtube_and_google_accounts',
+    'user.auth.errorCreatingAccountAssociatedWithFacebook': 'errors.user_auth_error_creating_account_associated_with_facebook',
+    'user.auth.errorCreatingAccountAssociatedWithGoogle': 'errors.user_auth_error_creating_account_associated_with_google',
+    'user.auth.youtubeAccountOwnerDoesNotMatchTheGoogleAccount': 'errors.user_auth_youtube_account_owner_does_not_match_the_google_account',
+    'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
+    'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
+    'status.400': 'errors.unexpected_error',
     'status.401': 'errors.authentication_required',
     'status.500': 'errors.unexpected_error'
-  }
-
+  };
   this.translateError = function(err) {
-    var deferred = $q.defer();
-    var translationKey = errorKeys[err.data.errorKey];
-    if(translationKey) {
-      deferred.resolve($translate(translationKey));
-    } else {
-      if(err.status == 400) {
-        deferred.resolve(err.errorMessage);
-      } else {
+    var isError = err instanceof Error;
+    var translationKey = errorKeys[isError ? err.data.errorKey : err];
+    if(!translationKey) {
+      if(isError) {
         translationKey = errorKeys['status.' + err.status];
-        deferred.resolve($translate(translationKey));
+      } else {
+        translationKey = errorKeys['internalError'];
       }
     }
+    var deferred = $q.defer();
+    deferred.resolve($translate(translationKey));
     return deferred.promise;
-  }
+  };
 }])
 .service('userService', ['$http', function($http) {
   this.loginEndpoint = function(provider) {
