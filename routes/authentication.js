@@ -15,8 +15,8 @@ module.exports = function(router, app, passport) {
     res.render('/auth/auth-fail.html', {message: req.flash('error')});
   });
 
-  router.get('/facebook', passport.authenticate('facebook'));
-  router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/api/auth/success', failureRedirect: '/api/auth/fail', failureFlash: true}));
+  // router.get('/facebook', passport.authenticate('facebook'));
+  // router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/api/auth/success', failureRedirect: '/api/auth/fail', failureFlash: true}));
 
   // router.get('/twitter', passport.authenticate('twitter'));
   // router.get('/twitter/callback', passport.authenticate('twitter', {successRedirect: '/api/auth/success', failureRedirect: '/api/auth/fail', failureFlash: true}));
