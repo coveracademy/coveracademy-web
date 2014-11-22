@@ -45,8 +45,36 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="primary-pictures" class="control-label col-md-2">
+                {{ 'forms.picture' | translate }}
+              </label>
+              <div id="primary-pictures" class="col-md-10">
+                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('facebook')" ng-click="selectPrimaryNetwork('facebook')" ng-class="{selected: isPrimaryNetwork('facebook')}">
+                  <div profile-picture="user" network="facebook" class="profile-picture img-circle align-center">
+                  </div>
+                  <div class="caption align-center">
+                    <i ng-show="isPrimaryNetwork('facebook')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_facebook_picture' | translate }}
+                  </div>
+                </div>
+                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('twitter')" ng-click="selectPrimaryNetwork('twitter')" ng-class="{selected: isPrimaryNetwork('twitter')}">
+                  <div profile-picture="user" network="twitter" class="profile-picture img-circle align-center">
+                  </div>
+                  <div class="caption align-center">
+                    <i ng-show="isPrimaryNetwork('twitter')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_twitter_picture' | translate }}
+                  </div>
+                </div>
+                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('google')" ng-click="selectPrimaryNetwork('google')" ng-class="{selected: isPrimaryNetwork('google')}">
+                  <div profile-picture="user" network="google" class="profile-picture img-circle align-center">
+                  </div>
+                  <div class="caption align-center">
+                    <i ng-show="isPrimaryNetwork('google')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_google_picture' | translate }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
               <div class="col-md-6 col-md-offset-2 align-right">
-                <button ng-disabled="profileForm.$invalid" ng-click="saveChanges()" type="button" class="btn btn-primary btn-lg">{{ 'forms.save_changes' | translate }}</button>
+                <button ng-disabled="profileForm.$invalid" ng-click="saveChanges()" type="button" class="btn btn-primary btn-block btn-lg">{{ 'forms.save_changes' | translate }}</button>
               </div>
             </div>
           </form>

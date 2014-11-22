@@ -17,13 +17,14 @@ var path = require('path'),
       clientID: '329761620528304',
       clientSecret: '9331e1f0ee96c8ea7789a22e55aacdba',
       callbackURL: _siteUrl + '/api/auth/facebook/callback',
-      profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails', 'about'],
-      scope: ['email', 'user_about_me', 'user_location']
+      profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails'],
+      scope: ['email']
     },
     _twitter = {
       consumerKey: '0mB4ErjFy98T1b2POJKSuqTOH',
       consumerSecret: 'AQC63tuLcet6uopVS5GQ87hknHAYd3GOfNDyedyOT1gEr0W5Vb',
-      callbackURL: _siteUrl + '/api/auth/twitter/callback'
+      callbackURL: _siteUrl + '/api/auth/twitter/callback',
+      profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails']
     },
     _google = {
       clientID: '787515950155-dpukm9vvm6u7ei2ma91nrhmvnsmusptn.apps.googleusercontent.com',

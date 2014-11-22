@@ -69,7 +69,7 @@ exports.configure = function(app, passport) {
         email: null,
         name: profile.displayName,
         gender: null,
-        picture: profile.photos[0].value
+        picture: profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
       };
       userService.findByTwitterAccount(profileInfos.id).then(function(user) {
         if(user) {
@@ -97,6 +97,7 @@ exports.configure = function(app, passport) {
     userService.findByGoogleAccount(profileInfos.id).then(function(user) {
       if(user) {
         if(user.get('google_picture') !== profileInfos.picture) {
+          user.set('google_picture', profileInfos.picture);
           return userService.save(user, ['google_picture']);
         } else {
           return user;

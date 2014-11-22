@@ -187,9 +187,7 @@ angular
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
 
-  $translate('seo.title.audition', {audition: $scope.audition.title}).then(function(translation) {
-    seoService.setTitle(translation);
-  });
+  seoService.setTitle($scope.audition.title + ' - ' + $scope.audition.user.name);
   seoService.setDescription($scope.audition.description);
   seoService.setImage($scope.audition.large_thumbnail);
 

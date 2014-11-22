@@ -309,13 +309,24 @@ angular
   this.getByEmail = function(email) {
     return $http.get('/api/user', {params: {email: email}});
   };
-  this.getProfilePicture = function(user) {
+  this.getProfilePicture = function(user, network) {
     var url = defaultProfilePicture;
-    var picture = networkPictures[user.primary_network];
+    var picture = networkPictures[network ? network : user.primary_network];
     if(picture) {
       url = picture.get(user);
     }
     return url;
+  };
+  this.hasNetworkConnection = function(user, network) {
+    var hasConnection = false;
+    if(network === 'facebook') {
+      hasConnection = Boolean(user.facebook_account);
+    } else if(network === 'twitter') {
+      hasConnection = Boolean(user.twitter_account);
+    } else if(network === 'google') {
+      hasConnection = Boolean(user.google_account);
+    }
+    return hasConnection;
   };
   this.getPrimaryNetworkConnection = function(user) {
     var connection = null;

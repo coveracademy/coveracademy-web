@@ -111,6 +111,24 @@ p, li {
   border-radius: 0;
 }
 
+#primary-pictures .thumbnail {
+  width: 220px;
+  padding: 20px;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 14px;
+}
+
+#primary-pictures .thumbnail.selected {
+  background-color: #ecf3fa;
+}
+
+#primary-pictures .profile-picture {
+  margin: 0 auto;
+  height: 100px;
+  width: 100px;
+}
+
 .profile-picture {
   display: block;
   background-color: transparent;

@@ -75,6 +75,15 @@ angular
     seoService.setTitle(translation);
   });
 
+  $scope.hasNetworkConnection = function(network) {
+    return userService.hasNetworkConnection($scope.user, network);
+  };
+  $scope.selectPrimaryNetwork = function(network) {
+    $scope.user.primary_network = network;
+  };
+  $scope.isPrimaryNetwork = function(network) {
+    return userService.isPrimaryNetworkConnection($scope.user, network);
+  };
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {
       $translate('alerts.changes_saved_successfully').then(function(translation) {

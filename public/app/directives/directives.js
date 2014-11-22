@@ -95,11 +95,12 @@ angular
   return {
     restrict: 'A',
     scope: {
-      profilePicture: '='
+      profilePicture: '=',
+      network: '@'
     },
     link: function(scope, element, attrs, ctrl) {
       element.css({
-        'background-image': 'url(' + userService.getProfilePicture(scope.profilePicture) +')',
+        'background-image': 'url(' + userService.getProfilePicture(scope.profilePicture, scope.network) +')',
       });
     }
   }
