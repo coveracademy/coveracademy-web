@@ -44,7 +44,6 @@ module.exports = function(router, app) {
       res.json(userVote);
     }).catch(function(err) {
       console.log(err)
-      console.log(err.cause.stack);
       messages.respondWithError(err, res);
     });
   });

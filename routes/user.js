@@ -23,10 +23,47 @@ module.exports = function(router, app) {
     });
   });
 
+  router.post('/connect', isAuthenticated, function(req, res, next) {
+    var email = req.param('email');
+    var password = req.param('password');
+    var user = User.forge({id: req.param('user')});
+    var networkType = req.param('network_type');
+    var networkAccount = req.param('network_account');
+
+    userService.connectNetwork(email, password, user, networkType, networkAccount).then(function(userAssociated) {
+      req.logout();
+      req.logIn(userAssociated, function(err) {
+        if(err) {
+          throw err;
+        }
+        res.json(userAssociated);
+      });
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   router.post('/', isAuthenticated, function(req, res, next) {
+    var userData = req.param('user');
+    userService.create(userData).then(function(user) {
+      req.logout();
+      req.logIn(user, function(err) {
+        if(err) {
+          throw err;
+        }
+        res.json(user);
+      });
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.put('/', isAuthenticated, function(req, res, next) {
     var user = req.param('user');
-    userService.save(req.user, User.forge(user)).then(function(user) {
-      res.json(user);
+    userService.update(req.user, User.forge(user)).then(function(userSaved) {
+      res.json(userSaved);
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
@@ -34,8 +71,13 @@ module.exports = function(router, app) {
   });
 
   router.get('/', function(req, res, next) {
-    var id = req.param('id');
-    userService.getUser(id).then(function(user) {
+    var query = req.param('id');
+    var queryPromise = userService.getUser;
+    if(!query) {
+      query = req.param('email');
+      queryPromise = userService.findByEmail;
+    }
+    queryPromise(query).then(function(user) {
       res.json(user);
     }).catch(function(err) {
       console.log(err);

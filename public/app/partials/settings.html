@@ -1,0 +1,60 @@
+<div class="container">
+  <h1>{{ 'menus.settings' | translate }}</h1>
+  <div class="tabbable-panel">
+    <div class="tabbable-line">
+      <tabset type="tabs">
+        <tab heading="{{ 'menus.profile' | translate | uppercase }}">
+          <form ng-if="!userFound" name="profileForm" class="form-horizontal">
+            <div class="form-group">
+              <label for="name" class="control-label col-md-2">
+                {{ 'forms.name' | translate }}
+              </label>
+              <div class="col-md-6" ng-class="{'has-error': profileForm.name.$dirty && profileForm.name.$invalid}">
+                <input ng-model="user.name" type="text" id="name" name="name" class="form-control" placeholder="{{ 'forms.name' | translate }}" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gender" class="control-label col-md-2">
+                {{ 'forms.gender' | translate }}
+              </label>
+              <div class="col-md-3" ng-class="{'has-error': profileForm.gender.$dirty && profileForm.gender.$invalid}">
+                <select ng-model="user.gender" id="gender" name="gender" class="form-control">
+                  <option value="male">{{ 'forms.male' | translate }}</option>
+                  <option value="female">{{ 'forms.female' | translate }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="location" class="control-label col-md-2">
+                {{ 'forms.location' | translate }}
+              </label>
+              <div class="col-md-3">
+                <input ng-model="user.city" type="text" id="city" name="city" class="form-control" placeholder="{{ 'forms.city' | translate }}">
+              </div>
+              <div class="col-md-3">
+                <input ng-model="user.state" type="text" id="state" name="state" class="form-control" placeholder="{{ 'forms.state' | translate }}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="biography" class="control-label col-md-2">
+                {{ 'forms.biography' | translate }}
+              </label>
+              <div class="col-md-6">
+                <textarea ng-model="user.biography" id="biography" name="biography" class="form-control" rows="5" placeholder="{{ 'forms.write_something_about_your_passion_for_music' | translate }}">
+                </textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-2 align-right">
+                <button ng-disabled="profileForm.$invalid" ng-click="saveChanges()" type="button" class="btn btn-primary btn-lg">{{ 'forms.save_changes' | translate }}</button>
+              </div>
+            </div>
+          </form>
+        </tab>
+        <tab heading="{{ 'menus.social_networks' | translate | uppercase }}">
+
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

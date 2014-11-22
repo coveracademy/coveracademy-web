@@ -542,7 +542,7 @@ exports.saveMusic = function(musicData) {
   musicData.artist = _.str.trim(musicData.artist);
   musicData.title = _.str.trim(musicData.title);
   return $.discoverArtist(musicData.artist).then(function(artist) {
-    var music = Music.forge(modelUtils.filterAttributes('MusicEditableAttributes', musicData));
+    var music = Music.forge(modelUtils.filterAttributes(musicData, 'MusicEditableAttributes'));
     music.set('id', musicData.id);
     music.set('artist_id', artist.id);
     return music.save();

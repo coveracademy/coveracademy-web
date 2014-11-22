@@ -43,28 +43,43 @@
   <img ng-src="/img/contests/{{ contest.image }}">
 </div>
 <div ng-if="!isContestProgress('finished') && !isContestant()" class="container">
-  <div ng-if="!usingGoogleAccount">
-    <h1 class="align-center">{{ 'join_contest_signin_google_account' | translate }}</h1>
-    <div class="row padding">
+  <div ng-if="!isAuthenticated()">
+    <h1 class="align-center">{{ 'join_contest_signin_account' | translate }}</h1>
+    <hr/>
+    <div class="row margin10">
       <div class="col-md-6 col-md-offset-3">
-        <a ng-click="signinWithGoogle()" class="btn btn-lg btn-block btn-social btn-google-plus">
+        <a ng-click="login('facebook')" class="btn btn-lg btn-block btn-social btn-facebook">
+          <i class="fa fa-facebook"></i> Facebook
+        </a>
+      </div>
+    </div>
+    <div class="row margin10">
+      <div class="col-md-6 col-md-offset-3">
+        <a ng-click="login('twitter')" class="btn btn-lg btn-block btn-social btn-twitter">
+          <i class="fa fa-twitter"></i> Twitter
+        </a>
+      </div>
+    </div>
+    <div class="row margin10">
+      <div class="col-md-6 col-md-offset-3">
+        <a ng-click="login('google')" class="btn btn-lg btn-block btn-social btn-google-plus">
           <i class="fa fa-google-plus"></i> Google
         </a>
       </div>
     </div>
   </div>
-  <div ng-if="usingGoogleAccount && !usingYoutubeAccount">
+  <div ng-if="isAuthenticated() && !user().youtube_account">
     <h1 class="align-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
     <h2 class="align-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
     <div class="row padding">
       <div class="col-md-6 col-md-offset-3">
-        <a ng-click="signinWithYoutube()" class="btn btn-lg btn-block btn-social btn-youtube">
+        <a ng-click="login('youtube')" class="btn btn-lg btn-block btn-social btn-youtube">
           <i class="fa fa-youtube"></i> Youtube
         </a>
       </div>
     </div>
   </div>
-  <form ng-if="usingGoogleAccount && usingYoutubeAccount" name="auditionForm" class="form-horizontal">
+  <form ng-if="isAuthenticated() && user().youtube_account" name="auditionForm" class="form-horizontal">
     <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
     <div class="row">
       <div class="col-md-12 align-center">

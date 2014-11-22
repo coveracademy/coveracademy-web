@@ -10,7 +10,7 @@ angular
     return constants.SITE_NAME;
   };
   this.getUrl = function() {
-    return $location.absUrl();;
+    return $location.absUrl();
   };
   this.getTitle = function() {
     return title;
@@ -71,7 +71,7 @@ angular
     }, 8000);
   };
 }])
-.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
+.service('authenticationService', ['$rootScope', '$state', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $state, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
   var changeUser = function(newUser) {
@@ -83,20 +83,39 @@ angular
       $cookieStore.remove(constants.USER_COOKIE);
     }
   };
-  userService.getAuthenticatedUser().then(function(response) {
-    if(!response.data) {
-      changeUser(null);
-    }
-  });
-
-  this.getUser = function() {
-    return user;
+  this.updateUser = function() {
+    var deferred = $q.defer();
+    userService.getAuthenticatedUser().then(function(response) {
+      changeUser(response.data);
+      deferred.resolve(user);
+    }).catch(function(err) {
+      deferred.reject(err);
+    });
+    return deferred.promise;
   };
+
+  $.updateUser();
+
   this.isAuthenticated = function() {
-    return user ? true : false;
+    return user && user.id ? true : false;
+  };
+  this.isTemporaryAuthentication = function() {
+    return user && user.id ? false : true;
+  };
+  this.getUser = function() {
+    return $.isAuthenticated() ? user : null;
+  };
+  this.getTemporaryUser = function() {
+    return !$.isAuthenticated() ? user : null;
   };
   this.isAuthorized = function (accessLevel) {
-    var userRole = $.isAuthenticated() ? $.getUser().permission : 'public';
+    var authUser = null;
+    if($.isAuthenticated()) {
+      authUser = $.getUser();
+    } else if($.isTemporaryAuthentication()) {
+      authUser = $.getTemporaryUser();
+    }
+    var userRole = authUser && authUser.permission ? authUser.permission : 'public';
     return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
   };
   this.login = function(provider) {
@@ -110,7 +129,11 @@ angular
         userService.getAuthenticatedUser().then(function(response) {
           changeUser(response.data);
           deferred.resolve(user);
-          $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+          if($.getTemporaryUser()) {
+            $rootScope.$broadcast(authEvents.MUST_REGISTER);
+          } else {
+            $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+          }
         }).catch(function(err) {
           deferred.reject(err);
           $rootScope.$broadcast(authEvents.LOGIN_FAILED);
@@ -208,12 +231,8 @@ angular
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
-    'user.auth.errorAssociatingAccountWithFacebook': 'errors.user_auth_error_associating_account_with_facebook',
-    'user.auth.errorAssociatingAccountWithGoogle': 'errors.user_auth_error_associating_account_with_google',
-    'user.auth.errorAssociatingYouTubeAndGoogleAccounts': 'errors.user_auth_error_associating_youtube_and_google_accounts',
-    'user.auth.errorCreatingAccountAssociatedWithFacebook': 'errors.user_auth_error_creating_account_associated_with_facebook',
-    'user.auth.errorCreatingAccountAssociatedWithGoogle': 'errors.user_auth_error_creating_account_associated_with_google',
-    'user.auth.youtubeAccountOwnerDoesNotMatchTheGoogleAccount': 'errors.user_auth_youtube_account_owner_does_not_match_the_google_account',
+    'user.auth.accountNotFound': 'errors.user_auth_account_not_found',
+    'user.auth.passwordWithFewerCharacters': 'errors.user_auth_password_with_fewer_characteres',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
     'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
@@ -237,6 +256,32 @@ angular
   };
 }])
 .service('userService', ['$http', function($http) {
+  var $ = this;
+  var defaultProfilePicture = '/img/users/default.jpg';
+  var networkPictures = {
+    facebook: {
+      url: 'http://graph.facebook.com/v2.2/{{ facebook_account }}/picture?type=large',
+      token: '{{ facebook_account }}',
+      get: function(user) {
+        return this.url.replace(this.token, user.facebook_account);
+      }
+    },
+    twitter: {
+      url: '',
+      token: '',
+      get: function(user) {
+        return user.twitter_picture;
+      }
+    },
+    google: {
+      url: '',
+      token: '',
+      get: function(user) {
+        return user.google_picture;
+      }
+    }
+  };
+
   this.loginEndpoint = function(provider) {
     return '/api/auth/' + provider;
   };
@@ -249,11 +294,43 @@ angular
   this.sendEmail = function(name, email, subject, message) {
     return $http.post('/api/user/email', {name: name, email: email, subject: subject, message: message});
   };
-  this.save = function(user) {
+  this.create = function(user) {
     return $http.post('/api/user', {user: user});
+  };
+  this.update = function(user) {
+    return $http.put('/api/user', {user: user});
+  };
+  this.connect = function(email, password, user, networkType, networkAccount) {
+    return $http.post('/api/user/connect', {email: email, password: password, user: user.id, network_type: networkType, network_account: networkAccount});
   };
   this.get = function(id) {
     return $http.get('/api/user', {params: {id: id}});
+  };
+  this.getByEmail = function(email) {
+    return $http.get('/api/user', {params: {email: email}});
+  };
+  this.getProfilePicture = function(user) {
+    var url = defaultProfilePicture;
+    var picture = networkPictures[user.primary_network];
+    if(picture) {
+      url = picture.get(user);
+    }
+    return url;
+  };
+  this.getPrimaryNetworkConnection = function(user) {
+    var connection = null;
+    if(user.primary_network === 'facebook') {
+      connection = {type: 'facebook', account: user.facebook_account};
+    } else if(user.primary_network === 'twitter') {
+      connection = {type: 'twitter', account: user.twitter_account};
+    } else if(user.primary_network === 'google') {
+      connection = {type: 'google', account: user.google_account};
+    }
+    return connection;
+  };
+  this.isPrimaryNetworkConnection = function(user, network) {
+    var connection = $.getPrimaryNetworkConnection(user);
+    return connection.type === network;
   };
 }])
 .service('oembedService', ['$http', function($http) {
@@ -306,6 +383,12 @@ angular
   };
   this.userView = function(id) {
     return $http.get('/view/user/' + id);
+  };
+  this.registerView = function() {
+    return $http.get('/view/register');
+  };
+  this.settingsView = function() {
+    return $http.get('/view/settings');
   };
 }])
 .service('coverService', ['$http', function($http) {

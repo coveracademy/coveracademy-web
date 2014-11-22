@@ -18,7 +18,7 @@ module.exports = function(router, app) {
         var userPhotoPath = fileUtils.userPhotoFilePath(userPhoto);
         user.set('image', userPhoto);
         fs.rename(flow.getFinalFilePath(filename), userPhotoPath, function() {
-          userService.save(req.user, user).then(function(user) {
+          userService.update(req.user, user).then(function(user) {
             res.send(200, {});
           }).catch(function(err) {
             res.send(500, {});

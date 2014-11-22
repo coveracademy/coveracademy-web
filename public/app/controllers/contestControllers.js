@@ -110,7 +110,6 @@ angular
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.userAudition = null;
-  $scope.usingGoogleAccount = false;
   $scope.usingYoutubeAccount = false;
 
   $translate(['seo.title.join_contest', 'seo.description.join_contest', 'seo.keywords.join_contest']).then(function(translations) {
@@ -127,10 +126,11 @@ angular
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.userAudition = null;
-    $scope.usingGoogleAccount = false;
     $scope.usingYoutubeAccount = false;
   });
-
+  $scope.login = function(network) {
+    authenticationService.login(network);
+  };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && angular.isDefined($scope.userAudition.id))
   };
@@ -147,19 +147,6 @@ angular
     var now = new Date();
     var end = new Date(date);
     return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
-  };
-  $scope.signinWithGoogle = function() {
-    authenticationService.login('google').then(function(user) {
-      $scope.usingGoogleAccount = true;
-      if(user.youtube_account) {
-        $scope.usingYoutubeAccount = true;
-      }
-    });
-  };
-  $scope.signinWithYoutube = function() {
-    authenticationService.login('youtube').then(function(user) {
-      $scope.usingYoutubeAccount = true;
-    });
   };
   $scope.videoUrlPasted = function(event) {
     var url = event.clipboardData.getData("text/plain");

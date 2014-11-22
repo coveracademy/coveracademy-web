@@ -1,54 +1,89 @@
 angular
 .module('coverAcademy.controllers')
-.controller('userController', ['$scope', '$translate', 'backendResponse', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, backendResponse, authenticationService, alertService, userService, seoService, translationService) {
-  $scope.user = backendResponse.data.user;
-  $scope.auditions = backendResponse.data.auditions;
-  $scope.editing = false;
-  $scope.flowModel = {};
-  $scope.flowConfig = {
-    target: '/api/upload/user',
-    singleFile: true,
-    query: function(flowFile, flowChunk) {
-      return {user: $scope.editedUser.id};
-    }
-  };
+.controller('registerController', ['$scope', '$state', '$timeout', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $state, $timeout, authenticationService, alertService, userService, seoService, translationService) {
+  $scope.user = authenticationService.getTemporaryUser();
+  $scope.emailChecked = false;
+  $scope.userRegistered = false;
+  $scope.userFound = null;
+  $scope.previousState = null;
 
-  var fixUserImage = function() {
-    $scope.user.image = $scope.user.image + '?date=' + new Date().getTime();
-  };
+  $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    $scope.previousState = {state: fromState, params: fromParams};
+  });
 
-  fixUserImage();
-  seoService.setTitle($scope.user.name);
-  seoService.setDescription($scope.user.biography);
-
-  $scope.isOwner = function() {
-    return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
+  $scope.getNetworkConnection = function() {
+    return userService.getPrimaryNetworkConnection($scope.user);
   };
-  $scope.editProfile = function() {
-    $scope.editing = true;
-    $scope.editedUser = angular.copy($scope.user);
+  $scope.isNetworkConnection = function(network) {
+    return userService.isPrimaryNetworkConnection($scope.user, network);
   };
-  $scope.save = function() {
-    $scope.flowModel.flow.on('complete', function () {
-      userService.get($scope.user.id).then(function(response) {
-        $scope.user = response.data;
-        fixUserImage();
-        $scope.editing = false;
-        $translate('informations_saved_successfully').then(function(translation) {
-          alertService.addAlert('success', translation);
-        });
-      });
-    });
-
-    userService.save($scope.editedUser).then(function(response) {
-      $scope.flowModel.flow.upload();
+  $scope.checkEmail = function() {
+    userService.getByEmail($scope.user.email).then(function(response) {
+      $scope.emailChecked = true;
+      $scope.userFound = response.data;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.addAlert('danger', translation);
       });
     });
   };
-  $scope.cancel = function() {
-    $scope.editing = false;
+  var confirmConnection = function() {
+    authenticationService.updateUser().then(function(userUpdated) {
+      $scope.userRegistered = true;
+      if($scope.previousState) {
+        $timeout(function() {
+          $state.go($scope.previousState.state.name, $scope.previousState.params);
+        }, 10000);
+      }
+    });
+  };
+  $scope.register = function() {
+    userService.create($scope.user).then(function(response) {
+      confirmConnection();
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
+      });
+    });
+  };
+  $scope.confirm = function() {
+    var connection = $scope.getNetworkConnection();
+    userService.connect($scope.userFound.email, $scope.userFound.password, $scope.userFound, connection.type, connection.account).then(function(response) {
+      confirmConnection();
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
+      });
+    });
+  };
+}])
+.controller('userController', ['$scope', 'backendResponse', 'authenticationService', 'userService', 'seoService', function($scope, backendResponse, authenticationService, userService, seoService) {
+  $scope.user = backendResponse.data.user;
+  $scope.auditions = backendResponse.data.auditions;
+
+  seoService.setTitle($scope.user.name);
+  seoService.setDescription($scope.user.biography);
+
+  $scope.isOwner = function() {
+    return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
+  };
+}])
+.controller('settingsController', ['$scope', '$translate', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, authenticationService, alertService, userService, seoService, translationService) {
+  $scope.user = authenticationService.getUser();
+
+  $translate('settings').then(function(translation) {
+    seoService.setTitle(translation);
+  });
+
+  $scope.saveChanges = function() {
+    userService.update($scope.user).then(function(response) {
+      $translate('alerts.changes_saved_successfully').then(function(translation) {
+        alertService.addAlert('success', translation);
+      });
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
+      });
+    });
   };
 }]);

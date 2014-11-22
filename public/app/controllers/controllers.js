@@ -11,29 +11,34 @@ angular
   $scope.metaKeywords = seoService.getKeywords;
   $scope.metaImage = seoService.getImage;
 
+  $scope.isAuthenticated = authenticationService.isAuthenticated;
   $scope.user = authenticationService.getUser;
+  $scope.temporaryUser = authenticationService.getTemporaryUser;
   $scope.login = authenticationService.ensureAuth;
   $scope.logout = authenticationService.logout;
 
+  $scope.$on(authEvents.MUST_REGISTER, function() {
+    $state.go('app.register', {locale: $scope.locale()});
+  });
   $scope.$on(authEvents.NOT_AUTHORIZED, function() {
     $state.go('app.index', {locale: $scope.locale()});
-    $translate('alerts.not_authorized').then(function(translation) {
-      alertService.addAlert('warning', translation);
-    });
+    // $translate('alerts.not_authorized').then(function(translation) {
+    //   alertService.addAlert('warning', translation);
+    // });
   });
   $scope.$on(authEvents.NOT_AUTHENTICATED, function() {
-    $state.go('app.login', {locale: $scope.locale()});
-    $translate('alerts.not_authenticated').then(function(translation) {
-      alertService.addAlert('warning', translation);
-    });
+    $state.go('app.index', {locale: $scope.locale()});
+    // $translate('alerts.not_authenticated').then(function(translation) {
+    //   alertService.addAlert('warning', translation);
+    // });
   });
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
     authenticationService.ensureAuth();
   });
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
-    $translate('alerts.login_success').then(function(translation) {
-      alertService.addAlert('success', translation);
-    });
+    // $translate('alerts.login_success').then(function(translation) {
+    //   alertService.addAlert('success', translation);
+    // });
   });
   $scope.$on(authEvents.LOGIN_FAILED, function(event, errorKey) {
     if(errorKey && errorKey.length > 0) {
@@ -47,7 +52,7 @@ angular
     }
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
-    $state.transitionTo($state.current, $stateParams, {reload: true, inherit: false, notify: true});
+    $state.go($state.current, $stateParams, {reload: true});
   });
 
   $scope.isLocale = function(locale) {
@@ -57,22 +62,14 @@ angular
 .controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
   $state.go('app.index', {locale: $translate.use()});
 }])
-.controller('loginController', ['$rootScope', '$scope', '$state', 'authEvents', 'authenticationService', 'alertService', function($rootScope, $scope, $state, authEvents, authenticationService, alertService) {
-  $scope.login = function(provider) {
-    authenticationService.login(provider).then(function(user) {
-      $state.go('app.index', {locale: $scope.locale()});
-    });
-  };
-}])
-.controller('headerController', ['$scope', '$state', '$languages', 'constants', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, constants, authenticationService, coverService, searchService) {
-  $scope.siteName = constants.SITE_NAME;
+.controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
   $scope.searchQuery = '';
   $scope.languages = $languages.all;
   $scope.isSectionActive = function(section) {
     return $state.current.name === 'app.' + section;
   };
-  $scope.isLoginState = function() {
-    return $state.current.name === 'app.login';
+  $scope.isRegisterState = function() {
+    return $state.current.name === 'app.register';
   };
   $scope.searchMusicOrArtist = function(query) {
     return searchService.searchMusicOrArtist(query).then(function(response) {
@@ -101,23 +98,18 @@ angular
     $state.go('app.search', {locale: $scope.locale(), q: $scope.searchQuery});
   };
 }])
-.controller('footerController', ['$scope', 'constants', function($scope, constants) {
-  $scope.siteName = constants.SITE_NAME;
-}])
 .controller('alertController', ['$scope', 'alertService', function($scope, alertService) {
   $scope.alerts = alertService.getAlerts();
   $scope.closeAlert = alertService.closeAlert;
 }])
-.controller('contactController', ['$scope', '$translate', 'constants', 'seoService', 'alertService', 'userService', function($scope, $translate, constants, seoService, alertService, userService) {
-  $scope.siteName = constants.SITE_NAME;
-
+.controller('contactController', ['$scope', '$translate', 'seoService', 'alertService', 'userService', function($scope, $translate, seoService, alertService, userService) {
   $translate('seo.title.contact').then(function(translation) {
     seoService.setTitle(translation);
   });
 
   $scope.sendEmail = function() {
     userService.sendEmail($scope.name, $scope.email, $scope.subject, $scope.message).then(function(response) {
-      $translate('contact_form.email_sended').then(function(translation) {
+      $translate('forms.email_sended').then(function(translation) {
         alertService.addAlert('success', translation);
       });
       $scope.name = '';
@@ -126,7 +118,7 @@ angular
       $scope.message = '';
       $scope.contactForm.$setPristine();
     }).catch(function(response) {
-      $translate('contact_form.error_sending_email').then(function(translation) {
+      $translate('forms.error_sending_email').then(function(translation) {
         alertService.addAlert('danger', translation);
       });
     });

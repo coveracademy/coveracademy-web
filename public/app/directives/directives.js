@@ -1,5 +1,5 @@
 angular
-.module('coverAcademy.directives', [])
+.module('coverAcademy.directives', ['coverAcademy.services'])
 .directive('audition', function() {
   return {
     templateUrl: 'app/partials/widgets/audition.html',
@@ -88,6 +88,34 @@ angular
       scope.showBorder = scope.border === 'true' ? true : false;
       scope.showFaces = scope.faces === 'true' ? true : false;
       scope.fbLikeBoxUrl = $sce.trustAsResourceUrl('//www.facebook.com/plugins/likebox.php?href=' + scope.link + '&width=' + scope.width + '&height=' + scope.height + '&colorscheme=' + scope.colorScheme + '&show_faces=' + scope.showFaces + '&header=false&stream=false&show_border=' + scope.showBorder + '&appId=329761620528304');
+    }
+  }
+}])
+.directive('profilePicture', ['userService', function(userService) {
+  return {
+    restrict: 'A',
+    scope: {
+      profilePicture: '='
+    },
+    link: function(scope, element, attrs, ctrl) {
+      element.css({
+        'background-image': 'url(' + userService.getProfilePicture(scope.profilePicture) +')',
+      });
+    }
+  }
+}])
+.directive('passwordCheck', [function () {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: {
+      password: '=passwordCheck',
+      passwordConfirmed: '=ngModel'
+    },
+    link: function (scope, element, attrs, ctrl) {
+      scope.$watch('[password, passwordConfirmed]', function(value) {
+        ctrl.$setValidity('passwordMatch', scope.password === scope.passwordConfirmed);
+      });
     }
   }
 }]);

@@ -19,7 +19,7 @@
     <meta property="og:description" content="{{ metaDescription() }}">
     <meta property="og:image" content="{{ metaImage() }}">
 
-    <title>Cover Academy - {{ pageTitle() }}</title>
+    <title>Cover Academy | {{ pageTitle() }}</title>
 
     <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -62,7 +62,7 @@
               <a ui-sref="app.about({locale: locale()})">{{ 'about' | translate }}</a>
             </li> -->
             <li ng-class="{'active': isSectionActive('contact')}">
-              <a ui-sref="app.contact({locale: locale()})">{{ 'contact' | translate }}</a>
+              <a ui-sref="app.contact({locale: locale()})">{{ 'menus.contact' | translate }}</a>
             </li>
           </ul>
           <ul class="languages nav navbar-nav navbar-left">
@@ -72,7 +72,7 @@
               </a>
             </li>
           </ul>
-          <ul ng-show="user()" class="nav navbar-nav navbar-right">
+          <ul ng-show="isAuthenticated() && !isRegisterState()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 {{ user().name }}
@@ -81,18 +81,23 @@
               <ul class="dropdown-menu">
                 <li ng-if="user()">
                   <a ui-sref="app.user({locale: locale(), id: user().id})">
-                    {{ 'profile' | translate }}
+                    <i class="glyphicon glyphicon-user"></i> {{ 'menus.profile' | translate }}
+                  </a>
+                </li>
+                <li ng-if="user()">
+                  <a ui-sref="app.settings({locale: locale()})">
+                    <i class="glyphicon glyphicon-cog"></i> {{ 'menus.settings' | translate }}
                   </a>
                 </li>
                 <li>
                   <a ng-click="logout()">
-                    {{ 'logout' | translate }}
+                    <i class="glyphicon glyphicon-off"></i> {{ 'menus.logout' | translate }}
                   </a>
                 </li>
               </ul>
             </li>
           </ul>
-          <form ng-if="!isLoginState() && !user()" class="navbar-form navbar-right">
+          <form ng-if="!isRegisterState() && !user()" class="navbar-form navbar-right">
             <button ng-click="login()" class="btn btn-primary">
               {{ 'signin_button' | translate }}
             </button>
@@ -103,7 +108,7 @@
 
     <main ui-view autoscroll="true"></main>
 
-    <footer ng-controller="footerController">
+    <footer>
       <div class="extra">
         <div class="container">
           <div class="row">
@@ -125,41 +130,41 @@
               </a>
             </div>
             <div class="col-md-2">
-              <h4 class="bolder-text">{{ 'contest' | translate | uppercase }}</h4>
+              <h4 class="bolder-text">{{ 'menus.contest' | translate | uppercase }}</h4>
               <ul>
                 <li>
                   <a ui-sref="app.contestGuideline({locale: locale()})">
-                    {{ 'guideline' | translate }}
+                    {{ 'menus.guideline' | translate }}
                   </a>
                 </li>
               </ul>
             </div>
             <div class="col-md-2 nopadding">
-              <h4 class="bolder-text">{{ 'support' | translate | uppercase }}</h4>
+              <h4 class="bolder-text">{{ 'menus.support' | translate | uppercase }}</h4>
               <ul>
                 <li>
                   <a ui-sref="app.contact({locale: locale()})">
-                    {{ 'contact' | translate }}
+                    {{ 'menus.contact' | translate }}
                   </a>
                 </li>
                 <li>
                   <a ui-sref="app.termsOfUse({locale: locale()})">
-                    {{ 'terms_of_use' | translate }}
+                    {{ 'menus.terms_of_use' | translate }}
                   </a>
                 </li>
                 <li>
                   <a ui-sref="app.privacyPolicy({locale: locale()})">
-                    {{ 'privacy_policy' | translate }}
+                    {{ 'menus.privacy_policy' | translate }}
                   </a>
                 </li>
               </ul>
             </div>
             <div class="col-md-3 social">
-              <h4 class="bolder-text">{{ 'follow_us' | translate | uppercase }}</h4>
+              <h4 class="bolder-text">{{ 'menus.follow_us' | translate | uppercase }}</h4>
               <ul>
                 <li>
                   <a href="https://www.facebook.com/coveracademy" target="_blank">
-                    <i class="fa fa-facebook"></i> {{ 'like_us_on_facebook' | translate }}
+                    <i class="fa fa-facebook"></i> {{ 'menus.like_us_on_facebook' | translate }}
                   </a>
                 </li>
               </ul>
@@ -171,7 +176,7 @@
               </fb-like-box>
             </div>
             <div class="col-md-8 align-right">
-              © {{ siteName }} 2014
+              © Cover Academy 2014
             </div>
           </div>
         </div>
@@ -187,6 +192,7 @@
     <script src="/lib/moment/min/moment.min.js"></script>
     <script src="/lib/moment/locale/pt-br.js"></script>
     <script src="/lib/underscore/underscore.js"></script>
+    <script src="/lib/underscore.string/dist/underscore.string.min.js"></script>
 
     <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/lib/angular-cookies/angular-cookies.min.js"></script>
@@ -201,6 +207,7 @@
 
     <script src="/lib/ng-flow/dist/ng-flow-standalone.min.js"></script>
     <script src="/lib/ng-flow/dist/ng-flow.min.js"></script>
+    <script src="/lib/ng-password-strength/dist/scripts/ng-password-strength.min.js"></script>
     <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
     <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
 

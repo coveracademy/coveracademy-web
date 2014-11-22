@@ -58,6 +58,10 @@ function respondWithMovedPermanently(toView, toParams, res) {
   res.json(301, {toView: toView, toParams: toParams});
 }
 
+function respondWithRedirection(toView, toParams, res) {
+  res.json(302, {toView: toView, toParams: toParams});
+}
+
 module.exports = {
   getErrorKey: getErrorKey,
   apiError: apiError,
@@ -67,5 +71,6 @@ module.exports = {
   respondWithError: respondWithError,
   respondWithNotFound: respondWithNotFound,
   respondWithMovedPermanently: respondWithMovedPermanently,
+  respondWithRedirection: respondWithRedirection,
   APIError: APIError
 }

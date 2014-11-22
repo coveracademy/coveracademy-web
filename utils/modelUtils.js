@@ -12,12 +12,13 @@ function filter(data, attributes) {
 
 exports.modelsAttributes = {
   MusicEditableAttributes: ['title', 'artist_id', 'small_thumbnail', 'medium_thumbnail', 'large_thumbnail'],
-  UserEditableAttributes: ['name', 'gender', 'biography', 'image', 'location']
+  UserEditableAttributes: ['name', 'gender', 'biography', 'city', 'state', 'primary_network'],
+  UserCreationAttributes: ['email', 'password', 'name', 'gender', 'facebook_account', 'facebook_picture', 'twitter_account', 'twitter_picture', 'google_account', 'google_picture', 'primary_network']
 }
 
-exports.filterAttributes = function(modelName, data) {
+exports.filterAttributes = function(data, attributesName) {
   var result = null;
-  var attributes = this.modelsAttributes[modelName];
+  var attributes = this.modelsAttributes[attributesName];
   if(attributes) {
     if(_.isArray(data)) {
       result = [];
@@ -27,6 +28,8 @@ exports.filterAttributes = function(modelName, data) {
     } else {
       result = filter(data, attributes)
     }
+  } else {
+    result = data;
   }
   return result;
 }

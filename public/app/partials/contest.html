@@ -214,9 +214,10 @@
       </audition>
       <div class="row padding">
         <div class="col-md-3">
-          <div class="author box">
+          <div class="winner-author">
             <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-              <img ng-src="/img/users/{{ audition.user.image }}">
+              <div profile-picture="audition.user" class="profile-picture">
+              </div>
             </a>
           </div>
         </div>

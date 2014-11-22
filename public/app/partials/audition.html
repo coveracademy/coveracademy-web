@@ -45,9 +45,10 @@
         </div>
         <div class="row padding">
           <div class="col-md-2">
-            <div class="author box">
+            <div id="author">
               <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
-                <img class="medium-thumbnail" ng-src="/img/users/{{ audition.user.image }}">
+                <div profile-picture="audition.user" class="profile-picture">
+                </div>
               </a>
             </div>
           </div>

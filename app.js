@@ -1,7 +1,6 @@
 require('newrelic');
 
 var express        = require('express'),
-    path           = require('path'),
     favicon        = require('serve-favicon'),
     logger         = require('morgan'),
     flash          = require('connect-flash'),

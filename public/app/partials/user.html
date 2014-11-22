@@ -1,18 +1,17 @@
 <div id="user" class="special-header">
   <div class="content">
     <div class="container">
-      <div ng-if="!editing" class="row">
+      <div class="row">
         <div class="col-md-3">
-          <div class="thumbnail">
-            <a ui-sref="app.user({locale: locale(), id: user.id})">
-              <img ng-src="/img/users/{{ user.image }}">
-            </a>
-          </div>
+          <a ui-sref="app.user({locale: locale(), id: user.id})">
+            <div profile-picture="user" class="profile-picture img-circle">
+            </div>
+          </a>
         </div>
         <div class="col-md-9">
           <h1 class="nomargin">
             {{ user.name }}
-            <button ng-if="isOwner()" ng-click="editProfile()" class="btn btn-link">
+            <button ng-if="isOwner()" ui-sref="app.settings({locale: locale()})" class="btn btn-link">
               {{ 'edit_profile' | translate }}
             </button>
           </h1>
@@ -22,53 +21,17 @@
               {{ 'voting_power' | translate }}: {{ user.voting_power }}
             </span>
             <span class="user-label label label-info">
-              <i class="glyphicon glyphicon-map-marker"></i> {{ user.location }}
+              <i class="glyphicon glyphicon-map-marker"></i> {{ user.city }} / {{ user.state }}
             </span>
             <span class="user-label label label-info">
               <i class="glyphicon glyphicon-time"></i>
               {{ 'member_since' | translate }} <span am-time-ago="user.registration_date"></span>
             </span>
           </h4>
-          <h4>
+          <h4 class="padding-top">
             {{ user.biography }}
           </h4>
         </div>
-      </div>
-      <div ng-if="editing" class="row">
-        <form name="userForm" class="form-horizontal" flow-init="flowConfig" flow-name="flowModel.flow" flow-file-added="!!{png: 1, gif: 1,jpg: 1, jpeg: 1}[$file.getExtension()]">
-          <div class="col-md-3">
-            <div class="thumbnail">
-              <div class="image" flow-btn>
-                <img ng-show="!$flow.files.length" ng-src="/img/users/{{ editedUser.image }}">
-                <img ng-show="$flow.files.length" flow-img="$flow.files[0]">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-9">
-            <div class="form-group" ng-class="{'has-error': userForm.name.$invalid}">
-              <div class="col-md-4">
-                <input ng-model="editedUser.name" type="text" name="name" class="form-control" placeholder="{{ 'user_form.what_is_your_name' | translate }}" required>
-              </div>
-              <button ng-click="save()" ng-disabled="userForm.$invalid" class="btn btn-primary">
-                {{ 'user_form.save' | translate }}
-              </button>
-              <button ng-click="cancel()" ng-disabled="userForm.$invalid" class="btn btn-default">
-                {{ 'user_form.cancel' | translate }}
-              </button>
-            </div>
-            <div class="form-group">
-              <div class="col-md-4">
-                <input ng-model="editedUser.location" type="text" name="location" class="form-control" placeholder="{{ 'user_form.where_are_you' | translate }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-12">
-                <textarea ng-model="editedUser.biography" rows="3" name="biography" class="form-control" placeholder="{{ 'user_form.tell_something_about_you' | translate }}">
-                </textarea>
-              </div>
-            </div>
-          </div>
-        </form>
       </div>
     </div>
   </div>

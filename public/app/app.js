@@ -11,6 +11,7 @@ angular
   'angulartics.google.analytics',
   'flow',
   'ngCookies',
+  'ngPasswordStrength',
   'ngProgress',
   'ngSanitize',
   'pascalprecht.translate',
@@ -26,6 +27,7 @@ angular
   USER_COOKIE: 'CoverAcademy.user'
 })
 .constant('authEvents', {
+  MUST_REGISTER: 'mustRegister',
   LOGIN_SUCCESS: 'loginSuccess',
   LOGIN_FAILED: 'loginFailed',
   LOGOUT_SUCCESS: 'logoutSuccess',
@@ -45,6 +47,7 @@ angular
   audition: 'app.audition',
   contest: 'app.contest',
   cover: 'app.cover',
+  index: 'app.index',
   joinContest: 'app.joinContest'
 })
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
@@ -76,7 +79,7 @@ angular
       abstract: true,
       template: '<ui-view autoscroll="true"/>'
     })
-    // Admin states
+    // Admin level states
     .state('app.admin', {
       url: '/admin',
       templateUrl: '/app/partials/admin.html',
@@ -101,14 +104,32 @@ angular
         }
       }
     })
-    // Anonymous states
-    .state('app.login', {
-      url: '/login',
-      templateUrl: '/app/partials/login.html',
-      controller: 'loginController',
-      accessLevel: accessLevel.ANONYMOUS
+    // User level states
+    .state('app.register', {
+      url: '/register',
+      templateUrl: '/app/partials/register.html',
+      controller: 'registerController',
+      accessLevel: accessLevel.USER,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.registerView();
+        }
+      }
     })
-    // Public states
+    .state('app.settings', {
+      url: '/settings',
+      templateUrl: '/app/partials/settings.html',
+      controller: 'settingsController',
+      accessLevel: accessLevel.USER,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.settingsView();
+        }
+      }
+    })
+    // Public level states
     .state('app.index', {
       url: '/',
       templateUrl: '/app/partials/index.html',
@@ -348,7 +369,7 @@ angular
       $state.go('app.404', {locale: $translate.use()}, {location: false});
     } else if(error.status === 500) {
       $state.go('app.500', {locale: $translate.use()}, {location: false});
-    } else if(error.status === 301) {
+    } else if(error.status === 301 || error.status === 302) {
       $state.go(redirections[error.data.toView], angular.extend(error.data.toParams, {locale: $translate.use()}));
     }
   });

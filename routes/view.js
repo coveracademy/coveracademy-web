@@ -1,11 +1,12 @@
-var coverService   = require('../apis/coverService'),
-    contestService = require('../apis/contestService'),
-    userService    = require('../apis/userService'),
-    constants      = require('../apis/constants'),
-    messages       = require('../apis/messages'),
-    isAdmin        = require('../utils/authorization').isAdmin,
-    math           = require('../utils/math'),
-    Promise        = require('bluebird');
+var coverService    = require('../apis/coverService'),
+    contestService  = require('../apis/contestService'),
+    userService     = require('../apis/userService'),
+    constants       = require('../apis/constants'),
+    messages        = require('../apis/messages'),
+    isAdmin         = require('../utils/authorization').isAdmin,
+    isAuthenticated = require('../utils/authorization').isAuthenticated,
+    math            = require('../utils/math'),
+    Promise         = require('bluebird');
 
 module.exports = function(router, app) {
 
@@ -35,6 +36,20 @@ module.exports = function(router, app) {
       console.log(err);
       messages.respondWithError(err, res);
     })
+  });
+
+  // AUTHENTICATED ROUTES
+
+  router.get('/register', isAuthenticated, function(req, res, next) {
+    if(req.user.id) {
+      messages.respondWithRedirection('index', {}, res);
+    } else {
+      res.json({});
+    }
+  });
+
+  router.get('/settings', isAuthenticated, function(req, res, next) {
+    res.json({});
   });
 
   // PUBLIC ROUTES
@@ -161,7 +176,6 @@ module.exports = function(router, app) {
       messages.respondWithError(err, res);
     }).bind({});
   });
-
 
   router.get('/music/:slug', function(req, res, next) {
     var slug = req.param('slug');

@@ -1,6 +1,7 @@
 var userService = require('../apis/userService');
 
 exports.isAdmin = function (req, res, next) {
+  console.log(req.user)
   if(req.isAuthenticated() && req.user.get('permission') === 'admin') {
     next();
   } else {
@@ -24,7 +25,7 @@ exports.isAuthenticated = function (req, res, next) {
   }
 }
 
-exports.isNotAuthenticated = function (req, res, next) {
+exports.isAnonymous = function (req, res, next) {
   if(!req.isAuthenticated()) {
     next();
   } else {
