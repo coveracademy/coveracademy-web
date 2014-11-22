@@ -74,6 +74,7 @@ exports.configure = function(app, passport) {
       userService.findByTwitterAccount(profileInfos.id).then(function(user) {
         if(user) {
           if(user.get('twitter_picture') !== profileInfos.picture) {
+            user.set('twitter_picture', profileInfos.picture);
             return userService.save(user, ['twitter_picture']);
           } else {
             return user;

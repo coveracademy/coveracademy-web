@@ -590,7 +590,7 @@ form.compacted .form-group {
 .special-header {
   background-color: #000;
   height: 250px;
-  margin-top: -14px; /* body element has a 64px margin-bottom and it's needed to positioning special-header to 50px*/
+  margin-top: -13px; /* body element has a 64px margin-bottom and it's needed to positioning special-header to 50px*/
   overflow: hidden;
   position: relative;
 }
