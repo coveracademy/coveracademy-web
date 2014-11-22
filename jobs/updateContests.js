@@ -28,6 +28,6 @@ var finishContests = function() {
   });
 }
 
-var sched = later.parse.recur().on(28).minute();
+var sched = later.parse.recur().on(0).minute();
 var finishContestsInterval = later.setInterval(finishContests, sched);
 var startContestsInterval = later.setInterval(startContests, sched);

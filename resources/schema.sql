@@ -17,7 +17,7 @@ create table user (
   google_account    varchar(255) default null,
   google_picture    varchar(255) default null,
   youtube_account   varchar(255) default null,
-  primary_network      varchar(20) default null,
+  primary_network   varchar(20) default null,
   voting_power      decimal(6, 3) default 1.000,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
