@@ -191,7 +191,7 @@ angular
     seoService.setTitle(translation);
   });
   seoService.setDescription($scope.audition.description);
-  seoService.setImage($scope.audition.medium_thumbnail);
+  seoService.setImage($scope.audition.large_thumbnail);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserVote($scope.audition).then(function(response) {
