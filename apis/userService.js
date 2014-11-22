@@ -1,28 +1,29 @@
-var User       = require('../models/models').User,
-    modelUtils = require('../utils/modelUtils'),
-    messages   = require('./messages'),
-    Promise    = require('bluebird'),
-    _          = require('underscore'),
-    $          = this;
+var User         = require('../models/models').User,
+    modelUtils   = require('../utils/modelUtils'),
+    encryptUtils = require('../utils/encryptUtils'),
+    messages     = require('./messages'),
+    Promise      = require('bluebird'),
+    _            = require('underscore'),
+    $            = this;
 
 exports.forge = function(userData) {
   return User.forge(userData);
 }
 
 exports.createTemporaryFacebookAccount = function(facebookAccount, name, gender) {
-  return User.forge({permission: 'user', name: name, gender: gender, primary_network: 'facebook', facebook_account: facebookAccount});
+  return $.forge({permission: 'user', name: name, gender: gender, primary_network: 'facebook', facebook_account: facebookAccount});
 }
 
 exports.createTemporaryTwitterAccount = function(twitterAccount, name, gender, picture) {
-  return User.forge({permission: 'user', name: name, gender: gender, primary_network: 'twitter', twitter_account: twitterAccount, twitter_picture: picture});
+  return $.forge({permission: 'user', name: name, gender: gender, primary_network: 'twitter', twitter_account: twitterAccount, twitter_picture: picture});
 }
 
 exports.createTemporaryGoogleAccount = function(googleAccount, name, gender, picture) {
-  return User.forge({permission: 'user', name: name, gender: gender, primary_network: 'google', google_account: googleAccount, google_picture: picture});
+  return $.forge({permission: 'user', name: name, gender: gender, primary_network: 'google', google_account: googleAccount, google_picture: picture});
 }
 
 exports.createTemporaryYouTubeAccount = function(youTubeAccount, name) {
-  return User.forge({permission: 'user', name: name, youtube_account: youTubeAccount});
+  return $.forge({permission: 'user', name: name, youtube_account: youTubeAccount});
 }
 
 exports.connectNetwork = function(email, password, user, networkType, networkAccount) {
@@ -69,17 +70,31 @@ exports.connectYouTubeAccount = function(user, youTubeAccount) {
 }
 
 exports.authenticate = function(email, password) {
-  return User.forge({email: email, password: password}).fetch();
+  return new Promise(function(resolve, reject) {
+    $.forge({email: email}).fetch().then(function(user) {
+      encryptUtils.comparePassword(password, user.get('password')).then(function(equals) {
+        resolve(equals ? user : null);
+      });
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error authenticating user', err));
+    });
+  });
 }
 
 exports.create = function(userData) {
   return new Promise(function(resolve, reject) {
     if(!userData.email) {
-      reject(reject(messages.apiError('user.auth.emailRequired', 'The email is required')));
+      reject(messages.apiError('user.auth.emailRequired', 'The email is required'));
     } else if(!userData.password || userData.password.length < 6) {
-      reject(reject(messages.apiError('user.auth.passwordWithFewerCharacters', 'The password must contains at least 6 characteres')));
+      reject(messages.apiError('user.auth.passwordWithFewerCharacters', 'The password must contains at least 6 characteres'));
     } else {
-      resolve(User.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes')).save());
+      var user = $.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes'));
+      encryptUtils.hashPassword(user.get('password')).then(function(hash) {
+        user.set('password', hash);
+        resolve(user.save());
+      }).catch(function(err) {
+        reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account'));
+      });
     }
   });
 }
@@ -116,30 +131,26 @@ exports.getUser = function(id) {
   });
 }
 
-exports.findAll = function() {
-  return User.forge().fetch();
-}
-
 exports.findById = function(id, required) {
-  return User.forge({id: id}).fetch({require: required});
+  return $.forge({id: id}).fetch({require: required});
 }
 
 exports.findByFacebookAccount = function(facebookAccount) {
-  return User.forge({facebook_account: facebookAccount}).fetch();
+  return $.forge({facebook_account: facebookAccount}).fetch();
 }
 
 exports.findByTwitterAccount = function(twitterAccount) {
-  return User.forge({twitter_account: twitterAccount}).fetch();
+  return $.forge({twitter_account: twitterAccount}).fetch();
 }
 
 exports.findByGoogleAccount = function(googleAccount, required) {
-  return User.forge({google_account: googleAccount}).fetch({require: required || false});
+  return $.forge({google_account: googleAccount}).fetch({require: required || false});
 }
 
 exports.findByEmail = function(email) {
-  return User.forge({email: email}).fetch();
+  return $.forge({email: email}).fetch();
 }
 
 exports.findByUsername = function(username) {
-  return User.forge({username: username}).fetch();
+  return $.forge({username: username}).fetch();
 }
