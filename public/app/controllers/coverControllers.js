@@ -216,7 +216,7 @@ angular
   $translate('seo.title.cover', {author: $scope.cover.author, music: $scope.cover.music.title, artist: $scope.cover.artist.name}).then(function(translation) {
     seoService.setTitle(translation);
   });
-  seoService.setImage($scope.cover.medium_thumbnail);
+  seoService.setImage($scope.cover.large_thumbnail);
 }])
 .controller('coversRankController', ['$scope', '$stateParams', '$translate', 'backendResponse', 'seoService', 'coverService', function($scope, $stateParams, $translate, backendResponse, seoService, coverService) {
   $scope.rankType = $stateParams.rank;
