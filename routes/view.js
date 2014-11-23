@@ -281,7 +281,7 @@ module.exports = function(router, app) {
         messages.respondWithMovedPermanently('contest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
         contest.set('progress', contest.getProgress());
-        var auditionsPromise = rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
+        var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
         Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest), winnersPromise])
         .spread(function(auditions, totalAuditions, audition, winnerAuditions) {

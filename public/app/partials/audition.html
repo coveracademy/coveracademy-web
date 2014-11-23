@@ -99,39 +99,6 @@
         </div>
       </div>
     </div>
-    <div class="row" ng-if="isContestProgress('running')">
-      <div class="col-md-12">
-        <div class="page-title">
-          <h3>
-            {{ 'the_latest_contestants' | translate }}
-          </h3>
-        </div>
-        <div class="row" ng-repeat="row in latestAuditions | partition: 4">
-          <div ng-repeat="audition in row" class="col-md-3">
-            <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
-            </audition>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="page-title">
-          <h3 ng-if="isContestProgress('running')">
-            {{ 'the_best_contestants_right_now' | translate }}
-          </h3>
-          <h3 ng-if="isContestProgress('finished')">
-            {{ 'the_best_contestants' | translate }}
-          </h3>
-        </div>
-        <div class="row" ng-repeat="row in bestAuditions | partition: 4">
-          <div ng-repeat="audition in row" class="col-md-3">
-            <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
-            </audition>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')">
     <div class="row">
@@ -183,6 +150,39 @@
       <div class="col-md-8 col-md-offset-2">
         <div class="embed-container">
           <embed-video ng-href="{{ audition.url }}"></embed-video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-if="isContestProgress('running') || isContestProgress('waiting') || isContestProgress('waiting_time')">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3>
+          {{ 'the_latest_contestants' | translate }}
+        </h3>
+      </div>
+      <div class="row" ng-repeat="row in latestAuditions | partition: 4">
+        <div ng-repeat="audition in row" class="col-md-3">
+          <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
+          </audition>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-if="isContestProgress('running') || isContestProgress('finished')">
+    <div class="col-md-12">
+      <div class="page-title">
+        <h3 ng-if="isContestProgress('running')">
+          {{ 'the_best_contestants_right_now' | translate }}
+        </h3>
+        <h3 ng-if="isContestProgress('finished')">
+          {{ 'the_best_contestants' | translate }}
+        </h3>
+      </div>
+      <div class="row" ng-repeat="row in bestAuditions | partition: 4">
+        <div ng-repeat="audition in row" class="col-md-3">
+          <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
+          </audition>
         </div>
       </div>
     </div>

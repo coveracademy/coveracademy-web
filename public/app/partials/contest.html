@@ -289,3 +289,23 @@
     <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
 </div>
+<div ng-if="isContestProgress('waiting') && hasAuditions()" class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>
+        <span>
+          {{ 'latest_auditions' | translate }}
+        </span>
+        <small>({{ totalAuditions }})</small>
+      </h1>
+    </div>
+  </div>
+  <div class="row" ng-repeat="row in auditions | partition: 3">
+    <div ng-repeat="audition in row" class="col-md-4">
+      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+      </audition>
+    </div>
+  </div>
+  <div class="align-center">
+    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  </div>
