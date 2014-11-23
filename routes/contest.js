@@ -1,4 +1,5 @@
 var contestService  = require('../apis/contestService'),
+    mailService     = require('../apis/mailService'),
     constants       = require('../apis/constants'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     messages        = require('../apis/messages'),
@@ -20,8 +21,12 @@ module.exports = function(router, app) {
 
   router.post('/join', isAuthenticated, function(req, res, next) {
     var auditionData = req.param('audition');
-    contestService.joinContest(req.user, auditionData).then(function(audition) {
-      res.json(audition);
+    var user = req.user;
+    contestService.joinContest(user, auditionData).then(function(joined) {
+      mailService.contestJoin(user, joined.contest, joined.audition).catch(function(err) {
+        console.log('Error sending "contest join" email to user ' + user.id + ': ' + err.message);
+      });
+      res.json(joined.audition);
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);

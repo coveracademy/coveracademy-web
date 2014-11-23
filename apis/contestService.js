@@ -9,7 +9,6 @@ var Contest     = require('../models/models').Contest,
     messages    = require('./messages'),
     youtube     = require('./third/youtube'),
     constants   = require('./constants'),
-    mailService = require('./mailService'),
     Promise     = require('bluebird'),
     moment      = require('moment'),
     _           = require('underscore'),
@@ -198,16 +197,13 @@ exports.joinContest = function(user, auditionData) {
       }
     }).then(function(audition) {
       this.audition = audition;
-      mailService.contestJoin(user, this.contest, this.audition).catch(function(err) {
-        console.log('Error sending "contest join" email to user ' + user.id);
-      });
       $.startContest(this.contest).then(function(contest) {
         return contest;
       }).catch(function(err) {
         return;
       });
     }).then(function(contest) {
-      resolve(this.audition);
+      resolve({audition: this.audition, contest: this.contest});
     }).catch(function(err) {
       reject(err);
     }).bind({});

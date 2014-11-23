@@ -47,6 +47,9 @@ module.exports = function(router, app) {
   router.post('/', isAuthenticated, function(req, res, next) {
     var userData = req.param('user');
     userService.create(userData).then(function(user) {
+      mailService.userRegistration(user).catch(function(err) {
+        console.log('Error sending "user registration" email to user ' + user.id + ': ' + err.message);
+      });
       req.logout();
       req.logIn(user, function(err) {
         if(err) {
