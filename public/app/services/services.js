@@ -350,17 +350,20 @@ angular
   };
 }])
 .service('viewService', ['$http', function($http) {
-  this.adminView = function() {
-    return $http.get('/view/admin');
-  };
   this.indexView = function() {
     return $http.get('/view/index');
+  };
+  this.adminView = function() {
+    return $http.get('/view/admin');
   };
   this.addCoverView = function() {
     return $http.get('/view/addCover');
   };
   this.coverView = function(id, slug) {
     return $http.get('/view/cover/' + id + '/' + slug);
+  };
+  this.coversView = function() {
+    return $http.get('/view/covers');
   };
   this.coversRankView = function(rank) {
     return $http.get('/view/covers/' + rank);

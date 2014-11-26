@@ -62,11 +62,19 @@ angular
 .controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
   $state.go('app.index', {locale: $translate.use()});
 }])
+.controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
+}])
 .controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
   $scope.searchQuery = '';
   $scope.languages = $languages.all;
+  $scope.sectionActive = '';
+  $scope.sections = {
+    contact: ['app.contact'],
+    covers: ['app.cover', 'app.covers', 'app.coversRank', 'app.artist', 'app.artists', 'app.music', 'app.musicGenre', 'app.musicGenreRank', 'app.search']
+  };
   $scope.isSectionActive = function(section) {
-    return $state.current.name === 'app.' + section;
+    var sectionExistent = $scope.sections[section];
+    return sectionExistent && sectionExistent.indexOf($state.current.name) >= 0;
   };
   $scope.isRegisterState = function() {
     return $state.current.name === 'app.register';
@@ -133,4 +141,142 @@ angular
   $translate('seo.title.privacy_policy').then(function(translation) {
     seoService.setTitle(translation);
   });
+}])
+.controller('adminController', ['$scope', '$filter', '$translate', '$underscore', 'backendResponse', 'seoService', 'alertService', 'modalService', 'coverService', 'searchService', 'artistService', 'musicService', function($scope, $filter, $translate, $underscore, backendResponse, seoService, alertService, modalService, coverService, searchService, artistService, musicService) {
+  $translate('seo.title.admin').then(function(translation) {
+    seoService.setTitle(translation);
+  });
+  var partitionPotentialCovers = function(potentialCovers) {
+    return $filter('partition')(potentialCovers, 3);
+  };
+  $scope.potentialCoversTab = {
+    potentialCovers: backendResponse.data.potentialCovers,
+    potentialCoversPartitioned: partitionPotentialCovers(backendResponse.data.potentialCovers),
+    acceptCover: function(potentialCover) {
+      coverService.acceptCover(potentialCover).then(function(response) {
+        alertService.addAlert('success', 'Potential cover accepted successfully');
+        $scope.potentialCoversTab.potentialCovers = $underscore.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+          return potentialCover.id == cover.id;
+        });
+        $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
+      });
+    },
+    refuseCover: function(potentialCover) {
+      coverService.refuseCover(potentialCover).then(function(response) {
+        alertService.addAlert('success', 'Potential cover refused successfully');
+        $scope.potentialCoversTab.potentialCovers = $underscore.reject($scope.potentialCoversTab.potentialCovers, function(cover) {
+          return potentialCover.id == cover.id;
+        });
+        $scope.potentialCoversTab.potentialCoversPartitioned = partitionPotentialCovers($scope.potentialCoversTab.potentialCovers);
+      });
+    }
+  };
+  $scope.coverTab = {
+    searchCoverByID: function(searchID) {
+      coverService.getCover(searchID).then(function(response) {
+        $scope.coverTab.cover = {};
+        $scope.coverTab.cover.id = response.data.id;
+        $scope.coverTab.cover.url = response.data.url;
+        $scope.coverTab.cover.author = response.data.author;
+        $scope.coverTab.cover.artist = response.data.artist.name;
+        $scope.coverTab.cover.music = response.data.music.title;
+      })
+    },
+    searchArtists: function(query) {
+      return searchService.searchArtists(query).then(function(response) {
+        return response.data;
+      });
+    },
+    selectArtist: function(artist) {
+      $scope.coverTab.cover.artist = artist.name;
+      $scope.coverTab.cover.music = null;
+    },
+    searchMusics: function(query) {
+      return searchService.searchMusics(query, $scope.coverTab.cover.artist).then(function(response) {
+        return response.data;
+      });
+    },
+    selectMusic: function(music) {
+      $scope.coverTab.cover.music = music.title;
+    },
+    saveCover: function() {
+      coverService.addCover($scope.coverTab.cover).then(function(response) {
+        alertService.addAlert('success', 'Cover saved successfully');
+      });
+    },
+    removeCover: function() {
+      var modalScope = {
+        headerText: 'Remove cover song',
+        bodyText: 'Do you really want to remove this cover song?'
+      };
+      modalService.show({}, modalScope).then(function() {
+        coverService.removeCover($scope.coverTab.cover).then(function(response) {
+          alertService.addAlert('success', 'Cover removed successfully');
+          $scope.coverTab.cover = null;
+        });
+      });
+    }
+  };
+  $scope.artistTab = {
+    musicGenres: backendResponse.data.musicGenres,
+    searchArtists: function(query) {
+      return searchService.searchArtists(query, ['musicGenre']).then(function(response) {
+        return response.data;
+      });
+    },
+    selectArtist: function(artist) {
+      $scope.artistTab.artist = artist;
+    },
+    saveArtist: function() {
+      var artist = {
+        id: $scope.artistTab.artist.id,
+        name: $scope.artistTab.artist.name,
+        music_genre_id: $scope.artistTab.artist.musicGenre.id,
+        small_thumbnail: $scope.artistTab.artist.small_thumbnail,
+        medium_thumbnail: $scope.artistTab.artist.medium_thumbnail,
+        large_thumbnail: $scope.artistTab.artist.large_thumbnail,
+      };
+      artistService.saveArtist(artist).then(function(response) {
+        alertService.addAlert('success', 'Artist saved successfully');
+        $scope.artistTab.artist = response.data;
+      });
+    }
+  };
+  $scope.musicTab = {
+    searchMusics: function(query) {
+      return searchService.searchMusics(query).then(function(response) {
+        response.data.forEach(function(music) {
+          music.displayTitle = music.title + ' by ' + music.artist.name;
+        });
+        return response.data;
+      });
+    },
+    selectMusic: function(music) {
+      $scope.musicTab.music = music;
+      $scope.musicTab.music.artist = $scope.musicTab.music.artist.name;
+    },
+    searchArtists: function(query) {
+      return searchService.searchArtists(query).then(function(response) {
+        return response.data;
+      });
+    },
+    selectArtist: function(artist) {
+      $scope.musicTab.music.artist = artist.name;
+    },
+    saveMusic: function() {
+      var music = {
+        id: $scope.musicTab.music.id,
+        title: $scope.musicTab.music.title,
+        artist: $scope.musicTab.music.artist,
+        small_thumbnail: $scope.musicTab.music.small_thumbnail,
+        medium_thumbnail: $scope.musicTab.music.medium_thumbnail,
+        large_thumbnail: $scope.musicTab.music.large_thumbnail,
+      };
+      musicService.saveMusic(music).then(function(response) {
+        alertService.addAlert('success', 'Music saved successfully');
+        $scope.musicTab.music = response.data;
+        $scope.musicTab.music.artist = $scope.musicTab.music.artist.name
+      });
+    }
+  };
 }]);

@@ -54,28 +54,16 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    Promise
-    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.musicGenres()])
-    .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
-      this.topCover = topCover;
-      this.bestCovers = bestCovers;
-      this.latestCovers = latestCovers;
-      this.musicGenres = musicGenres;
-
-      var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
-      return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
-    }).then(function(bestArtistsOfMusicGenre) {
-      res.json({
-        topCover: this.topCover,
-        bestCovers: this.bestCovers,
-        latestCovers: this.latestCovers,
-        musicGenres: this.musicGenres,
-        bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
-      });
+    contestService.listUnfinishedContests().then(function(contests) {
+      if(contests.length > 0) {
+        messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
+      } else {
+        messages.respondWithRedirection('covers', {}, res);
+      }
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    }).bind();
+    })
   });
 
   router.get('/cover/:id/:slug', function(req, res, next) {
@@ -100,6 +88,31 @@ module.exports = function(router, app) {
       console.log(err);
       messages.respondWithError(err, res);
     })
+  });
+
+  router.get('/covers', function(req, res, next) {
+    Promise
+    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.musicGenres()])
+    .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
+      this.topCover = topCover;
+      this.bestCovers = bestCovers;
+      this.latestCovers = latestCovers;
+      this.musicGenres = musicGenres;
+
+      var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
+      return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
+    }).then(function(bestArtistsOfMusicGenre) {
+      res.json({
+        topCover: this.topCover,
+        bestCovers: this.bestCovers,
+        latestCovers: this.latestCovers,
+        musicGenres: this.musicGenres,
+        bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
+      });
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    }).bind();
   });
 
   router.get('/covers/:rank', function(req, res, next) {

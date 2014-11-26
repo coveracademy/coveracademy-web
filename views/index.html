@@ -64,6 +64,9 @@
             <li ng-class="{'active': isSectionActive('contact')}">
               <a ui-sref="app.contact({locale: locale()})">{{ 'menus.contact' | translate }}</a>
             </li>
+            <li ng-class="{'active': isSectionActive('covers')}">
+              <a ui-sref="app.covers({locale: locale()})">{{ 'menus.covers' | translate }}</a>
+            </li>
           </ul>
           <ul class="languages nav navbar-nav navbar-left">
             <li ng-repeat="language in languages">

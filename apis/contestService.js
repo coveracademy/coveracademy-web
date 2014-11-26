@@ -25,6 +25,10 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
+exports.listUnfinishedContests = function() {
+  return Contest.collection().query({where: ['finished', 0]}).fetch();
+}
+
 exports.listContestsToStart = function() {
   return Contest.collection().query(function(qb) {
     qb.leftJoin('audition', 'contest.id', 'audition.contest_id')

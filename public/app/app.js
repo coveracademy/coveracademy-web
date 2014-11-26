@@ -47,6 +47,7 @@ angular
   audition: 'app.audition',
   contest: 'app.contest',
   cover: 'app.cover',
+  covers: 'app.covers',
   index: 'app.index',
   joinContest: 'app.joinContest'
 })
@@ -152,6 +153,18 @@ angular
       templateUrl: '/app/partials/contact.html',
       controller: 'contactController',
       accessLevel: accessLevel.PUBLIC
+    })
+    .state('app.covers', {
+      url: '/covers',
+      templateUrl: '/app/partials/covers.html',
+      controller: 'coversController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.coversView();
+        }
+      }
     })
     .state('app.cover', {
       url: '/cover/:id/:slug',
