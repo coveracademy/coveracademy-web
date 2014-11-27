@@ -4,11 +4,12 @@ var restify        = require('restify'),
     Promise        = require('bluebird'),
     settings       = require('../configs/settings'),
     mailService    = require('../apis/mailService'),
+    contestService = require('../apis/contestService'),
     userService    = require('../apis/userService'),
     contestService = require('../apis/contestService');
 
 var server = restify.createServer({
-  name: 'mailSender',
+  name: 'mailSender'
 });
 
 server.use(restify.queryParser());
@@ -21,6 +22,7 @@ env.addGlobal('siteUrl', settings.siteUrl);
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
 var contestJoinTemplate = env.getTemplate('contest_join.tpl');
+var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
 
 server.post('/user/registration', function(req, res, next) {
@@ -47,6 +49,25 @@ server.post('/contest/join', function(req, res, next) {
     console.log('Error sending "contest join" email to user ' + req.body.user + ': ' + err);
     res.send(500);
   });
+});
+
+server.post('/contest/start', function(req, res, next) {
+  contestService.getContest(req.body.contest).then(function(contest) {
+    this.contest = contest;
+    return contestService.latestAuditions(contest);
+  }).then(function(auditions) {
+    auditions.forEach(function(audition) {
+      var user = audition.related('user');
+      contestStartTemplate.render({user: user.toJSON(), contest: this.contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
+        mailService.send(user.get('email'), 'A competição começou, boa sorte!', email).then(function(mailResponse) {
+          res.send(200);
+        });
+      });
+    });
+  }).catch(function(err) {
+    console.log('Error sending "contest start" email: ' + err);
+    res.send(500);
+  }).bind({});
 });
 
 server.post('/contest/winner', function(req, res, next) {

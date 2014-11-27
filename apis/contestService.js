@@ -6,6 +6,7 @@ var Contest     = require('../models/models').Contest,
     settings    = require('../configs/settings'),
     slug        = require('../utils/slug'),
     modelUtils  = require('../utils/modelUtils'),
+    mailService = require('./mailService'),
     messages    = require('./messages'),
     youtube     = require('./third/youtube'),
     constants   = require('./constants'),
@@ -137,6 +138,9 @@ exports.startContest = function(contest) {
           contest.set('end_date', moment(start).add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
           contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
             resolve(contest);
+            mailService.contestStart(contest).catch(function(err) {
+              console.log('Error sending "contest start" email: ' + err.message);
+            });
           }).catch(function(err) {
             reject(messages.unexpectedError('Error starting the contest', err));
           });
@@ -171,6 +175,9 @@ var createAudition = function(user, contest, auditionData) {
           audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
           audition.save().then(function(audition) {
             resolve(audition);
+            mailService.contestJoin(user, contest, audition).catch(function(err) {
+              console.log('Error sending "contest join" email to user ' + user.id + ': ' + err.message);
+            });
           }).catch(function(err) {
             if(err.code === 'ER_DUP_ENTRY') {
               reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
@@ -247,9 +254,11 @@ var listAuditions = function(rankType, contest, page, pageSize) {
   page = parseInt(page);
   pageSize = parseInt(pageSize);
   return Audition.collection().query(function(qb) {
-    qb.where('contest_id', contest.id)
-    .offset((page - 1) * pageSize)
-    .limit(pageSize);
+    qb.where('contest_id', contest.id);
+    if(page && pageSize) {
+      qb.offset((page - 1) * pageSize);
+      qb.limit(pageSize);
+    }
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {

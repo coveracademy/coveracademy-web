@@ -58,15 +58,15 @@
             </div>
           </form>
           <ul class="nav navbar-nav">
-            <!-- <li ng-class="{'active': isSectionActive('about')}">
-              <a ui-sref="app.about({locale: locale()})">{{ 'about' | translate }}</a>
-            </li> -->
-            <li ng-class="{'active': isSectionActive('contact')}">
-              <a ui-sref="app.contact({locale: locale()})">{{ 'menus.contact' | translate }}</a>
-            </li>
             <li ng-class="{'active': isSectionActive('covers')}">
               <a ui-sref="app.covers({locale: locale()})">{{ 'menus.covers' | translate }}</a>
             </li>
+            <li ng-class="{'active': isSectionActive('contact')}">
+              <a ui-sref="app.contact({locale: locale()})">{{ 'menus.contact' | translate }}</a>
+            </li>
+            <!-- <li ng-class="{'active': isSectionActive('about')}">
+              <a ui-sref="app.about({locale: locale()})">{{ 'about' | translate }}</a>
+            </li> -->
           </ul>
           <ul class="languages nav navbar-nav navbar-left">
             <li ng-repeat="language in languages">

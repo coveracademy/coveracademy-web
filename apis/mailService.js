@@ -44,9 +44,9 @@ exports.userRegistration = function(user) {
   });
 }
 
-exports.userRegistration = function(user) {
+exports.contestJoin = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/user/registration', {user: user.id}, function(err, req, res, obj) {
+    mailClient.post('/contest/join', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
@@ -56,9 +56,9 @@ exports.userRegistration = function(user) {
   });
 }
 
-exports.contestJoin = function(user, contest, audition) {
+exports.contestStart = function(contest) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/contest/join', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+    mailClient.post('/contest/start', {contest: contest.id}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {

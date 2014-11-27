@@ -1,6 +1,7 @@
 var User         = require('../models/models').User,
     modelUtils   = require('../utils/modelUtils'),
     encryptUtils = require('../utils/encryptUtils'),
+    mailService  = require('./mailService'),
     messages     = require('./messages'),
     Promise      = require('bluebird'),
     _            = require('underscore'),
@@ -92,6 +93,9 @@ exports.create = function(userData) {
       encryptUtils.hashPassword(user.get('password')).then(function(hash) {
         user.set('password', hash);
         resolve(user.save());
+        mailService.userRegistration(user).catch(function(err) {
+          console.log('Error sending "user registration" email to user ' + user.id + ': ' + err.message);
+        });
       }).catch(function(err) {
         reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account'));
       });
