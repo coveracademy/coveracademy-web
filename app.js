@@ -7,6 +7,7 @@ var express        = require('express'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
     session        = require('express-session'),
+    RedisStore     = require('connect-redis')(session),
     passport       = require('passport'),
     engine         = require('./configs/engine'),
     routes         = require('./configs/routes'),
@@ -27,7 +28,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(flash());
-app.use(session({secret: 'coveracademy', saveUninitialized: true, resave: true}));
+app.use(session({
+  secret: 'coveracademy',
+  resave: true,
+  saveUninitialized: true,
+  store: new RedisStore({
+    host: settings.redisSessionStorage.host,
+    port: settings.redisSessionStorage.port,
+    pass: settings.redisSessionStorage.password,
+    prefix: 'session'
+  })
+}));
 app.use(express.static(app.get('public')));
 
 middlewares.configure(app);

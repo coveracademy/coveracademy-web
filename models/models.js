@@ -4,6 +4,7 @@ var knex = require('knex')({
   debug: settings.database.debug,
   connection: {
     host: settings.database.host,
+    port: settings.database.port,
     user: settings.database.user,
     password: settings.database.password,
     database: settings.database.schema,

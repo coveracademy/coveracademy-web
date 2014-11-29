@@ -48,11 +48,17 @@ var path = require('path'),
         database: {
           dialect: 'mysql',
           host: 'localhost',
+          port: 3306,
           user: 'root',
           password: 'sandroa1s2d3',
           schema: 'cover_academy',
           charset: 'utf8',
           debug: true
+        },
+        redisSessionStorage: {
+          host: 'localhost',
+          port: '6379',
+          password: 'sandroa1s2d3'
         }
       },
       prod: {
@@ -64,11 +70,17 @@ var path = require('path'),
         database: {
           dialect: 'mysql',
           host: 'localhost',
+          port: 3306,
           user: 'root',
           password: 'roota1s2d3',
           schema: 'cover_academy',
           charset: 'utf8',
           debug: false
+        },
+        redisSessionStorage: {
+          host: 'localhost',
+          port: '6379',
+          password: 'roota1s2d3'
         }
       }
     }

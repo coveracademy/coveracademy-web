@@ -87,6 +87,28 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/audition/best', function(req, res, next) {
+    var contest = Contest.forge(req.param('contest'));
+    var page = req.param('page');
+    contestService.bestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
+      res.json(auditions);
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/audition/latest', function(req, res, next) {
+    var contest = Contest.forge(req.param('contest'));
+    var page = req.param('page');
+    contestService.latestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
+      res.json(auditions);
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   app.use('/api/contest', router);
 
 }

@@ -471,4 +471,10 @@ angular
   this.getUserVote = function(audition) {
     return $http.get('/api/contest/audition/vote', {params: {audition_id: audition.id}});
   };
+  this.bestAuditions = function(contest, page) {
+    return $http.get('/api/contest/audition/best', {params: {contest: contest.id, page: page}});
+  };
+  this.latestAuditions = function(contest, page) {
+    return $http.get('/api/contest/audition/latest', {params: {contest: contest.id, page: page}});
+  };
 }]);

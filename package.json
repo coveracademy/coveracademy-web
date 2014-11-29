@@ -12,6 +12,7 @@
     "bookshelf": "~0.7.9",
     "connect-flash": "~0.1.1",
     "connect-multiparty": "~1.2.5",
+    "connect-redis": "~2.1.0",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "decay": "~1.0.6",

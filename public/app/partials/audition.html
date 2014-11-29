@@ -65,7 +65,7 @@
       <div class="col-md-3">
         <div>
           <div class="align-center">
-            <img ng-if="isWinner()" class="medium-medal" src="/img/badges/{{ getMedal(audition) }}-medal.png">
+            <img ng-if="isWinner()" class="medium-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
             <h1 class="nomargin">
               {{ score }} {{ 'points' | translate }}
             </h1>
@@ -75,7 +75,7 @@
                 {{ 'vote_now' | translate }}
                 <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remaining_votes: remainingVotes()} }}</h5>
               </button>
-              <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)" ng-disabled="!hasRemainingVotes()">
+              <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
                 {{ 'you_voted' | translate }}
                 <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remaining_votes: remainingVotes()} }}</h5>
               </button>

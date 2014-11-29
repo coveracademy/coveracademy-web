@@ -13,7 +13,7 @@ angular
   $scope.winnerAuditions = backendResponse.data.winnerAuditions;
   $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
-  $scope.auditionsPerPage = 20;
+  $scope.auditionsPerPage = 21;
 
   $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setDescription(translations['seo.description.contest']);
@@ -81,7 +81,7 @@ angular
       return 0;
     }
   };
-  $scope.pageChanged = function() {
+  $scope.changePage = function() {
     var promise = $scope.rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
     promise($scope.contest, $scope.currentPage).then(function(response) {
       $scope.auditions = response.data;
