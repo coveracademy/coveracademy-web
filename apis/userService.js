@@ -92,9 +92,13 @@ exports.create = function(userData) {
       var user = $.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes'));
       encryptUtils.hashPassword(user.get('password')).then(function(hash) {
         user.set('password', hash);
-        resolve(user.save());
-        mailService.userRegistration(user).catch(function(err) {
-          console.log('Error sending "user registration" email to user ' + user.id + ': ' + err.message);
+        user.save().then(function(userSaved) {
+          resolve(userSaved);
+          mailService.userRegistration(userSaved).catch(function(err) {
+            console.log('Error sending "user registration" email to user ' + userSaved.id + ': ' + err.message);
+          });
+        }).catch(function(err) {
+          reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account'));
         });
       }).catch(function(err) {
         reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account'));

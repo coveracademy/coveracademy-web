@@ -281,6 +281,9 @@ angular
   $scope.remainingVotes = function() {
     return $scope.voteLimit - $scope.totalUserVotes;
   };
+  $scope.hasRemainingVotes = function() {
+    return $scope.remainingVotes() > 0
+  };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
   $translate(['seo.title.guideline', 'seo.description.guideline', 'seo.keywords.guideline']).then(function(translations) {
