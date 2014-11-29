@@ -1,6 +1,6 @@
-var userService = require('../apis/userService');
+var Promise = require('bluebird');
 
-exports.isAdmin = function (req, res, next) {
+exports.isAdmin = function(req, res, next) {
   console.log(req.user)
   if(req.isAuthenticated() && req.user.get('permission') === 'admin') {
     next();
@@ -9,7 +9,7 @@ exports.isAdmin = function (req, res, next) {
   }
 }
 
-exports.isUser = function (req, res, next) {
+exports.isUser = function(req, res, next) {
   if(req.isAuthenticated() && req.user.get('permission') === 'user') {
     next();
   } else {
@@ -17,7 +17,7 @@ exports.isUser = function (req, res, next) {
   }
 }
 
-exports.isAuthenticated = function (req, res, next) {
+exports.isAuthenticated = function(req, res, next) {
   if(req.isAuthenticated()) {
     next();
   } else {
@@ -25,10 +25,39 @@ exports.isAuthenticated = function (req, res, next) {
   }
 }
 
-exports.isAnonymous = function (req, res, next) {
+exports.isAnonymous = function(req, res, next) {
   if(!req.isAuthenticated()) {
     next();
   } else {
     res.send(401);
   }
+}
+
+exports.isTemporaryUser = function(req, res, next) {
+  if(req.session.temporaryUser) {
+    next();
+  } else {
+    res.send(401);
+  }
+}
+
+exports.setTemporaryUser = function(req, user) {
+  req.session.temporaryUser = user;
+}
+
+exports.getTemporaryUser = function(req) {
+  return req.session.temporaryUser;
+}
+
+exports.refreshUser = function(req, user) {
+  return new Promise(function(resolve, reject) {
+    req.logout();
+    req.logIn(user, function(err) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
 }

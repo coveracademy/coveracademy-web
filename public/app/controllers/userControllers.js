@@ -1,7 +1,7 @@
 angular
 .module('coverAcademy.controllers')
-.controller('registerController', ['$scope', '$state', '$timeout', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $state, $timeout, authenticationService, alertService, userService, seoService, translationService) {
-  $scope.user = authenticationService.getTemporaryUser();
+.controller('registerController', ['$scope', '$state', '$timeout', 'backendResponse', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $state, $timeout, backendResponse, authenticationService, alertService, userService, seoService, translationService) {
+  $scope.user = backendResponse.data.temporaryUser;
   $scope.emailChecked = false;
   $scope.userRegistered = false;
   $scope.userFound = null;

@@ -3,9 +3,11 @@ var coverService    = require('../apis/coverService'),
     userService     = require('../apis/userService'),
     constants       = require('../apis/constants'),
     messages        = require('../apis/messages'),
-    isAdmin         = require('../utils/authorization').isAdmin,
-    isAuthenticated = require('../utils/authorization').isAuthenticated,
     math            = require('../utils/math'),
+    authorization   = require('../utils/authorization'),
+    isAdmin         = authorization.isAdmin,
+    isAuthenticated = authorization.isAuthenticated,
+    isTemporaryUser = authorization.isTemporaryUser,
     Promise         = require('bluebird');
 
 module.exports = function(router, app) {
@@ -40,12 +42,10 @@ module.exports = function(router, app) {
 
   // AUTHENTICATED ROUTES
 
-  router.get('/register', isAuthenticated, function(req, res, next) {
-    if(req.user.id) {
-      messages.respondWithRedirection('index', {}, res);
-    } else {
-      res.json({});
-    }
+  router.get('/register', isTemporaryUser, function(req, res, next) {
+    res.json({
+      temporaryUser: authorization.getTemporaryUser(req)
+    });
   });
 
   router.get('/settings', isAuthenticated, function(req, res, next) {

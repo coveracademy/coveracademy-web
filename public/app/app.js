@@ -106,18 +106,6 @@ angular
       }
     })
     // User level states
-    .state('app.register', {
-      url: '/register',
-      templateUrl: '/app/partials/register.html',
-      controller: 'registerController',
-      accessLevel: accessLevel.USER,
-      resolve: {
-        viewService: 'viewService',
-        backendResponse: function($stateParams, viewService) {
-          return viewService.registerView();
-        }
-      }
-    })
     .state('app.settings', {
       url: '/settings',
       templateUrl: '/app/partials/settings.html',
@@ -127,6 +115,19 @@ angular
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
           return viewService.settingsView();
+        }
+      }
+    })
+    // Anonymous level stages
+    .state('app.register', {
+      url: '/register',
+      templateUrl: '/app/partials/register.html',
+      controller: 'registerController',
+      accessLevel: accessLevel.ANONYMOUS,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.registerView();
         }
       }
     })

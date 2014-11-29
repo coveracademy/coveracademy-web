@@ -97,25 +97,14 @@ angular
   $.updateUser();
 
   this.isAuthenticated = function() {
-    return user && user.id ? true : false;
-  };
-  this.isTemporaryAuthentication = function() {
-    return user && user.id ? false : true;
+    return user ? true : false;
   };
   this.getUser = function() {
     return $.isAuthenticated() ? user : null;
   };
-  this.getTemporaryUser = function() {
-    return !$.isAuthenticated() ? user : null;
-  };
   this.isAuthorized = function (accessLevel) {
-    var authUser = null;
-    if($.isAuthenticated()) {
-      authUser = $.getUser();
-    } else if($.isTemporaryAuthentication()) {
-      authUser = $.getTemporaryUser();
-    }
-    var userRole = authUser && authUser.permission ? authUser.permission : 'public';
+    var authenticatedUser = $.getUser();
+    var userRole = authenticatedUser && authenticatedUser.permission ? authenticatedUser.permission : 'public';
     return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
   };
   this.login = function(provider) {
@@ -129,15 +118,14 @@ angular
         userService.getAuthenticatedUser().then(function(response) {
           changeUser(response.data);
           deferred.resolve(user);
-          if($.getTemporaryUser()) {
-            $rootScope.$broadcast(authEvents.MUST_REGISTER);
-          } else {
-            $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
-          }
+          $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
         }).catch(function(err) {
           deferred.reject(err);
           $rootScope.$broadcast(authEvents.LOGIN_FAILED);
         });
+      } else if(result === 'must-register') {
+        deferred.resolve();
+        $rootScope.$broadcast(authEvents.MUST_REGISTER);
       } else if(result === 'fail') {
         deferred.reject();
         $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);

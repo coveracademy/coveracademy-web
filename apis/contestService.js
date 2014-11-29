@@ -393,6 +393,7 @@ exports.countUserVotes = function(user, contest) {
 }
 
 exports.vote = function(user, audition) {
+  console.log(user)
   return new Promise(function(resolve, reject) {
     audition.fetch(auditionWithContestRelated).then(function(auditionFetched) {
       var contest = auditionFetched.related('contest');

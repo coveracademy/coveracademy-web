@@ -1,5 +1,6 @@
-var userService = require('../apis/userService'),
-    isAuthenticated = require('../utils/authorization').isAuthenticated;
+var userService     = require('../apis/userService'),
+    authorization   = require('../utils/authorization'),
+    isAuthenticated = authorization.isAuthenticated;
 
 module.exports = function(router, app, passport) {
 
@@ -9,7 +10,13 @@ module.exports = function(router, app, passport) {
   });
 
   router.get('/success', function(req, res) {
-    res.render('/auth/auth-success.html');
+    if(req.user && !req.user.id) {
+      authorization.setTemporaryUser(req, req.user);
+      req.logout();
+      res.render('/auth/auth-must-register.html');
+    } else {
+      res.render('/auth/auth-success.html');
+    }
   });
 
   router.get('/success/youtube', function(req, res) {

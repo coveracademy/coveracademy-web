@@ -2,12 +2,18 @@ var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
     messages        = require('../apis/messages'),
     User            = require('../models/models').User,
-    isAuthenticated = require('../utils/authorization').isAuthenticated;
+    authorization   = require('../utils/authorization'),
+    isAuthenticated = authorization.isAuthenticated,
+    isTemporaryUser = authorization.isTemporaryUser;
 
 module.exports = function(router, app) {
 
   router.get('/authenticated', function(req, res, next) {
     res.json(req.user);
+  });
+
+  router.get('/temporary', function(req, res, next) {
+    res.json(authorization.getTemporaryUser(req));
   });
 
   router.post('/email', function(req, res, next) {
@@ -23,7 +29,7 @@ module.exports = function(router, app) {
     });
   });
 
-  router.post('/connect', isAuthenticated, function(req, res, next) {
+  router.post('/connect', isTemporaryUser, function(req, res, next) {
     var email = req.param('email');
     var password = req.param('password');
     var user = User.forge({id: req.param('user')});
@@ -31,29 +37,21 @@ module.exports = function(router, app) {
     var networkAccount = req.param('network_account');
 
     userService.connectNetwork(email, password, user, networkType, networkAccount).then(function(userAssociated) {
-      req.logout();
-      req.logIn(userAssociated, function(err) {
-        if(err) {
-          throw err;
-        }
-        res.json(userAssociated);
-      });
+      return authorization.refreshUser(req, userAssociated);
+    }).then(function(refreshedUser) {
+      res.json(refreshedUser);
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
     });
   });
 
-  router.post('/', isAuthenticated, function(req, res, next) {
+  router.post('/', isTemporaryUser, function(req, res, next) {
     var userData = req.param('user');
     userService.create(userData).then(function(user) {
-      req.logout();
-      req.logIn(user, function(err) {
-        if(err) {
-          throw err;
-        }
-        res.json(user);
-      });
+      return authorization.refreshUser(req, user);
+    }).then(function(refreshedUser) {
+      res.json(refreshedUser);
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
