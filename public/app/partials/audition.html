@@ -160,7 +160,7 @@
     <div class="col-md-12">
       <div class="page-title">
         <h3>
-          {{ 'the_latest_contestants' | translate }}
+          {{ 'latest_auditions' | translate }}
         </h3>
       </div>
       <div class="row" ng-repeat="row in latestAuditions | partition: 4">
@@ -174,11 +174,8 @@
   <div class="row" ng-if="isContestProgress('running') || isContestProgress('finished')">
     <div class="col-md-12">
       <div class="page-title">
-        <h3 ng-if="isContestProgress('running')">
-          {{ 'the_best_contestants_right_now' | translate }}
-        </h3>
-        <h3 ng-if="isContestProgress('finished')">
-          {{ 'the_best_contestants' | translate }}
+        <h3>
+          {{ 'best_auditions' | translate }}
         </h3>
       </div>
       <div class="row" ng-repeat="row in bestAuditions | partition: 4">
