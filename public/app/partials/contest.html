@@ -261,7 +261,7 @@
       </h3>
       <div ng-repeat="userVote in userVotes" class="pull-left">
         <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
-          <div profile-picture="userVote.user" class="profile-picture small">
+          <div profile-picture="userVote.audition.user" class="profile-picture small">
           </div>
         </a>
       </div>

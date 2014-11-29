@@ -21,7 +21,7 @@ var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest', 'user']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
-var userVoteWithAuditionAndUserRelated = {withRelated: ['audition', 'user']};
+var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};
 
 exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
@@ -380,7 +380,7 @@ exports.getUserVotes = function(user, contest) {
         qb.where('audition.contest_id', contest.id);
         qb.where('user_vote.user_id', user.id);
         qb.orderBy('user_vote.registration_date', 'asc');
-      }).fetch(userVoteWithAuditionAndUserRelated);
+      }).fetch(userVoteWithAuditionUserRelated);
       resolve(promise);
     }
   });
