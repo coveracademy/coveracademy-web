@@ -50,8 +50,8 @@ exports.configure = function(app, passport) {
       id: profile.id,
       name: profile.displayName,
       gender: profile.gender,
-      email: profile.emails[0].value,
-      picture: profile.photos[0].value
+      email: profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null,
+      picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null
     };
     userService.findByFacebookAccount(profileInfos.id).then(function(user) {
       if(user) {
@@ -69,7 +69,7 @@ exports.configure = function(app, passport) {
         email: null,
         name: profile.displayName,
         gender: null,
-        picture: profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
+        picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
       };
       userService.findByTwitterAccount(profileInfos.id).then(function(user) {
         if(user) {
@@ -89,7 +89,7 @@ exports.configure = function(app, passport) {
   passport.use(new GoogleStrategy(settings.google, function(accessToken, refreshToken, profile, done) {
     var profileInfos = {
       id: profile.id,
-      email: profile.emails[0].value,
+      email: profile.emails ? profile.emails[0].value : null,
       name: profile.displayName,
       gender: profile._json.gender,
       picture: profile._json.picture
