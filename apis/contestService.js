@@ -21,6 +21,7 @@ var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest', 'user']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
+var userVoteWithAuditionAndUserRelated = {withRelated: ['audition', 'user']};
 
 exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
@@ -364,11 +365,23 @@ exports.getUserVote = function(user, audition) {
     if(!user) {
       resolve();
     } else {
-      UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch().then(function(userVote) {
-        resolve(userVote);
-      }).catch(function(err) {
-        reject(messages.unexpectedError('Error getting user vote', err));
-      });
+      resolve(UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch());
+    }
+  });
+}
+
+exports.getUserVotes = function(user, contest) {
+  return new Promise(function(resolve, reject) {
+    if(!user) {
+      resolve();
+    } else {
+      var promise = UserVote.collection().query(function(qb) {
+        qb.join('audition', 'user_vote.audition_id', 'audition.id');
+        qb.where('audition.contest_id', contest.id);
+        qb.where('user_vote.user_id', user.id);
+        qb.orderBy('user_vote.registration_date', 'asc');
+      }).fetch(userVoteWithAuditionAndUserRelated);
+      resolve(promise);
     }
   });
 }

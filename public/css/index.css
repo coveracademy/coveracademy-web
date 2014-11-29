@@ -145,6 +145,11 @@ p, li {
   margin-right: 20px;
 }
 
+.profile-picture.small {
+  height: 80px;
+  width: 80px;
+}
+
 .label-none {
   background-color: #f9f9f9;
 }

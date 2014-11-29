@@ -296,9 +296,10 @@ module.exports = function(router, app) {
         contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
-        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest), winnersPromise])
-        .spread(function(auditions, totalAuditions, audition, winnerAuditions) {
+        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest), winnersPromise, contestService.getUserVotes(req.user, contest)])
+        .spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes) {
           this.auditions = auditions;
+          this.userVotes = userVotes;
           this.totalAuditions = totalAuditions;
           this.audition = audition;
           this.winnerAuditions = winnerAuditions;
@@ -309,6 +310,7 @@ module.exports = function(router, app) {
             winnerAuditions: winnerAuditions,
             auditions: this.auditions,
             audition: this.audition,
+            userVotes: this.userVotes,
             totalAuditions: this.totalAuditions,
             scoreByAudition: scoreByAudition,
             votesByAudition: votesByAudition,

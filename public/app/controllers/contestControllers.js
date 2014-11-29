@@ -7,6 +7,7 @@ angular
   $scope.audition = backendResponse.data.audition;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.auditions = backendResponse.data.auditions;
+  $scope.userVotes = backendResponse.data.userVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
   $scope.scoreByAudition = backendResponse.data.scoreByAudition;
@@ -39,7 +40,10 @@ angular
   };
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;
-  }
+  };
+  $scope.hasUserVotes = function() {
+    return $scope.userVotes && $scope.userVotes.length > 0;
+  };
   $scope.isMedal = function(audition, expected) {
     return $scope.getMedal(audition) === expected;
   };
