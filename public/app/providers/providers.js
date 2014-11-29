@@ -300,7 +300,7 @@ angular
       see_the_best_auditions: 'Veja as melhores audições',
       see_the_best_covers: 'Veja os melhores covers',
       see_the_best_music_genre_covers: 'Veja os melhores covers {{ musicGenre }}',
-      see_the_latest_auditions: 'Veja as últimas audições',
+      see_the_latest_auditions: 'Veja as audições mais recentes',
       see_the_latest_covers: 'Veja os últimos covers',
       see_the_latest_music_genre_covers: 'Veja os últimos covers {{ musicGenre }}',
       see_the_guideline: 'Veja o guia',
