@@ -278,6 +278,9 @@ angular
       });
     });
   };
+  $scope.remainingVotes = function() {
+    return $scope.voteLimit - $scope.totalUserVotes;
+  };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
   $translate(['seo.title.guideline', 'seo.description.guideline', 'seo.keywords.guideline']).then(function(translations) {
