@@ -103,6 +103,7 @@ angular
       you_participated: 'You participated!',
       you_voted: 'You voted!',
       your_audition: 'Your audition',
+      your_votes: 'Your votes',
       alerts: {
         changes_saved_successfully: 'Changes saved successfully',
         congratulations_now_you_are_in_the_contest: 'Congratulations, now you are in the contest. Good luck!',
@@ -335,6 +336,7 @@ angular
       you_participated: 'Você participou!',
       you_voted: 'Você votou!',
       your_audition: 'Sua audição',
+      your_votes: 'Seus votos',
       alerts: {
         changes_saved_successfully: 'Alterações atualizadas com sucesso',
         congratulations_now_you_are_in_the_contest: 'Parabéns, agora você está participando da competição. Boa sorte!',

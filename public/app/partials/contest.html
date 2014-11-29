@@ -257,7 +257,7 @@
   <div ng-if="isContestProgress('running') && hasUserVotes()" class="row">
     <div class="col-md-12">
       <h3>
-        Your votes
+        {{ 'your_votes' | translate }}
       </h3>
       <div ng-repeat="userVote in userVotes" class="pull-left">
         <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
