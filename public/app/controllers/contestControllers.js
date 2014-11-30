@@ -5,13 +5,14 @@ angular
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
-  $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.auditions = backendResponse.data.auditions;
   $scope.userVotes = backendResponse.data.userVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
   $scope.scoreByAudition = backendResponse.data.scoreByAudition;
   $scope.winnerAuditions = backendResponse.data.winnerAuditions;
+  $scope.totalAuditions = backendResponse.data.totalAuditions;
+
   $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 21;
@@ -85,7 +86,7 @@ angular
       return 0;
     }
   };
-  $scope.changePage = function() {
+  $scope.pageChanged = function() {
     var promise = $scope.rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
     promise($scope.contest, $scope.currentPage).then(function(response) {
       $scope.auditions = response.data;

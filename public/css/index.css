@@ -537,7 +537,7 @@ input.big {
   font-weight: bold;
   text-align: center;
   text-shadow: 2px 2px 5px #000000;
-  background-image: url('/img/gradient.png');
+  /*background-image: url('/img/gradient.png');*/
   background-repeat: repeat-x;
   background-position: center bottom;
 }

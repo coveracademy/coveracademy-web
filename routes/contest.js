@@ -89,7 +89,7 @@ module.exports = function(router, app) {
 
   router.get('/audition/best', function(req, res, next) {
     var contest = Contest.forge({id: req.param('contest')});
-    var page = req.param('page');
+    var page = req.param('page') || constants.FIRST_PAGE;
     contestService.bestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
       res.json(auditions);
     }).catch(function(err) {
@@ -100,7 +100,7 @@ module.exports = function(router, app) {
 
   router.get('/audition/latest', function(req, res, next) {
     var contest = Contest.forge({id: req.param('contest')});
-    var page = req.param('page');
+    var page = req.param('page') || constants.FIRST_PAGE;
     contestService.latestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
       res.json(auditions);
     }).catch(function(err) {

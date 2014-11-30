@@ -299,7 +299,7 @@
     </div>
   </div>
   <div class="align-center">
-    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="changePage()"></pagination>
+    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
 </div>
 <div ng-if="isContestProgress('waiting') && hasAuditions()" class="container">
@@ -320,5 +320,5 @@
     </div>
   </div>
   <div class="align-center">
-    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="changePage()"></pagination>
+    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
