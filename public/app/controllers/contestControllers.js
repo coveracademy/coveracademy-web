@@ -15,7 +15,7 @@ angular
 
   $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
-  $scope.auditionsPerPage = 21;
+  $scope.auditionsPerPage = 35;
 
   $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setDescription(translations['seo.description.contest']);
