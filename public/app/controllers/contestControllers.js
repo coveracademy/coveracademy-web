@@ -86,7 +86,8 @@ angular
       return 0;
     }
   };
-  $scope.pageChanged = function() {
+  $scope.changePage = function(page) {
+    $scope.currentPage = page;
     var promise = $scope.rankType === 'best' ? contestService.bestAuditions : contestService.latestAuditions;
     promise($scope.contest, $scope.currentPage).then(function(response) {
       $scope.auditions = response.data;
