@@ -52,8 +52,7 @@ var path = require('path'),
           user: 'root',
           password: 'sandroa1s2d3',
           schema: 'cover_academy',
-          charset: 'utf8',
-          debug: true
+          charset: 'utf8'
         },
         redisSessionStorage: {
           host: 'localhost',
@@ -74,8 +73,7 @@ var path = require('path'),
           user: 'root',
           password: 'roota1s2d3',
           schema: 'cover_academy',
-          charset: 'utf8',
-          debug: false
+          charset: 'utf8'
         },
         redisSessionStorage: {
           host: 'localhost',
