@@ -150,10 +150,6 @@ p, li {
   width: 80px;
 }
 
-.label-none {
-  background-color: #f9f9f9;
-}
-
 .card {
   margin: 10px 0;
   border: 0;
@@ -302,10 +298,6 @@ a:hover {
 .label {
   padding: 7px;
   font-weight: normal;
-}
-
-.label-primary {
-  background-color: #2196f3;
 }
 
 .label-success {
