@@ -297,7 +297,7 @@
   </div>
   <div class="row" ng-repeat="row in auditions | partition: 3">
     <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+      <audition ng-model="audition" locale="{{ locale() }}" show-score="true" score-by-audition="getScoreByAudition(audition)">
       </audition>
     </div>
   </div>
@@ -318,7 +318,7 @@
   </div>
   <div class="row" ng-repeat="row in auditions | partition: 3">
     <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+      <audition ng-model="audition" locale="{{ locale() }}">
       </audition>
     </div>
   </div>
