@@ -72,8 +72,8 @@ angular
       see_the_prizes: 'See the prizes',
       share_on: 'Share on',
       share_this_contest: 'Share this contest',
-      signin_button: 'Sign in',
       signin_message: 'Please sign in with your social network account',
+      signin_with: 'Sign in with',
       the_artist_or_band_name: 'The artist or band name',
       the_audition_description: 'Write something interesting about your video',
       the_audition_title: 'The audition title',
@@ -114,7 +114,7 @@ angular
         thank_you_for_voting: 'Thank you for voting, help {{ user }} to win the contest by sharing this page!'
       },
       errors: {
-        authentication_required: 'You are not logged in, please login to continue',
+        authentication_required: 'You are not logged in, please sign in with your account to continue',
         page_not_found: 'Page not found',
         internal_error: 'Internal error',
         join_contest_already_finished: 'The contest was already finished =(',
@@ -305,8 +305,8 @@ angular
       see_the_prizes: 'Veja os prêmios',
       share_on: 'Compartilhe no',
       share_this_contest: 'Compartilhe esta competição',
-      signin_button: 'Acessar',
       signin_message: 'Por favor acesse com sua conta de rede social',
+      signin_with: 'Acessar com',
       the_artist_or_band_name: 'O nome do artista ou da banda',
       the_audition_description: 'Escreva algo interessante sobre seu vídeo',
       the_audition_title: 'O título do vídeo',
@@ -347,7 +347,7 @@ angular
         thank_you_for_voting: 'Obrigado pelo seu voto, ajude {{ user }} a vencer a competição compartilhando esta página!'
       },
       errors: {
-        authentication_required: 'Você não está logado, por favor faça login para continuar',
+        authentication_required: 'Você não está logado, por favor acesse sua conta para continuar',
         page_not_found: 'Página não encontrada',
         internal_error: 'Erro interno',
         join_contest_already_finished: 'A competição já foi finalizada =(',

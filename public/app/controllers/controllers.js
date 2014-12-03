@@ -14,7 +14,7 @@ angular
   $scope.isAuthenticated = authenticationService.isAuthenticated;
   $scope.user = authenticationService.getUser;
   $scope.temporaryUser = authenticationService.getTemporaryUser;
-  $scope.login = authenticationService.ensureAuth;
+  $scope.login = authenticationService.login;
   $scope.logout = authenticationService.logout;
 
   $scope.$on(authEvents.MUST_REGISTER, function() {
@@ -33,7 +33,7 @@ angular
     // });
   });
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
-    authenticationService.ensureAuth();
+    authenticationService.login();
   });
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     // $translate('alerts.login_success').then(function(translation) {

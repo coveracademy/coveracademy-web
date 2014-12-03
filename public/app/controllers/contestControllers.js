@@ -134,9 +134,6 @@ angular
     $scope.userAudition = null;
     $scope.usingYoutubeAccount = false;
   });
-  $scope.login = function(network) {
-    authenticationService.login(network);
-  };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && angular.isDefined($scope.userAudition.id))
   };

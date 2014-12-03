@@ -96,58 +96,7 @@ angular
 
   $.updateUser();
 
-  this.isAuthenticated = function() {
-    return user ? true : false;
-  };
-  this.getUser = function() {
-    return $.isAuthenticated() ? user : null;
-  };
-  this.isAuthorized = function (accessLevel) {
-    var authenticatedUser = $.getUser();
-    var userRole = authenticatedUser && authenticatedUser.permission ? authenticatedUser.permission : 'public';
-    return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
-  };
-  this.login = function(provider) {
-    var deferred = $q.defer();
-    var left = ($window.screen.width / 2) - (780 / 2);
-    var top = ($window.screen.height / 2) - (410 / 2);
-    var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
-    win.focus();
-    $window.authResult = function(result, message) {
-      if(result === 'success') {
-        userService.getAuthenticatedUser().then(function(response) {
-          changeUser(response.data);
-          deferred.resolve(user);
-          $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
-        }).catch(function(err) {
-          deferred.reject(err);
-          $rootScope.$broadcast(authEvents.LOGIN_FAILED);
-        });
-      } else if(result === 'must-register') {
-        deferred.resolve();
-        $rootScope.$broadcast(authEvents.MUST_REGISTER);
-      } else if(result === 'fail') {
-        deferred.reject();
-        $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
-      }
-      win.close();
-    }
-    return deferred.promise;
-  };
-  this.logout = function() {
-    var deferred = $q.defer();
-    userService.logout().then(function(response) {
-      changeUser(null);
-      deferred.resolve();
-      $rootScope.$broadcast(authEvents.LOGOUT_SUCCESS);
-    }).catch(function(err) {
-      deferred.reject();
-      $rootScope.$broadcast(authEvents.LOGOUT_FAILED);
-    });
-    return deferred.promise;
-  };
-
-  var modalOptions = {
+   var modalOptions = {
     backdrop: true,
     keyboard: true,
     templateUrl: '/app/partials/widgets/login-modal.html',
@@ -165,19 +114,70 @@ angular
       };
     }
   };
-  this.ensureAuth = function() {
-    var deferred = $q.defer();
-    if(!$.isAuthenticated()) {
-      $modal.open(modalOptions).result.then(function(authenticated) {
-        if(authenticated === true) {
-          deferred.resolve(true);
-        } else {
-          deferred.reject(false);
+  this.isAuthenticated = function() {
+    return user ? true : false;
+  };
+  this.getUser = function() {
+    return $.isAuthenticated() ? user : null;
+  };
+  this.isAuthorized = function (accessLevel) {
+    var authenticatedUser = $.getUser();
+    var userRole = authenticatedUser && authenticatedUser.permission ? authenticatedUser.permission : 'public';
+    return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
+  };
+  this.login = function(provider) {
+    if(provider) {
+      var deferred = $q.defer();
+      var left = ($window.screen.width / 2) - (780 / 2);
+      var top = ($window.screen.height / 2) - (410 / 2);
+      var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
+      win.focus();
+      $window.authResult = function(result, message) {
+        if(result === 'success') {
+          userService.getAuthenticatedUser().then(function(response) {
+            changeUser(response.data);
+            deferred.resolve(user);
+            $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+          }).catch(function(err) {
+            deferred.reject(err);
+            $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+          });
+        } else if(result === 'must-register') {
+          deferred.resolve();
+          $rootScope.$broadcast(authEvents.MUST_REGISTER);
+        } else if(result === 'fail') {
+          deferred.reject();
+          $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
         }
-      });
+        win.close();
+      }
+      return deferred.promise;
     } else {
-      deferred.resolve(true);
+      var deferred = $q.defer();
+      if(!$.isAuthenticated()) {
+        $modal.open(modalOptions).result.then(function(authenticated) {
+          if(authenticated === true) {
+            deferred.resolve(true);
+          } else {
+            deferred.reject(false);
+          }
+        });
+      } else {
+        deferred.resolve(true);
+      }
+      return deferred.promise;
     }
+  };
+  this.logout = function() {
+    var deferred = $q.defer();
+    userService.logout().then(function(response) {
+      changeUser(null);
+      deferred.resolve();
+      $rootScope.$broadcast(authEvents.LOGOUT_SUCCESS);
+    }).catch(function(err) {
+      deferred.reject();
+      $rootScope.$broadcast(authEvents.LOGOUT_FAILED);
+    });
     return deferred.promise;
   };
 }])

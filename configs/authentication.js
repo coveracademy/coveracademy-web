@@ -1,7 +1,5 @@
-var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy,
-    YoutubeStrategy  = require('passport-youtube-v3').Strategy,
+var YoutubeStrategy  = require('passport-youtube-v3').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
-    TwitterStrategy  = require('passport-twitter').Strategy,
     userService      = require('../apis/userService'),
     mailService      = require('../apis/mailService'),
     fileUtils        = require('../utils/fileUtils'),
@@ -58,52 +56,6 @@ exports.configure = function(app, passport) {
         return user;
       } else {
         return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender);
-      }
-    }).nodeify(new CustomDone(done).done);
-  }));
-
-  passport.use(new TwitterStrategy(settings.twitter,
-    function(accessToken, refreshToken, profile, done) {
-      var profileInfos = {
-        id: profile.id,
-        email: null,
-        name: profile.displayName,
-        gender: null,
-        picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
-      };
-      userService.findByTwitterAccount(profileInfos.id).then(function(user) {
-        if(user) {
-          if(user.get('twitter_picture') !== profileInfos.picture) {
-            user.set('twitter_picture', profileInfos.picture);
-            return userService.save(user, ['twitter_picture']);
-          } else {
-            return user;
-          }
-        } else {
-          return userService.createTemporaryTwitterAccount(profileInfos.id, profileInfos.name, profileInfos.gender, profileInfos.picture);
-        }
-      }).nodeify(new CustomDone(done).done);
-    }
-  ));
-
-  passport.use(new GoogleStrategy(settings.google, function(accessToken, refreshToken, profile, done) {
-    var profileInfos = {
-      id: profile.id,
-      email: profile.emails ? profile.emails[0].value : null,
-      name: profile.displayName,
-      gender: profile._json.gender,
-      picture: profile._json.picture
-    };
-    userService.findByGoogleAccount(profileInfos.id).then(function(user) {
-      if(user) {
-        if(user.get('google_picture') !== profileInfos.picture) {
-          user.set('google_picture', profileInfos.picture);
-          return userService.save(user, ['google_picture']);
-        } else {
-          return user;
-        }
-      } else {
-        return userService.createTemporaryGoogleAccount(profileInfos.id, profileInfos.name, profileInfos.gender, profileInfos.picture);
       }
     }).nodeify(new CustomDone(done).done);
   }));
