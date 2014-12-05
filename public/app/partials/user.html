@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
-          <a ui-sref="app.user({locale: locale(), id: user.id})">
+          <a ui-sref="{{ userState(user) }}">
             <div profile-picture="user" class="profile-picture img-circle">
             </div>
           </a>

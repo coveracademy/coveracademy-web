@@ -11,7 +11,6 @@ angular
   'angulartics.google.analytics',
   'flow',
   'ngCookies',
-  'ngPasswordStrength',
   'ngProgress',
   'ngSanitize',
   'pascalprecht.translate',
@@ -27,7 +26,8 @@ angular
   USER_COOKIE: 'CoverAcademy.user'
 })
 .constant('authEvents', {
-  MUST_REGISTER: 'mustRegister',
+  USER_REGISTERED: 'userRegistered',
+  FAIL_REGISTERING_USER: 'failRegisteringUser',
   LOGIN_SUCCESS: 'loginSuccess',
   LOGIN_FAILED: 'loginFailed',
   LOGOUT_SUCCESS: 'logoutSuccess',
@@ -49,7 +49,8 @@ angular
   cover: 'app.cover',
   covers: 'app.covers',
   index: 'app.index',
-  joinContest: 'app.joinContest'
+  joinContest: 'app.joinContest',
+  user: 'app.user'
 })
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$uiViewScrollProvider', '$httpProvider', '$translateProvider', '$languagesProvider', 'accessLevel', function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider, $httpProvider, $translateProvider, $languagesProvider, accessLevel) {
   // Internationalization
@@ -115,19 +116,6 @@ angular
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
           return viewService.settingsView();
-        }
-      }
-    })
-    // Anonymous level stages
-    .state('app.register', {
-      url: '/register',
-      templateUrl: '/app/partials/register.html',
-      controller: 'registerController',
-      accessLevel: accessLevel.ANONYMOUS,
-      resolve: {
-        viewService: 'viewService',
-        backendResponse: function($stateParams, viewService) {
-          return viewService.registerView();
         }
       }
     })
@@ -306,14 +294,26 @@ angular
       }
     })
     .state('app.user', {
-      url: '/user/:id',
+      url: '/user/:username',
       templateUrl: '/app/partials/user.html',
       controller: 'userController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.userView($stateParams.id);
+          return viewService.userView($stateParams.username);
+        }
+      }
+    })
+    .state('app.userId', {
+      url: '/user?id',
+      templateUrl: '/app/partials/user.html',
+      controller: 'userController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.userIdView($stateParams.id);
         }
       }
     })

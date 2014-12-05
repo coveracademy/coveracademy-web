@@ -17,7 +17,6 @@
     "bootswatch": "v3.3.1+2",
     "font-awesome": "~4.2.0",
     "ng-flow": "~2.4.3",
-    "ng-password-strength": "~0.0.6",
     "ng-videosharing-embed": "~0.2.1",
     "ngprogress": "~1.0.4",
     "underscore": "~1.6.0"

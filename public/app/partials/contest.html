@@ -215,7 +215,7 @@
       <div class="row padding">
         <div class="col-md-3">
           <div class="winner-author">
-            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+            <a ui-sref="{{ userState(audition.user) }}">
               <div profile-picture="audition.user" class="profile-picture">
               </div>
             </a>
@@ -223,7 +223,7 @@
         </div>
         <div class="col-md-9 nopadding-left">
           <h4 class="nomargin">
-            <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+            <a ui-sref="{{ userState(audition.user) }}">
               {{ audition.user.name }}
             </a>
             <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'won_a_gold_medal' | translate">

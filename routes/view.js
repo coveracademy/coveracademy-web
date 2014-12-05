@@ -41,13 +41,6 @@ module.exports = function(router, app) {
   });
 
   // AUTHENTICATED ROUTES
-
-  router.get('/register', isTemporaryUser, function(req, res, next) {
-    res.json({
-      temporaryUser: authorization.getTemporaryUser(req)
-    });
-  });
-
   router.get('/settings', isAuthenticated, function(req, res, next) {
     res.json({});
   });
@@ -377,11 +370,32 @@ module.exports = function(router, app) {
     })
   });
 
-  router.get('/user/:id', function(req, res, next) {
-    var id = req.param('id');
-    userService.getUser(id).then(function(user) {
+  router.get('/user/:username', function(req, res, next) {
+    var username = req.param('username');
+    userService.findByUsername(username).then(function(user) {
       if(!user) {
         messages.respondWithNotFound(res);
+      } else {
+        contestService.getUserAuditions(user).then(function(auditions) {
+          res.json({
+            user: user,
+            auditions: auditions
+          });
+        });
+      }
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    })
+  });
+
+  router.get('/user', function(req, res, next) {
+    var id = req.param('id');
+    userService.findById(id).then(function(user) {
+      if(!user) {
+        messages.respondWithNotFound(res);
+      } else if(user.get('username')) {
+        messages.respondWithMovedPermanently('user', {username: user.get('username')}, res);
       } else {
         contestService.getUserAuditions(user).then(function(auditions) {
           res.json({

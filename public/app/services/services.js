@@ -71,7 +71,7 @@ angular
     }, 8000);
   };
 }])
-.service('authenticationService', ['$rootScope', '$state', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $state, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
+.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
   var changeUser = function(newUser) {
@@ -96,23 +96,23 @@ angular
 
   $.updateUser();
 
-   var modalOptions = {
-    backdrop: true,
+  var loginModalOptions = {
     keyboard: true,
     templateUrl: '/app/partials/widgets/login-modal.html',
-    controller: function($scope, $modalInstance) {
-      $scope.modalScope = {};
-      $scope.modalScope.close = function(result) {
-        $modalInstance.dismiss('cancel');
-      };
-      $scope.modalScope.auth = function(provider) {
-        $.login(provider).then(function(user) {
-          $modalInstance.close($.isAuthenticated());
-        }).catch(function(err) {
-          $modalInstance.close($.isAuthenticated());
+    controller: 'loginController'
+  };
+  var registerModalOptions = {
+    keyboard: true,
+    size: 'lg',
+    templateUrl: '/app/partials/widgets/register-modal.html',
+    resolve: {
+      temporaryUser: function(userService) {
+        return userService.getTemporaryUser().then(function(response) {
+          return response.data;
         });
-      };
-    }
+      }
+    },
+    controller: 'registerController'
   };
   this.isAuthenticated = function() {
     return user ? true : false;
@@ -126,45 +126,54 @@ angular
     return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
   };
   this.login = function(provider) {
+    var deferred = $q.defer();
     if(provider) {
-      var deferred = $q.defer();
       var left = ($window.screen.width / 2) - (780 / 2);
       var top = ($window.screen.height / 2) - (410 / 2);
       var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
       win.focus();
       $window.authResult = function(result, message) {
-        if(result === 'success') {
-          userService.getAuthenticatedUser().then(function(response) {
-            changeUser(response.data);
-            deferred.resolve(user);
-            $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
-          }).catch(function(err) {
-            deferred.reject(err);
-            $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+        if(result === 'must-register') {
+          win.close();
+          $modal.open(registerModalOptions).result.then(function(registered) {
+            if(registered === true) {
+              $.updateUser().then(function(userUpdated) {
+                deferred.resolve(userUpdated);
+                $rootScope.$broadcast(authEvents.USER_REGISTERED);
+              }).catch(function(err) {
+                deferred.reject(err);
+                $rootScope.$broadcast(authEvents.FAIL_REGISTERING_USER);
+              });
+            } else {
+              deferred.reject();
+              $rootScope.$broadcast(authEvents.FAIL_REGISTERING_USER);
+            }
           });
-        } else if(result === 'must-register') {
-          deferred.resolve();
-          $rootScope.$broadcast(authEvents.MUST_REGISTER);
-        } else if(result === 'fail') {
-          deferred.reject();
-          $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
+        } else {
+          if(result === 'success') {
+            $.updateUser().then(function(userUpdated) {
+              deferred.resolve(userUpdated);
+              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+            }).catch(function(err) {
+              deferred.reject(err);
+              $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+            });
+          } else if(result === 'fail') {
+            deferred.reject();
+            $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
+          }
+          win.close();
         }
-        win.close();
       }
       return deferred.promise;
     } else {
-      var deferred = $q.defer();
-      if(!$.isAuthenticated()) {
-        $modal.open(modalOptions).result.then(function(authenticated) {
-          if(authenticated === true) {
-            deferred.resolve(true);
-          } else {
-            deferred.reject(false);
-          }
-        });
-      } else {
-        deferred.resolve(true);
-      }
+      $modal.open(loginModalOptions).result.then(function(authenticated) {
+        if(authenticated === true) {
+          deferred.resolve(user);
+        } else {
+          deferred.reject();
+        }
+      });
       return deferred.promise;
     }
   };
@@ -219,8 +228,7 @@ angular
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
-    'user.auth.accountNotFound': 'errors.user_auth_account_not_found',
-    'user.auth.passwordWithFewerCharacters': 'errors.user_auth_password_with_fewer_characteres',
+    'user.auth.invalidUsername': 'errors.user_auth_invalid_username',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
     'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
@@ -279,6 +287,9 @@ angular
   this.getAuthenticatedUser = function() {
     return $http.get('/api/user/authenticated');
   };
+  this.getTemporaryUser = function() {
+    return $http.get('/api/user/temporary');
+  };
   this.sendEmail = function(name, email, subject, message) {
     return $http.post('/api/user/email', {name: name, email: email, subject: subject, message: message});
   };
@@ -288,8 +299,8 @@ angular
   this.update = function(user) {
     return $http.put('/api/user', {user: user});
   };
-  this.connect = function(email, password, user, networkType, networkAccount) {
-    return $http.post('/api/user/connect', {email: email, password: password, user: user.id, network_type: networkType, network_account: networkAccount});
+  this.connect = function(networkType, networkAccount) {
+    return $http.post('/api/user/connect', {network_type: networkType, network_account: networkAccount});
   };
   this.get = function(id) {
     return $http.get('/api/user', {params: {id: id}});
@@ -297,15 +308,26 @@ angular
   this.getByEmail = function(email) {
     return $http.get('/api/user', {params: {email: email}});
   };
+  this.getProfilePictureType = function(user) {
+    var connection = null;
+    if(user.profile_picture === 'facebook') {
+      connection = {type: 'facebook', account: user.facebook_account};
+    } else if(user.profile_picture === 'twitter') {
+      connection = {type: 'twitter', account: user.twitter_account};
+    } else if(user.profile_picture === 'google') {
+      connection = {type: 'google', account: user.google_account};
+    }
+    return connection;
+  };
   this.getProfilePicture = function(user, network) {
     var url = defaultProfilePicture;
-    var picture = networkPictures[network ? network : user.primary_network];
+    var picture = networkPictures[network ? network : user.profile_picture];
     if(picture) {
       url = picture.get(user);
     }
     return url;
   };
-  this.hasNetworkConnection = function(user, network) {
+  this.hasProfilePicture = function(user, network) {
     var hasConnection = false;
     if(network === 'facebook') {
       hasConnection = Boolean(user.facebook_account);
@@ -316,19 +338,8 @@ angular
     }
     return hasConnection;
   };
-  this.getPrimaryNetworkConnection = function(user) {
-    var connection = null;
-    if(user.primary_network === 'facebook') {
-      connection = {type: 'facebook', account: user.facebook_account};
-    } else if(user.primary_network === 'twitter') {
-      connection = {type: 'twitter', account: user.twitter_account};
-    } else if(user.primary_network === 'google') {
-      connection = {type: 'google', account: user.google_account};
-    }
-    return connection;
-  };
-  this.isPrimaryNetworkConnection = function(user, network) {
-    var connection = $.getPrimaryNetworkConnection(user);
+  this.isProfilePicture = function(user, network) {
+    var connection = $.getProfilePictureType(user);
     return connection.type === network;
   };
 }])
@@ -386,8 +397,8 @@ angular
   this.userView = function(id) {
     return $http.get('/view/user/' + id);
   };
-  this.registerView = function() {
-    return $http.get('/view/register');
+  this.userIdView = function(id) {
+    return $http.get('/view/user', {params: {id: id}});
   };
   this.settingsView = function() {
     return $http.get('/view/settings');

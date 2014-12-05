@@ -83,7 +83,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li ng-if="user()">
-                  <a ui-sref="app.user({locale: locale(), id: user().id})">
+                  <a ui-sref="{{ userState(user()) }}">
                     <i class="glyphicon glyphicon-user"></i> {{ 'menus.profile' | translate }}
                   </a>
                 </li>
@@ -210,7 +210,6 @@
 
     <script src="/lib/ng-flow/dist/ng-flow-standalone.min.js"></script>
     <script src="/lib/ng-flow/dist/ng-flow.min.js"></script>
-    <script src="/lib/ng-password-strength/dist/scripts/ng-password-strength.min.js"></script>
     <script src="/lib/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
     <script src="/lib/ngprogress/build/ngProgress.min.js"></script>
 

@@ -14,6 +14,28 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="username" class="control-label col-md-2">
+                {{ 'forms.username' | translate }}
+              </label>
+              <div class="col-md-6">
+                <input ng-model="user.username" ng-disabled="!canEditUsername()" type="text" id="username" name="username" class="form-control" placeholder="{{ 'forms.username' | translate }}">
+                <span class="help-block" ng-if="canEditUsername()">
+                  {{ 'forms.edit_username_help' | translate }}
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email" class="control-label col-md-2">
+                {{ 'forms.email' | translate }}
+              </label>
+              <div class="col-md-6" ng-class="{'has-error': profileForm.email.$dirty && profileForm.email.$invalid}">
+                <input ng-model="user.email" type="text" id="email" name="email" class="form-control" placeholder="{{ 'forms.email' | translate }}" required>
+                <span class="help-block">
+                  {{ 'forms.edit_email_help' | translate }}
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
               <label for="gender" class="control-label col-md-2">
                 {{ 'forms.gender' | translate }}
               </label>
@@ -40,7 +62,7 @@
                 {{ 'forms.biography' | translate }}
               </label>
               <div class="col-md-6">
-                <textarea ng-model="user.biography" id="biography" name="biography" class="form-control" rows="5" placeholder="{{ 'forms.write_something_about_your_passion_for_music' | translate }}">
+                <textarea ng-model="user.biography" id="biography" name="biography" class="form-control" rows="5" placeholder="{{ 'forms.write_something_about_you' | translate }}">
                 </textarea>
               </div>
             </div>
@@ -49,25 +71,25 @@
                 {{ 'forms.picture' | translate }}
               </label>
               <div id="primary-pictures" class="col-md-10">
-                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('facebook')" ng-click="selectPrimaryNetwork('facebook')" ng-class="{selected: isPrimaryNetwork('facebook')}">
+                <div class="thumbnail pull-left" ng-if="hasProfilePicture('facebook')" ng-click="selectProfilePicture('facebook')" ng-class="{selected: isProfilePicture('facebook')}">
                   <div profile-picture="user" network="facebook" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
-                    <i ng-show="isPrimaryNetwork('facebook')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_facebook_picture' | translate }}
+                    <i ng-show="isProfilePicture('facebook')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_facebook_picture' | translate }}
                   </div>
                 </div>
-                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('twitter')" ng-click="selectPrimaryNetwork('twitter')" ng-class="{selected: isPrimaryNetwork('twitter')}">
+                <div class="thumbnail pull-left" ng-if="hasProfilePicture('twitter')" ng-click="selectProfilePicture('twitter')" ng-class="{selected: isProfilePicture('twitter')}">
                   <div profile-picture="user" network="twitter" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
-                    <i ng-show="isPrimaryNetwork('twitter')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_twitter_picture' | translate }}
+                    <i ng-show="isProfilePicture('twitter')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_twitter_picture' | translate }}
                   </div>
                 </div>
-                <div class="thumbnail pull-left" ng-if="hasNetworkConnection('google')" ng-click="selectPrimaryNetwork('google')" ng-class="{selected: isPrimaryNetwork('google')}">
+                <div class="thumbnail pull-left" ng-if="hasProfilePicture('google')" ng-click="selectProfilePicture('google')" ng-class="{selected: isProfilePicture('google')}">
                   <div profile-picture="user" network="google" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
-                    <i ng-show="isPrimaryNetwork('google')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_google_picture' | translate }}
+                    <i ng-show="isProfilePicture('google')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_google_picture' | translate }}
                   </div>
                 </div>
               </div>

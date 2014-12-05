@@ -29,14 +29,8 @@ module.exports = function(router, app) {
     });
   });
 
-  router.post('/connect', isTemporaryUser, function(req, res, next) {
-    var email = req.param('email');
-    var password = req.param('password');
-    var user = User.forge({id: req.param('user')});
-    var networkType = req.param('network_type');
-    var networkAccount = req.param('network_account');
-
-    userService.connectNetwork(email, password, user, networkType, networkAccount).then(function(userAssociated) {
+  router.post('/connect', isAuthenticated, function(req, res, next) {
+    userService.connectNetwork(req.user, networkType, networkAccount).then(function(userAssociated) {
       return authorization.refreshUser(req, userAssociated);
     }).then(function(refreshedUser) {
       res.json(refreshedUser);

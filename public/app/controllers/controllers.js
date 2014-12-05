@@ -13,13 +13,9 @@ angular
 
   $scope.isAuthenticated = authenticationService.isAuthenticated;
   $scope.user = authenticationService.getUser;
-  $scope.temporaryUser = authenticationService.getTemporaryUser;
   $scope.login = authenticationService.login;
   $scope.logout = authenticationService.logout;
 
-  $scope.$on(authEvents.MUST_REGISTER, function() {
-    $state.go('app.register', {locale: $scope.locale()});
-  });
   $scope.$on(authEvents.NOT_AUTHORIZED, function() {
     $state.go('app.index', {locale: $scope.locale()});
     // $translate('alerts.not_authorized').then(function(translation) {
@@ -54,9 +50,22 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $state.go($state.current, $stateParams, {reload: true});
   });
+  $scope.$on(authEvents.USER_REGISTERED, function() {
+
+  });
+  $scope.$on(authEvents.FAIL_REGISTERING_USER, function() {
+
+  });
 
   $scope.isLocale = function(locale) {
     return $translate.use() === locale;
+  };
+  $scope.userState = function(user) {
+    if(user.username) {
+      return 'app.user({locale: "' + $scope.locale() + '", username: "' + user.username + '"})';
+    } else {
+      return 'app.user({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
+    }
   };
 }])
 .controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {

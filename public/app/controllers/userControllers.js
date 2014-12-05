@@ -1,59 +1,41 @@
 angular
 .module('coverAcademy.controllers')
-.controller('registerController', ['$scope', '$state', '$timeout', 'backendResponse', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $state, $timeout, backendResponse, authenticationService, alertService, userService, seoService, translationService) {
-  $scope.user = backendResponse.data.temporaryUser;
-  $scope.emailChecked = false;
-  $scope.userRegistered = false;
-  $scope.userFound = null;
-  $scope.previousState = null;
-
-  $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-    $scope.previousState = {state: fromState, params: fromParams};
-  });
-
-  $scope.getNetworkConnection = function() {
-    return userService.getPrimaryNetworkConnection($scope.user);
+.controller('registerController', ['$scope', '$modalInstance', '$translate', 'constants', 'temporaryUser', 'translationService', 'alertService', 'userService', function($scope, $modalInstance, $translate, constants, temporaryUser, translationService, alertService, userService) {
+  $scope.temporaryUser = temporaryUser;
+  $scope.siteUrl = constants.SITE_URL;
+  $scope.locale = $translate.use();
+  $scope.close = function(result) {
+    $modalInstance.close(result);
   };
-  $scope.isNetworkConnection = function(network) {
-    return userService.isPrimaryNetworkConnection($scope.user, network);
+  $scope.cancel = function(reason) {
+    $modalInstance.dismiss(reason || 'cancel');
   };
-  $scope.checkEmail = function() {
-    userService.getByEmail($scope.user.email).then(function(response) {
-      $scope.emailChecked = true;
-      $scope.userFound = response.data;
-    }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
-      });
-    });
-  };
-  var confirmConnection = function() {
-    authenticationService.updateUser().then(function(userUpdated) {
-      $scope.userRegistered = true;
-      if($scope.previousState) {
-        $timeout(function() {
-          $state.go($scope.previousState.state.name, $scope.previousState.params);
-        }, 10000);
-      }
-    });
-  };
-  $scope.register = function() {
-    userService.create($scope.user).then(function(response) {
-      confirmConnection();
-    }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
-      });
-    });
+  $scope.sampleUsername = function() {
+    if(!$scope.temporaryUser.username || $scope.temporaryUser.username.length === 0) {
+      return '<username>';
+    }
+    return $scope.temporaryUser.username.toLowerCase();
   };
   $scope.confirm = function() {
-    var connection = $scope.getNetworkConnection();
-    userService.connect($scope.userFound.email, $scope.userFound.password, $scope.userFound, connection.type, connection.account).then(function(response) {
-      confirmConnection();
+    userService.create($scope.temporaryUser).then(function(response) {
+      $scope.close(true);
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.addAlert('danger', translation);
       });
+    });
+  };
+}])
+.controller('loginController', ['$scope', '$modalInstance', 'authenticationService', function($scope, $modalInstance, authenticationService) {
+  $scope.close = function(result) {
+    $modalInstance.close(result);
+  };
+  $scope.cancel = function(reason) {
+    $modalInstance.dismiss(reason || 'cancel');
+  };
+  $scope.login = function(provider) {
+    authenticationService.login(provider).finally(function() {
+      $modalInstance.close(authenticationService.isAuthenticated());
     });
   };
 }])
@@ -70,19 +52,24 @@ angular
 }])
 .controller('settingsController', ['$scope', '$translate', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, authenticationService, alertService, userService, seoService, translationService) {
   $scope.user = authenticationService.getUser();
+  $scope.initialUsername = $scope.user.username;
+  $scope.initialEmail = $scope.user.email;
 
   $translate('settings').then(function(translation) {
     seoService.setTitle(translation);
   });
 
-  $scope.hasNetworkConnection = function(network) {
-    return userService.hasNetworkConnection($scope.user, network);
+  $scope.canEditUsername = function() {
+    return Boolean(!$scope.initialUsername);
   };
-  $scope.selectPrimaryNetwork = function(network) {
-    $scope.user.primary_network = network;
+  $scope.hasProfilePicture = function(network) {
+    return userService.hasProfilePicture($scope.user, network);
   };
-  $scope.isPrimaryNetwork = function(network) {
-    return userService.isPrimaryNetworkConnection($scope.user, network);
+  $scope.selectProfilePicture = function(network) {
+    $scope.user.profile_picture = network;
+  };
+  $scope.isProfilePicture = function(network) {
+    return userService.isProfilePicture($scope.user, network);
   };
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {

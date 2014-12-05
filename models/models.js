@@ -14,12 +14,10 @@ var knex = require('knex')({
 
 var Bookshelf = require('bookshelf')(knex);
 Bookshelf.plugin('virtuals');
-Bookshelf.plugin('visibility');
 
 var User = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'user',
-  hidden: ['password']
+  tableName: 'user'
 });
 
 var MusicGenre = Bookshelf.Model.extend({

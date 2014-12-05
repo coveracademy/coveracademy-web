@@ -12,8 +12,8 @@ function filter(data, attributes) {
 
 exports.modelsAttributes = {
   MusicEditableAttributes: ['title', 'artist_id', 'small_thumbnail', 'medium_thumbnail', 'large_thumbnail'],
-  UserEditableAttributes: ['name', 'gender', 'biography', 'city', 'state', 'primary_network'],
-  UserCreationAttributes: ['email', 'password', 'name', 'gender', 'facebook_account', 'facebook_picture', 'twitter_account', 'twitter_picture', 'google_account', 'google_picture', 'primary_network']
+  UserEditableAttributes: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'confirmed'],
+  UserCreationAttributes: ['name', 'email', 'username', 'gender', 'facebook_account', 'facebook_picture', 'profile_picture', 'confirmed', 'permission']
 }
 
 exports.filterAttributes = function(data, attributesName) {

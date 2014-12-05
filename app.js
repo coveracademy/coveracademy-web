@@ -36,7 +36,7 @@ app.use(session({
     host: settings.redisSessionStorage.host,
     port: settings.redisSessionStorage.port,
     pass: settings.redisSessionStorage.password,
-    prefix: 'session'
+    prefix: 'session:'
   })
 }));
 app.use(express.static(app.get('public')));

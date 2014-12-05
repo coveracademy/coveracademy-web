@@ -28,7 +28,7 @@
           {{ 'published' | translate }}
           <span am-time-ago="audition.registration_date"></span>
           {{ 'by_user' | translate }}
-          <a ui-sref="app.user({locale: locale(), id: audition.user.id})">{{ audition.user.name }}</a>
+          <a ui-sref="{{ userState(audition.user) }}">{{ audition.user.name }}</a>
         </p>
       </div>
     </div>
@@ -46,7 +46,7 @@
         <div class="row padding">
           <div class="col-md-2">
             <div id="author">
-              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              <a ui-sref="{{ userState(audition.user) }}">
                 <div profile-picture="audition.user" class="profile-picture">
                 </div>
               </a>
@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-10">
             <h3 class="nomargin">
-              <a ui-sref="app.user({locale: locale(), id: audition.user.id})">
+              <a ui-sref="{{ userState(audition.user) }}">
                 {{ audition.user.name }}
               </a>
             </h3>

@@ -104,19 +104,4 @@ angular
       });
     }
   }
-}])
-.directive('passwordCheck', [function () {
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    scope: {
-      password: '=passwordCheck',
-      passwordConfirmed: '=ngModel'
-    },
-    link: function (scope, element, attrs, ctrl) {
-      scope.$watch('[password, passwordConfirmed]', function(value) {
-        ctrl.$setValidity('passwordMatch', scope.password === scope.passwordConfirmed);
-      });
-    }
-  }
 }]);
