@@ -103,6 +103,7 @@ angular
   };
   var registerModalOptions = {
     keyboard: true,
+    backdrop: false,
     size: 'lg',
     templateUrl: '/app/partials/widgets/register-modal.html',
     resolve: {
@@ -228,7 +229,7 @@ angular
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
-    'user.auth.invalidUsername': 'errors.user_auth_invalid_username',
+    'user.edit.invalidUsername': 'errors.user_edit_invalid_username',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
     'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',

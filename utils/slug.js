@@ -16,7 +16,7 @@ slug.charmap['@'] = ' ';
 slug.charmap['&'] = 'and';
 slug.charmap['\''] = ' ';
 
-var usernameRegexp = new RegExp('^[a-z0-9.]{5,15}$');
+var usernameRegexp = new RegExp('^[a-z0-9.]{5,20}$');
 
 exports.slugify = function(str) {
   var slugified = '';

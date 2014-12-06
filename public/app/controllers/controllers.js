@@ -64,7 +64,7 @@ angular
     if(user.username) {
       return 'app.user({locale: "' + $scope.locale() + '", username: "' + user.username + '"})';
     } else {
-      return 'app.user({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
+      return 'app.userId({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
     }
   };
 }])

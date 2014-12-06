@@ -50,15 +50,21 @@ angular
     return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
   };
 }])
-.controller('settingsController', ['$scope', '$translate', 'authenticationService', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, authenticationService, alertService, userService, seoService, translationService) {
-  $scope.user = authenticationService.getUser();
+.controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, constants, alertService, userService, seoService, translationService) {
+  $scope.siteUrl = constants.SITE_URL;
+  $scope.user = $scope.user();
   $scope.initialUsername = $scope.user.username;
   $scope.initialEmail = $scope.user.email;
 
-  $translate('settings').then(function(translation) {
+  $translate('seo.title.settings').then(function(translation) {
     seoService.setTitle(translation);
   });
-
+  $scope.sampleUsername = function() {
+    if(!$scope.user.username || $scope.user.username.length === 0) {
+      return '<username>';
+    }
+    return $scope.user.username.toLowerCase();
+  };
   $scope.canEditUsername = function() {
     return Boolean(!$scope.initialUsername);
   };
@@ -73,6 +79,7 @@ angular
   };
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {
+      $scope.initialUsername = $scope.user.username;
       $translate('alerts.changes_saved_successfully').then(function(translation) {
         alertService.addAlert('success', translation);
       });

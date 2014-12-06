@@ -55,7 +55,8 @@ exports.configure = function(app, passport) {
       if(user) {
         return user;
       } else {
-        return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender, profileInfos.email);
+        // return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender, profileInfos.email);
+        return userService.create({facebook_account: profileInfos.id, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
       }
     }).nodeify(new CustomDone(done).done);
   }));

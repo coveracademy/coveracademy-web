@@ -65,12 +65,12 @@ exports.create = function(userData) {
       return;
     }
     if(userData.username && !slug.isValidUsername(userData)) {
-      reject(messages.apiError('user.auth.invalidUsername', 'The username is invalid'));
+      reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
       return;
     }
     var user = $.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes'));
     user.set('permission', 'user');
-    if(user.get('email') === userData.facebook_email) {
+    if(!userData.facebook_email || user.get('email') === userData.facebook_email) {
       user.set('confirmed', 1);
     }
     user.save().then(function(userSaved) {
@@ -95,17 +95,30 @@ exports.save = function(user, attributes) {
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
     if(user.permission === 'admin' || user.id === edited.id) {
-      edited.fetch().then(function(userFetched) {
+      $.forge({id: edited.id}).fetch().then(function(userFetched) {
         if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
           reject(messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore'));
           return;
         }
-
+        if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
+          reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
+          return;
+        }
+        if(userFetched.get('email') !== edited.get('email')) {
+          edited.set('confirmed', 0);
+        }
         edited.save(edited.pick(modelUtils.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
           resolve(userEdited);
+          if(userEdited.get('confirmed') === 0) {
+            mailService.userConfirmation(userEdited).catch(function(err) {
+              console.log('Error sending "user confirmation" email to user ' + userEdited.id + ': ' + err.message);
+            });
+          }
         }).catch(function(err) {
-          reject(err);
+          reject(messages.unexpectedError('Error editing user', err));
         });
+      }).catch(function(err) {
+        reject(messages.unexpectedError('Error editing user', err));
       });
     } else {
       reject(messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because has no permission'));

@@ -122,7 +122,7 @@ angular
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you',
         join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us',
         unexpected_error: 'An unexpected error happened, please try again later',
-        user_auth_invalid_username: 'The username can only contain alphanumeric characters (a-z, 0-9) or a period ("."), with at least 3 characters and maximum length of 15',
+        user_edit_invalid_username: 'The username can only contain alphanumeric characters (a-z, 0-9) or a period ("."), with at least 5 characters and maximum length of 20',
         user_vote_can_not_vote_for_yourself: 'You can not vote for yourself',
         user_vote_contest_was_finished: 'You can\'t vote because this contest was already finished',
         user_vote_reach_vote_limit: 'You reach the maximum of votes per contest',
@@ -221,6 +221,7 @@ angular
           music_genre_rank: 'The {{ rankType }} {{ musicGenre }} cover songs',
           privacy_policy: 'Privacy policy',
           search: 'Search results for "{{ searchQuery }}"',
+          settings: 'Settings',
           terms_of_use: 'Terms of use'
         },
         description: {
@@ -357,7 +358,7 @@ angular
         join_contest_video_not_owned_by_user: 'Você não pode participar de uma competição com um vídeo publicado em outra conta',
         join_contest_user_already_in_contest: 'Você já está participando dessa competição. Caso tenha dúvidas entre em contato',
         unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente',
-        user_auth_invalid_username: 'O username pode conter apenas caracteres alfanuméricos (a-z, 0-9) ou ".", com pelo menos 3 caracteres e tamanho máximo de 15',
+        user_edit_invalid_username: 'O username só pode conter caracteres alfanuméricos (a-z, 0-9) ou ponto ".", com no mínimo 5 e no máximo 20 caracteres',
         user_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo',
         user_vote_contest_was_finished: 'Você não pode votar porque esta competição já foi finalizado',
         user_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição',
@@ -456,6 +457,7 @@ angular
           music_genre_rank: 'Os {{ rankType }} covers {{ musicGenre }}',
           privacy_policy: 'Política de privacidade',
           search: 'Resultados da busca por "{{ searchQuery }}"',
+          settings: 'Configurações',
           terms_of_use: 'Termos de uso'
         },
         description: {

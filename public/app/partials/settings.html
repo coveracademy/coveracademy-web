@@ -19,6 +19,9 @@
               </label>
               <div class="col-md-6">
                 <input ng-model="user.username" ng-disabled="!canEditUsername()" type="text" id="username" name="username" class="form-control" placeholder="{{ 'forms.username' | translate }}">
+                <span class="help-block">
+                  {{ 'forms.username_first_help' | translate }} {{ siteUrl }}/{{ locale() }}/user/{{ sampleUsername() }}
+                </span>
                 <span class="help-block" ng-if="canEditUsername()">
                   {{ 'forms.edit_username_help' | translate }}
                 </span>
