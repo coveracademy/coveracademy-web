@@ -30,6 +30,8 @@ module.exports = function(router, app) {
   });
 
   router.post('/connect', isAuthenticated, function(req, res, next) {
+    var networkType = req.param('network_type');
+    var networkAccount = req.param('network_account');
     userService.connectNetwork(req.user, networkType, networkAccount).then(function(userAssociated) {
       return authorization.refreshUser(req, userAssociated);
     }).then(function(refreshedUser) {
