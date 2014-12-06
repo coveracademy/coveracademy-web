@@ -47,15 +47,15 @@ exports.connectNetwork = function(user, networkType, networkAccount) {
 }
 
 exports.connectTwitterAccount = function(user, twitterAccount) {
-  return $.connectNetwork('twitter', twitterAccount);
+  return $.connectNetwork(user, 'twitter', twitterAccount);
 }
 
 exports.connectGoogleAccount = function(user, googleAccount) {
-  return $.connectNetwork('google', googleAccount);
+  return $.connectNetwork(user, 'google', googleAccount);
 }
 
 exports.connectYouTubeAccount = function(user, youTubeAccount) {
-  return $.connectNetwork('youtube', youTubeAccount);
+  return $.connectNetwork(user, 'youtube', youTubeAccount);
 }
 
 exports.create = function(userData) {
