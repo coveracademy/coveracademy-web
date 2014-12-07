@@ -28,6 +28,7 @@
     "morgan": "~1.0.0",
     "mysql": "~2.3.2",
     "newrelic": "~1.11.0",
+    "node-uuid": "~1.4.2",
     "nunjucks": "~1.1.0",
     "passport": "~0.2.1",
     "passport-facebook": "~1.0.3",

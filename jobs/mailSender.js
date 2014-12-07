@@ -21,6 +21,7 @@ var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(mailTemplates))
 env.addGlobal('siteUrl', settings.siteUrl);
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
+var userActivationTemplate = env.getTemplate('user_activation.tpl');
 var contestJoinTemplate = env.getTemplate('contest_join.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
@@ -34,6 +35,19 @@ server.post('/user/registration', function(req, res, next) {
     });
   }).catch(function(err) {
     console.log('Error sending "user registration" email to user ' + req.body.user + ': ' + err);
+    res.send(500);
+  });
+});
+
+server.post('/user/activation', function(req, res, next) {
+  userService.findById(req.body.user).then(function(user) {
+    userActivationTemplate.render({user: user.toJSON(), token: req.body.token}, function(err, email) {
+      mailService.send(user.get('email'), 'Confirme o seu email para participar do Cover Academy', email).then(function(mailResponse) {
+        res.send(200);
+      });
+    });
+  }).catch(function(err) {
+    console.log('Error sending "user activation" email to user ' + req.body.user + ': ' + err);
     res.send(500);
   });
 });

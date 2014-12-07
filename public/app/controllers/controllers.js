@@ -288,4 +288,9 @@ angular
       });
     }
   };
+}])
+.controller('errorController', ['$translate', 'errorCode', 'seoService', function($translate, errorCode, seoService) {
+  $translate('seo.title.error_' + errorCode).then(function(translation) {
+    seoService.setTitle(translation);
+  });
 }]);

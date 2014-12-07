@@ -44,6 +44,18 @@ exports.userRegistration = function(user) {
   });
 }
 
+exports.userActivation = function(user, activationToken) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/user/activation', {user: user.id, token: activationToken.get('token')}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 exports.contestJoin = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
     mailClient.post('/contest/join', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {

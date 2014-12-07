@@ -401,6 +401,9 @@ angular
   this.userIdView = function(id) {
     return $http.get('/view/user', {params: {id: id}});
   };
+  this.confirmationView = function(token) {
+    return $http.get('/view/confirm', {params: {token: token}});
+  };
   this.settingsView = function() {
     return $http.get('/view/settings');
   };

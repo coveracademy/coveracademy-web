@@ -107,15 +107,24 @@ var UserVote = Bookshelf.Model.extend({
   }
 });
 
+var ActivationToken = Bookshelf.Model.extend({
+  idAttribute: 'token',
+  tableName: 'activation_token',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  }
+});
+
 module.exports = {
-  User: User,
-  Cover: Cover,
-  PotentialCover: PotentialCover,
-  MusicGenre: MusicGenre,
+  ActivationToken: ActivationToken,
   Artist: Artist,
-  Music: Music,
-  Contest: Contest,
   Audition: Audition,
-  UserVote: UserVote,
-  Bookshelf: Bookshelf
+  Bookshelf: Bookshelf,
+  Contest: Contest,
+  Cover: Cover,
+  Music: Music,
+  MusicGenre: MusicGenre,
+  PotentialCover: PotentialCover,
+  User: User,
+  UserVote: UserVote
 }

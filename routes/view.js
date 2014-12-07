@@ -37,7 +37,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   // AUTHENTICATED ROUTES
@@ -56,7 +56,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/cover/:id/:slug', function(req, res, next) {
@@ -80,7 +80,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/covers', function(req, res, next) {
@@ -314,7 +314,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/contest/:id/:slug/join', function(req, res, next) {
@@ -334,7 +334,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/audition/:id/:slug', function(req, res, next) {
@@ -367,7 +367,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/user/:username', function(req, res, next) {
@@ -386,7 +386,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
   });
 
   router.get('/user', function(req, res, next) {
@@ -407,7 +407,27 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);
-    })
+    });
+  });
+
+  router.get('/confirm', function(req, res, next) {
+    var token = req.param('token');
+    if(!token) {
+      messages.respondWithMovedPermanently('index', {}, res);
+    } else {
+      userService.activateAccount(token).then(function(user) {
+        if(!user) {
+          messages.respondWithMovedPermanently('index', {}, res);
+        } else {
+          res.json({
+            user: user
+          });
+        }
+      }).catch(function(err) {
+        console.log(err);
+        messages.respondWithMovedPermanently('index', {}, res);
+      });
+    }
   });
 
   app.use('/view', router);

@@ -165,3 +165,12 @@ create table user_vote (
   constraint `fk_user_vote_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_user_vote_audition_id` foreign key (`audition_id`) references `audition` (`id`)
 ) engine = innodb default charset = utf8;
+
+create table activation_token (
+  token             varchar(255) not null,
+  user_id           int(11) not null,
+  expiration_date   timestamp not null default current_timestamp,
+  registration_date timestamp not null default current_timestamp,
+  primary key (token),
+  constraint `fk_activation_token_user_id` foreign key (`user_id`) references `user` (`id`)
+) engine = innodb default charset = utf8;

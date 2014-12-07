@@ -317,6 +317,18 @@ angular
         }
       }
     })
+    .state('app.confirmation', {
+      url: '/confirm?token',
+      templateUrl: '/app/partials/confirmation.html',
+      controller: 'confirmationController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.confirmationView($stateParams.token);
+        }
+      }
+    })
     .state('app.privacyPolicy', {
       url: '/privacy',
       templateUrl: '/app/partials/privacy-policy.html',
@@ -331,10 +343,22 @@ angular
     })
     // Error states
     .state('app.404', {
-      templateUrl: '/app/partials/errors/404.html'
+      templateUrl: '/app/partials/errors/404.html',
+      controller: 'errorController',
+      resolve: {
+        errorCode: function() {
+          return 404;
+        }
+      }
     })
     .state('app.500', {
-      templateUrl: '/app/partials/errors/500.html'
+      templateUrl: '/app/partials/errors/500.html',
+      controller: 'errorController',
+      resolve: {
+        errorCode: function() {
+          return 500;
+        }
+      }
     });
 }])
 .run(['$rootScope', '$state', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'redirections', 'authenticationService', 'seoService', function($rootScope, $state, $translate, $languages, amMoment, paginationConfig, authEvents, redirections, authenticationService, seoService) {

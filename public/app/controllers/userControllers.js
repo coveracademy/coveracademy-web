@@ -89,4 +89,10 @@ angular
       });
     });
   };
+}])
+.controller('confirmationController', ['$state', '$translate', 'alertService', function($state, $translate, alertService) {
+  $state.go('app.index');
+  $translate('account_confirmed').then(function(translation) {
+    alertService.addAlert('success', translation);
+  });
 }]);

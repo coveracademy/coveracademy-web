@@ -1,12 +1,16 @@
-var User         = require('../models/models').User,
-    modelUtils   = require('../utils/modelUtils'),
-    encryptUtils = require('../utils/encryptUtils'),
-    slug         = require('../utils/slug'),
-    mailService  = require('./mailService'),
-    messages     = require('./messages'),
-    Promise      = require('bluebird'),
-    _            = require('underscore'),
-    $            = this;
+var User            = require('../models/models').User,
+    ActivationToken = require('../models/models').ActivationToken,
+    Bookshelf       = require('../models/models').Bookshelf,
+    modelUtils      = require('../utils/modelUtils'),
+    encryptUtils    = require('../utils/encryptUtils'),
+    slug            = require('../utils/slug'),
+    mailService     = require('./mailService'),
+    messages        = require('./messages'),
+    uuid            = require('node-uuid'),
+    moment          = require('moment'),
+    Promise         = require('bluebird'),
+    _               = require('underscore'),
+    $               = this;
 
 exports.forge = function(userData) {
   return User.forge(userData);
@@ -110,8 +114,10 @@ exports.update = function(user, edited) {
         edited.save(edited.pick(modelUtils.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
           resolve(userEdited);
           if(userEdited.get('confirmed') === 0) {
-            mailService.userConfirmation(userEdited).catch(function(err) {
-              console.log('Error sending "user confirmation" email to user ' + userEdited.id + ': ' + err.message);
+            $.createActivationToken(userEdited).then(function(token) {
+              return mailService.userActivation(userEdited, token);
+            }).catch(function(err) {
+                console.log('Error sending "user activation" email to user ' + userEdited.id + ': ' + err.message);
             });
           }
         }).catch(function(err) {
@@ -148,4 +154,28 @@ exports.findByEmail = function(email) {
 
 exports.findByUsername = function(username) {
   return $.forge({username: username}).fetch();
+}
+
+exports.createActivationToken = function(user) {
+  return ActivationToken.forge({user_id: user.id, token: uuid.v1(), expiration_date: moment().add(7, 'days').toDate()}).save(null, {method: 'insert'});
+}
+
+exports.activateAccount = function(token) {
+  return new Promise(function(resolve, reject) {
+    Bookshelf.transaction(function(transaction) {
+      return ActivationToken.forge({token: token}).fetch({withRelated: ['user'], require: true}).then(function(activationToken) {
+        this.user = activationToken.related('user');
+        return activationToken.destroy({transacting: transaction});
+      }).then(function() {
+        this.user.set('confirmed', 1);
+        return this.user.save(null, {transacting: transaction});
+      }).then(function(user) {
+        return user;
+      }).bind({});
+    }).then(function(user) {
+      resolve(user);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
 }
