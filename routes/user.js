@@ -1,7 +1,6 @@
 var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
     messages        = require('../apis/messages'),
-    User            = require('../models/models').User,
     authorization   = require('../utils/authorization'),
     isAuthenticated = authorization.isAuthenticated,
     isTemporaryUser = authorization.isTemporaryUser;
@@ -56,7 +55,7 @@ module.exports = function(router, app) {
 
   router.put('/', isAuthenticated, function(req, res, next) {
     var user = req.param('user');
-    userService.update(req.user, User.forge(user)).then(function(userSaved) {
+    userService.update(req.user, userService.forge(user)).then(function(userSaved) {
       res.json(userSaved);
     }).catch(function(err) {
       console.log(err);
@@ -73,6 +72,16 @@ module.exports = function(router, app) {
     }
     queryPromise(query).then(function(user) {
       res.json(user);
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.post('/verification', isAuthenticated, function(req, res, next) {
+    var user = userService.forge({id: req.param('user')});
+    userService.resendVerificationEmail(user).then(function() {
+      res.json({});
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);

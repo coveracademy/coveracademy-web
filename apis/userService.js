@@ -1,5 +1,5 @@
 var User            = require('../models/models').User,
-    ActivationToken = require('../models/models').ActivationToken,
+    VerificationToken = require('../models/models').VerificationToken,
     Bookshelf       = require('../models/models').Bookshelf,
     modelUtils      = require('../utils/modelUtils'),
     encryptUtils    = require('../utils/encryptUtils'),
@@ -75,12 +75,12 @@ exports.create = function(userData) {
     var user = $.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes'));
     user.set('permission', 'user');
     if(!userData.facebook_email || user.get('email') === userData.facebook_email) {
-      user.set('confirmed', 1);
+      user.set('verified', 1);
     }
     user.save().then(function(userSaved) {
       resolve(userSaved);
       mailService.userRegistration(userSaved).catch(function(err) {
-        console.log('Error sending "user registration" email to user ' + userSaved.id + ': ' + err.message);
+        console.log('Error sending "user registration" email to user ' + userSaved.id + ': ' + err);
       });
     }).catch(function(err) {
       reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account', err));
@@ -109,15 +109,13 @@ exports.update = function(user, edited) {
           return;
         }
         if(userFetched.get('email') !== edited.get('email')) {
-          edited.set('confirmed', 0);
+          edited.set('verified', 0);
         }
         edited.save(edited.pick(modelUtils.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
           resolve(userEdited);
-          if(userEdited.get('confirmed') === 0) {
-            $.createActivationToken(userEdited).then(function(token) {
-              return mailService.userActivation(userEdited, token);
-            }).catch(function(err) {
-                console.log('Error sending "user activation" email to user ' + userEdited.id + ': ' + err.message);
+          if(userEdited.get('verified') === 0) {
+            $.sendVerificationEmail(userEdited).catch(function(err) {
+              console.log('Error sending "user verification" email to user ' + userEdited.id + ': ' + err);
             });
           }
         }).catch(function(err) {
@@ -156,18 +154,14 @@ exports.findByUsername = function(username) {
   return $.forge({username: username}).fetch();
 }
 
-exports.createActivationToken = function(user) {
-  return ActivationToken.forge({user_id: user.id, token: uuid.v1(), expiration_date: moment().add(7, 'days').toDate()}).save(null, {method: 'insert'});
-}
-
-exports.activateAccount = function(token) {
+exports.verifyEmail = function(token) {
   return new Promise(function(resolve, reject) {
     Bookshelf.transaction(function(transaction) {
-      return ActivationToken.forge({token: token}).fetch({withRelated: ['user'], require: true}).then(function(activationToken) {
+      return VerificationToken.forge({token: token}).fetch({withRelated: ['user'], require: true}).then(function(activationToken) {
         this.user = activationToken.related('user');
         return activationToken.destroy({transacting: transaction});
       }).then(function() {
-        this.user.set('confirmed', 1);
+        this.user.set('verified', 1);
         return this.user.save(null, {transacting: transaction});
       }).then(function(user) {
         return user;
@@ -177,5 +171,22 @@ exports.activateAccount = function(token) {
     }).catch(function(err) {
       reject(err);
     });
+  });
+}
+
+exports.sendVerificationEmail = function(user) {
+  return VerificationToken.forge({user_id: user.id, token: uuid.v1(), expiration_date: moment().add(7, 'days').toDate()}).save(null, {method: 'insert'}).then(function(token) {
+    return mailService.userVerification(user, token).catch(function(err) {
+      throw messages.apiError('user.verification.errorSendingVerificationEmail', 'Error sending verification email to ' + user.get('email'));
+    });
+  });
+}
+
+exports.resendVerificationEmail = function(user) {
+  return user.fetch().then(function(userFetched) {
+    if(userFetched.get('verified') === 1) {
+      throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified');
+    }
+    return $.sendVerificationEmail(userFetched);
   });
 }

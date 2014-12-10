@@ -44,9 +44,9 @@ exports.userRegistration = function(user) {
   });
 }
 
-exports.userActivation = function(user, activationToken) {
+exports.userVerification = function(user, verificationToken) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/user/activation', {user: user.id, token: activationToken.get('token')}, function(err, req, res, obj) {
+    mailClient.post('/user/verification', {user: user.id, token: verificationToken.get('token')}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {

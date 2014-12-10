@@ -317,15 +317,15 @@ angular
         }
       }
     })
-    .state('app.confirmation', {
-      url: '/confirm?token',
-      templateUrl: '/app/partials/confirmation.html',
-      controller: 'confirmationController',
+    .state('app.verify', {
+      url: '/verify?token',
+      templateUrl: '/app/partials/verify.html',
+      controller: 'verifyEmailController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function($stateParams, viewService) {
-          return viewService.confirmationView($stateParams.token);
+          return viewService.verifyView($stateParams.token);
         }
       }
     })

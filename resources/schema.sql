@@ -17,7 +17,7 @@ create table user (
   youtube_account   varchar(255) default null,
   profile_picture   varchar(20) default null,
   voting_power      decimal(6, 3) default 1.000,
-  confirmed         tinyint(1) default 0,
+  verified          tinyint(1) default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_username` (`username`),
@@ -166,11 +166,11 @@ create table user_vote (
   constraint `fk_user_vote_audition_id` foreign key (`audition_id`) references `audition` (`id`)
 ) engine = innodb default charset = utf8;
 
-create table activation_token (
+create table verification_token (
   token             varchar(255) not null,
   user_id           int(11) not null,
   expiration_date   timestamp not null default current_timestamp,
   registration_date timestamp not null default current_timestamp,
   primary key (token),
-  constraint `fk_activation_token_user_id` foreign key (`user_id`) references `user` (`id`)
+  constraint `fk_verification_token_user_id` foreign key (`user_id`) references `user` (`id`)
 ) engine = innodb default charset = utf8;

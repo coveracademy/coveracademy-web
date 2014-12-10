@@ -107,16 +107,16 @@ var UserVote = Bookshelf.Model.extend({
   }
 });
 
-var ActivationToken = Bookshelf.Model.extend({
+var VerificationToken = Bookshelf.Model.extend({
   idAttribute: 'token',
-  tableName: 'activation_token',
+  tableName: 'verification_token',
   user: function() {
     return this.belongsTo(User, 'user_id');
   }
 });
 
 module.exports = {
-  ActivationToken: ActivationToken,
+  VerificationToken: VerificationToken,
   Artist: Artist,
   Audition: Audition,
   Bookshelf: Bookshelf,

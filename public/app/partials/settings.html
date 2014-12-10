@@ -33,6 +33,9 @@
               </label>
               <div class="col-md-6" ng-class="{'has-error': profileForm.email.$dirty && profileForm.email.$invalid}">
                 <input ng-model="user.email" type="text" id="email" name="email" class="form-control" placeholder="{{ 'forms.email' | translate }}" required>
+                <span ng-if="isUnverifiedEmail()" class="help-block align-right font-normal">
+                  <a ng-click="resendVerificationEmail()">{{ 'forms.resend_verification_email' | translate }}</a>
+                </span>
                 <span class="help-block">
                   {{ 'forms.edit_email_help' | translate }}
                 </span>

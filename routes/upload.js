@@ -1,6 +1,5 @@
 var userService = require('../apis/userService'),
     settings    = require('../configs/settings'),
-    User        = require('../models/models').User,
     flow        = require('../utils/flow-node.js')(settings.tmpUploadPath),
     fileUtils   = require('../utils/fileUtils'),
     path        = require('path'),
@@ -13,7 +12,7 @@ module.exports = function(router, app) {
   router.post('/user', multipart(), function(req, res) {
     flow.post(req, function(status, filename, originalFilename, identifier) {
       if(status === 'done') {
-        var user = User.forge({id: parseInt(req.body.user)});
+        var user = userService.forge({id: parseInt(req.body.user)});
         var userPhoto = fileUtils.userPhotoFilename(user, path.extname(filename));
         var userPhotoPath = fileUtils.userPhotoFilePath(userPhoto);
         user.set('image', userPhoto);

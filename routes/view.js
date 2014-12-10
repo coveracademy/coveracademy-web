@@ -410,12 +410,12 @@ module.exports = function(router, app) {
     });
   });
 
-  router.get('/confirm', function(req, res, next) {
+  router.get('/verify', function(req, res, next) {
     var token = req.param('token');
     if(!token) {
       messages.respondWithMovedPermanently('index', {}, res);
     } else {
-      userService.activateAccount(token).then(function(user) {
+      userService.verifyEmail(token).then(function(user) {
         if(!user) {
           messages.respondWithMovedPermanently('index', {}, res);
         } else {

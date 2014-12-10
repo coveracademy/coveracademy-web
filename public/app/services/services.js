@@ -230,6 +230,8 @@ angular
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'user.edit.invalidUsername': 'errors.user_edit_invalid_username',
+    'user.verification.emailAlreadyVerified': 'errors.user_verification_email_already_verified',
+    'user.verification.errorSendingVerificationEmail': 'errors.user_verification_error_sending_verification_email',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
     'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
@@ -290,6 +292,9 @@ angular
   };
   this.getTemporaryUser = function() {
     return $http.get('/api/user/temporary');
+  };
+  this.verificationEmail = function(user) {
+    return $http.post('/api/user/verification', {user: user.id});
   };
   this.sendEmail = function(name, email, subject, message) {
     return $http.post('/api/user/email', {name: name, email: email, subject: subject, message: message});
@@ -401,8 +406,8 @@ angular
   this.userIdView = function(id) {
     return $http.get('/view/user', {params: {id: id}});
   };
-  this.confirmationView = function(token) {
-    return $http.get('/view/confirm', {params: {token: token}});
+  this.verifyView = function(token) {
+    return $http.get('/view/verify', {params: {token: token}});
   };
   this.settingsView = function() {
     return $http.get('/view/settings');

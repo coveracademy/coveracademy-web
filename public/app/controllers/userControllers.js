@@ -52,13 +52,32 @@ angular
 }])
 .controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, constants, alertService, userService, seoService, translationService) {
   $scope.siteUrl = constants.SITE_URL;
-  $scope.user = $scope.user();
-  $scope.initialUsername = $scope.user.username;
-  $scope.initialEmail = $scope.user.email;
+
+  $scope.setUser = function(user) {
+    $scope.user = user;
+    $scope.initialUsername = $scope.user.username;
+    $scope.initialEmail = $scope.user.email;
+  };
+
+  $scope.setUser($scope.user());
 
   $translate('seo.title.settings').then(function(translation) {
     seoService.setTitle(translation);
   });
+  $scope.isUnverifiedEmail = function() {
+    return $scope.user.verified === 0;
+  };
+  $scope.resendVerificationEmail = function() {
+    userService.verificationEmail($scope.user).then(function(response) {
+      $translate('alerts.verification_email_sended').then(function(translation) {
+        alertService.addAlert('success', translation);
+      });
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.addAlert('danger', translation);
+      });
+    });
+  };
   $scope.sampleUsername = function() {
     if(!$scope.user.username || $scope.user.username.length === 0) {
       return '<username>';
@@ -79,7 +98,7 @@ angular
   };
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {
-      $scope.initialUsername = $scope.user.username;
+      $scope.setUser(response.data);
       $translate('alerts.changes_saved_successfully').then(function(translation) {
         alertService.addAlert('success', translation);
       });
@@ -90,9 +109,10 @@ angular
     });
   };
 }])
-.controller('confirmationController', ['$state', '$translate', 'alertService', function($state, $translate, alertService) {
+.controller('verifyEmailController', ['$state', '$translate', 'alertService', 'authenticationService', function($state, $translate, alertService, authenticationService) {
+  authenticationService.updateUser();
   $state.go('app.index');
-  $translate('account_confirmed').then(function(translation) {
+  $translate('alerts.email_verified').then(function(translation) {
     alertService.addAlert('success', translation);
   });
 }]);
