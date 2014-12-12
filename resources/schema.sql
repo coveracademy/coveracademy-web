@@ -169,7 +169,7 @@ create table user_vote (
 create table verification_token (
   token             varchar(255) not null,
   user_id           int(11) not null,
-  expiration_date   timestamp not null default current_timestamp,
+  expiration_date   timestamp not null,
   registration_date timestamp not null default current_timestamp,
   primary key (token),
   constraint `fk_verification_token_user_id` foreign key (`user_id`) references `user` (`id`)

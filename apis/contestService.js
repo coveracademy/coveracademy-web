@@ -83,43 +83,11 @@ var chooseWinners = function(contest, transaction) {
   });
 }
 
-var incrementVotingPowers = function(auditions, transaction) {
-  return $.getUsersVotes(auditions).then(function(usersVotes) {
-    var usersWithVotingPowerIncremented = [];
-    var usersPromises = [];
-    var usersVotesSortedByAuditionPlace = usersVotes.sortBy(function(userVote) {
-      return auditions.get(userVote.get('audition_id')).get('place');
-    });
-    usersVotes.reset();
-    usersVotes.set(usersVotesSortedByAuditionPlace);
-    usersVotes.forEach(function(userVote) {
-      var audition = auditions.get(userVote.get('audition_id'));
-      var user = userVote.related('user');
-      if(!_.contains(usersWithVotingPowerIncremented, user.id)) {
-        var increment = 0;
-        if(audition.get('place') === 1) {
-          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_GOLD_MEDAL_VOTER;
-        } else if(audition.get('place') === 2) {
-          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_SILVER_MEDAL_VOTER;
-        } else if(audition.get('place') === 3) {
-          increment = constants.POWER_VOTING_INCREMENT_FOR_THE_BRONZE_MEDAL_VOTER;
-        }
-        user.set('voting_power', user.get('voting_power') + increment);
-        usersWithVotingPowerIncremented.push(user.id);
-        usersPromises.push(user.save({voting_power: user.get('voting_power')}, {patch: true, transacting: transaction}));
-      }
-    });
-    return Promise.all(usersPromises);
-  });
-}
-
 exports.finishContest = function(contest) {
   return Bookshelf.transaction(function(transaction) {
     return contest.save({finished: 1}, {patch: true, transacting: transaction}).then(function(contest) {
       return chooseWinners(contest, transaction);
     }).then(function(winners) {
-      return incrementVotingPowers(winners);
-    }).then(function(voters) {
       return;
     });
   });
@@ -406,7 +374,6 @@ exports.countUserVotes = function(user, contest) {
 }
 
 exports.vote = function(user, audition) {
-  console.log(user)
   return new Promise(function(resolve, reject) {
     audition.fetch(auditionWithContestRelated).then(function(auditionFetched) {
       var contest = auditionFetched.related('contest');
