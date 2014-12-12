@@ -47,7 +47,7 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    contestService.listUnfinishedContests().then(function(contests) {
+    contestService.listContests().then(function(contests) {
       if(contests.length > 0) {
         messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
       } else {

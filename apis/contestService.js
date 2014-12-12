@@ -27,6 +27,10 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
+exports.listContests = function() {
+  return Contest.colletion().fecth();
+}
+
 exports.listUnfinishedContests = function() {
   return Contest.collection().query({where: ['finished', 0]}).fetch();
 }
