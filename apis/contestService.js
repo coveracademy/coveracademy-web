@@ -28,7 +28,7 @@ exports.getContest = function(id) {
 }
 
 exports.listContests = function() {
-  return Contest.collection().fecth();
+  return Contest.collection().fetch();
 }
 
 exports.listUnfinishedContests = function() {
