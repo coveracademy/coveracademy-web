@@ -121,6 +121,7 @@ create table contest (
   description         text not null,
   image               varchar(255) not null,
   minimum_contestants int(4) not null,
+  acceptance_date     date not null,
   start_date          timestamp null default null,
   end_date            timestamp null default null,
   registration_date   timestamp not null default current_timestamp,

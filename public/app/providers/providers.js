@@ -120,7 +120,7 @@ angular
       errors: {
         authentication_required: 'You are not logged in, please sign in with your account to continue.',
         join_contest_already_finished: 'The contest was already finished =(',
-        join_contest_video_date_is_not_valid: 'The video can not be older or younger than the contest.',
+        join_contest_video_date_is_not_valid: 'The date of the video must be between the dates of acceptance of the videos and the contest end date.',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you.',
         join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us.',
         unexpected_error: 'An unexpected error happened, please try again later.',
@@ -363,7 +363,7 @@ angular
       errors: {
         authentication_required: 'Você não está logado, por favor acesse sua conta para continuar.',
         join_contest_already_finished: 'A competição já foi finalizada =(',
-        join_contest_video_date_is_not_valid: 'O vídeo não pode ser mais antigo ou mais novo que a competição.',
+        join_contest_video_date_is_not_valid: 'A data do vídeo deve estar entre as datas de aceitação de vídeos e a data de término da competição.',
         join_contest_video_not_owned_by_user: 'Você não pode participar de uma competição com um vídeo publicado em outra conta.',
         join_contest_user_already_in_contest: 'Você já está participando dessa competição. Caso tenha dúvidas entre em contato.',
         unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente.',

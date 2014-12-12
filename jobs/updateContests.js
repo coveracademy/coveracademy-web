@@ -1,5 +1,4 @@
 var contestService = require('../apis/contestService'),
-    Contest        = require('../models/models').Contest,
     later          = require('later');
 
 var startContests = function() {

@@ -35,8 +35,14 @@ exports.listContestsToStart = function() {
   return Contest.collection().query(function(qb) {
     qb.leftJoin('audition', 'contest.id', 'audition.contest_id')
     .where('contest.finished', 0)
-    .whereNotNull('contest.start_date')
-    .where('contest.start_date', '<=', new Date())
+    .where(function() {
+      this.andWhere(function() {
+        this.whereNotNull('contest.start_date').where('contest.start_date', '<=', new Date());
+      })
+      .orWhere(function() {
+        this.whereNull('contest.start_date');
+      });
+    })
     .whereNull('contest.end_date')
     .groupBy('audition.contest_id')
     .havingRaw('count(audition.contest_id) >= contest.minimum_contestants');
@@ -101,10 +107,22 @@ exports.startContest = function(contest) {
         var now = new Date();
         if(totalAuditions >= contest.get('minimum_contestants') && (!start || now > start)) {
           if(!start || now > start) {
-            start = now;
+            var momentToStart = moment(now);
+            var foundTimeToStart = constants.TIMES_TO_START_THE_CONTEST.some(function(hourToStart) {
+              if(momentToStart.hour() < hourToStart) {
+                momentToStart.hour(hourToStart);
+                return true;
+              } else {
+                return false;
+              }
+            });
+            if(foundTimeToStart === false) {
+              momentToStart.add(1, 'days').hour(constants.TIMES_TO_START_THE_CONTEST[0]);
+            }
+            start = momentToStart.toDate();
           }
-          contest.set('start_date', start);
-          contest.set('end_date', moment(start).add(contest.get('duration') + 1, 'days').hours(0).minutes(0).seconds(0).toDate());
+          contest.set('start_date', moment(start).minutes(0).second(0).toDate());
+          contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hours(constants.TIME_TO_FINISH_THE_CONTEST).minutes(0).second(0).toDate());
           contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
             resolve(contest);
             mailService.contestStart(contest).catch(function(err) {
@@ -131,7 +149,7 @@ var createAudition = function(user, contest, auditionData) {
   return new Promise(function(resolve, reject) {
     youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
       if(videoInfos.channelId === user.get('youtube_account')) {
-        if(videoInfos.date > contest.get('registration_date') && (_.isUndefined(contest.get('end_date')) || _.isNull(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
+        if(videoInfos.date > contest.get('acceptance_date') && (_.isUndefined(contest.get('end_date')) || _.isNull(contest.get('end_date')) || videoInfos.date < contest.get('end_date'))) {
           var audition = Audition.forge(auditionData);
           audition.set('contest_id', contest.id);
           audition.set('user_id', user.id);
