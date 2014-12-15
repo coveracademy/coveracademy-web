@@ -49,7 +49,7 @@ module.exports = function(router, app) {
   router.get('/index', function(req, res, next) {
     contestService.listContests().then(function(contests) {
       if(contests.length > 0) {
-        messages.respondWithRedirection('contest', {id: contests.at(contest.length - 1).id, slug: contests.at(contest.length - 1).get('slug')}, res);
+        messages.respondWithRedirection('contest', {id: contests.at(contests.length - 1).id, slug: contests.at(contests.length - 1).get('slug')}, res);
       } else {
         messages.respondWithRedirection('covers', {}, res);
       }
