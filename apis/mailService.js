@@ -65,9 +65,8 @@ exports.auditionSubmit = function(user, contest, audition) {
         resolve(obj);
       }
     });
-   });
- }
-
+  });
+}
 
 exports.auditionApproved = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {

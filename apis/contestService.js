@@ -389,7 +389,7 @@ exports.vote = function(user, audition) {
       var contest = auditionFetched.related('contest');
       $.countUserVotes(user, contest).then(function(totalAuditionsVotes) {
         if(totalAuditionsVotes >= constants.VOTE_LIMIT) {
-           reject(messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
+          reject(messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
           return;
         }
         if(contest.getProgress() === 'finished') {
