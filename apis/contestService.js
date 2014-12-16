@@ -150,47 +150,49 @@ exports.startContest = function(contest) {
 }
 
 exports.submitAudition = function(user, contest, auditionData) {
-  Contest.forge({id: contest.id}).fetch().then(function(contestFetched) {
-    if(contestFetched.getProgress() === 'finished') {
-      reject(messages.apiError('contest.join.alreadyFinished', 'The contest was already finished'));
-      return;
-    }
-    youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
-      if(videoInfos.channelId !== user.get('youtube_account')) {
-        reject(messages.apiError('contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
+  return new Promise(function(resolve, reject) {
+    Contest.forge({id: contest.id}).fetch().then(function(contestFetched) {
+      if(contestFetched.getProgress() === 'finished') {
+        reject(messages.apiError('contest.join.alreadyFinished', 'The contest was already finished'));
         return;
       }
-      if(videoInfos.date < contestFetched.get('acceptance_date') || (contestFetched.get('end_date') && videoInfos.date > contestFetched.get('end_date'))) {
-         reject(messages.apiError('contest.join.videoDateIsNotValid', 'The date of this video can not be older than acceptance date or younger than the contest end'));
-        return;
-      }
-      var audition = Audition.forge(auditionData);
-      audition.set('approved', 0);
-      audition.set('contest_id', contestFetched.id);
-      audition.set('user_id', user.id);
-      audition.set('url', videoInfos.url);
-      audition.set('embed_url', videoInfos.embedUrl);
-      audition.set('video_id', videoInfos.id);
-      audition.set('small_thumbnail', videoInfos.thumbnails.small);
-      audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
-      audition.set('large_thumbnail', videoInfos.thumbnails.large);
-      audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
-      audition.save().then(function(auditionSaved) {
-        $.startContest(contestFetched).finally(function() {
-          resolve(auditionSaved);
-        });
-        mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
-          console.log('Error sending "audition submit" email to user ' + user.id + ': ' + err.message);
+      youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
+        if(videoInfos.channelId !== user.get('youtube_account')) {
+          reject(messages.apiError('contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
+          return;
+        }
+        if(videoInfos.date < contestFetched.get('acceptance_date') || (contestFetched.get('end_date') && videoInfos.date > contestFetched.get('end_date'))) {
+           reject(messages.apiError('contest.join.videoDateIsNotValid', 'The date of this video can not be older than acceptance date or younger than the contest end'));
+          return;
+        }
+        var audition = Audition.forge(auditionData);
+        audition.set('approved', 0);
+        audition.set('contest_id', contestFetched.id);
+        audition.set('user_id', user.id);
+        audition.set('url', videoInfos.url);
+        audition.set('embed_url', videoInfos.embedUrl);
+        audition.set('video_id', videoInfos.id);
+        audition.set('small_thumbnail', videoInfos.thumbnails.small);
+        audition.set('medium_thumbnail', videoInfos.thumbnails.medium);
+        audition.set('large_thumbnail', videoInfos.thumbnails.large);
+        audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
+        audition.save().then(function(auditionSaved) {
+          $.startContest(contestFetched).finally(function() {
+            resolve(auditionSaved);
+          });
+          mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
+            console.log('Error sending "audition submit" email to user ' + user.id + ': ' + err.message);
+          });
+        }).catch(function(err) {
+          if(err.code === 'ER_DUP_ENTRY') {
+            reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
+          } else {
+            reject(messages.unexpectedError('Error adding audition in contest', err));
+          }
         });
       }).catch(function(err) {
-        if(err.code === 'ER_DUP_ENTRY') {
-          reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
-        } else {
-          reject(messages.unexpectedError('Error adding audition in contest', err));
-        }
+        reject(messages.unexpectedError('Error fetching contest', err));
       });
-    }).catch(function(err) {
-      reject(messages.unexpectedError('Error fetching contest', err));
     });
   });
 }
