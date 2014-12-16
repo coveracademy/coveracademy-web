@@ -187,12 +187,14 @@ exports.submitAudition = function(user, contest, auditionData) {
           if(err.code === 'ER_DUP_ENTRY') {
             reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
           } else {
-            reject(messages.unexpectedError('Error adding audition in contest', err));
+            reject(messages.unexpectedError('Error submitting audition', err));
           }
         });
       }).catch(function(err) {
-        reject(messages.unexpectedError('Error fetching contest', err));
+        reject(messages.unexpectedError('Error submitting audition', err));
       });
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error submitting audition', err));
     });
   });
 }
@@ -433,7 +435,7 @@ exports.removeVote = function(user, audition) {
       if(userVote.related('audition').related('contest').getProgress() === 'finished') {
         reject(messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
         return;
-       }
+      }
       var userVoteCloned = userVote.clone();
       userVote.destroy().then(function() {
         resolve(userVoteCloned);

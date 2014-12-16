@@ -33,7 +33,7 @@ angular
     $scope.audition = null;
   });
   $scope.isAuditionApproved = function() {
-   return $scope.isContestant() && $scope.audition.approved === 1;
+    return $scope.isContestant() && $scope.audition.approved === 1;
   };
   $scope.isContestant = function() {
     return Boolean($scope.audition && $scope.audition.id);
