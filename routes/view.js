@@ -68,8 +68,10 @@ module.exports = function(router, app) {
       } else if(slug !== cover.get('slug')) {
         messages.respondWithMovedPermanently('cover', {id: cover.id, slug: cover.get('slug')}, res);
       } else {
-        Promise.all([coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)])
-        .spread(function(bestCoversOfMusic, bestCoversByArtist) {
+        return Promise.all([
+          coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+          coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)
+        ]).spread(function(bestCoversOfMusic, bestCoversByArtist) {
           res.json({
             cover: cover,
             bestCoversOfMusic: bestCoversOfMusic,
@@ -84,14 +86,16 @@ module.exports = function(router, app) {
   });
 
   router.get('/covers', function(req, res, next) {
-    Promise
-    .all([coverService.topCover(), coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.musicGenres()])
-    .spread(function(topCover, bestCovers, latestCovers, musicGenres) {
+    Promise.all([
+      coverService.topCover(),
+      coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      coverService.musicGenres()
+    ]).spread(function(topCover, bestCovers, latestCovers, musicGenres) {
       this.topCover = topCover;
       this.bestCovers = bestCovers;
       this.latestCovers = latestCovers;
       this.musicGenres = musicGenres;
-
       var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
       return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
     }).then(function(bestArtistsOfMusicGenre) {
@@ -115,8 +119,10 @@ module.exports = function(router, app) {
       messages.respondWithNotFound(res);
     } else {
       var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
-      Promise.all([coversPromise, coverService.totalCovers(constants.WEEK_PERIOD)])
-      .spread(function(coversRank, totalCoversRank) {
+      Promise.all([
+        coversPromise,
+        coverService.totalCovers(constants.WEEK_PERIOD)
+      ]).spread(function(coversRank, totalCoversRank) {
         this.coversRank = coversRank;
         this.totalCoversRank = totalCoversRank;
         return coverService.artistsOfCovers(coversRank);
@@ -140,8 +146,10 @@ module.exports = function(router, app) {
       if(!artist) {
         messages.respondWithNotFound(res);
       } else {
-        Promise.all([coverService.totalMusicsByArtist(artist), coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)])
-        .spread(function(totalMusicsByArtist, musicsByArtist) {
+        return Promise.all([
+          coverService.totalMusicsByArtist(artist),
+          coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)
+        ]).spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
           var coversOfMusics;
@@ -186,13 +194,15 @@ module.exports = function(router, app) {
   router.get('/music/:slug', function(req, res, next) {
     var slug = req.param('slug');
     var rank = req.param('rank') || 'best';
-    coverService.getMusicBySlug(slug).bind({}).then(function(music) {
+    coverService.getMusicBySlug(slug).then(function(music) {
       if(!music) {
         messages.respondWithNotFound(res);
       } else {
         var coversOfMusicPromise = rank === 'best' ? coverService.bestCoversOfMusic : coverService.latestCoversOfMusic;
-        Promise.all([coverService.totalCoversOfMusic(music), coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)])
-        .spread(function(totalCoversOfMusic, coversOfMusic) {
+        return Promise.all([
+          coverService.totalCoversOfMusic(music),
+          coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)
+        ]).spread(function(totalCoversOfMusic, coversOfMusic) {
           res.json({
             music: music,
             totalCoversOfMusic: totalCoversOfMusic,
@@ -212,8 +222,11 @@ module.exports = function(router, app) {
       if(!musicGenre) {
         messages.respondWithNotFound(res);
       } else {
-        Promise.all([coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_SUMMARIZED_LIST), coverService.bestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST), coverService.latestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)]).bind({})
-        .spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
+        return Promise.all([
+          coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_SUMMARIZED_LIST),
+          coverService.bestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+          coverService.latestCoversOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)
+        ]).spread(function(bestArtistsOfMusicGenre, bestCoversOfMusicGenre, latestCoversOfMusicGenre) {
           res.json({
             musicGenre: musicGenre,
             bestArtistsOfMusicGenre: bestArtistsOfMusicGenre,
@@ -240,8 +253,10 @@ module.exports = function(router, app) {
           messages.respondWithNotFound(res);
         } else {
           var coversOfMusicGenrePromise = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
-          Promise.all([coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST), coverService.totalCoversOfMusicGenre(musicGenre)]).bind({})
-          .spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
+          return Promise.all([
+            coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST),
+            coverService.totalCoversOfMusicGenre(musicGenre)
+          ]).spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
             res.json({
               musicGenre: musicGenre,
               coversOfMusicGenre: coversOfMusicGenre,
@@ -289,8 +304,12 @@ module.exports = function(router, app) {
         contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
-        Promise.all([auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST), contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest), winnersPromise, contestService.getUserVotes(req.user, contest)])
-        .spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes) {
+        return Promise.all([
+          auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST),
+          contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest),
+          winnersPromise,
+          contestService.getUserVotes(req.user, contest)
+        ]).spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes) {
           this.auditions = auditions;
           this.userVotes = userVotes;
           this.totalAuditions = totalAuditions;
@@ -351,8 +370,15 @@ module.exports = function(router, app) {
       } else {
         var contest = audition.related('contest');
         contest.set('progress', contest.getProgress());
-        Promise.all([contestService.countUserVotes(req.user, contest), contestService.getUserVote(req.user, audition), contestService.getAuditionVotes(audition), contestService.getAuditionScore(audition), contestService.bestAuditions(contest, 1, 8), contestService.latestAuditions(contest, 1, 8), contestService.totalAuditions(contest)])
-        .spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
+        return Promise.all([
+          contestService.countUserVotes(req.user, contest),
+          contestService.getUserVote(req.user, audition),
+          contestService.getAuditionVotes(audition),
+          contestService.getAuditionScore(audition),
+          contestService.bestAuditions(contest, 1, 8),
+          contestService.latestAuditions(contest, 1, 8),
+          contestService.totalAuditions(contest)
+        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
           res.json({
             contest: contest,
             audition: audition,
@@ -379,7 +405,7 @@ module.exports = function(router, app) {
       if(!user) {
         messages.respondWithNotFound(res);
       } else {
-        contestService.getUserAuditions(user).then(function(auditions) {
+        return contestService.getUserAuditions(user).then(function(auditions) {
           res.json({
             user: user,
             auditions: auditions
@@ -400,7 +426,7 @@ module.exports = function(router, app) {
       } else if(user.get('username')) {
         messages.respondWithMovedPermanently('user', {username: user.get('username')}, res);
       } else {
-        contestService.getUserAuditions(user).then(function(auditions) {
+        return contestService.getUserAuditions(user).then(function(auditions) {
           res.json({
             user: user,
             auditions: auditions

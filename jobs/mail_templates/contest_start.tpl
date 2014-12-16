@@ -18,7 +18,7 @@
       </a>
     </p>
     <p>
-      Agora basta compartilhar este link com seus amigos e correr atrás de votos. Boa sorte!
+      Agora basta compartilhar este link com seus amigos e ganhar votos. Boa sorte!
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

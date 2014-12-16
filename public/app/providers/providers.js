@@ -334,7 +334,7 @@ angular
       the_publish_date_must_be_since: 'Lembre-se, a data de publicação do vídeo no YouTube deve ser a partir de',
       third_place: 'Terceiro lugar',
       third_place_description: 'O autor da audição com a terceira maior pontuação no final do concurso vencerá em terceiro lugar. O prêmio em dinheiro aumentará com a entrada de novos competidores.',
-      this_audition_is_under_review_wait_for_approval: 'Está audição está sob revisão, espere pela aprovação.',
+      this_audition_is_under_review_wait_for_approval: 'Esta audição está sob revisão, espere pela aprovação.',
       this_contest_is_happening_but_we_need_contestants: 'Esta competição está acontecendo, mas precisamos de competidores!',
       this_contest_is_not_happening_yet: 'Esta competição ainda não está acontecendo!',
       this_contest_was_finished: 'Esta competição acabou!',
