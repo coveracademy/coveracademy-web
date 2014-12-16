@@ -145,6 +145,7 @@ create table audition (
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
   place             int(1) default null,
+  approved          tinyint(1) default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_audition_url` (`url`),

@@ -22,7 +22,9 @@ env.addGlobal('siteUrl', settings.siteUrl);
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
 var userVerificationTemplate = env.getTemplate('user_verification.tpl');
-var contestJoinTemplate = env.getTemplate('contest_join.tpl');
+var auditionSubmitTemplate = env.getTemplate('audition_submit.tpl');
+var auditionApprovedTemplate = env.getTemplate('audition_approved.tpl');
+var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
 
@@ -52,18 +54,45 @@ server.post('/user/verification', function(req, res, next) {
   });
 });
 
-server.post('/contest/join', function(req, res, next) {
+server.post('/audition/submit', function(req, res, next) {
   Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).spread(function(user, contest, audition) {
-    contestJoinTemplate.render({user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
-      mailService.send(user.get('email'), 'Você está inscrito na competição, boa sorte!', email).then(function(mailResponse) {
+    auditionSubmitTemplate.render({user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
+      mailService.send(user.get('email'), 'Você se inscreveu na competição, aguarde enquanto revisamos o seu vídeo!', email).then(function(mailResponse) {
         res.send(200);
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "contest join" email to user ' + req.body.user + ': ' + err);
+    console.log('Error sending "audition submit" email to user ' + req.body.user + ': ' + err);
     res.send(500);
   });
 });
+
+server.post('/audition/approved', function(req, res, next) {
+  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).spread(function(user, contest, audition) {
+    auditionApprovedTemplate.render({user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
+      mailService.send(user.get('email'), 'Parabéns, o seu vídeo foi aprovado e você está participando da competição!', email).then(function(mailResponse) {
+        res.send(200);
+      });
+    });
+  }).catch(function(err) {
+    console.log('Error sending "audition approved" email to user ' + req.body.user + ': ' + err);
+    res.send(500);
+  });
+});
+
+server.post('/audition/disapproved', function(req, res, next) {
+  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).spread(function(user, contest, audition) {
+    auditionDisapprovedTemplate.render({user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
+      mailService.send(user.get('email'), 'Sentimos muito, mas infelizmente o seu vídeo não foi aprovado =(', email).then(function(mailResponse) {
+        res.send(200);
+      });
+    });
+  }).catch(function(err) {
+    console.log('Error sending "audition disapproved" email to user ' + req.body.user + ': ' + err);
+    res.send(500);
+  });
+});
+
 
 server.post('/contest/start', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {

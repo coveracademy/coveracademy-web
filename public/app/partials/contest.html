@@ -122,33 +122,6 @@
     </div>
   </div>
 </div>
-<div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
-  <div class="jumbotron margin10 align-center">
-    <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
-    <div class="padding-top">
-      <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-        {{ 'join_now' | translate }}
-      </a>
-      <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-        {{ 'see_the_guideline' | translate }}
-      </a>
-    </div>
-    <h2>
-      {{ 'help_sharing' | translate }}
-    </h2>
-    <div>
-      <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-          <i class="fa fa-facebook"></i>
-        </a>
-      <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-        <i class="fa fa-twitter"></i>
-      </a>
-      <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-        <i class="fa fa-google-plus"></i>
-      </a>
-    </div>
-  </div>
-</div>
 <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')" class="container">
   <div class="jumbotron margin10 align-center">
     <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
@@ -187,12 +160,76 @@
     <div ng-if="isContestant()" class="padding-top">
       <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
         {{ 'you_are_participating' | translate }}
+        <h4 ng-if="!isAuditionApproved()">
+          {{ 'waiting_for_approval' | translate }}
+        </h4>
       </a>
     </div>
     <h2>
       {{ 'help_sharing' | translate }}
     </h2>
     <div class="padding-top">
+      <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+          <i class="fa fa-facebook"></i>
+        </a>
+      <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+        <i class="fa fa-twitter"></i>
+      </a>
+      <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+        <i class="fa fa-google-plus"></i>
+      </a>
+    </div>
+  </div>
+</div>
+<div ng-if="isContestProgress('waiting') && hasAuditions()" class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>
+        <span>
+          {{ 'latest_auditions' | translate }}
+        </span>
+        <small>({{ totalAuditions }})</small>
+      </h1>
+    </div>
+  </div>
+  <div class="row" ng-repeat="row in auditions | partition: 3">
+    <div ng-repeat="audition in row" class="col-md-4">
+      <audition ng-model="audition" locale="{{ locale() }}">
+      </audition>
+    </div>
+  </div>
+  <div class="align-center">
+    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="changePage(currentPage)"></pagination>
+  </div>
+</div>
+<div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
+  <div class="jumbotron margin10 align-center">
+    <div ng-if="!isContestant()">
+      <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
+      <div class="padding-top">
+        <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
+          {{ 'join_now' | translate }}
+        </a>
+        <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
+          {{ 'see_the_guideline' | translate }}
+        </a>
+      </div>
+    </div>
+    <div ng-if="isContestant()">
+      <h2>{{ 'this_contest_is_happening_but_we_need_contestants' | translate }}</h2>
+      <div class="padding-top">
+        <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
+          {{ 'you_are_participating' | translate }}
+          <h4 ng-if="!isAuditionApproved()">
+            {{ 'waiting_for_approval' | translate }}
+          </h4>
+        </a>
+      </div>
+    </div>
+    <h2>
+      {{ 'help_sharing' | translate }}
+    </h2>
+    <div>
       <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
           <i class="fa fa-facebook"></i>
         </a>
@@ -254,7 +291,7 @@
   </div>
 </div>
 <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions()" class="container">
-  <div ng-if="isContestProgress('running') && hasUserVotes()" class="row">
+  <div ng-if="hasUserVotes()" class="row">
     <div class="col-md-12">
       <h3>
         {{ 'your_votes' | translate }}
@@ -305,23 +342,3 @@
     <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="changePage(currentPage)"></pagination>
   </div>
 </div>
-<div ng-if="isContestProgress('waiting') && hasAuditions()" class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h1>
-        <span>
-          {{ 'latest_auditions' | translate }}
-        </span>
-        <small>({{ totalAuditions }})</small>
-      </h1>
-    </div>
-  </div>
-  <div class="row" ng-repeat="row in auditions | partition: 3">
-    <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}">
-      </audition>
-    </div>
-  </div>
-  <div class="align-center">
-    <pagination total-items="totalAuditions" items-per-page="auditionsPerPage" ng-model="currentPage" ng-change="changePage(currentPage)"></pagination>
-  </div>

@@ -32,9 +32,11 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.audition = null;
   });
-
+  $scope.isAuditionApproved = function() {
+   return $scope.isContestant() && $scope.audition.approved === 1;
+  };
   $scope.isContestant = function() {
-    return Boolean($scope.audition && angular.isDefined($scope.audition.id))
+    return Boolean($scope.audition && $scope.audition.id);
   };
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
@@ -115,7 +117,7 @@ angular
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
-  $scope.userAudition = null;
+  $scope.userAudition = backendResponse.data.audition;
   $scope.usingYoutubeAccount = false;
 
   $translate(['seo.title.join_contest', 'seo.description.join_contest', 'seo.keywords.join_contest']).then(function(translations) {
@@ -135,7 +137,7 @@ angular
     $scope.usingYoutubeAccount = false;
   });
   $scope.isContestant = function() {
-    return Boolean($scope.userAudition && angular.isDefined($scope.userAudition.id))
+    return Boolean($scope.userAudition && $scope.userAudition.id);
   };
   $scope.isContestProgress = function(expectedProgress) {
     var progress;
@@ -164,7 +166,7 @@ angular
     });
   };
   $scope.joinContest = function() {
-    contestService.joinContest($scope.audition).then(function(response) {
+    contestService.submitAudition($scope.audition, $scope.contest).then(function(response) {
       var audition = response.data;
       $state.go('app.audition', {locale: $scope.locale(), id: audition.id, slug: audition.slug});
       $translate('alerts.congratulations_now_you_are_in_the_contest').then(function(translation) {
@@ -204,7 +206,12 @@ angular
     $scope.userVote = null;
     $scope.totalUserVotes = 0;
   });
-
+  $scope.isAuditionApproved = function() {
+    return $scope.audition.approved === 1;
+  };
+  $scope.hasAuditions = function(auditions) {
+    return auditions && auditions.length > 0;
+  };
   $scope.isWinner = function() {
     return angular.isDefined($scope.audition.place) && $scope.audition.place !== null;
   };

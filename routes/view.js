@@ -327,8 +327,11 @@ module.exports = function(router, app) {
         messages.respondWithMovedPermanently('joinContest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
         contest.set('progress', contest.getProgress());
-        res.json({
-          contest: contest
+        return contestService.getUserAudition(req.user, contest).then(function(audition) {
+          res.json({
+            contest: contest,
+            audition: audition
+          });
         });
       }
     }).catch(function(err) {

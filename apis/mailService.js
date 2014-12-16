@@ -56,9 +56,22 @@ exports.userVerification = function(user, verificationToken) {
   });
 }
 
-exports.contestJoin = function(user, contest, audition) {
+exports.auditionSubmit = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/contest/join', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+    mailClient.post('/audition/submit', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+   });
+ }
+
+
+exports.auditionApproved = function(user, contest, audition) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/audition/approved', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
@@ -67,6 +80,19 @@ exports.contestJoin = function(user, contest, audition) {
     });
   });
 }
+
+exports.auditionDisapproved = function(user, contest, audition) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/audition/disapproved', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 
 exports.contestStart = function(contest) {
   return new Promise(function(resolve, reject) {

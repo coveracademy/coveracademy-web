@@ -17,7 +17,7 @@
       <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a>.
     </p>
     <p>
-      Você também pode ser um juíz e nos ajudar a escolher vencedores, participe!
+      Você também pode ser um juíz e nos ajudar a escolher os vencedores, participe!
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

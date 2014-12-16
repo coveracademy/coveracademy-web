@@ -473,8 +473,8 @@ angular
   this.getAuditionVideoInfos = function(url) {
     return $http.get('/api/contest/audition/videoInfos', {params: {url: url}});
   };
-  this.joinContest = function(audition) {
-    return $http.post('/api/contest/join', {audition: audition});
+  this.submitAudition = function(audition, contest) {
+    return $http.post('/api/contest/audition/submit', {audition: audition, contest: contest.id});
   };
   this.isContestant = function(contest) {
     return $http.get('/api/contest/isContestant', {params: {contest_id: contest.id}});
