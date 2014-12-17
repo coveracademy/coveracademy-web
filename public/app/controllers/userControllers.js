@@ -21,7 +21,7 @@ angular
       $scope.close(true);
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };
@@ -70,11 +70,11 @@ angular
   $scope.resendVerificationEmail = function() {
     userService.verificationEmail($scope.user).then(function(response) {
       $translate('alerts.verification_email_sended').then(function(translation) {
-        alertService.addAlert('success', translation);
+        alertService.alert('success', translation);
       });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };
@@ -100,11 +100,11 @@ angular
     userService.update($scope.user).then(function(response) {
       $scope.setUser(response.data);
       $translate('alerts.changes_saved_successfully').then(function(translation) {
-        alertService.addAlert('success', translation);
+        alertService.alert('success', translation);
       });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };
@@ -113,6 +113,6 @@ angular
   authenticationService.updateUser();
   $state.go('app.index');
   $translate('alerts.email_verified').then(function(translation) {
-    alertService.addAlert('success', translation);
+    alertService.alert('success', translation);
   });
 }]);

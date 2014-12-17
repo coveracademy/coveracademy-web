@@ -7,7 +7,7 @@
   <h3>Parabéns {{ user.name }}!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
-      O seu vídeo foi aprovado. Seja bem-vindo à competição!
+      O seu vídeo foi aprovado, seja bem-vindo à competição!
     </p>
     <p style="text-align: center; font-weight: bold;">
       <a href="{{ contestLink }}" target="_blank" style="text-decoration: none;">
@@ -15,7 +15,7 @@
       </a>
     </p>
     <p>
-      Nossa equipe analisou o seu vídeo e está de acordo com as regras descritas no nosso
+      Nossa equipe analisou o seu vídeo e ele está de acordo com as regras descritas no nosso
       <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a>.
     </p>
     <p>
@@ -27,7 +27,7 @@
       </a>
     </p>
     <p>
-      Compartilhe este link com seus amigos, ganhe votos para vencer e conquiste o prêmio, boa sorte!
+      Compartilhe este link com seus amigos, ganhe votos para vencer e conquiste o prêmio. Boa sorte!
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

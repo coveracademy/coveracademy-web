@@ -17,11 +17,23 @@ module.exports = function(router, app) {
   }
 
   // ADMIN ROUTES
-  router.get('/admin', isAdmin, function(req, res, next) {
+  router.get('/covers/admin', isAdmin, function(req, res, next) {
     Promise.all([coverService.musicGenres(), coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)]).spread(function(musicGenres, potentialCovers) {
       res.json({
         musicGenres: musicGenres,
         potentialCovers: potentialCovers
+      });
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/contests/admin', isAdmin, function(req, res, next) {
+    Promise.all([contestService.listContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
+      res.json({
+        contests: contests,
+        auditionsToReview: auditionsToReview
       });
     }).catch(function(err) {
       console.log(err);

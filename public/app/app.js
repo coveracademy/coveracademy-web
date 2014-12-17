@@ -82,15 +82,27 @@ angular
       template: '<ui-view autoscroll="true"/>'
     })
     // Admin level states
-    .state('app.admin', {
-      url: '/admin',
-      templateUrl: '/app/partials/admin.html',
-      controller: 'adminController',
+    .state('app.contestsAdmin', {
+      url: '/contests/admin',
+      templateUrl: '/app/partials/contests-admin.html',
+      controller: 'contestsAdminController',
       accessLevel: accessLevel.ADMIN,
       resolve: {
         viewService: 'viewService',
         backendResponse: function(viewService) {
-          return viewService.adminView();
+          return viewService.contestsAdminView();
+        }
+      }
+    })
+    .state('app.coversAdmin', {
+      url: '/covers/admin',
+      templateUrl: '/app/partials/covers-admin.html',
+      controller: 'coversAdminController',
+      accessLevel: accessLevel.ADMIN,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.coversAdminView();
         }
       }
     })

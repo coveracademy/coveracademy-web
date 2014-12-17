@@ -58,16 +58,15 @@ angular
 }])
 .service('alertService', ['$timeout', function($timeout) {
   var $ = this;
-  var alerts = [];
-  this.getAlerts = function() {
-    return alerts;
+  var messages = [];
+  this.alerts = function() {
+    return messages;
   };
-  this.addAlert = function(type, message) {
-    var that = this;
-    var alert = {type: type, msg: message};
-    $.getAlerts().push(alert);
+  this.alert = function(type, message) {
+    var alertMessage = {type: type, msg: message};
+    $.alerts().push(alertMessage);
     $timeout(function() {
-      $.getAlerts().splice(that.getAlerts().indexOf(alert), 1);
+      $.alerts().splice($.alerts().indexOf(alertMessage), 1);
     }, 8000);
   };
 }])
@@ -358,8 +357,8 @@ angular
   this.indexView = function() {
     return $http.get('/view/index');
   };
-  this.adminView = function() {
-    return $http.get('/view/admin');
+  this.coversAdminView = function() {
+    return $http.get('/view/covers/admin');
   };
   this.addCoverView = function() {
     return $http.get('/view/addCover');
@@ -393,6 +392,9 @@ angular
   };
   this.contestView = function(id, slug, rank) {
     return $http.get('/view/contest/' + id + '/' + slug, {params: {rank: rank}});
+  };
+  this.contestsAdminView = function() {
+    return $http.get('/view/contests/admin');
   };
   this.joinContestView = function(id, slug) {
     return $http.get('/view/contest/' + id + '/' + slug + '/join');
@@ -496,5 +498,11 @@ angular
   };
   this.latestAuditions = function(contest, page) {
     return $http.get('/api/contest/audition/latest', {params: {contest: contest.id, page: page}});
+  };
+  this.approveAudition = function(audition) {
+    return $http.post('/api/contest/audition/approve', {audition: audition.id});
+  };
+  this.disapproveAudition = function(audition, reason) {
+    return $http.post('/api/contest/audition/disapprove', {audition: audition.id, reason: reason});
   };
 }]);

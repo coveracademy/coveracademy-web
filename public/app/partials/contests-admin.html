@@ -1,0 +1,45 @@
+<div class="container">
+  <h1>Contests administration</h1>
+  <div class="tabbable-panel">
+    <div class="tabbable-line">
+      <tabset type="tabs">
+        <tab heading="Auditions to Review">
+          <div ng-repeat="row in partitionAuditionsToReview()" class="row">
+            <div ng-repeat="auditionToReview in row" class="col-md-6">
+              <div class="thumbnail">
+                <div class="embed-container">
+                  <embed-video href="{{ auditionToReview.url }}"></embed-video>
+                </div>
+                <div class="caption">
+                  <form class="form-horizontal compacted">
+                    <div class="form-group">
+                      <label for="title-{{ auditionToReview.id }}" class="col-md-2 control-label">Title</label>
+                      <div class="col-md-10">
+                        <input ng-model="auditionToReview.title" type="text" id="title-{{ auditionToReview.id }}" class="form-control" placeholder="The audition title" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="description-{{ auditionToReview.id }}" class="col-md-2 control-label">Description</label>
+                      <div class="col-md-10">
+                        <textarea rows="3" ng-model="auditionToReview.description" type="text" id="desceiption-{{ auditionToReview.id }}" class="form-control" placeholder="The audition description" required>
+                        </textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <button type="button" ng-click="approveAudition(auditionToReview)" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"/> Approve</button>
+                      </div>
+                      <div class="col-md-6">
+                        <button type="button" ng-click="disapproveAudition(auditionToReview)" class="btn btn-danger btn-block"><span class="glyphicon glyphicon-remove"/> Disapprove</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

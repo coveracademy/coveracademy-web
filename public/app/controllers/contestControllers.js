@@ -1,5 +1,37 @@
 angular
 .module('coverAcademy.controllers')
+.controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, seoService) {
+  $scope.contests = backendResponse.data.contests;
+  $scope.auditionsToReview = backendResponse.data.auditionsToReview;
+
+  $translate('seo.title.contestsAdmin').then(function(translation) {
+    seoService.setTitle(translation);
+  });
+
+  $scope.partitionAuditionsToReview = function() {
+    return $filter('partition')($scope.auditionsToReview, 2);
+  };
+  $scope.approveAudition = function(audition) {
+    contestService.approveAudition(audition).then(function(response) {
+      alertService.alert('success', 'Audition approved');
+      $scope.auditionsToReview = $underscore.reject($scope.auditionsToReview, function(auditionToReview) {
+        return audition.id == auditionToReview.id;
+      });
+    }).catch(function(err) {
+      alertService.alert('danger', 'Error approving audition');
+    });
+  };
+  $scope.disapproveAudition = function(audition) {
+    contestService.disapproveAudition(audition).then(function(response) {
+      alertService.alert('success', 'Audition disapproved');
+      $scope.auditionsToReview = $underscore.reject($scope.auditionsToReview, function(auditionToReview) {
+        return audition.id == auditionToReview.id;
+      });
+    }).catch(function(err) {
+      alertService.alert('danger', 'Error disapproving audition');
+    });
+  };
+}])
 .controller('contestController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, contestService, seoService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
@@ -161,7 +193,7 @@ angular
       $scope.audition.description = response.data.description;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('warning', translation);
+        alertService.alert('warning', translation);
       });
     });
   };
@@ -170,11 +202,11 @@ angular
       var audition = response.data;
       $state.go('app.audition', {locale: $scope.locale(), id: audition.id, slug: audition.slug});
       $translate('alerts.congratulations_now_you_are_in_the_contest').then(function(translation) {
-        alertService.addAlert('info', translation)
+        alertService.alert('info', translation)
       });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };
@@ -267,11 +299,11 @@ angular
       $scope.score += $scope.userVote.voting_power;
       $scope.score = Number($scope.score.toFixed(3));
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(translation) {
-        alertService.addAlert('success', translation);
+        alertService.alert('success', translation);
       });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };
@@ -284,7 +316,7 @@ angular
       $scope.userVote = null;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
-        alertService.addAlert('danger', translation);
+        alertService.alert('danger', translation);
       });
     });
   };

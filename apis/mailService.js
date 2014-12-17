@@ -68,9 +68,9 @@ exports.auditionSubmit = function(user, contest, audition) {
   });
 }
 
-exports.auditionApproved = function(user, contest, audition) {
+exports.auditionApproved = function(audition) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/audition/approved', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+    mailClient.post('/audition/approved', {audition: audition.id}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
@@ -80,9 +80,9 @@ exports.auditionApproved = function(user, contest, audition) {
   });
 }
 
-exports.auditionDisapproved = function(user, contest, audition) {
+exports.auditionDisapproved = function(user, contest, reason) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/audition/disapproved', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {
+    mailClient.post('/audition/disapproved', {user: user.id, contest: contest.id, reason: reason}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {

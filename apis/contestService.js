@@ -28,7 +28,9 @@ exports.getContest = function(id) {
 }
 
 exports.listContests = function() {
-  return Contest.collection().fetch();
+  return Contest.collection().query(function(qb) {
+    qb.orderBy('registration_date', 'desc');
+  }).fetch();
 }
 
 exports.listUnfinishedContests = function() {
@@ -199,6 +201,37 @@ exports.submitAudition = function(user, contest, auditionData) {
   });
 }
 
+exports.approveAudition = function(audition) {
+  return new Promise(function(resolve, reject) {
+    audition.set('approved', 1);
+    audition.save({approved: audition.get('approved')}, {patch: true}).then(function(auditionSaved) {
+      resolve(auditionSaved);
+      mailService.auditionApproved(auditionSaved).catch(function(err) {
+        console.log('Error sending "audition approved" email to audition ' + auditionSaved.id + ' owner: ' + err.message);
+      });
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error approving audition', err));
+    });
+  });
+}
+
+exports.disapproveAudition = function(audition, reason) {
+  return new Promise(function(resolve, reject) {
+    $.getAudition(audition.id).then(function(auditionLoaded) {
+      this.user = auditionLoaded.related('user').clone();
+      this.contest = auditionLoaded.related('contest').clone();
+      return auditionLoaded.destroy();
+    }).then(function() {
+      mailService.auditionDisapproved(this.user, this.contest, reason).catch(function(err) {
+        console.log('Error sending "audition disapproved" email to user ' + this.user.id + ': ' + err.message);
+      });
+      resolve();
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error disapproving audition', err));
+    }).bind({});
+  });
+}
+
 exports.getWinnerAuditions = function(contest) {
   return Audition.collection().query(function(qb) {
     qb.where('contest_id', contest.id);
@@ -227,6 +260,14 @@ exports.getUserAuditions = function(user) {
     qb.where('approved', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch(auditionWithContestRelated);
+}
+
+exports.listAuditionsToReview = function() {
+  return Audition.collection().query(function(qb) {
+    qb.join('contest', 'audition.contest_id', 'contest.id');
+    qb.where('approved', 0);
+    qb.where('contest.finished', 0);
+  }).fetch();
 }
 
 var listAuditions = function(rankType, contest, page, pageSize) {

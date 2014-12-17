@@ -1,7 +1,6 @@
 var Promise = require('bluebird');
 
 exports.isAdmin = function(req, res, next) {
-  console.log(req.user)
   if(req.isAuthenticated() && req.user.get('permission') === 'admin') {
     next();
   } else {

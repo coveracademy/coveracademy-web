@@ -1,7 +1,6 @@
 {% extends "base.tpl" %}
 
 {% set contestLink = siteUrl + "/pt-br/contest/" + contest.id + "/" + contest.slug %}
-{% set auditionLink = siteUrl + "/pt-br/audition/" + audition.id + "/" + audition.slug %}
 
 {% block content %}
   <h3>Sentimos muito =(</h3>
@@ -15,7 +14,7 @@
       </a>
     </p>
     <p>
-      Nossa equipe analisou o seu vídeo e constatou que não está de acordo com algumas regras descritas no nosso
+      Nossa equipe analisou o seu vídeo e constatou que ele não está de acordo com algumas das regras descritas no nosso
       <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a> ou está abaixo da qualidade mínima para ser aprovado.
     </p>
     <p>
