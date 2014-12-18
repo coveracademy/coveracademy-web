@@ -1,3 +1,4 @@
+
 <div class="special-header contest small">
   <div class="content">
     <div class="container">
@@ -155,6 +156,26 @@
       <div class="col-md-8 col-md-offset-2">
         <div class="embed-container">
           <embed-video ng-href="{{ audition.url }}"></embed-video>
+        </div>
+      </div>
+    </div>
+    <div class="row padding">
+      <div class="col-md-10 col-md-offset-2">
+        <div class="pull-left">
+          <div id="author">
+            <a ui-sref="{{ userState(audition.user) }}">
+              <div profile-picture="audition.user" class="profile-picture">
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="pull-left">
+          <h3 class="nomargin">
+            <a ui-sref="{{ userState(audition.user) }}">
+              {{ audition.user.name }}
+            </a>
+          </h3>
+          <h4 class="nomargin">{{ audition.description }}</h4>
         </div>
       </div>
     </div>

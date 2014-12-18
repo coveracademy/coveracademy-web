@@ -27,6 +27,18 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch();
 }
 
+exports.getContestFromAudition = function(audition) {
+  if(audition.related('contest')) {
+    return Promise.resolve(audition.related('contest'));
+  } else if(audition.get('contest_id')) {
+    return $.getContest(audition.get('contest_id'));
+  } else {
+    return $.getAudition(audition.id).then(function(auditionFetched) {
+      return auditionFetched.related('contest');
+    });
+  }
+}
+
 exports.listContests = function() {
   return Contest.collection().query(function(qb) {
     qb.orderBy('registration_date', 'desc');
@@ -179,9 +191,6 @@ exports.submitAudition = function(user, contest, auditionData) {
         audition.set('large_thumbnail', videoInfos.thumbnails.large);
         audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
         audition.save().then(function(auditionSaved) {
-          $.startContest(contestFetched).finally(function() {
-            resolve(auditionSaved);
-          });
           mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
             console.log('Error sending "audition submit" email to user ' + user.id + ': ' + err.message);
           });
@@ -206,6 +215,9 @@ exports.approveAudition = function(audition) {
     audition.set('approved', 1);
     audition.save({approved: audition.get('approved')}, {patch: true}).then(function(auditionSaved) {
       resolve(auditionSaved);
+      $.getContestFromAudition(auditionSaved).then(function(contest) {
+        return $.startContest(contest);
+      });
       mailService.auditionApproved(auditionSaved).catch(function(err) {
         console.log('Error sending "audition approved" email to audition ' + auditionSaved.id + ' owner: ' + err.message);
       });
