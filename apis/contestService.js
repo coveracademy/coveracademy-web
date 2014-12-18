@@ -191,6 +191,7 @@ exports.submitAudition = function(user, contest, auditionData) {
         audition.set('large_thumbnail', videoInfos.thumbnails.large);
         audition.set('slug', slug.slugify(audition.get('title')) + '-' + slug.slugify(user.get('name')));
         audition.save().then(function(auditionSaved) {
+          resolve(auditionSaved);
           mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
             console.log('Error sending "audition submit" email to user ' + user.id + ': ' + err.message);
           });
