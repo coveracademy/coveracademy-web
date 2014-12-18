@@ -217,6 +217,10 @@ exports.approveAudition = function(audition) {
 
 exports.disapproveAudition = function(audition, reason) {
   return new Promise(function(resolve, reject) {
+    if(!reason || reason.trim().length === 0) {
+      reject(reject(messages.apiError('audition.disapprove.reasonMustBeProvided', 'The reason must be provided', err)));
+      return;
+    }
     $.getAudition(audition.id).then(function(auditionLoaded) {
       this.user = auditionLoaded.related('user').clone();
       this.contest = auditionLoaded.related('contest').clone();

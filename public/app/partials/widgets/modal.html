@@ -5,10 +5,10 @@
   <h4 class="line-height-1-5">{{ modalScope.bodyText }}</h4>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" data-ng-click="modalScope.action()">
-    {{ modalScope.actionButtonText }}
+  <button type="button" class="btn btn-primary" ng-click="modalScope.confirm()">
+    {{ modalScope.confirmText }}
   </button>
-  <button type="button" class="btn btn-default" data-ng-click="modalScope.close()">
-    {{ modalScope.closeButtonText }}
+  <button type="button" class="btn btn-default" ng-click="modalScope.cancel()">
+    {{ modalScope.cancelText }}
   </button>
 </div>

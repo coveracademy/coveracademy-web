@@ -194,28 +194,30 @@ angular
   var modalOptions = {
     backdrop: true,
     keyboard: true,
-    templateUrl: '/partials/widgets/modal.html',
+    templateUrl: '/app/partials/widgets/modal.html',
   };
   var modalScope = {
     headerText: 'Do you really want to procede with this action?',
     bodyText: '',
-    closeButtonText: 'No',
-    actionButtonText: 'Yes',
+    cancelText: 'No',
+    confirmText: 'Yes',
   };
-  this.show = function(customModalOptions, customModalScope) {
+  this.show = function(customOptions, customScope) {
     var extendedOptions = {};
     var extendedScope = {};
-    angular.extend(extendedOptions, modalOptions, customModalOptions);
-    angular.extend(extendedScope, modalScope, customModalScope);
-    extendedOptions.controller = function($scope, $modalInstance) {
-      $scope.modalScope = extendedScope;
-      $scope.modalScope.action = function() {
-        $modalInstance.close('action');
+    angular.extend(extendedOptions, modalOptions, customOptions);
+    if(!extendedOptions.controller) {
+      angular.extend(extendedScope, modalScope, customScope);
+      extendedOptions.controller = function($scope, $modalInstance) {
+        $scope.modalScope = extendedScope;
+        $scope.modalScope.confirm = function(result) {
+          $modalInstance.close(result);
+        };
+        $scope.modalScope.cancel = function(reason) {
+          $modalInstance.dismiss(reason || 'cancel');
+        };
       };
-      $scope.modalScope.close = function() {
-        $modalInstance.dismiss('cancel');
-      };
-    };
+    }
     return $modal.open(extendedOptions).result;
   };
 }])

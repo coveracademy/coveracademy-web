@@ -1,0 +1,27 @@
+<form name="reasonForm" class="form-horizontal">
+  <div class="modal-header">
+    <button ng-click="cancel()" type="button" class="close" aria-hidden="true">
+      &times;
+    </button>
+    <h3 class="align-center">Do you really want to disapprove this audition?</h3>
+  </div>
+  <div class="modal-body">
+    <h4>Let the user know why you are disapproving his audition:</h4>
+    <div class="row">
+      <div class="col-md-12">
+        <div ng-class="{'has-error': reasonForm.reason.$invalid}">
+          <textarea ng-model="reason" name="reason" class="form-control" rows="3" required>
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" ng-click="disapprove(reason)" ng-disabled="reasonForm.$invalid">
+      Disapprove
+    </button>
+    <button type="button" class="btn btn-default" ng-click="cancel()">
+      Cancel
+    </button>
+  </div>
+</form>

@@ -1,12 +1,23 @@
 angular
 .module('coverAcademy.controllers')
-.controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, seoService) {
+.controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;
   $scope.auditionsToReview = backendResponse.data.auditionsToReview;
-
   $translate('seo.title.contestsAdmin').then(function(translation) {
     seoService.setTitle(translation);
   });
+
+  var disapproveModalOptions = {
+    templateUrl: '/app/partials/widgets/disapprove-audition-modal.html',
+    controller: function($scope, $modalInstance) {
+      $scope.disapprove = function() {
+        $modalInstance.close($scope.reason);
+      };
+      $scope.cancel = function() {
+        $modalInstance.dismiss();
+      };
+    }
+  };
 
   $scope.partitionAuditionsToReview = function() {
     return $filter('partition')($scope.auditionsToReview, 2);
@@ -22,13 +33,19 @@ angular
     });
   };
   $scope.disapproveAudition = function(audition) {
-    contestService.disapproveAudition(audition).then(function(response) {
-      alertService.alert('success', 'Audition disapproved');
-      $scope.auditionsToReview = $underscore.reject($scope.auditionsToReview, function(auditionToReview) {
-        return audition.id == auditionToReview.id;
-      });
-    }).catch(function(err) {
-      alertService.alert('danger', 'Error disapproving audition');
+    modalService.show(disapproveModalOptions).then(function(reason) {
+      if(!reason || reason.trim().length === 0) {
+        alertService.alert('danger', 'You must tell the reason');
+      } else {
+        contestService.disapproveAudition(audition, reason).then(function(response) {
+          alertService.alert('success', 'Audition disapproved');
+          $scope.auditionsToReview = $underscore.reject($scope.auditionsToReview, function(auditionToReview) {
+            return audition.id == auditionToReview.id;
+          });
+        }).catch(function(err) {
+          alertService.alert('danger', 'Error disapproving audition');
+        });
+      }
     });
   };
 }])
