@@ -165,6 +165,10 @@ exports.startContest = function(contest) {
 
 exports.submitAudition = function(user, contest, auditionData) {
   return new Promise(function(resolve, reject) {
+    if(user.get('verified') === 0) {
+      reject(messages.apiError('contest.join.userNotVerified', 'The user can not submit his audidion because he is not verified'));
+      return;
+    }
     Contest.forge({id: contest.id}).fetch().then(function(contestFetched) {
       if(contestFetched.getProgress() === 'finished') {
         reject(messages.apiError('contest.join.alreadyFinished', 'The contest was already finished'));
@@ -445,6 +449,10 @@ exports.countUserVotes = function(user, contest) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
+    if(user.get('verified') === 0) {
+      reject(messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified'));
+      return;
+    }
     audition.fetch(auditionWithContestRelated).then(function(auditionFetched) {
       var contest = auditionFetched.related('contest');
       $.countUserVotes(user, contest).then(function(totalAuditionsVotes) {

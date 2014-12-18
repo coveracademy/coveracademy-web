@@ -226,8 +226,10 @@ angular
     'audition.vote.canNotVoteForYourself': 'errors.user_vote_can_not_vote_for_yourself',
     'audition.vote.contestWasFinished': 'errors.user_vote_contest_was_finished',
     'audition.vote.reachVoteLimit': 'errors.user_vote_reach_vote_limit',
+    'audition.vote.userNotVerified': 'errors.user_vote_user_not_verified',
     'contest.join.alreadyFinished': 'errors.join_contest_already_finished',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
+    'contest.join.userNotVerified': 'errors.join_contest_user_not_verified',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'user.edit.invalidUsername': 'errors.user_edit_invalid_username',
@@ -240,7 +242,7 @@ angular
     'status.401': 'errors.authentication_required',
     'status.500': 'errors.unexpected_error'
   };
-  this.translateError = function(err) {
+  this.translateError = function(err, vars) {
     var isError = Boolean(angular.isObject(err) && err.data && err.status);
     var translationKey = errorKeys[isError ? err.data.errorKey : err];
     if(!translationKey) {
@@ -251,7 +253,7 @@ angular
       }
     }
     var deferred = $q.defer();
-    deferred.resolve($translate(translationKey));
+    deferred.resolve($translate(translationKey, vars));
     return deferred.promise;
   };
 }])

@@ -4,7 +4,7 @@
 {% set auditionLink = siteUrl + "/pt-br/audition/" + audition.id + "/" + audition.slug %}
 
 {% block content %}
-  <h3>A competição começou {{ user.name }}!</h3>
+  <h3>A competição começou, {{ user.name }}!</h3>
   <div style="color: #555; font-size: 16px;">
     <p style="text-align: center; font-weight: bold;">
       <a href="{{ contestLink }}" target="_blank" style="text-decoration: none;">
