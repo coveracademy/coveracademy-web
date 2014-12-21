@@ -222,11 +222,7 @@ angular
         alertService.alert('info', translation)
       });
     }).catch(function(err) {
-      var vars = {};
-      if(err.data.errorKey && err.data.errorKey === 'contest.join.userNotVerified') {
-        vars.email = $scope.user().email;
-      }
-      translationService.translateError(err, vars).then(function(translation) {
+      translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -323,11 +319,7 @@ angular
         alertService.alert('success', translation);
       });
     }).catch(function(err) {
-      var vars = {};
-      if(err.data.errorKey && err.data.errorKey === 'audition.vote.userNotVerified') {
-        vars.email = $scope.user().email;
-      }
-      translationService.translateError(err, vars).then(function(translation) {
+      translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });

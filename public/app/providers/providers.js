@@ -127,7 +127,7 @@ angular
         join_contest_video_date_is_not_valid: 'The date of the video must be between the dates of acceptance of the videos and the contest end date.',
         join_contest_video_not_owned_by_user: 'You can not join the contest using a video that are not owned by you.',
         join_contest_user_already_in_contest: 'You are already participating in this contest. For questions please contact us.',
-        join_contest_user_not_verified: 'You can not join the contest because you have not verified your email yet, please check in {{ email }}. You can change your email or resend a verification email going to your account settings.',
+        join_contest_user_not_verified: 'You can not join the contest because you have not verified your email yet, please check in {{ user.email }}. You can change your email or resend a verification email going to your account settings.',
         unexpected_error: 'An unexpected error happened, please try again later.',
         user_edit_invalid_username: 'The username can only contain alphanumeric characters (a-z, 0-9) or a period ("."), with at least 5 characters and maximum length of 20.',
         user_verification_email_already_verified: 'Your email was already verified.',
@@ -135,7 +135,7 @@ angular
         user_vote_can_not_vote_for_yourself: 'You can not vote for yourself.',
         user_vote_contest_was_finished: 'You can\'t vote because this contest was already finished.',
         user_vote_reach_vote_limit: 'You reach the maximum of votes per contest.',
-        user_vote_user_not_verified: 'You can not vote because you have not verified your email yet, please check in {{ email }}. You can change your email or resend an verification email going to your account settings.',
+        user_vote_user_not_verified: 'You can not vote because you have not verified your email yet, please check in {{ user.email }}. You can change your email or resend an verification email going to your account settings.',
         youtube_video_url_not_valid: 'For now we support only Youtube videos =('
       },
       forms: {
@@ -376,7 +376,7 @@ angular
         join_contest_video_date_is_not_valid: 'A data do vídeo deve estar entre as datas de aceitação de vídeos e a data de término da competição.',
         join_contest_video_not_owned_by_user: 'Você não pode participar de uma competição com um vídeo publicado em outra conta.',
         join_contest_user_already_in_contest: 'Você já está participando dessa competição. Caso tenha dúvidas entre em contato.',
-        join_contest_user_not_verified: 'Você não pode entrar na competição porque ainda não confirmou o seu email, por favor verifique em {{ email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
+        join_contest_user_not_verified: 'Você não pode entrar na competição porque ainda não confirmou o seu email, por favor verifique em {{ user.email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
         unexpected_error: 'Um erro inesperado ocorreu, por favor tente novamente.',
         user_edit_invalid_username: 'O username só pode conter caracteres alfanuméricos (a-z, 0-9) ou ponto ".", com no mínimo 5 e no máximo 20 caracteres.',
         user_verification_email_already_verified: 'Seu email já foi verificado.',
@@ -384,7 +384,7 @@ angular
         user_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo.',
         user_vote_contest_was_finished: 'Você não pode votar porque esta competição já foi finalizado.',
         user_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição.',
-        user_vote_user_not_verified: 'Você não pode votar porque ainda não confirmou o seu email, por favor verifique em {{ email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
+        user_vote_user_not_verified: 'Você não pode votar porque ainda não confirmou o seu email, por favor verifique em {{ user.email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
         youtube_video_url_not_valid: 'Por enquanto suportamos apenas vídeos do YouTube =('
       },
       forms: {
