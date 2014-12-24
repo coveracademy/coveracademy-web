@@ -19,12 +19,13 @@ _.str = require('underscore.string');
 
 var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest', 'user']};
+var contestRelated = {withRelated: ['prizes']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};
 
 exports.getContest = function(id) {
-  return Contest.forge({id: id}).fetch();
+  return Contest.forge({id: id}).fetch(contestRelated);
 }
 
 exports.getContestFromAudition = function(audition) {

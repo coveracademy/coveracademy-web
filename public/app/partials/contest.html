@@ -75,42 +75,19 @@
       {{ 'see_the_prizes' | translate }}
     </button>
     <div collapse="prizesCollapsed">
-      <div class="row">
-        <div class="col-md-4">
+      <div class="row" ng-repeat="row in contest.prizes | partition: 3">
+        <div class="col-md-4" ng-repeat="prize in row">
           <h2>
-            {{ 'first_place' | translate }}
-            <span class="text-muted">R$100</span>
+            <span ng-if="isPrizePlace(prize, 1)">{{ 'first_place' | translate }}</span>
+            <span ng-if="isPrizePlace(prize, 2)">{{ 'second_place' | translate }}</span>
+            <span ng-if="isPrizePlace(prize, 3)">{{ 'third_place' | translate }}</span>
+            <span class="text-muted">{{ prize.value }}</span>
           </h2>
-          <p>
-            {{ 'first_place_description' | translate }}
-          </p>
-          <p>
-            <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
-              {{ 'view_details' | translate }}
-            </a>
-          </p>
-        </div>
-        <div class="col-md-4">
-          <h2>
-            {{ 'second_place' | translate }}
-            <span class="text-muted">R$55</span>
-          </h2>
-          <p>
-            {{ 'second_place_description' | translate }}
-          </p>
-          <p>
-            <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
-              {{ 'view_details' | translate }}
-            </a>
-          </p>
-        </div>
-        <div class="col-md-4">
-          <h2>
-            {{ 'third_place' | translate }}
-            <span class="text-muted">R$35</span>
-          </h2>
-          <p>
-            {{ 'third_place_description' | translate }}
+          <p class="align-justify">
+            <span ng-if="isPrizePlace(prize, 1)">{{ 'first_place_description' | translate }}</span>
+            <span ng-if="isPrizePlace(prize, 2)">{{ 'second_place_description' | translate }}</span>
+            <span ng-if="isPrizePlace(prize, 3)">{{ 'third_place_description' | translate }}</span>
+            <span ng-if="isCashPrize(prize)">{{ 'cash_prizes_increase' | translate }}</span>
           </p>
           <p>
             <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">

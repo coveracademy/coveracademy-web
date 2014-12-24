@@ -90,6 +90,12 @@ angular
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
   };
+  $scope.isPrizePlace = function(prize, place) {
+    return prize.place === place;
+  };
+  $scope.isCashPrize = function(prize) {
+    return prize.type === 'cash';
+  };
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;
   };

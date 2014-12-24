@@ -63,6 +63,11 @@ var PotentialCover = Bookshelf.Model.extend({
 var Contest = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'contest',
+  prizes: function() {
+    return this.hasMany(Prize, 'contest_id').query(function(qb) {
+      qb.orderBy('place', 'asc');
+    });
+  },
   getProgress: function() {
     if(this.get('finished') === 1) {
       return 'finished';
@@ -112,6 +117,14 @@ var VerificationToken = Bookshelf.Model.extend({
   tableName: 'verification_token',
   user: function() {
     return this.belongsTo(User, 'user_id');
+  }
+});
+
+var Prize = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'prize',
+  contest: function() {
+    return this.belongsTo(Contest, 'contest_id');
   }
 });
 

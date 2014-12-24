@@ -1,5 +1,5 @@
 create table user (
-  id                int(11) not null auto_increment,
+  id                int not null auto_increment,
   name              varchar(100) not null,
   email             varchar(255) not null,
   permission        enum('user', 'admin') default 'user',
@@ -29,7 +29,7 @@ create table user (
 ) engine = innodb default charset = utf8;
 
 create table music_genre (
-  id       int(11) not null auto_increment,
+  id       int not null auto_increment,
   name     varchar(50) not null,
   slug     varchar(50) not null,
   image    varchar(50) not null,
@@ -41,10 +41,10 @@ create table music_genre (
 ) engine = innodb default charset = utf8;
 
 create table artist (
-  id                int(11) not null auto_increment,
+  id                int not null auto_increment,
   name              varchar(100) not null,
   slug              varchar(100) not null,
-  music_genre_id    int(11) default null,
+  music_genre_id    int default null,
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
@@ -57,10 +57,10 @@ create table artist (
 ) engine = innodb default charset = utf8;
 
 create table music (
-  id                int(11) not null auto_increment,
+  id                int not null auto_increment,
   title             varchar(255) not null,
   slug              varchar(255) not null,
-  artist_id         int(11) not null,
+  artist_id         int not null,
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
@@ -73,21 +73,21 @@ create table music (
 ) engine = innodb default charset = utf8;
 
 create table cover (
-  id                int(11) not null auto_increment,
-  user_id           int(11) not null,
-  artist_id         int(11) not null,
-  music_id          int(11) not null,
+  id                int not null auto_increment,
+  user_id           int not null,
+  artist_id         int not null,
+  music_id          int not null,
   slug              varchar(255) not null,
   url               varchar(255) not null,
   embed_url         varchar(255) not null,
   author            varchar(255) not null,
   score             decimal(17, 16) not null,
-  duration          int(11) not null,
+  duration          int not null,
   video_id          varchar(255) not null,
   video_title       varchar(255) not null,
-  video_likes       int(11) not null,
-  video_dislikes    int(11) not null,
-  video_views       int(11) not null,
+  video_likes       int not null,
+  video_dislikes    int not null,
+  video_views       int not null,
   video_date        timestamp null default null,
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
@@ -104,7 +104,7 @@ create table cover (
 ) engine = innodb default charset = utf8;
 
 create table potential_cover (
-  id                int(11) not null auto_increment,
+  id                int not null auto_increment,
   artist            varchar(255) not null,
   music             varchar(255) not null,
   author            varchar(255) not null,
@@ -115,26 +115,26 @@ create table potential_cover (
 ) engine = innodb default charset = utf8;
 
 create table contest (
-  id                  int(11) not null auto_increment,
+  id                  int not null auto_increment,
   name                varchar(255) not null,
   slug                varchar(255) not null,
   description         text not null,
   image               varchar(255) not null,
-  minimum_contestants int(4) not null,
+  minimum_contestants tinyint not null,
   acceptance_date     date not null,
   start_date          timestamp null default null,
   end_date            timestamp null default null,
   registration_date   timestamp not null default current_timestamp,
-  duration            int(2) not null,
+  duration            tinyint not null,
   finished            tinyint(1) default 0,
   primary key (id),
   unique key `uq_contest_slug` (`slug`)
 ) engine = innodb default charset = utf8;
 
 create table audition (
-  id                int(11) not null auto_increment,
-  contest_id        int(11) not null,
-  user_id           int(11) not null,
+  id                int not null auto_increment,
+  contest_id        int not null,
+  user_id           int not null,
   slug              varchar(255) not null,
   url               varchar(255) not null,
   embed_url         varchar(255) not null,
@@ -144,7 +144,7 @@ create table audition (
   small_thumbnail   varchar(255) default null,
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
-  place             int(1) default null,
+  place             tinyint default null,
   approved          tinyint(1) default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
@@ -157,9 +157,9 @@ create table audition (
 ) engine = innodb default charset = utf8;
 
 create table user_vote (
-  id                int(11) not null auto_increment,
-  user_id           int(11) not null,
-  audition_id       int(11) not null,
+  id                int not null auto_increment,
+  user_id           int not null,
+  audition_id       int not null,
   voting_power      decimal(6, 3) default 1.000,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
@@ -170,9 +170,20 @@ create table user_vote (
 
 create table verification_token (
   token             varchar(255) not null,
-  user_id           int(11) not null,
+  user_id           int not null,
   expiration_date   timestamp not null,
   registration_date timestamp not null default current_timestamp,
   primary key (token),
   constraint `fk_verification_token_user_id` foreign key (`user_id`) references `user` (`id`)
+) engine = innodb default charset = utf8;
+
+create table prize (
+  id                int not null auto_increment,
+  contest_id        int not null,
+  place             tinyint not null,
+  type              enum('cash', 'other') default 'cash',
+  value             varchar(100) not null,
+  image             varchar(100) default null,
+  primary key (id),
+  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `prize` (`id`)
 ) engine = innodb default charset = utf8;
