@@ -74,11 +74,11 @@
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
                 {{ 'vote_now' | translate }}
-                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remaining_votes: remainingVotes()} }}</h5>
+                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
                 {{ 'you_voted' | translate }}
-                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remaining_votes: remainingVotes()} }}</h5>
+                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
               </button>
             </div>
             <div ng-if="isContestProgress('finished')">

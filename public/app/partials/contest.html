@@ -220,33 +220,34 @@
   </div>
 </div>
 <div ng-if="isContestProgress('finished')" class="container margin-top">
-  <h2 class="align-center">{{ 'this_contest_was_finished' | translate }}</h2>
-  <div ng-if="hasWinners()" ng-repeat="row in winnerAuditions | partition: 3" class="winner row">
-    <h1 class="align-center bolder-text">{{ 'winners' | translate }}</h1>
-    <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
-      </audition>
-      <div class="row padding">
-        <div class="col-md-3">
-          <div class="winner-author">
-            <a ui-sref="{{ userState(audition.user) }}">
-              <div profile-picture="audition.user" class="profile-picture">
-              </div>
-            </a>
+  <div ng-if="hasWinners()">
+    <h1 class="align-center">{{ 'winners' | translate }}</h1>
+    <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row padding">
+      <div ng-repeat="audition in row" class="col-md-4">
+        <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
+        </audition>
+        <div class="row padding">
+          <div class="col-md-3">
+            <div class="winner-author">
+              <a ui-sref="{{ userState(audition.user) }}">
+                <div profile-picture="audition.user" class="profile-picture">
+                </div>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="col-md-9 nopadding-left">
-          <h4 class="nomargin">
-            <a ui-sref="{{ userState(audition.user) }}">
-              {{ audition.user.name }}
-            </a>
-            <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'won_a_gold_medal' | translate">
-            </span>
-            <span ng-if="isMedal(audition, 'silver')" ng-bind-html="'won_a_silver_medal' | translate">
-            </span>
-            <span ng-if="isMedal(audition, 'bronze')" ng-bind-html="'won_a_bronze_medal' | translate">
-            </span>
-          </h4>
+          <div class="col-md-9 nopadding-left">
+            <h4 class="nomargin">
+              <a ui-sref="{{ userState(audition.user) }}">
+                {{ audition.user.name }}
+              </a>
+              <span ng-if="isMedal(audition, 'gold')" ng-bind-html="'won_a_gold_medal' | translate">
+              </span>
+              <span ng-if="isMedal(audition, 'silver')" ng-bind-html="'won_a_silver_medal' | translate">
+              </span>
+              <span ng-if="isMedal(audition, 'bronze')" ng-bind-html="'won_a_bronze_medal' | translate">
+              </span>
+            </h4>
+          </div>
         </div>
       </div>
     </div>
@@ -268,22 +269,25 @@
   </div>
 </div>
 <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions()" class="container">
-  <div ng-if="hasUserVotes()" class="row">
-    <div class="col-md-12">
-      <h3>
-        {{ 'your_votes' | translate }}
-      </h3>
-      <div ng-repeat="userVote in userVotes" class="pull-left">
-        <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
-          <div profile-picture="userVote.audition.user" class="profile-picture small">
-          </div>
-        </a>
+  <div ng-if="hasUserVotes()">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>
+          {{ 'your_votes' | translate }} <small>({{ 'you_can_vote_in_more_contestants' | translate: {remainingVotes: remainingVotes()} }})</small>
+        </h2>
+        <div ng-repeat="userVote in userVotes" class="pull-left">
+          <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
+            <div profile-picture="userVote.audition.user" class="profile-picture small">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
+    <hr/>
   </div>
   <div class="row">
     <div class="col-md-8">
-      <h1>
+      <h2>
         <span ng-if="isRanked('best')">
           {{ 'best_auditions' | translate }}
         </span>
@@ -291,7 +295,7 @@
           {{ 'latest_auditions' | translate }}
         </span>
         <small>({{ totalAuditions }})</small>
-      </h1>
+      </h2>
     </div>
     <div class="col-md-4 align-right" style="padding-top: 36px;">
       <h4>
