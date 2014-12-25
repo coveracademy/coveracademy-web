@@ -503,6 +503,9 @@ angular
   this.latestAuditions = function(contest, page) {
     return $http.get('/api/contest/audition/latest', {params: {contest: contest.id, page: page}});
   };
+  this.randomAuditions = function(contest, size) {
+    return $http.get('/api/contest/audition/random', {params: {contest: contest.id, size: size}});
+  };
   this.approveAudition = function(audition) {
     return $http.post('/api/contest/audition/approve', {audition: audition.id});
   };

@@ -273,7 +273,7 @@
     <div class="row">
       <div class="col-md-12">
         <h2>
-          {{ 'your_votes' | translate }} <small>({{ 'you_can_vote_in_more_contestants' | translate: {remainingVotes: remainingVotes()} }})</small>
+          {{ 'your_votes' | translate }} <small>({{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes()} }})</small>
         </h2>
         <div ng-repeat="userVote in userVotes" class="pull-left">
           <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
@@ -283,7 +283,6 @@
         </div>
       </div>
     </div>
-    <hr/>
   </div>
   <div class="row">
     <div class="col-md-8">
@@ -294,10 +293,10 @@
         <span ng-if="isRanked('latest')">
           {{ 'latest_auditions' | translate }}
         </span>
-        <small>({{ totalAuditions }})</small>
+        <small>({{ 'this_contest_has_many_auditions' | translate: {totalAuditions: totalAuditions} }})</small>
       </h2>
     </div>
-    <div class="col-md-4 align-right" style="padding-top: 36px;">
+    <div class="col-md-4 align-right" style="padding-top: 27px;">
       <h4>
         <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
           {{ 'see_the_latest_auditions' | translate }}

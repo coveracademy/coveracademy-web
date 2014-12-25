@@ -134,6 +134,17 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/audition/random', function(req, res, next) {
+    var contest = Contest.forge({id: req.param('contest')});
+    var size = req.param('size');
+    contestService.randomAuditions(contest, size).then(function(auditions) {
+      res.json(auditions);
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   app.use('/api/contest', router);
 
 }

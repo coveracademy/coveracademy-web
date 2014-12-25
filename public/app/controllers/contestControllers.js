@@ -242,7 +242,7 @@ angular
     });
   };
 }])
-.controller('auditionController', ['$scope', '$translate', 'authEvents', 'constants', 'backendResponse', 'authenticationService', 'translationService', 'alertService', 'seoService', 'contestService', function($scope, $translate, authEvents, constants, backendResponse, authenticationService, translationService, alertService, seoService, contestService) {
+.controller('auditionController', ['$scope', '$translate', '$timeout', 'authEvents', 'constants', 'backendResponse', 'authenticationService', 'translationService', 'alertService', 'modalService', 'seoService', 'contestService', function($scope, $translate, $timeout, authEvents, constants, backendResponse, authenticationService, translationService, alertService, modalService, seoService, contestService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
@@ -269,6 +269,13 @@ angular
     $scope.userVote = null;
     $scope.totalUserVotes = 0;
   });
+
+  $scope.remainingVotes = function() {
+    return $scope.voteLimit - $scope.totalUserVotes;
+  };
+  $scope.hasRemainingVotes = function() {
+    return $scope.remainingVotes() > 0
+  };
   $scope.isAuditionApproved = function() {
     return $scope.audition.approved === 1;
   };
@@ -322,6 +329,30 @@ angular
   $scope.voted = function() {
     return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
   };
+
+   var incentiveVoteModalOptions = {
+    size: 'lg',
+    templateUrl: '/app/partials/widgets/incentive-vote-modal.html',
+    resolve: {
+      remainingVotes: function() {
+        return $scope.remainingVotes();
+      },
+      randomAuditions: function() {
+        return contestService.randomAuditions($scope.contest, 6).then(function(response) {
+          return response.data;
+        });
+      }
+    },
+    controller: function($scope, $modalInstance, remainingVotes, randomAuditions) {
+      $scope.remainingVotes = remainingVotes;
+      $scope.randomAuditions = randomAuditions;
+      console.log($scope.randomAuditions)
+      $scope.close = function() {
+        $modalInstance.dismiss();
+      };
+    }
+  };
+
   $scope.vote = function(audition) {
     contestService.voteInAudition(audition).then(function(response) {
       $scope.userVote = response.data;
@@ -332,6 +363,11 @@ angular
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(translation) {
         alertService.alert('success', translation);
       });
+      if($scope.remainingVotes() > 2) {
+        $timeout(function() {
+          modalService.show(incentiveVoteModalOptions);
+        }, 4000);
+      }
     }).catch(function(err) {
       translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
         alertService.alert('danger', translation);
@@ -350,12 +386,6 @@ angular
         alertService.alert('danger', translation);
       });
     });
-  };
-  $scope.remainingVotes = function() {
-    return $scope.voteLimit - $scope.totalUserVotes;
-  };
-  $scope.hasRemainingVotes = function() {
-    return $scope.remainingVotes() > 0
   };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {

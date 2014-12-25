@@ -320,6 +320,19 @@ exports.bestAuditions = function(contest, page, pageSize) {
   return listAuditions('best', contest, page, pageSize);
 }
 
+exports.randomAuditions = function(contest, size) {
+  return $.latestAuditions(contest).then(function(auditions) {
+    if(size < auditions.length) {
+      size = auditions.length;
+    }
+    var randomAuditions = Audition.collection();
+    _.range(size).forEach(function() {
+      randomAuditions.add(auditions.at(_.random(auditions.length - 1)));
+    });
+    return randomAuditions;
+  });
+}
+
 exports.totalAuditions = function(contest) {
   return new Promise(function(resolve, reject) {
     var qb = Bookshelf.knex('audition')
