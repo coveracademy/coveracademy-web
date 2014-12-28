@@ -9,7 +9,6 @@ angular
   'angularMoment',
   'angulartics',
   'angulartics.google.analytics',
-  'flow',
   'ngCookies',
   'ngProgress',
   'ngSanitize',

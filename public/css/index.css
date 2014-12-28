@@ -99,6 +99,10 @@ p, li {
   line-height: 1.8;
 }
 
+.modal-backdrop {
+  height: 100%;
+}
+
 #incentive-vote {
   padding: 0;
 }
