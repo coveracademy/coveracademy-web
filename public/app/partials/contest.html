@@ -165,7 +165,7 @@
         <span>
           {{ 'latest_auditions' | translate }}
         </span>
-        <small>({{ totalAuditions }})</small>
+        <small>• {{ 'many_auditions_in_this_contest' | translate: {totalAuditions: totalAuditions} }}</small>
       </h1>
     </div>
   </div>
