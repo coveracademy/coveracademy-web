@@ -99,6 +99,24 @@ p, li {
   line-height: 1.8;
 }
 
+#incentive-vote {
+  padding: 0;
+}
+
+#incentive-vote #incentive {
+  padding: 30px;
+}
+
+#incentive-vote #join-community {
+  background-color: #363b3f;
+  padding: 20px 0px 20px 0px;
+  color: #fff;
+}
+
+#incentive-vote #join-community .row {
+  padding: 0px 30px 0px 30px;
+}
+
 .thumbnail {
   line-height: 1.5;
 }

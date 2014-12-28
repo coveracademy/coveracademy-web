@@ -4,24 +4,28 @@
   </button>
   <h2 class="align-center">{{ 'incentive_vote_modal_header' | translate }}</h2>
 </div>
-<div class="modal-body margin10">
-  <div class="row">
-    <div class="col-md-12">
-      <h3 class="align-center nomargin">{{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes} }}</h3>
-      <h4>{{ 'incentive_vote_modal_description' | translate }}</h4>
+<div id="incentive-vote" class="modal-body">
+  <div id="incentive">
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="align-center nomargin">{{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes} }}</h3>
+        <h4>{{ 'incentive_vote_modal_description' | translate }}</h4>
+      </div>
+    </div>
+    <div class="row padding" ng-repeat="row in randomAuditions | partition: 3">
+      <div ng-repeat="audition in row" class="col-md-4">
+        <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
+        </audition>
+      </div>
     </div>
   </div>
-  <div class="row padding" ng-repeat="row in randomAuditions | partition: 3">
-    <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
-      </audition>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <h4>{{ 'join_our_community' | translate }}</h4>
-      <fb-like-box link="https://www.facebook.com/coveracademy" width="840" height="190" faces="true" theme="light">
-      </fb-like-box>
+  <div id="join-community">
+    <div class="row">
+      <div class="col-md-12">
+        <h4>{{ 'join_our_community' | translate }}</h4>
+        <fb-like-box link="https://www.facebook.com/coveracademy" width="820" height="190" faces="true" theme="dark">
+        </fb-like-box>
+      </div>
     </div>
   </div>
 </div>
