@@ -397,6 +397,9 @@ angular
   this.contestView = function(id, slug, rank) {
     return $http.get('/view/contest/' + id + '/' + slug, {params: {rank: rank}});
   };
+  this.contestsView = function() {
+    return $http.get('/view/contests');
+  };
   this.contestsAdminView = function() {
     return $http.get('/view/contests/admin');
   };

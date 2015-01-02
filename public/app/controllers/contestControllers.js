@@ -1,5 +1,27 @@
 angular
 .module('coverAcademy.controllers')
+.controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, contestService, seoService) {
+  $scope.contests = backendResponse.data.contests;
+  $scope.totalVotes = backendResponse.data.totalVotes;
+  $scope.totalAuditions = backendResponse.data.totalAuditions;
+  $scope.winnerAuditions = backendResponse.data.winnerAuditions;
+
+  $scope.getTotalVotes = function(contest) {
+    return $scope.totalVotes[contest.id] ? $scope.totalVotes[contest.id] : 0;
+  };
+  $scope.getTotalAuditions = function(contest) {
+    return $scope.totalAuditions[contest.id] ? $scope.totalAuditions[contest.id] : 0;
+  };
+  $scope.hasWinnerAuditions = function(contest) {
+    return $scope.winnerAuditions[contest.id] && $scope.winnerAuditions[contest.id].length > 0;
+  };
+  $scope.getWinnerAuditions = function(contest) {
+    return $scope.winnerAuditions[contest.id]
+  };
+  $scope.isContestFinished = function(contest) {
+    return contest.progress === 'finished';
+  };
+}])
 .controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;
   $scope.auditionsToReview = backendResponse.data.auditionsToReview;

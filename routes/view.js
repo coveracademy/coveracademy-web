@@ -30,7 +30,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/contests/admin', isAdmin, function(req, res, next) {
-    Promise.all([contestService.listContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
+    Promise.all([contestService.latestContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
       res.json({
         contests: contests,
         auditionsToReview: auditionsToReview
@@ -59,7 +59,7 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    contestService.listContests().then(function(contests) {
+    contestService.latestContests().then(function(contests) {
       if(contests.length > 0) {
         messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
       } else {
@@ -369,6 +369,22 @@ module.exports = function(router, app) {
           });
         });
       }
+    }).catch(function(err) {
+      console.log(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/contests', function(req, res, next) {
+    contestService.latestContests(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTS_IN_LIST).then(function(contests) {
+      return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.getWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
+        res.json({
+          contests: contests,
+          totalVotes: totalVotes,
+          totalAuditions: totalAuditions,
+          winnerAuditions: winnerAuditions
+        })
+      });
     }).catch(function(err) {
       console.log(err);
       messages.respondWithError(err, res);

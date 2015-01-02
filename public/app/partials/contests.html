@@ -1,0 +1,32 @@
+<div class="container">
+	<h1 class="page-header">{{ 'latest_contests' | translate }}</h1>
+	<div ng-repeat="contest in contests">
+		<div class="row contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/contests/{{ contest.image }}');">
+			<div class="col-md-12">			
+				<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+					<h1 class="align-center nomargin">{{ contest.name }}</h1>
+				</a>
+				<h3>
+					{{ 'total_votes_and_auditions' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
+				</h3>
+				<div ng-if="hasWinnerAuditions(contest)">
+			    <h3 class="align-center">{{ 'winners' | translate }}</h3>
+			    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding">
+			      <div ng-repeat="audition in row" class="col-md-4">
+			        <audition ng-model="audition" locale="{{ locale() }}" border="false">
+			        </audition>
+			      </div>
+			    </div>
+			  </div>
+			  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="align-center">
+			  	<a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
+          {{ 'join_now' | translate }}
+       		</a>
+	        <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
+	          {{ 'see_the_guideline' | translate }}
+	        </a>
+			  </div>
+			</div>
+		</div>
+	</div>
+</div>

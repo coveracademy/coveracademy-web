@@ -1,5 +1,6 @@
+- Install MySQL database version 5.6+
 - Configure database
-    $ vim /etc/mysql/my.cnf
+    $ sudo vim /etc/mysql/my.cnf
       > Change from key_buffer property to key_buffer_size
       > Change from myisam-recover to myisam-recover-options
       > Set UTF-8 and the new timestamp behavior adding these properties after [mysqld] section:

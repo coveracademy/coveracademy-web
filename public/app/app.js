@@ -274,6 +274,18 @@ angular
         }
       }
     })
+    .state('app.contests', {
+      url: '/contests',
+      templateUrl: '/app/partials/contests.html',
+      controller: 'contestsController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.contestsView();
+        }
+      }
+    })
     .state('app.contestGuideline', {
       url: '/contest/guideline',
       templateUrl: '/app/partials/contest-guideline.html',

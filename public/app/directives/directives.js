@@ -9,6 +9,7 @@ angular
       locale: '@',
       showScore: '@',
       thumbSize: '@',
+      border: '@',
       audition: '=ngModel',
       scoreByAudition: '&'
     },
@@ -19,6 +20,7 @@ angular
     }],
     link: function(scope, element, attrs, ctrl) {
       scope.showScoreFinal = scope.showScore === 'true' ? true : false;
+      scope.noBorderFinal = scope.border === 'false' ? true : false;
       scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
     }
   };

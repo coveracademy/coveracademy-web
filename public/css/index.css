@@ -263,6 +263,10 @@ a:hover {
   margin: 0px;
 }
 
+.noborder {
+  border: none;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -787,6 +791,20 @@ form.compacted .form-group {
 
 .audition {
   background-color: #000;
+  color: #fff;
+}
+
+.contest-cover {
+  background-position: center top; 
+  background-size: cover; 
+  min-height: 200px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #fff;
+  padding: 40px;
+}
+
+.contest-cover a {
   color: #fff;
 }
 

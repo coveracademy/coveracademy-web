@@ -1,4 +1,5 @@
-var _ = require('underscore');
+var Bookshelf = require('../models/models').Bookshelf,
+    _         = require('underscore');
 
 function filter(data, attributes) {
   var filtered = {};
@@ -40,4 +41,8 @@ exports.getIds = function(collection) {
     ids.push(model.id);
   });
   return ids;
+}
+
+exports.isCollection = function(obj) {
+  return obj instanceof Bookshelf.Collection;
 }
