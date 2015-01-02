@@ -7,7 +7,7 @@
 					<h1 class="align-center nomargin">{{ contest.name }}</h1>
 				</a>
 				<h3>
-					{{ 'total_votes_and_auditions' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
+					{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
 				</h3>
 				<div ng-if="hasWinnerAuditions(contest)">
 			    <h3 class="align-center">{{ 'winners' | translate }}</h3>
