@@ -924,9 +924,10 @@ form.compacted .form-group {
 /* Tabs panel */
 
 /* Bootstrap custom buttons */
-
 .btn-primary {
+  color: #fff;
   background-color: #2196f3;
+  border-color: transparent;
 }
 
 .btn-primary:hover {
@@ -934,7 +935,9 @@ form.compacted .form-group {
 }
 
 .btn-success {
+  color: #fff;
   background-color: #4caf50;
+  border-color: transparent;
 }
 
 .btn-success:hover {
@@ -942,7 +945,9 @@ form.compacted .form-group {
 }
 
 .btn-warning {
+  color: #fff;
   background-color: #ff9800;
+  border-color: transparent;
 }
 
 .btn-warning:hover {
@@ -950,7 +955,9 @@ form.compacted .form-group {
 }
 
 .btn-danger {
+  color: #fff;
   background-color: #e51c23;
+  border-color: transparent;
 }
 
 .btn-danger:hover {
@@ -958,7 +965,9 @@ form.compacted .form-group {
 }
 
 .btn-info {
+  color: #fff;
   background-color: #9c27b0;
+  border-color: transparent;
 }
 
 .btn-info:hover {
@@ -966,7 +975,9 @@ form.compacted .form-group {
 }
 
 .btn-default {
+  color: #fff;
   background-color: #ffffff;
+  border-color: transparent;
 }
 
 .btn-default:hover {
