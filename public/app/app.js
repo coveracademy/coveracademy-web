@@ -45,6 +45,7 @@ angular
 .constant('redirections', {
   audition: 'app.audition',
   contest: 'app.contest',
+  contests: 'app.contests',
   cover: 'app.cover',
   covers: 'app.covers',
   index: 'app.index',

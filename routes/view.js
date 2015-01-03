@@ -59,14 +59,27 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    contestService.listUnfinishedContests().then(function(contests) {
-      res.json({
-        contests: contests
+    if(!req.user) {
+      contestService.listUnfinishedContests().then(function(contests) {
+        res.json({
+          contests: contests
+        });
+      }).catch(function(err) {
+        console.log(err);
+        messages.respondWithError(err, res);
       });
-    }).catch(function(err) {
-      console.log(err);
-      messages.respondWithError(err, res);
-    });
+    } else {
+      contestService.listUnfinishedContests().then(function(contests) {
+        if(contests.length > 0) {
+          messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
+        } else {
+          messages.respondWithRedirection('contests', {}, res);
+        }
+      }).catch(function(err) {
+        console.log(err);
+        messages.respondWithError(err, res);
+      });
+    }
   });
 
   router.get('/cover/:id/:slug', function(req, res, next) {
