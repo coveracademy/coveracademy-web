@@ -232,13 +232,14 @@ angular
           artists_all: 'All artists',
           artists_music_genre: '{{ musicGenre }} artists',
           contact: 'Contact us, give us your feedback',
+          contests: 'See all contests',
           cover: '{{ author }}\'s cover of "{{ music }}" by {{ artist }}',
           covers: 'The best covers in one place',
           covers_rank: 'The {{ rankType }} covers from this week',
           error_404: 'Page not found',
           error_500: 'Internal error',
           guideline: 'Read our contest guideline and find out how to participate!',
-          index: 'Join our music contest now!',
+          index: 'Join our online music contest now!',
           join_contest: 'Join the contest now!',
           music: 'The {{ rankType }} covers of "{{ music }}" by {{ artist }}',
           music_genre: '{{ musicGenre }} cover songs',
@@ -254,9 +255,7 @@ angular
           join_contest: '@:seo.description.contest'
         },
         keywords: {
-          contest: 'singing contest, music contest, singing competition, music competition, singing battle, music battle, cover battle, cover competition, cover contest, music contest, music competition, online music contest, online singing contest, online music competition, online singing competition, talent show, cover music, cover song',
-          guideline: '@:seo.keywords.contest',
-          join_contest: '@:seo.keywords.contest'
+          contest: 'singing contest, music contest, singing competition, music competition, singing battle, music battle, cover battle, cover competition, cover contest, music contest, music competition, online music contest, online singing contest, online music competition, online singing competition, talent show, cover music, cover song'
         }
       }
     }
@@ -492,13 +491,14 @@ angular
           artists_all: 'Todos os artistas',
           artists_music_genre: 'Artistas {{ musicGenre }}',
           contact: 'Entre em contato, nos dê o seu feedback',
+          contests: 'Veja todas as competições',
           cover: 'Cover de {{ author }} da música "{{ music }}" de {{ artist }}',
           covers: 'Os melhores covers em um só lugar',
           covers_rank: 'Os {{ rankType }} covers da semana',
           error_404: 'Página não encontrada',
           error_500: 'Erro interno',
           guideline: 'Leia o nosso guia da competição e saiba como participar!',
-          index: 'Entre na nossa competição de música agora!',
+          index: 'Entre agora na nossa competição online de música!',
           join_contest: 'Participe agora da competição!',
           music: 'Os {{ rankType }} covers da música "{{ music }}" de {{ artist }}',
           music_genre: 'Covers {{ musicGenre }}',
@@ -509,14 +509,10 @@ angular
           terms_of_use: 'Termos de uso'
         },
         description: {
-          contest: 'Cover Academy é o primeiro website do Brasil a promover competições online de música. Participe e concorra a prêmios ou seja um juiz e ajude-nos a escolher os vencedores.',
-          guideline: '@:seo.description.contest',
-          join_contest: '@:seo.description.contest'
+          contest: 'Cover Academy é o primeiro website do Brasil a promover competições online de música. Participe e concorra a prêmios ou seja um juiz e ajude-nos a escolher os vencedores.'
         },
         keywords: {
-          contest: 'competição de canto, competição de música, concurso de canto, concurso de música, batalha de canto, batalha de música, batalha cover, competição cover, campeonato cover, campeonato de música, campeonato online de música, concurso online de música, competição online de música, show de talentos, música cover',
-          guideline: '@:seo.keywords.contest',
-          join_contest: '@:seo.keywords.contest'
+          contest: 'competição de canto, competição de música, concurso de canto, concurso de música, batalha de canto, batalha de música, batalha cover, competição cover, campeonato cover, campeonato de música, campeonato online de música, concurso online de música, competição online de música, show de talentos, música cover'
         }
       }
     }

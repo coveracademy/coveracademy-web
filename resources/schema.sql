@@ -185,5 +185,5 @@ create table prize (
   value             varchar(100) not null,
   image             varchar(100) default null,
   primary key (id),
-  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `prize` (`id`)
+  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`)
 ) engine = innodb default charset = utf8;

@@ -67,11 +67,15 @@ angular
       return 'app.userId({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
     }
   };
+  $scope.showHeader = function() {
+    return $state.current.name !== 'app.index';
+  };
+  $scope.withFooterMargin = function() {
+    return $state.current.name !== 'app.index';
+  };
 }])
 .controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
   $state.go('app.index', {locale: $translate.use()});
-}])
-.controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
 }])
 .controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
   $scope.searchQuery = '';

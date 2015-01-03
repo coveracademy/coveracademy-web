@@ -10,8 +10,12 @@ html {
 body {
   font-family: 'Ubuntu', 'sans-serif';
   /* Margin bottom by footer height */
-  margin-bottom: 540px;
+  margin-bottom: 500px;
   line-height: 1.5;
+}
+
+body.footer-margin {
+  margin-bottom: 540px;
 }
 
 header.navbar-default {
@@ -36,7 +40,7 @@ header.navbar-default .navbar-nav > li > a:hover {
   color: #999;
 }
 
-main {
+main.with-header {
   padding-top: 64px;
 }
 
@@ -99,6 +103,44 @@ p, li {
   line-height: 1.8;
 }
 
+.land-section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.land-section h2 {
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+.land-section i {
+  font-size: 70px;
+}
+
+#land-header {
+  background-color: #333;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/img/backgrounds/land-header.jpg');
+  background-repeat:; no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  padding: 80px 100px 80px 100px;
+}
+
+#land-header .btn-lg {
+  font-size: 25px;
+}
+
+#land-steps-section {
+  background-color: #363b3f;
+  color: #fff;
+}
+
+#land-community-section {
+  background-color: #3a5795;
+  color: #fff;
+}
+
 .modal-backdrop {
   height: 100%;
 }
@@ -123,14 +165,6 @@ p, li {
 
 .thumbnail {
   line-height: 1.5;
-}
-
-.progress {
-  margin: 0;
-}
-
-.progress {
-  border-radius: 0;
 }
 
 #primary-pictures .thumbnail {
@@ -795,8 +829,8 @@ form.compacted .form-group {
 }
 
 .contest-cover {
-  background-position: center top; 
-  background-size: cover; 
+  background-position: center top;
+  background-size: cover;
   min-height: 200px;
   border-radius: 4px;
   margin-bottom: 20px;
@@ -888,3 +922,54 @@ form.compacted .form-group {
   font-size: 16px;
 }
 /* Tabs panel */
+
+/* Bootstrap custom buttons */
+
+.btn-primary {
+  background-color: #2196f3;
+}
+
+.btn-primary:hover {
+  background-color: #0d87e9;
+}
+
+.btn-success {
+  background-color: #4caf50;
+}
+
+.btn-success:hover {
+  background-color: #439a46;
+}
+
+.btn-warning {
+  background-color: #ff9800;
+}
+
+.btn-warning:hover {
+  background-color: #e08600;
+}
+
+.btn-danger {
+  background-color: #e51c23;
+}
+
+.btn-danger:hover {
+  background-color: #cb171e;
+}
+
+.btn-info {
+  background-color: #9c27b0;
+}
+
+.btn-info:hover {
+  background-color: #862197;
+}
+
+.btn-default {
+  background-color: #ffffff;
+}
+
+.btn-default:hover {
+  background-color: #f0f0f0;
+}
+/* Bootstrap custom buttons */

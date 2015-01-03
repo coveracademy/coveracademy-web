@@ -51,7 +51,10 @@ exports.latestContests = function(page, pageSize) {
 }
 
 exports.listUnfinishedContests = function() {
-  return Contest.collection().query({where: ['finished', 0]}).fetch();
+  return Contest.collection().query(function(qb) {
+    qb.where('finished', 0);
+    qb.orderBy('registration_date', 'desc');
+  }).fetch();
 }
 
 exports.listContestsToStart = function() {

@@ -5,7 +5,7 @@
         <tr>
           <td valign="middle" style="padding-top: 0px; padding-bottom: 10px; padding-right: 0px; padding-left: 0px; text-align: left; border-collapse: collapse;">
             <a href="{{ siteUrl }}" style="display: inline-block; color:#3686be" target="_blank">
-              <img src="{{ siteUrl }}/img/logos/green-logo-footer.png" alt="Cover Academy" border="0" height="50">
+              <img src="{{ siteUrl }}/img/logos/green-logo.png" alt="Cover Academy" border="0" height="50">
             </a>
           </td>
         </tr>

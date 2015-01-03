@@ -1,10 +1,34 @@
 angular
 .module('coverAcademy.controllers')
-.controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, contestService, seoService) {
+.controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
+  $scope.contests = backendResponse.data.contests;
+  $translate(['seo.title.index', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
+    seoService.setTitle(translations['seo.title.index']);
+    seoService.setDescription(translations['seo.description.contest']);
+    seoService.setKeywords(translations['seo.keywords.contest']);
+  });
+
+  $scope.hasUnfinishedContests = function() {
+    return $scope.contests.length > 0;
+  };
+  $scope.getLatestUnfinishedContest = function() {
+    if($scope.hasUnfinishedContests()) {
+      return $scope.contests[0];
+    } else {
+      return null;
+    }
+  };
+}])
+.controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
   $scope.contests = backendResponse.data.contests;
   $scope.totalVotes = backendResponse.data.totalVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.winnerAuditions = backendResponse.data.winnerAuditions;
+  $translate(['seo.title.contests', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
+    seoService.setTitle(translations['seo.title.contests']);
+    seoService.setDescription(translations['seo.description.contest']);
+    seoService.setKeywords(translations['seo.keywords.contest']);
+  });
 
   $scope.getTotalVotes = function(contest) {
     return $scope.totalVotes[contest.id] ? $scope.totalVotes[contest.id] : 0;
@@ -205,10 +229,10 @@ angular
   $scope.userAudition = backendResponse.data.audition;
   $scope.usingYoutubeAccount = false;
 
-  $translate(['seo.title.join_contest', 'seo.description.join_contest', 'seo.keywords.join_contest']).then(function(translations) {
+  $translate(['seo.title.join_contest', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.join_contest']);
-    seoService.setDescription(translations['seo.description.join_contest']);
-    seoService.setKeywords(translations['seo.keywords.join_contest']);
+    seoService.setDescription(translations['seo.description.contest']);
+    seoService.setKeywords(translations['seo.keywords.contest']);
   });
   seoService.setImage('/img/contests/' + $scope.contest.image);
 
@@ -411,9 +435,9 @@ angular
   };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {
-  $translate(['seo.title.guideline', 'seo.description.guideline', 'seo.keywords.guideline']).then(function(translations) {
+  $translate(['seo.title.guideline', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.guideline']);
-    seoService.setDescription(translations['seo.description.guideline']);
-    seoService.setKeywords(translations['seo.keywords.guideline']);
+    seoService.setDescription(translations['seo.description.contest']);
+    seoService.setKeywords(translations['seo.keywords.contest']);
   });
 }]);
