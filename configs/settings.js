@@ -62,7 +62,7 @@ try {
       },
       _envs = {
         prod: {
-          prerender: config.prerender || "http://localhost:9000"
+          prerenderUrl: config.prerender.url || "http://localhost:9000"
         }
       };
 
