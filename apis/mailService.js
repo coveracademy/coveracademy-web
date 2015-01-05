@@ -6,7 +6,7 @@ var	Mailgun      = require('mailgun-js'),
     apiKey       = settings.email.apiKey,
     emailContact = settings.email.contact,
     mailgun      = new Mailgun({apiKey: apiKey, domain: domain}),
-    mailClient   = restify.createJsonClient(settings.siteUrl + ':' + settings.mailingPort);
+    mailClient   = restify.createJsonClient(settings.siteUrl + ':' + settings.mailPort);
 
 exports.receive = function(fromName, from, subject, text) {
   return new Promise(function(resolve, reject) {

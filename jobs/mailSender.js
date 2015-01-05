@@ -127,6 +127,6 @@ server.post('/contest/winner', function(req, res, next) {
   });
 });
 
-server.listen(settings.mailingPort, function() {
+server.listen(settings.mailPort, function() {
   console.log('%s listening at %s', server.name, server.url);
 });

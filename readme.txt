@@ -51,6 +51,8 @@
     }
 
 - Edit /etc/hosts and add www.coveracademy.com pointing to localhost
+- Creates a copy of config.properties located in resources/samples and change the properties according to environment
+- Set the environment variable with name CONFIG_FILE referencing the absolute path of the config.properties copy (Defaults to './config.properties')
 - Install cover-academy dependencies
     $ npm install
 - Start cover-academy server

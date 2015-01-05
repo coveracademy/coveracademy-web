@@ -33,9 +33,9 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   store: new RedisStore({
-    host: settings.redisSessionStorage.host,
-    port: settings.redisSessionStorage.port,
-    pass: settings.redisSessionStorage.password,
+    host: settings.redis.host,
+    port: settings.redis.port,
+    pass: settings.redis.password,
     prefix: 'session:'
   })
 }));

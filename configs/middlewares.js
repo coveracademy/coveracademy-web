@@ -5,6 +5,6 @@ exports.configure = function(app) {
 
   // Production only
   if('prod' == app.get('env')) {
-    app.use(require('prerender-node').set('prerenderServiceUrl', settings.prerenderServiceURL));
+    app.use(require('prerender-node').set('prerenderServiceUrl', settings.prerender));
   }
 }
