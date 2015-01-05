@@ -40,6 +40,10 @@ header.navbar-default .navbar-nav > li > a:hover {
   color: #999;
 }
 
+header.navbar-default .navbar-form input {
+  width: 350px !important;
+}
+
 main.with-header {
   padding-top: 64px;
 }
@@ -924,6 +928,11 @@ form.compacted .form-group {
 /* Tabs panel */
 
 /* Bootstrap custom buttons */
+.btn {
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #2196f3;
@@ -985,14 +994,14 @@ form.compacted .form-group {
 }
 
 .btn-default {
-  color: #fff;
+  color: #666666;
   background-color: #ffffff;
-  border-color: transparent;
+  border-color: #eeeeee;
 }
 
 .btn-default:hover {
-  color: #fff;
+  color: #666666;
   background-color: #f0f0f0;
-  border-color: transparent;
+  border-color: #eeeeee;
 }
 /* Bootstrap custom buttons */
