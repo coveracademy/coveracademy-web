@@ -18,12 +18,12 @@
     $ mysql -u <user> -p cover_academy < resources/data.sql
 
 - Install and set up Redis
-      $ wget http://download.redis.io/releases/redis-2.8.17.tar.gz
-      $ tar -xvf installers/redis-2.8.17.tar.gz
-      $ cd redis-2.8.17
-      $ make; make test; sudo make install;
-      $ sudo utils/install_server.sh
-      $ sudo service redis_6379 start
+    $ wget http://download.redis.io/releases/redis-2.8.17.tar.gz
+    $ tar -xvf installers/redis-2.8.17.tar.gz
+    $ cd redis-2.8.17
+    $ make; make test; sudo make install;
+    $ sudo utils/install_server.sh
+    $ sudo service redis_6379 start
 
 - Install Nginx
     $ sudo apt-get install nginx

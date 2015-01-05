@@ -5,7 +5,7 @@ var Contest     = require('../models/models').Contest,
     Bookshelf   = require('../models/models').Bookshelf,
     settings    = require('../configs/settings'),
     slug        = require('../utils/slug'),
-    modelUtils  = require('../utils/modelUtils'),
+    entities    = require('../utils/entities'),
     mailService = require('./mailService'),
     messages    = require('./messages'),
     youtube     = require('./third/youtube'),
@@ -262,10 +262,10 @@ exports.disapproveAudition = function(audition, reason) {
 }
 
 exports.getWinnerAuditions = function(obj) {
-  if(modelUtils.isCollection(obj)) {
+  if(entities.isCollection(obj)) {
     return new Promise(function(resolve, reject) {
       Bookshelf.knex('audition')
-      .whereIn('contest_id', modelUtils.getIds(obj))
+      .whereIn('contest_id', entities.getIds(obj))
       .where('place', '<=', '3')
       .orderBy('place', 'asc')
       .then(function(rows) {
@@ -368,11 +368,11 @@ exports.randomAuditions = function(contest, size) {
 
 exports.totalAuditions = function(obj) {
   return new Promise(function(resolve, reject) {
-    if(modelUtils.isCollection(obj)) {
+    if(entities.isCollection(obj)) {
       var qb = Bookshelf.knex('audition')
       .select('contest_id')
       .count('id as total_auditions')
-      .whereIn('contest_id', modelUtils.getIds(obj))
+      .whereIn('contest_id', entities.getIds(obj))
       .where('approved', 1)
       .groupBy('contest_id')
       .then(function(rows) {
@@ -405,7 +405,7 @@ exports.getScoreByAudition = function(auditions) {
     } else {
       Bookshelf.knex('user_vote')
       .select(Bookshelf.knex.raw('audition_id, sum(voting_power) as score'))
-      .whereIn('audition_id', modelUtils.getIds(auditions))
+      .whereIn('audition_id', entities.getIds(auditions))
       .groupBy('audition_id')
       .then(function(scoreCounts) {
         var scoreByAudition = {};
@@ -428,7 +428,7 @@ exports.getVotesByAudition = function(auditions) {
       Bookshelf.knex('user_vote')
       .select('audition_id')
       .count('id as votes')
-      .whereIn('audition_id', modelUtils.getIds(auditions))
+      .whereIn('audition_id', entities.getIds(auditions))
       .groupBy('audition_id')
       .then(function(votesCounts) {
         var votesByAudition = {};
@@ -463,7 +463,7 @@ exports.getAuditionVotes = function(audition) {
 
 exports.getUsersVotes = function(auditions) {
   return UserVote.collection().query(function(qb) {
-    qb.whereIn('audition_id', modelUtils.getIds(auditions));
+    qb.whereIn('audition_id', entities.getIds(auditions));
   }).fetch(userVoteWithUserRelated);
 }
 
@@ -605,7 +605,7 @@ exports.totalVotes = function(contests) {
     .count('user_vote.id as total_votes')
     .join('audition', 'user_vote.audition_id', 'audition.id')
     .join('contest', 'audition.contest_id', 'contest.id')
-    .whereIn('contest.id', modelUtils.getIds(contests))
+    .whereIn('contest.id', entities.getIds(contests))
     .groupBy('contest.id')
     .then(function(rows) {
       var totalVotes = {};

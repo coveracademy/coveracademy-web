@@ -46,4 +46,6 @@ engine.configure(app);
 authentication.configure(app, passport);
 routes.configure(express, app, passport);
 
-module.exports = app;
+var server = app.listen(app.get('port'), function() {
+  console.log('Cover Academy server is listening on port ' + server.address().port);
+});

@@ -376,7 +376,7 @@ angular
     return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
   };
 
-   var incentiveVoteModalOptions = {
+  var incentiveVoteModalOptions = {
     size: 'lg',
     templateUrl: '/app/partials/widgets/incentive-vote-modal.html',
     resolve: {
@@ -392,7 +392,6 @@ angular
     controller: function($scope, $modalInstance, remainingVotes, randomAuditions) {
       $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
-      console.log($scope.randomAuditions)
       $scope.close = function() {
         $modalInstance.dismiss();
       };

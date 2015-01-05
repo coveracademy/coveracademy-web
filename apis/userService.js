@@ -1,16 +1,15 @@
-var User            = require('../models/models').User,
+var User              = require('../models/models').User,
     VerificationToken = require('../models/models').VerificationToken,
-    Bookshelf       = require('../models/models').Bookshelf,
-    modelUtils      = require('../utils/modelUtils'),
-    encryptUtils    = require('../utils/encryptUtils'),
-    slug            = require('../utils/slug'),
-    mailService     = require('./mailService'),
-    messages        = require('./messages'),
-    uuid            = require('node-uuid'),
-    moment          = require('moment'),
-    Promise         = require('bluebird'),
-    _               = require('underscore'),
-    $               = this;
+    Bookshelf         = require('../models/models').Bookshelf,
+    entities          = require('../utils/entities'),
+    slug              = require('../utils/slug'),
+    mailService       = require('./mailService'),
+    messages          = require('./messages'),
+    uuid              = require('node-uuid'),
+    moment            = require('moment'),
+    Promise           = require('bluebird'),
+    _                 = require('underscore'),
+    $                 = this;
 
 exports.forge = function(userData) {
   return User.forge(userData);
@@ -72,7 +71,7 @@ exports.create = function(userData) {
       reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
       return;
     }
-    var user = $.forge(modelUtils.filterAttributes(userData, 'UserCreationAttributes'));
+    var user = $.forge(entities.filterAttributes(userData, 'UserCreationAttributes'));
     user.set('permission', 'user');
     if(!userData.facebook_email || user.get('email') === userData.facebook_email) {
       user.set('verified', 1);
@@ -111,7 +110,7 @@ exports.update = function(user, edited) {
         if(userFetched.get('email') !== edited.get('email')) {
           edited.set('verified', 0);
         }
-        edited.save(edited.pick(modelUtils.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
+        edited.save(edited.pick(entities.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
           resolve(userEdited);
           if(userEdited.get('verified') === 0) {
             $.sendVerificationEmail(userEdited).catch(function(err) {

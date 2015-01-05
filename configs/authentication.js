@@ -2,7 +2,6 @@ var YoutubeStrategy  = require('passport-youtube-v3').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
     userService      = require('../apis/userService'),
     mailService      = require('../apis/mailService'),
-    fileUtils        = require('../utils/fileUtils'),
     settings         = require('./settings'),
     messages         = require('../apis/messages'),
     _                = require('underscore');

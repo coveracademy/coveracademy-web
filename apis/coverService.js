@@ -6,7 +6,7 @@ var Cover          = require('../models/models').Cover,
     Bookshelf      = require('../models/models').Bookshelf,
     settings       = require('../configs/settings'),
     slug           = require('../utils/slug'),
-    modelUtils     = require('../utils/modelUtils'),
+    entities       = require('../utils/entities'),
     lastfm         = require('./third/lastfm'),
     youtube        = require('./third/youtube'),
     wilsonScore    = require('decay').wilsonScore(),
@@ -542,7 +542,7 @@ exports.saveMusic = function(musicData) {
   musicData.artist = _.str.trim(musicData.artist);
   musicData.title = _.str.trim(musicData.title);
   return $.discoverArtist(musicData.artist).then(function(artist) {
-    var music = Music.forge(modelUtils.filterAttributes(musicData, 'MusicEditableAttributes'));
+    var music = Music.forge(entities.filterAttributes(musicData, 'MusicEditableAttributes'));
     music.set('id', musicData.id);
     music.set('artist_id', artist.id);
     return music.save();

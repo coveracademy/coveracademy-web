@@ -29,4 +29,3 @@ exports.slugify = function(str) {
 exports.isValidUsername = function(username) {
   return username && usernameRegexp.test(username);
 }
-

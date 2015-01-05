@@ -22,7 +22,7 @@ angular
   SITE_NAME: 'Cover Academy',
   SITE_URL: 'http://www.coveracademy.com',
   LOGO_URL: 'http://www.coveracademy.com/img/logos/pretty-logo.jpg',
-  USER_COOKIE: 'CoverAcademy.user'
+  USER_COOKIE: 'coverAcademy.user'
 })
 .constant('authEvents', {
   USER_REGISTERED: 'userRegistered',
@@ -63,12 +63,13 @@ angular
 
   // Interceptors
   $httpProvider.interceptors.push('authHttpInterceptor');
-  // $httpProvider.interceptors.push('ngProgressHttpInterceptor');
 
+  // Settings
   $locationProvider.html5Mode(true);
   $locationProvider.hashPrefix('!');
   $uiViewScrollProvider.useAnchorScroll();
   $urlRouterProvider.otherwise('/');
+
   // Routes
   $stateProvider
     .state('root', {
@@ -287,12 +288,6 @@ angular
         }
       }
     })
-    .state('app.contestGuideline', {
-      url: '/contest/guideline',
-      templateUrl: '/app/partials/contest-guideline.html',
-      controller: 'guidelineController',
-      accessLevel: accessLevel.PUBLIC
-    })
     .state('app.joinContest', {
       url: '/contest/:id/:slug/join',
       templateUrl: '/app/partials/join-contest.html',
@@ -353,6 +348,12 @@ angular
         }
       }
     })
+    .state('app.contestGuideline', {
+      url: '/contest/guideline',
+      templateUrl: '/app/partials/contest-guideline.html',
+      controller: 'guidelineController',
+      accessLevel: accessLevel.PUBLIC
+    })
     .state('app.privacyPolicy', {
       url: '/privacy',
       templateUrl: '/app/partials/privacy-policy.html',
@@ -369,6 +370,7 @@ angular
     .state('app.404', {
       templateUrl: '/app/partials/errors/404.html',
       controller: 'errorController',
+      accessLevel: accessLevel.PUBLIC,
       resolve: {
         errorCode: function() {
           return 404;
@@ -378,6 +380,7 @@ angular
     .state('app.500', {
       templateUrl: '/app/partials/errors/500.html',
       controller: 'errorController',
+      accessLevel: accessLevel.PUBLIC,
       resolve: {
         errorCode: function() {
           return 500;
@@ -389,12 +392,14 @@ angular
   // Angular-Translate events
   $rootScope.$on('$translateChangeSuccess', function() {
     if($translate.use() === 'en') {
+      // Change modules locale to 'en'
       amMoment.changeLocale('en');
       paginationConfig.firstText = 'First';
       paginationConfig.lastText = 'Last';
       paginationConfig.previousText = 'Previous';
       paginationConfig.nextText = 'Next';
     } else {
+      // Change modules locale to default
       amMoment.changeLocale('pt-br');
       paginationConfig.firstText = 'Primeira';
       paginationConfig.lastText = 'Última';
