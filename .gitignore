@@ -1,6 +1,6 @@
-npm-debug.log
-newrelic_agent.log
-config.properties
+/npm-debug.log
+/newrelic_agent.log
+/config.properties
 node_modules/
 tmp/
 public/img/users/
