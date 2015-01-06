@@ -3,6 +3,7 @@ var User              = require('../models/models').User,
     Bookshelf         = require('../models/models').Bookshelf,
     entities          = require('../utils/entities'),
     slug              = require('../utils/slug'),
+    logger            = require('../configs/logger'),
     mailService       = require('./mailService'),
     messages          = require('./messages'),
     uuid              = require('node-uuid'),
@@ -79,7 +80,7 @@ exports.create = function(userData) {
     user.save().then(function(userSaved) {
       resolve(userSaved);
       mailService.userRegistration(userSaved).catch(function(err) {
-        console.log('Error sending "user registration" email to user ' + userSaved.id + ': ' + err);
+        logger.error('Error sending "user registration" email to user %d: ' + err, userSaved.id);
       });
     }).catch(function(err) {
       reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account', err));
@@ -114,7 +115,7 @@ exports.update = function(user, edited) {
           resolve(userEdited);
           if(userEdited.get('verified') === 0) {
             $.sendVerificationEmail(userEdited).catch(function(err) {
-              console.log('Error sending "user verification" email to user ' + userEdited.id + ': ' + err);
+              logger.error('Error sending "user verification" email to user %d: ' + err, userEdited.id);
             });
           }
         }).catch(function(err) {

@@ -34,7 +34,7 @@
     "passport": "~0.2.1",
     "passport-facebook": "~1.0.3",
     "passport-google-oauth": "~0.1.5",
-    "passport-youtube-v3": "*",
+    "passport-youtube-v3": "~0.0.2",
     "passport-twitter": "~1.0.2",
     "prerender-node": "~1.1.0",
     "properties": "1.2.1",
@@ -44,6 +44,7 @@
     "slug": "~0.4.2",
     "underscore": "~1.6.0",
     "underscore.string": "~2.3.3",
+    "winston": "0.8.3",
     "youtube-api": "~0.3.0"
   }
 }

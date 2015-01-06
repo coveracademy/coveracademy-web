@@ -1,6 +1,7 @@
 var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
     messages        = require('../apis/messages'),
+    logger          = require('../configs/logger'),
     authorization   = require('../utils/authorization'),
     isAuthenticated = authorization.isAuthenticated,
     isTemporaryUser = authorization.isTemporaryUser;
@@ -23,7 +24,7 @@ module.exports = function(router, app) {
     mailService.receive(name, email, subject, message).then(function() {
       res.send(200);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -36,7 +37,7 @@ module.exports = function(router, app) {
     }).then(function(refreshedUser) {
       res.json(refreshedUser);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -48,7 +49,7 @@ module.exports = function(router, app) {
     }).then(function(refreshedUser) {
       res.json(refreshedUser);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -58,7 +59,7 @@ module.exports = function(router, app) {
     userService.update(req.user, userService.forge(user)).then(function(userSaved) {
       res.json(userSaved);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -73,7 +74,7 @@ module.exports = function(router, app) {
     queryPromise(query).then(function(user) {
       res.json(user);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -83,7 +84,7 @@ module.exports = function(router, app) {
     userService.resendVerificationEmail(user).then(function() {
       res.json({});
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });

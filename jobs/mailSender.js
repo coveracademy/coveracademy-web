@@ -1,12 +1,13 @@
-var restify        = require('restify'),
-    nunjucks       = require('nunjucks'),
-    path           = require('path'),
-    Promise        = require('bluebird'),
-    settings       = require('../configs/settings'),
+var settings       = require('../configs/settings'),
+    logger         = require('../configs/logger'),
     mailService    = require('../apis/mailService'),
     contestService = require('../apis/contestService'),
     userService    = require('../apis/userService'),
-    contestService = require('../apis/contestService');
+    contestService = require('../apis/contestService'),
+    restify        = require('restify'),
+    nunjucks       = require('nunjucks'),
+    path           = require('path'),
+    Promise        = require('bluebird');
 
 var server = restify.createServer({
   name: 'mailSender'
@@ -36,7 +37,7 @@ server.post('/user/registration', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "user registration" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "user registration" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
@@ -49,7 +50,7 @@ server.post('/user/verification', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "user verification" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "user verification" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
@@ -62,7 +63,7 @@ server.post('/audition/submit', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "audition submit" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "audition submit" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
@@ -76,7 +77,7 @@ server.post('/audition/approved', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "audition approved" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "audition approved" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
@@ -89,7 +90,7 @@ server.post('/audition/disapproved', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "audition disapproved" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "audition disapproved" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
@@ -109,7 +110,7 @@ server.post('/contest/start', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "contest start" email: ' + err);
+    logger.error('Error sending "contest start" email: ' + err);
     res.send(500);
   }).bind({});
 });
@@ -122,11 +123,11 @@ server.post('/contest/winner', function(req, res, next) {
       });
     });
   }).catch(function(err) {
-    console.log('Error sending "contest winner" email to user ' + req.body.user + ': ' + err);
+    logger.error('Error sending "contest winner" email to user %d: ' + err, req.body.user);
     res.send(500);
   });
 });
 
 server.listen(settings.mailPort, function() {
-  console.log('%s listening at %s', server.name, server.url);
+  logger.info('%s listening at %s', server.name, server.url);
 });

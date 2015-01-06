@@ -1,8 +1,9 @@
-var nunjucks = require('nunjucks'),
+var logger   = require('./logger'),
+    nunjucks = require('nunjucks'),
     _        = require('underscore');
 
 exports.configure = function(app) {
-  console.log('Configuring view engine');
+  logger.info('Configuring view engine');
 
   app.engine('html', nunjucks.render);
   var env = nunjucks.configure(app.get('views'), {

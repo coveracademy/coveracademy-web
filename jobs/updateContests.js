@@ -1,27 +1,28 @@
 var contestService = require('../apis/contestService'),
+    logger         = require('../configs/logger'),
     later          = require('later');
 
 var startContests = function() {
-  console.log('Starting contests');
+  logger.info('Starting contests');
   contestService.listContestsToStart().then(function(contests) {
     contests.forEach(function(contest) {
       contestService.startContest(contest).then(function(contest) {
-        console.log('Contest ' + contest.id + ' started successfully');
+        logger.info('Contest %d started successfully', contest.id);
       }).catch(function(err) {
-        console.log('Error starting contest ' + contest.id + ': ' + err.message);
+        logger.error('Error starting contest %d: ' + err.message, contest.id);
       });
     });
   });
 }
 
 var finishContests = function() {
-  console.log('Finishing contests');
+  logger.info('Finishing contests');
   contestService.listContestsToFinish().then(function(contests) {
     contests.forEach(function(contest) {
       contestService.finishContest(contest).then(function() {
-        console.log('Contest ' + contest.id + ' was finished');
+        logger.info('Contest ' + contest.id + ' was finished');
       }).catch(function(err) {
-        console.log('Error finishing contest ' + contest.id + ': ' + err.message);
+        logger.error('Error finishing contest %d: ' + err.message, contest.id);
       });
     });
   });

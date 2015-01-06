@@ -5,6 +5,7 @@ var Cover          = require('../models/models').Cover,
     Music          = require('../models/models').Music,
     Bookshelf      = require('../models/models').Bookshelf,
     settings       = require('../configs/settings'),
+    logger         = require('../configs/logger'),
     slug           = require('../utils/slug'),
     entities       = require('../utils/entities'),
     lastfm         = require('./third/lastfm'),
@@ -378,7 +379,7 @@ exports.addArtist = function(name) {
           artist.save();
         }
       }).catch(function(err) {
-        console.log('Error fetching ' + name + ' infos from last.fm api: ', err);
+        logger.error('Error fetching %s infos from last.fm api: ' + err, name);
       });
     }).catch(function(err) {
       reject(err);
@@ -471,7 +472,7 @@ exports.addMusic = function(artist, title) {
         music.set('large_thumbnail', musicInfos.thumbnails.large);
         music.save();
       }).catch(function(err) {
-        console.log('Error fetching ' + artist.get('name') + ' - ' + title + ' infos from last.fm api: ', err);
+        logger.error('Error fetching %s - %s infos from last.fm api: ' + err, artist.get('name'), title);
       });
     });
   });

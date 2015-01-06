@@ -1,5 +1,6 @@
 /npm-debug.log
 /newrelic_agent.log
+/cover-academy.log
 /config.properties
 node_modules/
 tmp/

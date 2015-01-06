@@ -1,5 +1,7 @@
+var logger = require('./logger');
+
 exports.configure = function(express, app, passport) {
-  console.log('Configuring routes');
+  logger.info('Configuring routes');
 
   require('../routes/artist')(express.Router(), app);
   require('../routes/authentication')(express.Router(), app, passport);

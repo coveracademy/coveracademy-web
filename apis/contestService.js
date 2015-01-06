@@ -4,6 +4,7 @@ var Contest     = require('../models/models').Contest,
     User        = require('../models/models').User,
     Bookshelf   = require('../models/models').Bookshelf,
     settings    = require('../configs/settings'),
+    logger      = require('../configs/logger'),
     slug        = require('../utils/slug'),
     entities    = require('../utils/entities'),
     mailService = require('./mailService'),
@@ -152,7 +153,7 @@ exports.startContest = function(contest) {
           contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
             resolve(contest);
             mailService.contestStart(contest).catch(function(err) {
-              console.log('Error sending "contest start" email: ' + err.message);
+              logger.error('Error sending "contest start" email: ' + err.message);
             });
           }).catch(function(err) {
             reject(messages.unexpectedError('Error starting the contest', err));
@@ -205,7 +206,7 @@ exports.submitAudition = function(user, contest, auditionData) {
         audition.save().then(function(auditionSaved) {
           resolve(auditionSaved);
           mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
-            console.log('Error sending "audition submit" email to user ' + user.id + ': ' + err.message);
+            logger.error('Error sending "audition submit" email to user %d: ' + err.message, user.id);
           });
         }).catch(function(err) {
           if(err.code === 'ER_DUP_ENTRY') {
@@ -232,7 +233,7 @@ exports.approveAudition = function(audition) {
         return $.startContest(contest);
       });
       mailService.auditionApproved(auditionSaved).catch(function(err) {
-        console.log('Error sending "audition approved" email to audition ' + auditionSaved.id + ' owner: ' + err.message);
+        logger.error('Error sending "audition approved" email to audition %d owner: ' + err.message, auditionSaved.id);
       });
     }).catch(function(err) {
       reject(messages.unexpectedError('Error approving audition', err));
@@ -252,7 +253,7 @@ exports.disapproveAudition = function(audition, reason) {
       return auditionLoaded.destroy();
     }).then(function() {
       mailService.auditionDisapproved(this.user, this.contest, reason).catch(function(err) {
-        console.log('Error sending "audition disapproved" email to user ' + this.user.id + ': ' + err.message);
+        logger.error('Error sending "audition disapproved" email to user %d: ' + err.message, this.user.id);
       });
       resolve();
     }).catch(function(err) {

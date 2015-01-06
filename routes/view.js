@@ -3,6 +3,7 @@ var coverService    = require('../apis/coverService'),
     userService     = require('../apis/userService'),
     constants       = require('../apis/constants'),
     messages        = require('../apis/messages'),
+    logger          = require('../configs/logger'),
     math            = require('../utils/math'),
     authorization   = require('../utils/authorization'),
     isAdmin         = authorization.isAdmin,
@@ -24,7 +25,7 @@ module.exports = function(router, app) {
         potentialCovers: potentialCovers
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -36,7 +37,7 @@ module.exports = function(router, app) {
         auditionsToReview: auditionsToReview
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -47,7 +48,7 @@ module.exports = function(router, app) {
         musicGenres: musicGenres
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -65,7 +66,7 @@ module.exports = function(router, app) {
           contests: contests
         });
       }).catch(function(err) {
-        console.log(err);
+        logger.error(err);
         messages.respondWithError(err, res);
       });
     } else {
@@ -76,7 +77,7 @@ module.exports = function(router, app) {
           messages.respondWithRedirection('contests', {}, res);
         }
       }).catch(function(err) {
-        console.log(err);
+        logger.error(err);
         messages.respondWithError(err, res);
       });
     }
@@ -103,7 +104,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -130,7 +131,7 @@ module.exports = function(router, app) {
         bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     }).bind();
   });
@@ -156,7 +157,7 @@ module.exports = function(router, app) {
           artistsOfCovers: artistsOfCovers
         });
       }).catch(function(err) {
-        console.log(err);
+        logger.error(err);
         messages.respondWithError(err, res);
       }).bind({});
     }
@@ -192,7 +193,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -209,7 +210,7 @@ module.exports = function(router, app) {
         totalArtists: totalArtists
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     }).bind({});
   });
@@ -234,7 +235,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -259,7 +260,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -288,7 +289,7 @@ module.exports = function(router, app) {
           });
         }
       }).catch(function(err) {
-        console.log(err);
+        logger.error(err);
         messages.respondWithError(err, res);
       });
     }
@@ -309,7 +310,7 @@ module.exports = function(router, app) {
         coversOfMusics: coversOfMusics
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     }).bind({});
   });
@@ -358,7 +359,7 @@ module.exports = function(router, app) {
         }).bind({});
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -381,7 +382,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -397,7 +398,7 @@ module.exports = function(router, app) {
         })
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -437,7 +438,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -456,7 +457,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -477,7 +478,7 @@ module.exports = function(router, app) {
         });
       }
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -496,7 +497,7 @@ module.exports = function(router, app) {
           });
         }
       }).catch(function(err) {
-        console.log(err);
+        logger.error(err);
         messages.respondWithMovedPermanently('index', {}, res);
       });
     }

@@ -1,7 +1,8 @@
-var settings = require('./settings');
+var settings = require('./settings'),
+    logger   = require('./logger');
 
 exports.configure = function(app) {
-  console.log('Configuring middlewares');
+  logger.info('Configuring middlewares');
 
   // Production only
   if('prod' == app.get('env')) {

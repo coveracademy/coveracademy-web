@@ -1,12 +1,14 @@
-var properties = require('./properties');
+var properties = require('./properties'),
+    logger     = require('./logger'),
+    path       = require('path'),
+    config     = properties.load();
+
 try {
-  var config = properties.load(),
-      path = require('path'),
-      _debug = config.app.debug && config.app.debug === 'true' ? true : false,
-      _nodeEnv = config.app.env || 'dev',
-      _nodeIP = config.app.ip || '127.0.0.1',
-      _nodePort = config.app.port || 3000,
-      _mailPort = config.app.mailPort || 5000,
+  var _debug = properties.getValue(config, 'app.debug', false),
+      _nodeEnv = properties.getValue(config, 'app.env', 'dev'),
+      _nodeIP = properties.getValue(config, 'app.ip', '127.0.0.1'),
+      _nodePort = properties.getValue(config, 'app.port', 3000),
+      _mailPort = properties.getValue(config, 'app.mailPort', 5000),
       _publicPath = path.join(__dirname, '../public'),
       _viewsPath = path.join(__dirname, '../views'),
       _tmpUploadPath = path.join(__dirname, '../tmp'),
@@ -47,28 +49,28 @@ try {
         apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
       },
       _database = {
-        dialect: config.database.dialect || 'mysql',
-        host: config.database.host || 'localhost',
-        port: config.database.port || 3306,
-        user: config.database.user || 'root',
-        password: config.database.password,
-        schema: config.database.schema || 'cover_academy',
-        charset: config.database.charset || 'utf8'
+        dialect: properties.getValue(config, 'database.dialect', 'mysql'),
+        host: properties.getValue(config, 'database.host', 'localhost'),
+        port: properties.getValue(config, 'database.port', 3306),
+        user: properties.getValue(config, 'database.user', 'root'),
+        password: properties.getValue(config, 'database.password'),
+        schema: properties.getValue(config, 'database.schema', 'cover_academy'),
+        charset: properties.getValue(config, 'database.charset', 'utf8')
       },
       _redis = {
-        host: config.redis.host || 'localhost',
-        port: config.redis.port || '6379',
-        password: config.redis.password
+        host: properties.getValue(config, 'redis.host', 'localhost'),
+        port: properties.getValue(config, 'redis.port', 6379),
+        password: properties.getValue(config, 'redis.password')
       },
       _envs = {
         prod: {
-          prerenderUrl: config.prerender.url || "http://localhost:9000"
+          prerenderUrl: properties.getValue(config, 'prerender.url', 'http://localhost:9000')
         }
       };
 
-  console.log('Using ' + _nodeEnv + ' environment settings');
+  logger.info('Using %s environment settings', _nodeEnv);
   if(_debug === true) {
-    console.log('Debug mode is ON');
+    logger.info('Debug mode is ON');
   }
 
   exports.debug = _debug;
@@ -100,5 +102,5 @@ try {
     exports[property] = env[property];
   }
 } catch(err) {
-  console.log(err);
+  logger.error('Error loading settings: ' + err);
 }

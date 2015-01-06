@@ -2,7 +2,7 @@ require('newrelic');
 
 var express        = require('express'),
     favicon        = require('serve-favicon'),
-    logger         = require('morgan'),
+    morgan         = require('morgan'),
     flash          = require('connect-flash'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
@@ -13,7 +13,8 @@ var express        = require('express'),
     routes         = require('./configs/routes'),
     middlewares    = require('./configs/middlewares'),
     authentication = require('./configs/authentication'),
-    settings       = require('./configs/settings');
+    settings       = require('./configs/settings'),
+    logger         = require('./configs/logger');
 
 var app = express();
 
@@ -23,7 +24,7 @@ app.set('views', settings.viewsPath);
 app.set('public', settings.publicPath);
 
 app.use(favicon(settings.publicPath + '/img/favicon.ico'));
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
@@ -47,5 +48,5 @@ authentication.configure(app, passport);
 routes.configure(express, app, passport);
 
 var server = app.listen(app.get('port'), function() {
-  console.log('Cover Academy server is listening on port ' + server.address().port);
+  logger.info('Cover Academy server is listening on port %s', server.address().port);
 });

@@ -1,5 +1,6 @@
 var contestService  = require('../apis/contestService'),
     constants       = require('../apis/constants'),
+    logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     isAdmin         = require('../utils/authorization').isAdmin,
     messages        = require('../apis/messages'),
@@ -14,7 +15,7 @@ module.exports = function(router, app) {
     contestService.approveAudition(audition).then(function() {
       res.json({});
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -25,7 +26,7 @@ module.exports = function(router, app) {
     contestService.disapproveAudition(audition, reason).then(function() {
       res.json({});
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -38,7 +39,7 @@ module.exports = function(router, app) {
     contestService.submitAudition(user, contest, auditionData).then(function(audition) {
       res.json(audition);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -48,7 +49,7 @@ module.exports = function(router, app) {
     contestService.vote(req.user, audition).then(function(userVote) {
       res.json(userVote);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -58,7 +59,7 @@ module.exports = function(router, app) {
     contestService.removeVote(req.user, audition).then(function(userVote) {
       res.json(userVote);
     }).catch(function(err) {
-      console.log(err)
+      logger.error(err)
       messages.respondWithError(err, res);
     });
   });
@@ -76,7 +77,7 @@ module.exports = function(router, app) {
         totalUserVotes: totalUserVotes
       });
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     }).bind({});
   });
@@ -86,7 +87,7 @@ module.exports = function(router, app) {
     contestService.isContestant(req.user, contest).then(function(isContestant) {
       res.json(isContestant);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -96,7 +97,7 @@ module.exports = function(router, app) {
     contestService.getUserAudition(req.user, contest).then(function(userAudition) {
       res.json(userAudition ? userAudition : {});
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -107,7 +108,7 @@ module.exports = function(router, app) {
     contestService.getAuditionVideoInfos(url).then(function(videoInfos) {
       res.json(videoInfos);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -118,7 +119,7 @@ module.exports = function(router, app) {
     contestService.bestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
       res.json(auditions);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -129,7 +130,7 @@ module.exports = function(router, app) {
     contestService.latestAuditions(contest, page, constants.NUMBER_OF_AUDITIONS_IN_LIST).then(function(auditions) {
       res.json(auditions);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });
@@ -140,7 +141,7 @@ module.exports = function(router, app) {
     contestService.randomAuditions(contest, size).then(function(auditions) {
       res.json(auditions);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       messages.respondWithError(err, res);
     });
   });

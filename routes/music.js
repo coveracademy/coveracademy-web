@@ -1,5 +1,6 @@
 var coverService = require('../apis/coverService'),
     constants    = require('../apis/constants'),
+    logger       = require('../configs/logger'),
     isAdmin      = require('../utils/authorization').isAdmin,
     Music        = require('../models/models').Music;
 
@@ -10,7 +11,7 @@ module.exports = function(router, app) {
     coverService.saveMusic(musicData).then(function(music) {
       res.json(music);
     }).catch(function(err) {
-      console.log(err);
+      logger.error(err);
       res.send(500);
     });
   });

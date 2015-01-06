@@ -1,6 +1,6 @@
-var	Mailgun      = require('mailgun-js'),
+var settings     = require('../configs/settings'),
+    Mailgun      = require('mailgun-js'),
     Promise      = require('bluebird'),
-    settings     = require('../configs/settings'),
     restify      = require('restify'),
     domain       = settings.domain,
     apiKey       = settings.email.apiKey,

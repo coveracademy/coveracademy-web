@@ -1,12 +1,14 @@
-var YoutubeStrategy  = require('passport-youtube-v3').Strategy,
-    FacebookStrategy = require('passport-facebook').Strategy,
-    userService      = require('../apis/userService'),
+var userService      = require('../apis/userService'),
     mailService      = require('../apis/mailService'),
-    settings         = require('./settings'),
     messages         = require('../apis/messages'),
+    settings         = require('./settings'),
+    logger           = require('./logger'),
+    YoutubeStrategy  = require('passport-youtube-v3').Strategy,
+    FacebookStrategy = require('passport-facebook').Strategy,
     _                = require('underscore');
 
 exports.configure = function(app, passport) {
+  logger.info('Configuring authentication');
 
   var CustomDone = function(originalDone) {
     this.done = function(err, obj) {
