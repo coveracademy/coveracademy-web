@@ -5,15 +5,15 @@
   <h2>Mostre o seu talento para o mundo e concorra a prêmios</h2>
   <h2>Participe das nossas competições online de música</h2>
   <div ng-if="hasUnfinishedContests()" class="padding10">
-    <a ui-sref="app.contest({id: getLatestUnfinishedContest().id, slug: getLatestUnfinishedContest().slug})" class="btn btn-primary btn-lg">Ver a competição atual</a>
+    <a ui-sref="app.contest({id: getLatestUnfinishedContest().id, slug: getLatestUnfinishedContest().slug})" class="btn btn-primary btn-lg">Veja a competição atual</a>
     <h3>ou</h3>
     <h3>
-      <a ui-sref="app.contests()">Ver todas as competições</a>
+      <a ui-sref="app.contests()">Veja todas as competições</a>
     </h3>
   </div>
   <div ng-if="!hasUnfinishedContests()" class="padding10">
     <h2>
-      <a ui-sref="app.contests()" class="btn btn-primary btn-lg">Ver todas as competições</a>
+      <a ui-sref="app.contests()" class="btn btn-primary btn-lg">Veja todas as competições</a>
     </h2>
   </div>
 </div>

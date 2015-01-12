@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt" ng-app="coverAcademy" ng-controller="applicationController">
   <head>
-    <!-- Chartbeat -->
-    <!-- <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script> -->
     <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="fragment" content="!">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <meta name="description" content="{{ metaDescription() }}">
     <meta name="keywords" content="{{ metaKeywords() }}">
     <meta name="author" content="Sandro Simas">
-
+    <meta name="prerender-status-code" content="{{ statusCode }}">
+    <meta ng-if="isRedirectionStatusCode()" name="prerender-header" content="Location: {{ pageUrl() }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ siteName() }}">
     <meta property="og:url" content="{{ pageUrl() }}">
@@ -226,16 +225,5 @@
     <script src="/app/controllers/userControllers.js"></script>
     <script src="/app/app.js"></script>
     <script src="/js/index.js"></script>
-    <script type="text/javascript">
-      // UMRUM
-      !function(a, b, c, d) {
-        b._mrm = b._mrm||{},
-        b._mrm.hostId = a,
-        d = c.createElement("script"),
-        d.async = 1,
-        d.src = "//umrum.io/dist/umrum-client.js"
-        c.body.appendChild(d);
-      }("5422c6924166c5e6491b023f", window, document);
-    </script>
   </body>
 </html>

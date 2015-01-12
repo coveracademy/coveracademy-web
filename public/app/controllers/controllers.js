@@ -1,6 +1,6 @@
 angular
 .module('coverAcademy.controllers', [])
-.controller('applicationController', ['$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', function($scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService) {
+.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'statusCodeService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, statusCodeService) {
   $scope.locale = $translate.use;
 
   // SEO
@@ -11,31 +11,13 @@ angular
   $scope.metaKeywords = seoService.getKeywords;
   $scope.metaImage = seoService.getImage;
 
+  // Authentication
   $scope.isAuthenticated = authenticationService.isAuthenticated;
   $scope.user = authenticationService.getUser;
   $scope.login = authenticationService.login;
   $scope.logout = authenticationService.logout;
 
-  $scope.$on(authEvents.NOT_AUTHORIZED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
-    // $translate('alerts.not_authorized').then(function(translation) {
-    //   alertService.alert('warning', translation);
-    // });
-  });
-  $scope.$on(authEvents.NOT_AUTHENTICATED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
-    // $translate('alerts.not_authenticated').then(function(translation) {
-    //   alertService.alert('warning', translation);
-    // });
-  });
-  $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
-    authenticationService.login();
-  });
-  $scope.$on(authEvents.LOGIN_SUCCESS, function() {
-    // $translate('alerts.login_success').then(function(translation) {
-    //   alertService.alert('success', translation);
-    // });
-  });
+  // Events
   $scope.$on(authEvents.LOGIN_FAILED, function(event, errorKey) {
     if(errorKey && errorKey.length > 0) {
       translationService.translateError(errorKey).then(function(translation) {
@@ -50,13 +32,11 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $state.go($state.current, $stateParams, {reload: true});
   });
-  $scope.$on(authEvents.USER_REGISTERED, function() {
-
-  });
-  $scope.$on(authEvents.FAIL_REGISTERING_USER, function() {
-
+  $rootScope.$on('$stateChangeSuccess', function() {
+    $scope.statusCode = statusCodeService.get();
   });
 
+  // Utilities
   $scope.isLocale = function(locale) {
     return $translate.use() === locale;
   };
@@ -73,9 +53,9 @@ angular
   $scope.withFooterMargin = function() {
     return $state.current.name !== 'app.index';
   };
-}])
-.controller('rootController', ['$scope', '$state', '$translate', function($scope, $state, $translate) {
-  $state.go('app.index', {locale: $translate.use()});
+  $scope.isRedirectionStatusCode = function() {
+    return $scope.statusCode === 301;
+  };
 }])
 .controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
   $scope.searchQuery = '';

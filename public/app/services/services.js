@@ -1,5 +1,16 @@
 angular
 .module('coverAcademy.services', [])
+.service('statusCodeService', [function() {
+  var statusCode = 200;
+  this.get = function() {
+    var current = statusCode;
+    statusCode = 200;
+    return current;
+  };
+  this.set = function(code) {
+    statusCode = code;
+  };
+}])
 .service('seoService', ['$location', 'constants', function($location, constants) {
   var title = null;
   var description = null;
