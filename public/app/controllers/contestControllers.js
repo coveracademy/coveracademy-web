@@ -387,12 +387,15 @@ angular
         return contestService.randomAuditions($scope.contest, 6).then(function(response) {
           return response.data;
         });
+      },
+      locale: function() {
+        return $scope.locale();
       }
     },
-    controller: function($scope, $modalInstance, remainingVotes, randomAuditions) {
+    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
       $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
-      $scope.locale = $scope.locale();
+      $scope.locale = locale;
       $scope.close = function() {
         $modalInstance.dismiss();
       };
