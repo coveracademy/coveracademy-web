@@ -392,6 +392,7 @@ angular
     controller: function($scope, $modalInstance, remainingVotes, randomAuditions) {
       $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
+      $scope.locale = $scope.locale();
       $scope.close = function() {
         $modalInstance.dismiss();
       };
