@@ -18,6 +18,9 @@ angular
   $scope.logout = authenticationService.logout;
 
   // Events
+  $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
+    authenticationService.login();
+  });
   $scope.$on(authEvents.LOGIN_FAILED, function(event, errorKey) {
     if(errorKey && errorKey.length > 0) {
       translationService.translateError(errorKey).then(function(translation) {
