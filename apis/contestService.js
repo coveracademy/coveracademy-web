@@ -356,7 +356,7 @@ exports.bestAuditions = function(contest, page, pageSize) {
 
 exports.randomAuditions = function(contest, size) {
   return $.latestAuditions(contest).then(function(auditions) {
-    if(size < auditions.length) {
+    if(size > auditions.length) {
       size = auditions.length;
     }
     var randomAuditions = Audition.collection();

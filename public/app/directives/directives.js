@@ -11,7 +11,8 @@ angular
       thumbSize: '@',
       border: '@',
       audition: '=ngModel',
-      scoreByAudition: '&'
+      scoreByAudition: '&',
+      auditionClick: '&'
     },
     controller: ['$scope', function($scope) {
       $scope.isThumbSize = function(size) {
