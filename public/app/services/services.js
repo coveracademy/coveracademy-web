@@ -1,14 +1,50 @@
 angular
 .module('coverAcademy.services', [])
-.service('statusCodeService', [function() {
-  var statusCode = 200;
-  this.get = function() {
-    var current = statusCode;
-    statusCode = 200;
-    return current;
+.service('stateService', ['$state', function($state) {
+  var latestState = undefined;
+  var latestStatusCode = undefined;
+  var State = function(name, params, opts) {
+    this.stateName = name;
+    this.stateParams = params;
+    this.stateOpts = opts;
+    this.statusCode = 200;
+
+    this.withStatusCode = function(code) {
+      this.statusCode = code;
+      return this;
+    };
+    this.go = function() {
+      latestStatusCode = this.statusCode;
+      latestState = this;
+      return $state.go(this.stateName, this.stateParams, this.stateOpts);
+    };
+    this.getStatusCode = function() {
+      return statusCode;
+    };
+    this.getStateName = function() {
+      return stateName;
+    };
+    this.getStateParams = function() {
+      return stateParams;
+    };
+    this.getStateOpts = function() {
+      return stateOpts;
+    };
   };
-  this.set = function(code) {
-    statusCode = code;
+
+  this.newState = function(name, params, opts) {
+    return new State(name, params, opts);
+  };
+  this.getLatestState = function() {
+    return latestState;
+  };
+  this.getLatestStatusCode = function() {
+    return latestStatusCode;
+  };
+  this.releaseLatestStatusCode = function() {
+    var latest = latestStatusCode;
+    latestStatusCode = undefined;
+    return latest;
   };
 }])
 .service('seoService', ['$location', 'constants', function($location, constants) {

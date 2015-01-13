@@ -49,7 +49,7 @@ angular
 .controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;
   $scope.auditionsToReview = backendResponse.data.auditionsToReview;
-  $translate('seo.title.contestsAdmin').then(function(translation) {
+  $translate('seo.title.admin').then(function(translation) {
     seoService.setTitle(translation);
   });
 

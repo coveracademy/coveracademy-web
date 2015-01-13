@@ -9,7 +9,7 @@
     <meta name="description" content="{{ metaDescription() }}">
     <meta name="keywords" content="{{ metaKeywords() }}">
     <meta name="author" content="Sandro Simas">
-    <meta name="prerender-status-code" content="{{ statusCode }}">
+    <meta ng-if="statusCode" name="prerender-status-code" content="{{ statusCode }}">
     <meta ng-if="isRedirectionStatusCode()" name="prerender-header" content="Location: {{ pageUrl() }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ siteName() }}">

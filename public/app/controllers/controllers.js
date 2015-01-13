@@ -1,6 +1,6 @@
 angular
 .module('coverAcademy.controllers', [])
-.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'statusCodeService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, statusCodeService) {
+.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
   $scope.locale = $translate.use;
 
   // SEO
@@ -42,7 +42,7 @@ angular
     $state.go($state.current, $stateParams, {reload: true});
   });
   $rootScope.$on('$stateChangeSuccess', function() {
-    $scope.statusCode = statusCodeService.get();
+    $scope.statusCode = stateService.releaseLatestStatusCode();
   });
 
   // Utilities

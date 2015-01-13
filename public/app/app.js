@@ -68,17 +68,19 @@ angular
   $locationProvider.html5Mode(true);
   $locationProvider.hashPrefix('!');
   $uiViewScrollProvider.useAnchorScroll();
-  $urlRouterProvider.otherwise('/');
 
-  // Routes
+  // States
   $stateProvider
+    // Basic states
     .state('root', {
       url: '/',
+      accessLevel: accessLevel.PUBLIC
     })
     .state('app', {
       url: '/:locale',
       abstract: true,
-      template: '<ui-view autoscroll="true"/>'
+      template: '<ui-view autoscroll="true"/>',
+      accessLevel: accessLevel.PUBLIC
     })
     // Admin level states
     .state('app.contestsAdmin', {
@@ -143,11 +145,6 @@ angular
         }
       }
     })
-    // .state('app.about', {
-    //   url: '/about',
-    //   templateUrl: '/app/partials/about.html',
-    //   accessLevel: accessLevel.PUBLIC
-    // })
     .state('app.contact', {
       url: '/contact',
       templateUrl: '/app/partials/contact.html',
@@ -384,9 +381,13 @@ angular
           return 500;
         }
       }
+    })
+    .state('otherwise', {
+      url: '*path',
+      accessLevel: accessLevel.PUBLIC
     });
 }])
-.run(['$rootScope', '$state', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'redirections', 'authenticationService', 'seoService', 'statusCodeService', function($rootScope, $state, $translate, $languages, amMoment, paginationConfig, authEvents, redirections, authenticationService, seoService, statusCodeService) {
+.run(['$rootScope', '$translate', '$languages', 'amMoment', 'paginationConfig', 'authEvents', 'redirections', 'authenticationService', 'seoService', 'stateService', function($rootScope, $translate, $languages, amMoment, paginationConfig, authEvents, redirections, authenticationService, seoService, stateService) {
   // Angular-Translate events
   $rootScope.$on('$translateChangeSuccess', function() {
     if($translate.use() === 'en') {
@@ -407,35 +408,29 @@ angular
   });
   // Ui-Router events
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    // Root view must redirect to index view with locale param
     if(toState.name === 'root') {
-      // Root view must redirect to index view with locale param
       event.preventDefault();
-      statusCodeService.set(301);
-      $state.go('app.index', {locale: $translate.use()});
+      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(301).go();
     // Check if locale param is a supported language
-    } else if(toState.name !== 'root' && !$languages.contains(toParams.locale)) {
+    } else if(!$languages.contains(toParams.locale)) {
       event.preventDefault();
-      statusCodeService.set(404);
-      $state.go('app.404', {locale: $translate.use()}, {location: false});
-    } else {
-      // Check if user has permission to access a view
-      if (!authenticationService.isAuthorized(toState.accessLevel)) {
-        event.preventDefault();
-        statusCodeService.set(401);
-        $state.go('app.index', {locale: $translate.use()});
-      }
+      stateService.newState('app.404', {locale: $translate.use()}, {location: false}).withStatusCode(404).go();
+    // Check if user has permission to access a view
+    } else if(!authenticationService.isAuthorized(toState.accessLevel)) {
+      event.preventDefault();
+      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(401).go();
     }
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    statusCodeService.set(error.status);
     if(error.status === 401) {
-      $state.go('app.index', {locale: $translate.use()});
+      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(error.status).go();
     } else if(error.status === 404) {
-      $state.go('app.404', {locale: $translate.use()}, {location: false});
+      stateService.newState('app.404', {locale: $translate.use()}, {location: false}).withStatusCode(error.status).go();
     } else if(error.status === 500) {
-      $state.go('app.500', {locale: $translate.use()}, {location: false});
+      stateService.newState('app.500', {locale: $translate.use()}, {location: false}).withStatusCode(error.status).go();
     } else if(error.status === 301 || error.status === 302) {
-      $state.go(redirections[error.data.toView], angular.extend(error.data.toParams, {locale: $translate.use()}));
+      stateService.newState(redirections[error.data.toView], angular.extend(error.data.toParams, {locale: $translate.use()})).withStatusCode(error.status).go();
     }
   });
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
@@ -444,7 +439,6 @@ angular
     $translate.use(toParams.locale);
   });
   $rootScope.$on('$stateNotFound', function(event, unfoundState, fromState, fromParams) {
-    statusCodeService.set(404);
-    $state.go('app.404', {locale: $translate.use()}, {location: false});
+    stateService.newState('app.404', {locale: $translate.use()}, {location: false}).withStatusCode(404).go();
   });
 }]);
