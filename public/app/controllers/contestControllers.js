@@ -415,7 +415,7 @@ angular
       if($scope.remainingVotes() > 2) {
         $timeout(function() {
           modalService.show(incentiveVoteModalOptions);
-        }, 4000);
+        }, 2000);
       }
     }).catch(function(err) {
       translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
