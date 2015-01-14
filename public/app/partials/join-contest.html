@@ -3,14 +3,46 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
+          <div class="join">
+            <div ng-if="isContestProgress('running')">
+              <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
+              <h2 class="margin10 bolder-text">
+                <span ng-if="remainingOneDay(contest.end_date)">
+                  <timer interval="60000" end-time="contest.end_date">
+                    {{ hours }}
+                    <small>{{ 'hours' | translate }}</small>
+                    {{ minutes }}
+                    <small>{{ 'minutes' | translate }}</small>
+                  </timer>
+                </span>
+                <span ng-if="!remainingOneDay(contest.end_date)">
+                  <timer interval="60000" end-time="contest.end_date">
+                    {{ days }}
+                    <small>{{ 'days' | translate }}</small>
+                    {{ hours }}
+                    <small>{{ 'hours' | translate }}</small>
+                  </timer>
+                </span>
+              </h2>
+            </div>
+            <a ng-if="isContestProgress('running')" ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-lg btn-block">
+              {{ 'see_the_guideline' | translate }}
+            </a>
+          </div>
         </div>
         <div class="col-md-6 nopadding">
           <div class="title">
             <h1 class="nomargin">
-              <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
-                {{ contest.name }}
-              </a>
+              <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">{{ contest.name }}</a>
             </h1>
+          </div>
+          <div ng-if="hasSponsors()" class="sponsors">
+            <div class="become-sponsor">
+              <a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a>
+            </div>
+            <a ng-repeat="sponsor in contest.sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank">
+              <img ng-src="{{ sponsor.image }}">
+            </a>
           </div>
         </div>
         <div class="col-md-3">

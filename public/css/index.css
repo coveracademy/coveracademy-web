@@ -551,11 +551,12 @@ form.compacted .form-group {
   height: auto;
   overflow: visible;
   position: static;
+  min-height: 277px;
 }
-.pretty-header.small {
-  height: 100px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+.pretty-header.background-style.small {
+  padding-top: 10px;
+  padding-bottom: 30px;
+  min-height: 139px;
 }
 .pretty-header a {
   color: #fff;
@@ -594,10 +595,6 @@ form.compacted .form-group {
 }
 #contest.pretty-header > img.background {
   opacity: 0.3;
-}
-#contest.pretty-header .join a {
-  color: #fff;
-  text-decoration: none;
 }
 #contest.pretty-header .join .callout {
   background-color: #363b3f;

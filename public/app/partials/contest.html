@@ -36,7 +36,9 @@
         <div class="col-md-6 nopadding">
           <div class="title">
             <h1 class="nomargin">
-              {{ contest.name }}
+              <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+                {{ contest.name }}
+              </a>
             </h1>
           </div>
           <div ng-if="hasSponsors()" class="sponsors">
