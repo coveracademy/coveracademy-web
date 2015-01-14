@@ -1,4 +1,4 @@
-<div class="special-header contest">
+<div id="contest" class="pretty-header background-style" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/contests/{{ contest.image }}');">
   <div class="content">
     <div class="container">
       <div class="row">
@@ -11,7 +11,6 @@
                 {{ contest.name }}
               </a>
             </h1>
-            <h4 class="align-justify">{{ contest.description }}</h4>
           </div>
         </div>
         <div class="col-md-3">
@@ -40,7 +39,6 @@
       </div>
     </div>
   </div>
-  <img ng-src="/img/contests/{{ contest.image }}">
 </div>
 <div ng-if="!isContestProgress('finished') && !isContestant()" class="container">
   <div ng-if="!isAuthenticated()">

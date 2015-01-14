@@ -138,6 +138,9 @@ angular
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
   };
+  $scope.hasSponsors = function() {
+    return $scope.contest.sponsors.length !== 0;
+  };
   $scope.isPrizePlace = function(prize, place) {
     return prize.place === place;
   };

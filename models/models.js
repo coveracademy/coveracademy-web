@@ -68,6 +68,9 @@ var Contest = Bookshelf.Model.extend({
       qb.orderBy('place', 'asc');
     });
   },
+  sponsors: function() {
+    return this.hasMany(Sponsor, 'contest_id');
+  },
   getProgress: function() {
     if(this.get('finished') === 1) {
       return 'finished';
@@ -126,6 +129,11 @@ var Prize = Bookshelf.Model.extend({
   contest: function() {
     return this.belongsTo(Contest, 'contest_id');
   }
+});
+
+var Sponsor = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'sponsor'
 });
 
 module.exports = {

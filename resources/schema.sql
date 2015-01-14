@@ -178,12 +178,22 @@ create table verification_token (
 ) engine = innodb default charset = utf8;
 
 create table prize (
-  id                int not null auto_increment,
-  contest_id        int not null,
-  place             tinyint not null,
-  type              enum('cash', 'other') default 'cash',
-  value             varchar(100) not null,
-  image             varchar(100) default null,
+  id         int not null auto_increment,
+  contest_id int not null,
+  place      tinyint not null,
+  type       enum('cash', 'other') default 'cash',
+  value      varchar(100) not null,
+  image      varchar(100) default null,
   primary key (id),
   constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`)
+) engine = innodb default charset = utf8;
+
+create table sponsor (
+  id         int not null auto_increment,
+  name       varchar(255) not null,
+  image      varchar(255) not null,
+  website    varchar(255) not null,
+  contest_id int not null,
+  primary key (id),
+  constraint `fk_sponsor_contest_id` foreign key (`contest_id`) references `contest` (`id`)
 ) engine = innodb default charset = utf8;

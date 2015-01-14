@@ -20,7 +20,7 @@ _.str = require('underscore.string');
 
 var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest', 'user']};
-var contestRelated = {withRelated: ['prizes']};
+var contestRelated = {withRelated: ['prizes', 'sponsors']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};

@@ -60,7 +60,7 @@ angular
     return $state.current.name !== 'app.index';
   };
   $scope.withFooterMargin = function() {
-    return $state.current.name !== 'app.index';
+    return $state.current.name !== 'app.index' && $state.current.name !== 'app.contest';
   };
   $scope.isRedirectionStatusCode = function() {
     return $scope.statusCode === 301;
