@@ -833,3 +833,19 @@ form.compacted .form-group {
   border-color: #eeeeee;
 }
 /* Bootstrap custom buttons */
+
+/* Custom loading bar */
+#loading-bar .bar {
+  height: 5px;
+  background: #2196f3;
+}
+#loading-bar-spinner .spinner-icon {
+  width: 25px;
+  height: 25px;
+}
+#loading-bar-spinner {
+  top: 13px;
+  left: 10px;
+}
+
+/* Custom loading bar */

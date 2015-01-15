@@ -6,6 +6,7 @@ angular
   'coverAcademy.directives',
   'coverAcademy.filters',
   'coverAcademy.controllers',
+  'angular-loading-bar',
   'angularMoment',
   'angulartics',
   'angulartics.google.analytics',
