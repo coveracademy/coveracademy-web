@@ -12,7 +12,7 @@ exports.configure = function(app, passport) {
 
   var CustomDone = function(originalDone) {
     this.done = function(err, obj) {
-      logger.debug('CustomDone.done: [err: ' + err + ', obj: ' + obj + ']');
+      logger.debug('CustomDone.done: [err: ' + JSON.stringify(err) + ', obj: ' + JSON.stringify(obj) + ']');
       if(err) {
         logger.debug('CustomDone.done: with error')
         originalDone(null, false, {message: messages.getErrorKey(err)});
