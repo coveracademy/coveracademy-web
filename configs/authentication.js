@@ -12,12 +12,10 @@ exports.configure = function(app, passport) {
 
   var CustomDone = function(originalDone) {
     this.done = function(err, obj) {
-      logger.debug('CustomDone.done: [err: ' + JSON.stringify(err) + ', obj: ' + JSON.stringify(obj) + ']');
       if(err) {
-        logger.debug('CustomDone.done: with error')
+        logger.error('Error authenticating user: [err: ' + JSON.stringify(err) + ', obj: ' + JSON.stringify(obj) + ']');
         originalDone(null, false, {message: messages.getErrorKey(err)});
       } else {
-        logger.debug('CustomDone.done: without error')
         originalDone(null, obj);
       }
     };
@@ -27,28 +25,21 @@ exports.configure = function(app, passport) {
   app.use(passport.session());
 
   passport.serializeUser(function(user, done) {
-    logger.debug('passport.serializeUser: [user: ' + JSON.stringify(user) + ']');
     if(user.id) {
-      logger.debug('passport.serializeUser: user have id');
       done(null, user.id);
     } else {
-      logger.debug('passport.serializeUser: user do not have id');
       done(null, user);
     }
   });
 
   passport.deserializeUser(function(user, done) {
-    logger.debug('passport.deserializeUser: [user: ' + JSON.stringify(user) + ']');
     if(_.isObject(user)) {
-      logger.debug('passport.deserializeUser: user is object');
       done(null, user);
     } else {
-      logger.debug('passport.deserializeUser: user is not object');
       userService.findById(user).then(function(userFound) {
         if(userFound) {
           return userFound;
         }
-        logger.debug('passport.deserializeUser: user with id ' + user + ' was not found');
         throw messages.apiError('user.auth.errorDeserializingUserFromSession', 'Error deserializing user with id ' + user.id);
       }).nodeify(done);
     }
@@ -66,8 +57,11 @@ exports.configure = function(app, passport) {
       if(user) {
         return user;
       } else {
-        // return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender, profileInfos.email);
-        return userService.create({facebook_account: profileInfos.id, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
+        if(profileInfos.email) {
+          return userService.create({facebook_account: profileInfos.id, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
+        } else {
+          return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender);
+        }
       }
     }).nodeify(new CustomDone(done).done);
   }));

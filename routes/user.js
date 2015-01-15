@@ -44,6 +44,7 @@ module.exports = function(router, app) {
 
   router.post('/', isTemporaryUser, function(req, res, next) {
     var userData = req.param('user');
+    userData.verifyEmail = true;
     userService.create(userData).then(function(user) {
       return authorization.refreshUser(req, user);
     }).then(function(refreshedUser) {

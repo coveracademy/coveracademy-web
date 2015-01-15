@@ -68,20 +68,27 @@ exports.create = function(userData) {
       reject(messages.apiError('user.auth.emailRequired', 'The email is required'));
       return;
     }
-    if(userData.username && !slug.isValidUsername(userData)) {
+    if(userData.username && !slug.isValidUsername(userData.username)) {
       reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
       return;
     }
     var user = $.forge(entities.filterAttributes(userData, 'UserCreationAttributes'));
     user.set('permission', 'user');
-    if(!userData.facebook_email || user.get('email') === userData.facebook_email) {
-      user.set('verified', 1);
+    user.set('verified', 1);
+    if(userData.verifyEmail === true) {
+      user.set('verified', 0);
     }
     user.save().then(function(userSaved) {
       resolve(userSaved);
-      mailService.userRegistration(userSaved).catch(function(err) {
-        logger.error('Error sending "user registration" email to user %d: ' + err, userSaved.id);
-      });
+      if(userSaved.get('verified') === 0) {
+        $.sendVerificationEmail(userSaved).catch(function(err) {
+          logger.error('Error sending "user verification" email to user %d: ' + err, userSaved.id);
+        });
+      } else {
+        mailService.userRegistration(userSaved).catch(function(err) {
+          logger.error('Error sending "user registration" email to user %d: ' + err, userSaved.id);
+        });
+      }
     }).catch(function(err) {
       reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account', err));
     });
@@ -162,7 +169,7 @@ exports.verifyEmail = function(token) {
         return activationToken.destroy({transacting: transaction});
       }).then(function() {
         this.user.set('verified', 1);
-        return this.user.save(null, {transacting: transaction});
+        return this.user.save({verified: this.user.get('verified')}, {patch: true, transacting: transaction});
       }).then(function(user) {
         return user;
       }).bind({});

@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-  <h3>Por favor confirme o seu email!</h3>
+  <h3>Por favor, confirme o seu email.</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       Olá {{ user.name }}, obrigado por fazer parte da nossa comunidade.

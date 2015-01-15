@@ -12,7 +12,7 @@
   <hr/>
   <div class="row">
     <div class="col-md-3">
-      <span profile-picture="temporaryUser" class="img-circle profile-picture pull-right">
+      <span profile-picture="temporaryUser" class="img-circle nomargin profile-picture pull-right">
       </span>
     </div>
     <div class="col-md-9">
@@ -29,6 +29,9 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
+      <h3 class="align-center">
+        {{ 'forms.we_could_not_get_your_facebook_data' | translate }}
+      </h3>
       <h3 class="align-center">
         {{ 'forms.please_confirm_some_informations_about_your_account' | translate }}
       </h3>
@@ -47,8 +50,11 @@
           </label>
           <div class="col-md-9" ng-class="{'has-error': registerForm.email.$dirty && registerForm.email.$invalid}">
             <input ng-model="temporaryUser.email" type="email" id="email" name="email" class="form-control" required>
-            <span class="help-block">
-              {{ 'forms.email_help' | translate }}
+            <span ng-if="temporaryUser.facebook_email" class="help-block">
+              {{ 'forms.email_help_with_email' | translate }}
+            </span>
+            <span ng-if="!temporaryUser.facebook_email" class="help-block">
+              {{ 'forms.email_help_without_email' | translate }}
             </span>
           </div>
         </div>

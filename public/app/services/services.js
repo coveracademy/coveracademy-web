@@ -143,13 +143,10 @@ angular
   $.updateUser();
 
   var loginModalOptions = {
-    keyboard: true,
     templateUrl: '/app/partials/widgets/login-modal.html',
     controller: 'loginController'
   };
   var registerModalOptions = {
-    keyboard: true,
-    backdrop: false,
     size: 'lg',
     templateUrl: '/app/partials/widgets/register-modal.html',
     resolve: {
