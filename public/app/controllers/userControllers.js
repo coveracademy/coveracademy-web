@@ -19,6 +19,9 @@ angular
   $scope.confirm = function() {
     userService.create($scope.temporaryUser).then(function(response) {
       $scope.close(true);
+      $translate('alerts.confirm_your_email').then(function(translation) {
+        alertService.alert('success', translation)
+      });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);

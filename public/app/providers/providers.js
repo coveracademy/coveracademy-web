@@ -126,6 +126,7 @@ angular
       your_votes: 'Your votes',
       alerts: {
         changes_saved_successfully: 'Changes saved successfully.',
+        confirm_your_email: 'Welcome! Please check your email and confirm your account.',
         congratulations_now_you_are_in_the_contest: 'Congratulations, now you are in the contest. Good luck!',
         email_verified: 'Your email was verified successfully, now you can vote and enter the contest.',
         login_failed: 'Error authenticating, please try again.',
@@ -390,6 +391,7 @@ angular
       your_votes: 'Seus votos',
       alerts: {
         changes_saved_successfully: 'Alterações atualizadas com sucesso.',
+        confirm_your_email: 'Bem-vindo! Por favor, verifique o seu email e confirme a sua conta.',
         congratulations_now_you_are_in_the_contest: 'Parabéns, agora você está participando da competição. Boa sorte!',
         email_verified: 'Seu email foi verificado com sucesso, agora você pode votar e participar da competição.',
         login_failed: 'Erro ao autenticar, por favor tente novamente.',
