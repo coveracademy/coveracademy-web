@@ -677,6 +677,9 @@ form.compacted .form-group {
 .audition.small .cover .legend {
   font-size: 20px;
 }
+.audition.medium .label {
+  font-size: 25px;
+}
 .audition {
   background-color: #000;
   color: #fff;
@@ -767,7 +770,7 @@ form.compacted .form-group {
 }
 /* Tabs panel */
 
-/* Bootstrap custom buttons */
+/* Bootstrap custom buttons and labels */
 .btn {
   border: 1px solid transparent;
   border-radius: 3px;
@@ -832,7 +835,10 @@ form.compacted .form-group {
   background-color: #f0f0f0;
   border-color: #eeeeee;
 }
-/* Bootstrap custom buttons */
+.label-primary {
+  background-color: #2196f3;
+}
+/* Bootstrap custom buttons and labels */
 
 /* Custom loading bar */
 #loading-bar .bar {
