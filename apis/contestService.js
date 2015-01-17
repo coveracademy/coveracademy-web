@@ -19,7 +19,8 @@ var Contest     = require('../models/models').Contest,
 _.str = require('underscore.string');
 
 var auditionRelated = {withRelated: ['user']};
-var auditionWithContestRelated = {withRelated: ['contest', 'user']};
+var auditionWithContestRelated = {withRelated: ['contest']};
+var auditionWithContestAndUserRelated = {withRelated: ['contest', 'user']};
 var contestRelated = {withRelated: ['prizes', 'sponsors']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
@@ -30,7 +31,7 @@ exports.getContest = function(id) {
 }
 
 exports.getContestFromAudition = function(audition) {
-  if(audition.related('contest')) {
+  if(audition.related('contest') && audition.related('contest').id) {
     return Promise.resolve(audition.related('contest'));
   } else if(audition.get('contest_id')) {
     return $.getContest(audition.get('contest_id'));
@@ -297,7 +298,7 @@ exports.getWinnerAuditions = function(obj) {
 }
 
 exports.getAudition = function(id) {
-  return Audition.forge({id: id}).fetch(auditionWithContestRelated);
+  return Audition.forge({id: id}).fetch(auditionWithContestAndUserRelated);
 }
 
 exports.getUserAudition = function(user, contest) {
@@ -315,7 +316,7 @@ exports.getUserAuditions = function(user) {
     qb.where('user_id', user.id);
     qb.where('approved', 1);
     qb.orderBy('registration_date', 'desc');
-  }).fetch(auditionWithContestRelated);
+  }).fetch(auditionWithContestAndUserRelated);
 }
 
 exports.listAuditionsToReview = function() {
@@ -323,7 +324,7 @@ exports.listAuditionsToReview = function() {
     qb.join('contest', 'audition.contest_id', 'contest.id');
     qb.where('approved', 0);
     qb.where('contest.finished', 0);
-  }).fetch();
+  }).fetch(auditionWithContestRelated);
 }
 
 var listAuditions = function(rankType, contest, page, pageSize) {
@@ -519,7 +520,7 @@ exports.vote = function(user, audition) {
       reject(messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified'));
       return;
     }
-    audition.fetch(auditionWithContestRelated).then(function(auditionFetched) {
+    audition.fetch(auditionWithContestAndUserRelated).then(function(auditionFetched) {
       var contest = auditionFetched.related('contest');
       $.countUserVotes(user, contest).then(function(totalAuditionsVotes) {
         if(totalAuditionsVotes >= constants.VOTE_LIMIT) {
