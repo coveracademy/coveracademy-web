@@ -105,6 +105,18 @@ exports.contestStart = function(contest) {
   });
 }
 
+exports.contestFinish = function(contest) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/finish', {contest: contest.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 exports.contestWinner = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
     mailClient.post('/contest/winner', {user: user.id, contest: contest.id, audition: audition.id}, function(err, req, res, obj) {

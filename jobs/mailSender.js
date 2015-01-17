@@ -27,6 +27,7 @@ var auditionSubmitTemplate = env.getTemplate('audition_submit.tpl');
 var auditionApprovedTemplate = env.getTemplate('audition_approved.tpl');
 var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
+var contestFinishTemplate = env.getTemplate('contest_finish.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
 
 server.post('/user/registration', function(req, res, next) {
@@ -95,7 +96,6 @@ server.post('/audition/disapproved', function(req, res, next) {
   });
 });
 
-
 server.post('/contest/start', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     this.contest = contest;
@@ -115,17 +115,32 @@ server.post('/contest/start', function(req, res, next) {
   }).bind({});
 });
 
-server.post('/contest/winner', function(req, res, next) {
-  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).spread(function(user, contest, audition) {
-    contestWinnerTemplate.render({user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()}, function(err, email) {
-      mailService.send(user.get('email'), 'Parabéns, você venceu a competição!', email).then(function(mailResponse) {
-        res.send(200);
-      });
+server.post('/contest/finish', function(req, res, next) {
+  contestService.getContest(req.body.contest).then(function(contest) {
+    this.contest = contest;
+    return contestService.latestAuditions(contest);
+  }).then(function(auditions) {
+    auditions.forEach(function(audition) {
+      var user = audition.related('user');
+      if(audition.get('place') > 0) {
+        var prize = contestService.getPrizeForPlace(this.contest, audition.get('place'));
+        contestWinnerTemplate.render({user: user.toJSON(), contest: this.contest.toJSON(), audition: audition.toJSON(), prize: prize.toJSON()}, function(err, email) {
+          mailService.send(user.get('email'), 'Parabéns, você foi um dos vencedores!', email).then(function(mailResponse) {
+            res.send(200);
+          });
+        });
+      } else {
+        contestFinishTemplate.render({user: user.toJSON(), contest: this.contest.toJSON()}, function(err, email) {
+          mailService.send(user.get('email'), 'A competição terminou, confira o resultado.', email).then(function(mailResponse) {
+            res.send(200);
+          });
+        });
+      }
     });
   }).catch(function(err) {
-    logger.error('Error sending "contest winner" email to user %d: ' + err, req.body.user);
+    logger.error('Error sending "contest finish" email: ' + err);
     res.send(500);
-  });
+  }).bind({});
 });
 
 server.listen(settings.mailPort, function() {

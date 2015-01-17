@@ -42,6 +42,16 @@ exports.getContestFromAudition = function(audition) {
   }
 }
 
+exports.getPrizeForPlace = function(contest, place) {
+  var prize = null;
+  contest.related('prizes').forEach(function(currentPrize) {
+    if(currentPrize.get('place') === place) {
+      prize = currentPrize;
+    }
+  });
+  return prize;
+}
+
 exports.latestContests = function(page, pageSize) {
   return Contest.collection().query(function(qb) {
     qb.orderBy('registration_date', 'desc');
@@ -122,6 +132,9 @@ exports.finishContest = function(contest) {
     return contest.save({finished: 1}, {patch: true, transacting: transaction}).then(function(contest) {
       return chooseWinners(contest, transaction);
     }).then(function(winners) {
+      mailService.contestFinish(contest).catch(function(err) {
+        logger.error('Error sending "contest finish" email: ' + err.message);
+      });
       return;
     });
   });

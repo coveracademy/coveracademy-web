@@ -27,7 +27,7 @@
       </a>
     </p>
     <p>
-      Compartilhe este link com seus amigos, ganhe votos para vencer e conquiste o prêmio. Boa sorte!
+      Compartilhe este link com seus amigos, ganhe votos para vencer e conquistar o prêmio. Boa sorte!
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

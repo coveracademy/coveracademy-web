@@ -496,6 +496,10 @@ input.big {
   margin-left: 40px;
   margin-bottom: 20px;
 }
+#guideline .callout .title {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
 #guideline #index {
   background-color: #f9f9f9;
   margin-top: 40px;
@@ -699,11 +703,17 @@ form.compacted .form-group {
 .callout {
   padding: 20px;
   border: 1px solid #eee;
-  border-left-width: 5px;
-  border-radius: 3px;
+  border-left-width: 3px;
+  border-radius: 15px;
 }
 .callout-primary {
   border-left-color: #2196f3;;
+}
+.callout li {
+  list-style-type: circle;
+}
+.callout ul {
+  padding-left: 20px;
 }
 #artists .box {
   margin-bottom: 10px;
