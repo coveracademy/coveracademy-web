@@ -9,7 +9,7 @@ var startContests = function() {
       contestService.startContest(contest).then(function(contest) {
         logger.info('Contest %d started successfully', contest.id);
       }).catch(function(err) {
-        logger.error('Error starting contest %d: ' + err.message, contest.id);
+        logger.error('Error starting contest %d: ' + JSON.stringify(err), contest.id);
       });
     });
   });
@@ -22,12 +22,12 @@ var finishContests = function() {
       contestService.finishContest(contest).then(function() {
         logger.info('Contest ' + contest.id + ' was finished');
       }).catch(function(err) {
-        logger.error('Error finishing contest %d: ' + err.message, contest.id);
+        logger.error('Error finishing contest %d: ' + JSON.stringify(err), contest.id);
       });
     });
   });
 }
 
-var sched = later.parse.recur().on(15).minute();
+var sched = later.parse.recur().on(0).minute();
 var finishContestsInterval = later.setInterval(finishContests, sched);
 var startContestsInterval = later.setInterval(startContests, sched);

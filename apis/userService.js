@@ -81,7 +81,7 @@ exports.create = function(userData) {
     user.save().then(function(userSaved) {
       resolve(userSaved);
       if(userSaved.get('verified') === 0) {
-        $.sendVerificationEmail(userSaved).catch(function(err) {
+        $.sendVerificationEmail(userSaved, true).catch(function(err) {
           logger.error('Error sending "user verification" email to user %d: ' + err, userSaved.id);
         });
       } else {
@@ -181,9 +181,9 @@ exports.verifyEmail = function(token) {
   });
 }
 
-exports.sendVerificationEmail = function(user) {
+exports.sendVerificationEmail = function(user, registration) {
   return VerificationToken.forge({user_id: user.id, token: uuid.v1(), expiration_date: moment().add(7, 'days').toDate()}).save(null, {method: 'insert'}).then(function(token) {
-    return mailService.userVerification(user, token).catch(function(err) {
+    return mailService.userVerification(user, token, registration).catch(function(err) {
       throw messages.apiError('user.verification.errorSendingVerificationEmail', 'Error sending verification email to ' + user.get('email'));
     });
   });

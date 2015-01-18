@@ -135,6 +135,9 @@ angular
   $scope.isContestant = function() {
     return Boolean($scope.audition && $scope.audition.id);
   };
+  $scope.isContestDraw = function() {
+    return $scope.contest.draw === 1;
+  };
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
   };

@@ -64,55 +64,60 @@ exports.latestContests = function(page, pageSize) {
 
 exports.listUnfinishedContests = function() {
   return Contest.collection().query(function(qb) {
-    qb.where('finished', 0);
+    qb.where('progress', '!=', 'finished');
     qb.orderBy('registration_date', 'desc');
   }).fetch();
 }
 
 exports.listContestsToStart = function() {
   return Contest.collection().query(function(qb) {
-    qb.leftJoin('audition', 'contest.id', 'audition.contest_id')
-    .where('contest.finished', 0)
-    .where(function() {
-      this.andWhere(function() {
-        this.whereNotNull('contest.start_date').where('contest.start_date', '<=', new Date());
-      })
-      .orWhere(function() {
-        this.whereNull('contest.start_date');
-      });
-    })
-    .whereNull('contest.end_date')
-    .groupBy('audition.contest_id')
-    .havingRaw('count(audition.contest_id) >= contest.minimum_contestants');
+    qb.where('progress', 'waiting');
+    qb.orderBy('registration_date', 'desc');
   }).fetch();
 }
 
 exports.listContestsToFinish = function() {
   return Contest.collection().query(function(qb) {
-    qb.where('finished', 0);
-    qb.whereNotNull('end_date');
-    qb.where('end_date', '<', new Date());
+    qb.where('progress', 'running');
+    qb.orderBy('registration_date', 'desc');
   }).fetch();
 }
 
-var chooseWinners = function(contest, transaction) {
+var getPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
     var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');
     var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).groupBy('audition_id');
     var topScores = Bookshelf.knex.distinct('score').from(scores.as('scores')).orderBy('score', 'desc').limit(3);
     var winners = Bookshelf.knex.select('*').from(auditionWithScore.as('audition_with_score')).join(topScores.as('top_scores'), 'audition_with_score.score', 'top_scores.score').orderBy('audition_with_score.score', 'desc');
+
     var place = 1;
     var previousWinner = null;
-    var savePromises = [];
+    var potentialWinners = Audition.collection();
     winners.then(function(winnersRows) {
       winnersRows.forEach(function(winner) {
-        var audition = Audition.forge(winner);
-        audition.unset('score');
-        if(previousWinner && winner.score !== previousWinner.score) {
+        var potentialWinner = Audition.forge(winner);
+        potentialWinners.add(potentialWinner);
+        if(previousWinner && potentialWinner.get('score') !== previousWinner.get('score')) {
           place++;
         }
-        savePromises.push(audition.save({place: place}, {patch: true, transacting: transaction}));
-        previousWinner = winner;
+        potentialWinner.set('place', place);
+        previousWinner = potentialWinner;
+      });
+
+      resolve(potentialWinners);
+    }).catch(function(err) {
+      reject(err)
+    });
+  });
+}
+
+var chooseWinners = function(contest, transaction) {
+  return new Promise(function(resolve, reject) {
+    var savePromises = [];
+    getPotentialWinners(contest).then(function(potentialWinners) {
+      potentialWinners.forEach(function(winner) {
+        winner.unset('score')
+        savePromises.push(winner.save({place: winner.get('place')}, {patch: true, transacting: transaction}));
       });
       Promise.all(savePromises).then(function(winners) {
         var winnersCollection = Audition.collection();
@@ -127,14 +132,55 @@ var chooseWinners = function(contest, transaction) {
   });
 }
 
+var hasDraw = function(potentialWinners) {
+  if(potentialWinners.length > 3) {
+    return true;
+  }
+  var busyPlaces = {};
+  var draw = false;
+  potentialWinners.forEach(function(potentialWinner) {
+    if(busyPlaces[potentialWinner.get('place')]) {
+      draw = true;
+    }
+    busyPlaces[potentialWinner.get('place')] = true;
+  });
+  return draw;
+}
+
 exports.finishContest = function(contest) {
   return Bookshelf.transaction(function(transaction) {
-    return contest.save({finished: 1}, {patch: true, transacting: transaction}).then(function(contest) {
-      return chooseWinners(contest, transaction);
-    }).then(function(winners) {
-      mailService.contestFinish(contest).catch(function(err) {
-        logger.error('Error sending "contest finish" email: ' + err.message);
-      });
+    if(contest.get('progress') !== 'running') {
+      throw messages.apiError('contest.notReadyToFinish', 'The contest is not ready to finish');
+    }
+    if(new Date() < contest.get('end_date')) {
+      throw messages.apiError('contest.notReadyToFinish', 'The contest is not ready to finish');
+    }
+    return getPotentialWinners(contest).then(function(potentialWinners) {
+      if(hasDraw(potentialWinners)) {
+        contest.set('end_date', moment(contest.get('end_date')).add(constants.HOURS_TO_ADD_WHEN_CONTEST_DRAW, 'hours').toDate());
+        contest.set('draw', 1);
+        return contest.save({end_date: contest.get('end_date'), draw: contest.get('draw')}, {patch: true, transacting: transaction}).then(function(contest) {
+          return true;
+        });
+      } else {
+        contest.set('progress', 'finished');
+        contest.set('draw', 0);
+        return contest.save({progress: contest.get('progress'), draw: contest.get('draw')}, {patch: true, transacting: transaction}).then(function(contest) {
+          return chooseWinners(contest, transaction).then(function(winners) {
+            return false;
+          });
+        });
+      }
+    }).then(function(draw) {
+      if(draw === true) {
+        mailService.contestDraw(contest).catch(function(err) {
+          logger.error('Error sending "contest draw" email: ' + err.message);
+        });
+      } else {
+        mailService.contestFinish(contest).catch(function(err) {
+          logger.error('Error sending "contest finish" email: ' + err.message);
+        });
+      }
       return;
     });
   });
@@ -142,12 +188,23 @@ exports.finishContest = function(contest) {
 
 exports.startContest = function(contest) {
   return new Promise(function(resolve, reject) {
-    if(contest.getProgress() === 'waiting') {
+    if(contest.get('progress') === 'waiting') {
       $.totalAuditions(contest).then(function(totalAuditions) {
         var start = contest.get('start_date');
+        var end = contest.get('end_date');
         var now = new Date();
-        if(totalAuditions >= contest.get('minimum_contestants') && (!start || now > start)) {
-          if(!start || now > start) {
+        if(totalAuditions >= contest.get('minimum_contestants')) {
+          if(start && end && now >= start) {
+            contest.set('progress', 'running');
+            contest.save({progress: contest.get('progress')}, {patch: true}).then(function(contestSaved) {
+              resolve(contest);
+              mailService.contestStart(contest).catch(function(err) {
+                logger.error('Error sending "contest start" email: ' + err.message);
+              });
+            }).catch(function(err) {
+              reject(messages.unexpectedError('Error starting the contest', err));
+            });
+          } else if(!start || now >= start) {
             var momentToStart = moment(now);
             var foundTimeToStart = constants.TIMES_TO_START_THE_CONTEST.some(function(hourToStart) {
               if(momentToStart.hour() < hourToStart) {
@@ -161,24 +218,21 @@ exports.startContest = function(contest) {
               momentToStart.add(1, 'days').hour(constants.TIMES_TO_START_THE_CONTEST[0]);
             }
             start = momentToStart.toDate();
-          }
-          contest.set('start_date', moment(start).minutes(0).second(0).toDate());
-          contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hours(constants.TIME_TO_FINISH_THE_CONTEST).minutes(0).second(0).toDate());
-          contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
-            resolve(contest);
-            mailService.contestStart(contest).catch(function(err) {
-              logger.error('Error sending "contest start" email: ' + err.message);
+            contest.set('start_date', moment(start).minutes(0).second(0).toDate());
+            contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hours(constants.TIME_TO_FINISH_THE_CONTEST).minutes(0).second(0).toDate());
+            contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
+              resolve(contest);
+            }).catch(function(err) {
+              reject(messages.unexpectedError('Error starting the contest', err));
             });
-          }).catch(function(err) {
-            reject(messages.unexpectedError('Error starting the contest', err));
-          });
+          }
         } else {
-          resolve();
+          reject(messages.apiError('contest.notReady', 'The contest is not ready to start'));
         }
       }).catch(function(err) {
         reject(messages.unexpectedError('Error starting the contest', err));
       });
-    } else if(contest.getProgress() === 'running') {
+    } else if(contest.get('progress') === 'running') {
       reject(messages.apiError('contest.alreadyStarted', 'The contest was already started'));
     } else {
       reject(messages.apiError('contest.alreadyFinished', 'The contest was already finished'));
@@ -193,7 +247,7 @@ exports.submitAudition = function(user, contest, auditionData) {
       return;
     }
     Contest.forge({id: contest.id}).fetch().then(function(contestFetched) {
-      if(contestFetched.getProgress() === 'finished') {
+      if(contestFetched.get('progress') === 'finished') {
         reject(messages.apiError('contest.join.alreadyFinished', 'The contest was already finished'));
         return;
       }
@@ -244,7 +298,9 @@ exports.approveAudition = function(audition) {
     audition.save({approved: audition.get('approved')}, {patch: true}).then(function(auditionSaved) {
       resolve(auditionSaved);
       $.getContestFromAudition(auditionSaved).then(function(contest) {
-        return $.startContest(contest);
+        $.startContest(contest).catch(function(err) {
+          // Ignore
+        });
       });
       mailService.auditionApproved(auditionSaved).catch(function(err) {
         logger.error('Error sending "audition approved" email to audition %d owner: ' + err.message, auditionSaved.id);
@@ -336,7 +392,7 @@ exports.listAuditionsToReview = function() {
   return Audition.collection().query(function(qb) {
     qb.join('contest', 'audition.contest_id', 'contest.id');
     qb.where('approved', 0);
-    qb.where('contest.finished', 0);
+    qb.where('contest.progress', '!=', 'finished');
   }).fetch(auditionWithContestRelated);
 }
 
@@ -540,7 +596,7 @@ exports.vote = function(user, audition) {
           reject(messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT));
           return;
         }
-        if(contest.getProgress() === 'finished') {
+        if(contest.get('progress') === 'finished') {
           reject(messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
           return;
         }
@@ -578,7 +634,7 @@ exports.removeVote = function(user, audition) {
         reject(messages.apiError('audition.vote.userHasNotVoted', 'The user has not voted'));
         return;
       }
-      if(userVote.related('audition').related('contest').getProgress() === 'finished') {
+      if(userVote.related('audition').related('contest').get('progress') === 'finished') {
         reject(messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished'));
         return;
       }
@@ -631,5 +687,42 @@ exports.totalVotes = function(contests) {
     }).catch(function(err) {
       reject(err);
     });
+  });
+}
+
+exports.getContestants = function(contest) {
+  return new Promise(function(resolve, reject) {
+    $.latestAuditions(contest).then(function(auditions) {
+      var users = User.collection();
+      auditions.forEach(function(audition) {
+        users.add(audition.related('user'));
+      });
+      resolve(users);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
+exports.getNonContestants = function(contest) {
+  return new Promise(function(resolve, reject) {
+    $.getContestants(contest).then(function(contestants) {
+      this.contestants = contestants;
+      return User.fetchAll();
+    }).then(function(users) {
+      var nonContestants = User.collection();
+      var contestantsArray = this.contestants.toArray();
+      users.forEach(function(user) {
+        var contains = _.some(contestantsArray, function(contestant) {
+          return contestant.id === user.id;
+        });
+        if(!contains) {
+          nonContestants.add(user);
+        }
+      });
+      resolve(nonContestants);
+    }).catch(function(err) {
+      reject(err);
+    }).bind({});
   });
 }

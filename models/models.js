@@ -70,26 +70,6 @@ var Contest = Bookshelf.Model.extend({
   },
   sponsors: function() {
     return this.hasMany(Sponsor, 'contest_id');
-  },
-  getProgress: function() {
-    if(this.get('finished') === 1) {
-      return 'finished';
-    } else {
-      if(this.get('start_date') && this.get('end_date')) {
-        var start = new Date(this.get('start_date'));
-        var end = new Date(this.get('end_date'));
-        var now = new Date();
-        if(now < start) {
-          return 'waiting';
-        } else if(now > start && now < end) {
-          return 'running';
-        } else {
-          return 'finished';
-        }
-      } else {
-        return 'waiting';
-      }
-    }
   }
 });
 

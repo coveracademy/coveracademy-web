@@ -15,7 +15,8 @@
     </p>
     <p>
       Nossa equipe analisou o seu vídeo e constatou que ele não está de acordo com algumas das regras descritas no nosso
-      <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a> ou está abaixo da qualidade mínima para ser aprovado.
+      <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a>
+      ou está abaixo da qualidade mínima para ser aprovado.
     </p>
     <hr/>
     <p>

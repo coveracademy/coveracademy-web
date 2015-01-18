@@ -22,7 +22,7 @@ exports.receive = function(fromName, from, subject, text) {
 
 exports.send = function(to, subject, text) {
   return new Promise(function(resolve, reject) {
-    mailgun.messages().send({from: 'Cover Academy' + ' <' + emailContact + '>', to: to, subject: '[Cover Academy] ' + subject, html: text}, function (err, body) {
+    mailgun.messages().send({from: 'Cover Academy <' + emailContact + '>', to: to, subject: subject, html: text}, function (err, body) {
       if(err) {
         reject(err);
       } else {
@@ -44,9 +44,9 @@ exports.userRegistration = function(user) {
   });
 }
 
-exports.userVerification = function(user, verificationToken) {
+exports.userVerification = function(user, verificationToken, registration) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/user/verification', {user: user.id, token: verificationToken.get('token')}, function(err, req, res, obj) {
+    mailClient.post('/user/verification', {user: user.id, token: verificationToken.get('token'), registration: registration}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
@@ -104,6 +104,19 @@ exports.contestStart = function(contest) {
     });
   });
 }
+
+exports.contestDraw = function(contest) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/draw', {contest: contest.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 
 exports.contestFinish = function(contest) {
   return new Promise(function(resolve, reject) {

@@ -325,7 +325,6 @@ module.exports = function(router, app) {
       } else if(slug !== contest.get('slug')) {
         messages.respondWithMovedPermanently('contest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
-        contest.set('progress', contest.getProgress());
         var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
         return Promise.all([
@@ -373,7 +372,6 @@ module.exports = function(router, app) {
       } else if(slug !== contest.get('slug')) {
         messages.respondWithMovedPermanently('joinContest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
-        contest.set('progress', contest.getProgress());
         return contestService.getUserAudition(req.user, contest).then(function(audition) {
           res.json({
             contest: contest,
@@ -413,7 +411,6 @@ module.exports = function(router, app) {
         messages.respondWithMovedPermanently('audition', {id: audition.id, slug: audition.get('slug')}, res);
       } else {
         var contest = audition.related('contest');
-        contest.set('progress', contest.getProgress());
         return Promise.all([
           contestService.countUserVotes(req.user, contest),
           contestService.getUserVote(req.user, audition),

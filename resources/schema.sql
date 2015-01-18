@@ -17,7 +17,7 @@ create table user (
   youtube_account   varchar(255) default null,
   profile_picture   varchar(20) default null,
   voting_power      decimal(6, 3) default 1.000,
-  verified          tinyint(1) default 0,
+  verified          tinyint default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_username` (`username`),
@@ -126,7 +126,8 @@ create table contest (
   end_date            timestamp null default null,
   registration_date   timestamp not null default current_timestamp,
   duration            tinyint not null,
-  finished            tinyint(1) default 0,
+  draw                tinyint default 0,
+  progress            varchar(50) default 'waiting',
   primary key (id),
   unique key `uq_contest_slug` (`slug`)
 ) engine = innodb default charset = utf8;
@@ -145,7 +146,7 @@ create table audition (
   medium_thumbnail  varchar(255) default null,
   large_thumbnail   varchar(255) default null,
   place             tinyint default null,
-  approved          tinyint(1) default 0,
+  approved          tinyint default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_audition_url` (`url`),

@@ -594,6 +594,10 @@ form.compacted .form-group {
   opacity: 0.5;
   margin-top: -200px;
 }
+#contest-draw.alert{
+  margin: -13px 0px 13px 0px;
+  border-radius: 0px;
+}
 #contest.pretty-header a {
   text-decoration: none;
 }

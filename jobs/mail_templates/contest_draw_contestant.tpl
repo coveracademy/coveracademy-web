@@ -4,10 +4,10 @@
 {% set auditionLink = siteUrl + "/pt-br/audition/" + audition.id + "/" + audition.slug %}
 
 {% block content %}
-  <h3>Obrigado por se inscrever na competição!</h3>
+  <h3>Aproveite, {{ user.name }}!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
-      {{ user.name }}, falta pouco para concorrer aos prêmios.
+      A competição está empatada e por isso será estendida por <span style="font-size: 25px;">1</span> hora. Aproveite para ganhar mais votos!
     </p>
     <p style="text-align: center; font-weight: bold;">
       <a href="{{ contestLink }}" target="_blank" style="text-decoration: none;">
@@ -15,20 +15,13 @@
       </a>
     </p>
     <p>
-      O seu vídeo foi enviado para a nossa equipe de revisão. Eles irão analisar se o vídeo está de acordo com as regras descritas no nosso
-      <a href="{{ siteUrl }}/pt-br/contest/guideline" target="_blank">guia</a>
-      e possui a qualidade mínima para ser aprovado.
-    </p>
-    <p>
       Aqui está o link da sua audição:
-    </p>
-    <p>
       <a href="{{ auditionLink }}" target="_blank" style="text-decoration: none;">
         {{ auditionLink }}
       </a>
     </p>
     <p>
-      Por favor aguarde, em alguns instantes você receberá um e-mail de confirmação.
+      É agora ou nunca, compartilhe este link na sua rede de contatos para mostrar ainda mais o seu talento e diminuir a diferença entre os votos.
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas
