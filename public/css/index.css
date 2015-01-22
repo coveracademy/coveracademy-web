@@ -84,6 +84,16 @@ h1, h2, h3, h4, h5 {
 p, li {
   line-height: 1.8;
 }
+img.brand {
+  max-height: 250px;
+  max-width: 300px;
+  margin: 20px;
+}
+img.small-brand {
+  max-height: 130px;
+  max-width: 156px;
+  margin: 5px;
+}
 .land-section {
   padding-top: 80px;
   padding-bottom: 80px;
@@ -614,15 +624,10 @@ form.compacted .form-group {
 #contest.pretty-header .sponsors {
   margin-top: 20px;
 }
-#contest.pretty-header .sponsors img {
-  width: 130px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
 #contest.pretty-header .sponsors .become-sponsor {
   text-align: right;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 #contest.pretty-header .contestant i.glyphicon-ok {
   font-size: 100px;
@@ -658,17 +663,14 @@ form.compacted .form-group {
   background-color: #eee;
 }
 #brands {
-  padding-top: 20px;
-}
-#brands a {
-  padding: 0px 10px 0px 10px;
+  padding: 20px;
 }
 .winner-author .profile-picture {
   width: 66px;
   height: 66px;
 }
 .audition .cover {
-  font-size: 18px;
+  font-size: 15px;
 }
 .audition .cover .legend {
   font-size: 25px;
@@ -680,7 +682,7 @@ form.compacted .form-group {
   font-size: 34px;
 }
 .audition.small .cover {
-  font-size: 14px;
+  font-size: 13px;
 }
 .audition.small .cover .legend {
   font-size: 20px;

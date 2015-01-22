@@ -61,9 +61,10 @@ module.exports = function(router, app) {
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
     if(!req.user) {
-      contestService.listUnfinishedContests().then(function(contests) {
+      Promise.all([contestService.listUnfinishedContests(), contestService.getSponsorsOfUnfinishedContests()]).spread(function(contests, sponsors) {
         res.json({
-          contests: contests
+          contests: contests,
+          sponsors: sponsors
         });
       }).catch(function(err) {
         logger.error(err);

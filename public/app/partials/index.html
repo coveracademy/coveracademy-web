@@ -63,3 +63,20 @@
     </div>
   </div>
 </div>
+<div id="land-sponsors-section">
+  <div id="land-sponsor" class="land-section container align-center">
+    <div ng-if="hasSponsors()" class="container">
+      <h2>Empresas que estão apoiando as competições</h2>
+      <div>
+        <a ng-repeat="sponsor in sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank" rel="nofollow">
+         <img class="brand" ng-src="{{ getSponsorImage(sponsor) }}">
+        </a>
+      </div>
+      <h3><a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a></h3>
+    </div>
+    <div ng-if="!hasSponsors()" class="container">
+      <h2>{{ 'would_you_like_to_support_this_project' | translate }}</h2>
+      <h2><a ui-sref="app.contact()">{{ 'become_a_sponsor_and_show_your_brand_here' | translate }}</a></h2>
+    </div>
+  </div>
+</div>

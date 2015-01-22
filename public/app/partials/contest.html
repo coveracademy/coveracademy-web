@@ -48,8 +48,8 @@
             <div class="become-sponsor">
               <a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a>
             </div>
-            <a ng-repeat="sponsor in contest.sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank">
-              <img ng-src="{{ sponsor.image }}">
+            <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
+              <img class="small-brand" ng-src="{{ getSponsorImage(sponsorInContest) }}">
             </a>
           </div>
         </div>
@@ -341,8 +341,8 @@
   <div ng-if="hasSponsors()" class="container">
     <h2>{{ 'companies_that_made_this_contest_happen' | translate }}</h2>
     <div id="brands">
-      <a ng-repeat="sponsor in contest.sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank">
-       <img ng-src="{{ sponsor.image }}">
+      <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
+       <img class="brand" ng-src="{{ getSponsorImage(sponsorInContest) }}">
       </a>
     </div>
     <h3><a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a></h3>

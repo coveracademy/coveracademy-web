@@ -1,5 +1,6 @@
 var Contest     = require('../models/models').Contest,
     Audition    = require('../models/models').Audition,
+    Sponsor     = require('../models/models').Sponsor,
     UserVote    = require('../models/models').UserVote,
     User        = require('../models/models').User,
     Bookshelf   = require('../models/models').Bookshelf,
@@ -21,13 +22,14 @@ _.str = require('underscore.string');
 var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest']};
 var auditionWithContestAndUserRelated = {withRelated: ['contest', 'user']};
-var contestRelated = {withRelated: ['prizes', 'sponsors']};
+var contestRelated = {withRelated: ['prizes', 'sponsorsInContest', 'sponsorsInContest.sponsor']};
+var contestWithSponsorsAndPrizesRelated = {withRelated: ['prizes', 'sponsorsInContest', 'sponsorsInContest.sponsor']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};
 
 exports.getContest = function(id) {
-  return Contest.forge({id: id}).fetch(contestRelated);
+  return Contest.forge({id: id}).fetch(contestWithSponsorsAndPrizesRelated);
 }
 
 exports.getContestFromAudition = function(audition) {
@@ -725,4 +727,12 @@ exports.getNonContestants = function(contest) {
       reject(err);
     }).bind({});
   });
+}
+
+exports.getSponsorsOfUnfinishedContests = function() {
+  return Sponsor.collection().query(function(qb) {
+    qb.join('sponsor_contest', 'sponsor_contest.sponsor_id', 'sponsor.id');
+    qb.join('contest', 'sponsor_contest.contest_id', 'contest.id');
+    qb.where('contest.progress', '!=', 'finished');
+  }).fetch();
 }

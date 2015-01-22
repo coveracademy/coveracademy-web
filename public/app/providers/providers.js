@@ -375,7 +375,7 @@ angular
       votes: 'votos',
       voting_power: 'Poder de voto',
       waiting_for_approval: 'Aguardando aprovação',
-      want_to_become_a_sponsor: 'Quer se tornar um patrocinador?',
+      want_to_become_a_sponsor: 'Quer ser um patrocinador?',
       watch_the_audition: 'Assista ao vídeo',
       watch_your_audition: 'Assista ao seu vídeo',
       we_need_more_contestants_to_begin_the_contest: 'Precisamos de mais {{ contestantsRemaining }} participantes para iniciar a competição',

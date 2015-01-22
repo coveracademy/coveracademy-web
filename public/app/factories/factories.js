@@ -1,7 +1,15 @@
 angular
 .module('coverAcademy.factories', [])
 .factory('$underscore', ['$window', function($window) {
-    return $window._;
+  $window._.mixin({
+    isUrl: function(url) {
+      if(typeof url != "string") {
+        return false;
+      }
+      return url.substr(0, 4) === "http" || url.substr(0, 2) === "//";
+    }
+  });
+  return $window._;
 }])
 .factory('authHttpInterceptor', ['$rootScope', '$q', 'authEvents', function($rootScope, $q, authEvents) {
   return {

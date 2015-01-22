@@ -1,13 +1,24 @@
 angular
 .module('coverAcademy.controllers')
-.controller('indexController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
+.controller('indexController', ['$scope', '$state', '$filter', '$translate', '$underscore', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, $underscore, backendResponse, seoService) {
   $scope.contests = backendResponse.data.contests;
+  $scope.sponsors = backendResponse.data.sponsors;
   $translate(['seo.title.index', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.index']);
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
 
+  $scope.hasSponsors = function() {
+    return $scope.sponsors.length !== 0;
+  };
+  $scope.getSponsorImage = function(sponsor) {
+    if($underscore.isUrl(sponsor.logo)) {
+      return sponsor.logo;
+    } else {
+      return '/img/sponsors/' + sponsor.logo;
+    }
+  };
   $scope.hasUnfinishedContests = function() {
     return $scope.contests.length > 0;
   };
@@ -95,7 +106,7 @@ angular
     });
   };
 }])
-.controller('contestController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, contestService, seoService) {
+.controller('contestController', ['$scope', '$stateParams', '$translate', '$underscore', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, $underscore, authEvents, constants, backendResponse, contestService, seoService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = $stateParams.rank || 'best';
   $scope.contest = backendResponse.data.contest;
@@ -138,11 +149,21 @@ angular
   $scope.isContestDraw = function() {
     return $scope.contest.draw === 1;
   };
+  $scope.isUrl = function(value) {
+    return $underscore.isUrl(value);
+  };
   $scope.hasAuditions = function() {
     return $scope.auditions.length !== 0;
   };
   $scope.hasSponsors = function() {
-    return $scope.contest.sponsors.length !== 0;
+    return $scope.contest.sponsorsInContest.length !== 0;
+  };
+  $scope.getSponsorImage = function(sponsorInContest) {
+    if($underscore.isUrl(sponsorInContest.sponsor.logo)) {
+      return sponsorInContest.sponsor.logo;
+    } else {
+      return '/img/sponsors/' + sponsorInContest.sponsor.logo;
+    }
   };
   $scope.isPrizePlace = function(prize, place) {
     return prize.place === place;

@@ -68,8 +68,8 @@ var Contest = Bookshelf.Model.extend({
       qb.orderBy('place', 'asc');
     });
   },
-  sponsors: function() {
-    return this.hasMany(Sponsor, 'contest_id');
+  sponsorsInContest: function() {
+    return this.hasMany(SponsorInContest, 'contest_id');
   }
 });
 
@@ -116,6 +116,17 @@ var Sponsor = Bookshelf.Model.extend({
   tableName: 'sponsor'
 });
 
+var SponsorInContest = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'sponsor_contest',
+  sponsor: function() {
+    return this.belongsTo(Sponsor, 'sponsor_id');
+  },
+  contest: function() {
+    return this.belongsTo(Contest, 'contest_id');
+  }
+});
+
 module.exports = {
   VerificationToken: VerificationToken,
   Artist: Artist,
@@ -126,6 +137,8 @@ module.exports = {
   Music: Music,
   MusicGenre: MusicGenre,
   PotentialCover: PotentialCover,
+  Sponsor: Sponsor,
+  SponsorInContest: SponsorInContest,
   User: User,
   UserVote: UserVote
 }

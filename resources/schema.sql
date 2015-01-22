@@ -179,22 +179,34 @@ create table verification_token (
 ) engine = innodb default charset = utf8;
 
 create table prize (
-  id         int not null auto_increment,
-  contest_id int not null,
-  place      tinyint not null,
-  type       enum('cash', 'other') default 'cash',
-  value      varchar(100) not null,
-  image      varchar(100) default null,
+  id          int not null auto_increment,
+  contest_id  int not null,
+  sponsor_id  int default null,
+  place       tinyint not null,
+  value       varchar(100) not null,
+  description varchar(255) default null,
+  image       varchar(100) default null,
+  image_link  varchar(255) default null,
   primary key (id),
-  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`)
+  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`),
+  constraint `fk_prize_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`)
 ) engine = innodb default charset = utf8;
 
 create table sponsor (
-  id         int not null auto_increment,
-  name       varchar(255) not null,
-  image      varchar(255) not null,
-  website    varchar(255) not null,
-  contest_id int not null,
+  id                int not null auto_increment,
+  name              varchar(255) not null,
+  logo              varchar(255) not null,
+  website           varchar(255) not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id)
+) engine = innodb default charset = utf8;
+
+create table sponsor_contest (
+  id                int not null auto_increment,
+  sponsor_id        int not null,
+  contest_id        int not null,
+  registration_date timestamp not null default current_timestamp,
   primary key (id),
-  constraint `fk_sponsor_contest_id` foreign key (`contest_id`) references `contest` (`id`)
+  constraint `fk_sponsor_contest_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`),
+  constraint `fk_sponsor_contest_contest_id` foreign key (`contest_id`) references `contest` (`id`)
 ) engine = innodb default charset = utf8;
