@@ -12,13 +12,6 @@ angular
   $scope.hasSponsors = function() {
     return $scope.sponsors.length !== 0;
   };
-  $scope.getSponsorImage = function(sponsor) {
-    if($underscore.isUrl(sponsor.logo)) {
-      return sponsor.logo;
-    } else {
-      return '/img/sponsors/' + sponsor.logo;
-    }
-  };
   $scope.hasUnfinishedContests = function() {
     return $scope.contests.length > 0;
   };
@@ -124,6 +117,7 @@ angular
   $scope.prizesCollapsed = true;
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 35;
+  $scope.prizeDetailsToShow = {};
 
   $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setDescription(translations['seo.description.contest']);
@@ -158,18 +152,21 @@ angular
   $scope.hasSponsors = function() {
     return $scope.contest.sponsorsInContest.length !== 0;
   };
-  $scope.getSponsorImage = function(sponsorInContest) {
-    if($underscore.isUrl(sponsorInContest.sponsor.logo)) {
-      return sponsorInContest.sponsor.logo;
-    } else {
-      return '/img/sponsors/' + sponsorInContest.sponsor.logo;
-    }
-  };
   $scope.isPrizePlace = function(prize, place) {
     return prize.place === place;
   };
-  $scope.isCashPrize = function(prize) {
-    return prize.type === 'cash';
+  $scope.hasPrizeDetails = function(prize) {
+    return prize.full_name || prize.description || prize.link;
+  };
+  $scope.showPrizeDetails = function(prize) {
+    if(!$scope.prizeDetailsToShow[prize.id]) {
+      $scope.prizeDetailsToShow[prize.id] = true;
+    } else {
+      delete $scope.prizeDetailsToShow[prize.id];
+    }
+  };
+  $scope.isShowPrizeDetails = function(prize) {
+    return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];
   };
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;

@@ -19,7 +19,7 @@
       Veja o que você ganhou desta vez:
     </p>
     <h1 style="text-align: center; font-weight: bold;">
-      {{ prize.value }}
+      {{ prize.name }}
     </h1>
     <p>
       Entraremos em contato em breve para entregar o prêmio, fica ligado!

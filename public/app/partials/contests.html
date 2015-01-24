@@ -1,8 +1,8 @@
 <div class="container">
 	<h1 class="page-header">{{ 'latest_contests' | translate }}</h1>
 	<div ng-repeat="contest in contests">
-		<div class="row contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/contests/{{ contest.image }}');">
-			<div class="col-md-12">			
+		<div class="row contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ contest.image }}');">
+			<div class="col-md-12">
 				<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
 					<h1 class="align-center nomargin">{{ contest.name }}</h1>
 				</a>

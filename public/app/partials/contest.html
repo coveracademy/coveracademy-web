@@ -1,7 +1,7 @@
 <div id="contest-draw" ng-if="isContestDraw()" class="alert alert-warning">
   <h3 class="align-center nomargin">{{ 'the_contest_is_drawn' | translate }}</h3>
 </div>
-<div id="contest" ng-class="{'small': isContestProgress('finished')}" class="pretty-header background-style" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/contests/{{ contest.image }}');">
+<div id="contest" ng-class="{'small': isContestProgress('finished')}" class="pretty-header background-style" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ contest.image }}');">
   <div class="content">
     <div class="container">
       <div class="row">
@@ -49,7 +49,7 @@
               <a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a>
             </div>
             <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
-              <img class="small-brand" ng-src="{{ getSponsorImage(sponsorInContest) }}">
+              <img class="small-brand" ng-src="{{ sponsorInContest.sponsor.logo }}">
             </a>
           </div>
         </div>
@@ -80,37 +80,42 @@
     </div>
   </div>
 </div>
-<div id="auditions">
+<div id="prizes">
   <div class="container">
-    <div class="padding-top">
-      <button class="btn btn-lg btn-block" ng-click="prizesCollapsed = !prizesCollapsed">
-        {{ 'show_the_prizes' | translate }}
-      </button>
-      <div collapse="prizesCollapsed">
-        <div class="row" ng-repeat="row in contest.prizes | partition: 3">
-          <div class="col-md-4" ng-repeat="prize in row">
-            <h2>
-              <span ng-if="isPrizePlace(prize, 1)">{{ 'first_place' | translate }}</span>
-              <span ng-if="isPrizePlace(prize, 2)">{{ 'second_place' | translate }}</span>
-              <span ng-if="isPrizePlace(prize, 3)">{{ 'third_place' | translate }}</span>
-              <span class="text-muted">{{ prize.value }}</span>
-            </h2>
-            <p class="align-justify">
-              <span ng-if="isPrizePlace(prize, 1)">{{ 'first_place_description' | translate }}</span>
-              <span ng-if="isPrizePlace(prize, 2)">{{ 'second_place_description' | translate }}</span>
-              <span ng-if="isPrizePlace(prize, 3)">{{ 'third_place_description' | translate }}</span>
-              <span ng-if="isCashPrize(prize)">{{ 'cash_prizes_increase' | translate }}</span>
-            </p>
-            <p>
-              <a class="btn btn-default" ui-sref="app.contestGuideline({locale: locale()})">
-                {{ 'view_details' | translate }}
+    <div class="row" ng-repeat="row in contest.prizes | partition: 3">
+      <div class="col-md-4 prize align-center" ng-repeat="prize in row">
+        <div class="card with-padding">
+          <span ng-if="isPrizePlace(prize, 1)"><img class="prize-place" src="/img/contests/first.png"></span>
+          <span ng-if="isPrizePlace(prize, 2)"><img class="prize-place" src="/img/contests/second.png"></span>
+          <span ng-if="isPrizePlace(prize, 3)"><img class="prize-place" src="/img/contests/third.png"></span>
+          <h2 class="nomargin">
+            <span class="text-muted">{{ prize.name }}</span>
+            <small ng-if="hasPrizeDetails(prize)">
+              <a ng-click="showPrizeDetails(prize)">
+                <i class="glyphicon glyphicon-question-sign"></i>
               </a>
+            </small>
+          </h2>
+          <div ng-if="isShowPrizeDetails(prize)" class="well">
+            <p ng-if="prize.full_name" class="nomargin"><b>{{ prize.full_name }}</b></p>
+            <p ng-if="prize.description" class="nomargin align-left">{{ prize.description }}</p>
+            <p ng-if="prize.link" class="nomargin">
+              <a ng-href="{{ prize.link }}" target="_blank" rel="nofollow">{{ 'see_on_sponsors_website' | translate }}</a>
             </p>
           </div>
+          <img ng-if="prize.image" ng-src="{{ prize.image }}" class="prize-image">
+          <p ng-if="prize.sponsor.id" class="nomargin">
+            {{ 'offered_by' | translate }}
+            <a ng-href="{{ prize.sponsor.website }}" target="_blank" rel="nofollow">
+              {{ prize.sponsor.name }}
+            </a>
+          </p>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div id="auditions">
   <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')" class="container">
     <div class="jumbotron margin10 align-center">
       <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
@@ -333,7 +338,7 @@
     <h2>{{ 'companies_that_made_this_contest_happen' | translate }}</h2>
     <div id="brands">
       <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
-       <img class="brand" ng-src="{{ getSponsorImage(sponsorInContest) }}">
+       <img class="brand" ng-src="{{ sponsorInContest.sponsor.logo }}">
       </a>
     </div>
     <h3><a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a></h3>

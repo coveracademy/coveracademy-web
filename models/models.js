@@ -108,7 +108,10 @@ var Prize = Bookshelf.Model.extend({
   tableName: 'prize',
   contest: function() {
     return this.belongsTo(Contest, 'contest_id');
-  }
+  },
+  sponsor: function() {
+    return this.belongsTo(Sponsor, 'sponsor_id');
+  },
 });
 
 var Sponsor = Bookshelf.Model.extend({

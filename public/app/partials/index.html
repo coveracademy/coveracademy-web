@@ -69,7 +69,7 @@
       <h2>Empresas que estão apoiando as competições</h2>
       <div>
         <a ng-repeat="sponsor in sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank" rel="nofollow">
-         <img class="brand" ng-src="{{ getSponsorImage(sponsor) }}">
+         <img class="brand" ng-src="{{ sponsor.logo }}">
         </a>
       </div>
       <h3><a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a></h3>
