@@ -15,6 +15,7 @@ angular
   'ngSanitize',
   'pascalprecht.translate',
   'timer',
+  'textAngular',
   'ui.router',
   'ui.bootstrap',
   'videosharing-embed'

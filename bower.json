@@ -19,6 +19,7 @@
     "font-awesome": "~4.2.0",
     "ng-videosharing-embed": "~0.2.1",
     "ngprogress": "~1.0.4",
+    "textAngular": "~v1.3.1",
     "underscore": "~1.6.0"
   }
 }

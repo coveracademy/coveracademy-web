@@ -419,8 +419,9 @@ module.exports = function(router, app) {
           contestService.getAuditionScore(audition),
           contestService.bestAuditions(contest, 1, 8),
           contestService.latestAuditions(contest, 1, 8),
-          contestService.totalAuditions(contest)
-        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions) {
+          contestService.totalAuditions(contest),
+          contestService.listComments(audition),
+        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions, comments) {
           res.json({
             contest: contest,
             audition: audition,
@@ -431,7 +432,8 @@ module.exports = function(router, app) {
             totalUserVotes: totalUserVotes,
             voteLimit: constants.VOTE_LIMIT,
             votes: votes,
-            score: score
+            score: score,
+            comments: comments
           });
         });
       }

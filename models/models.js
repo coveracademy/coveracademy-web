@@ -95,6 +95,22 @@ var UserVote = Bookshelf.Model.extend({
   }
 });
 
+var UserComment = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'user_comment',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  },
+  audition: function() {
+    return this.belongsTo(Audition, 'audition_id');
+  },
+  replies: function() {
+    return this.hasMany(UserComment, 'comment_id').query(function(qb) {
+      qb.orderBy('registration_date', 'asc');
+    });
+  }
+});
+
 var VerificationToken = Bookshelf.Model.extend({
   idAttribute: 'token',
   tableName: 'verification_token',
@@ -143,5 +159,6 @@ module.exports = {
   Sponsor: Sponsor,
   SponsorInContest: SponsorInContest,
   User: User,
+  UserComment: UserComment,
   UserVote: UserVote
 }

@@ -324,6 +324,8 @@ angular
   $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
+  $scope.comments = backendResponse.data.comments;
+  $scope.replyCommentFormOpened = {};
 
   seoService.setTitle($scope.audition.title + ' - ' + $scope.audition.user.name);
   seoService.setDescription($scope.audition.description);
@@ -427,7 +429,7 @@ angular
   };
 
   $scope.vote = function(audition) {
-    contestService.voteInAudition(audition).then(function(response) {
+    contestService.vote(audition).then(function(response) {
       $scope.userVote = response.data;
       $scope.totalUserVotes++;
       $scope.votes++;
@@ -448,7 +450,7 @@ angular
     });
   };
   $scope.removeVote = function(audition) {
-    contestService.removeVoteInAudition(audition).then(function(response) {
+    contestService.removeVote(audition).then(function(response) {
       $scope.totalUserVotes--;
       $scope.votes--;
       $scope.score -= response.data.voting_power;
@@ -459,6 +461,63 @@ angular
         alertService.alert('danger', translation);
       });
     });
+  };
+  $scope.comment = function(message) {
+    contestService.comment($scope.audition, message).then(function(response) {
+      $scope.comments.unshift(response.data);
+      message = '';
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.replyComment = function(comment, message) {
+    contestService.replyComment(comment, message).then(function(response) {
+      comment.replies.push(response.data);
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.openReplyCommentForm = function(comment) {
+    authenticationService.ensureAuthentication().then(function() {
+      $scope.replyCommentFormOpened[comment.id] = true;
+    });
+  };
+  $scope.isReplyCommentFormOpened = function(comment) {
+    return $scope.replyCommentFormOpened[comment.id] === true;
+  };
+  $scope.canRemoveComment = function(comment) {
+    var user = $scope.user();
+    return user && (user.id === $scope.audition.user_id || user.id === comment.user_id);
+  };
+  $scope.removeComment = function(comment, parentComment) {
+    contestService.removeComment(comment).then(function(response) {
+      if(parentComment) {
+        for(index in parentComment.replies) {
+          var reply = parentComment.replies[index];
+          if(reply.id === comment.id) {
+            parentComment.replies.splice(index, 1);
+          }
+        }
+      } else {
+        for(index in $scope.comments) {
+          var currentComment = $scope.comments[index];
+          if(currentComment.id === comment.id) {
+            $scope.comments.splice(index, 1);
+          }
+        }
+      }
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.commentHasReplies = function(comment) {
+    return comment.replies.length > 0;
   };
 }])
 .controller('guidelineController', ['$translate', 'seoService', function($translate, seoService) {

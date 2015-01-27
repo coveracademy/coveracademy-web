@@ -41,21 +41,25 @@
           </div>
         </div>
         <div class="row padding">
-          <div class="col-md-2">
-            <div id="author">
-              <a ui-sref="{{ userState(audition.user) }}">
-                <div profile-picture="audition.user" class="profile-picture">
+          <div class="col-md-12">
+            <div class="media">
+              <div class="media-left">
+                <div id="author">
+                  <a ui-sref="{{ userState(audition.user) }}">
+                    <div profile-picture="audition.user" class="profile-picture">
+                    </div>
+                  </a>
                 </div>
-              </a>
+              </div>
+              <div class="media-body">
+                <h3 class="nomargin">
+                  <a ui-sref="{{ userState(audition.user) }}">
+                    {{ audition.user.name }}
+                  </a>
+                </h3>
+                <h4 class="nomargin">{{ audition.description }}</h4>
+              </div>
             </div>
-          </div>
-          <div class="col-md-10">
-            <h3 class="nomargin">
-              <a ui-sref="{{ userState(audition.user) }}">
-                {{ audition.user.name }}
-              </a>
-            </h3>
-            <h4 class="nomargin">{{ audition.description }}</h4>
           </div>
         </div>
       </div>
@@ -157,26 +161,145 @@
     </div>
     <div class="row padding">
       <div class="col-md-8 col-md-offset-2">
-        <div class="pull-left">
-          <div id="author">
-            <a ui-sref="{{ userState(audition.user) }}">
-              <div profile-picture="audition.user" class="profile-picture">
-              </div>
-            </a>
+        <div class="media">
+          <div class="media-left">
+            <div id="author">
+              <a ui-sref="{{ userState(audition.user) }}">
+                <div profile-picture="audition.user" class="profile-picture">
+                </div>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="pull-left">
-          <h3 class="nomargin">
-            <a ui-sref="{{ userState(audition.user) }}">
-              {{ audition.user.name }}
-            </a>
-          </h3>
-          <h4 class="nomargin">{{ audition.description }}</h4>
+          <div class="media-body">
+            <h3 class="nomargin">
+              <a ui-sref="{{ userState(audition.user) }}">
+                {{ audition.user.name }}
+              </a>
+            </h3>
+            <h4 class="nomargin">{{ audition.description }}</h4>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <hr/>
+  <div class="row padding">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="page-title">
+            <h3>
+              {{ 'what_did_you_think_of_user_performance' | translate: {user: audition.user.name} }}
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">
+          <div class="comments">
+            <div ng-if="user()" class="media comments-comment">
+              <div class="media-left">
+                <div profile-picture="user()" class="media-object profile-picture comment-user img-circle">
+                </div>
+              </div>
+              <div class="media-body">
+                <form name="commentForm" class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-md-9">
+                      <div text-angular name="comment" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_comment' | translate }}" required>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <button ng-disabled="commentForm.comment.$pristine || commentForm.comment.$invalid" ng-click="comment(message); message = '';" type="button" class="btn btn-info btn-block">
+                        {{ 'comment' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div ng-if="!user()">
+              <button ng-click="login()" type="button" class="btn btn-info">
+                {{ 'login_to_post_a_comment' | translate }}
+              </button>
+            </div>
+            <div class="comments-box">
+              <div class="media" ng-repeat="comment in comments">
+                <div class="media-left">
+                  <a ui-sref="{{ userState(comment.user) }}">
+                    <div profile-picture="comment.user" class="media-object profile-picture comment-user img-circle">
+                    </div>
+                  </a>
+                </div>
+                <div class="media-body">
+                  <a class="comment-user" ui-sref="{{ userState(comment.user) }}">
+                    <b>{{ comment.user.name }}</b>
+                  </a>
+                  <div ta-bind ng-model="comment.message" class="comment-text"></div>
+                  <span class="comment-date" am-time-ago="comment.registration_date"></span>
+                  <span ng-if="!commentHasReplies(comment)">
+                    ·
+                    <a ng-click="openReplyCommentForm(comment)">
+                      {{ 'reply' | translate }}
+                    </a>
+                  </span>
+                  <span ng-if="canRemoveComment(comment)">
+                    ·
+                    <a ng-click="removeComment(comment)">
+                      {{ 'delete' | translate }}
+                    </a>
+                  </span>
+                  <div class="comment-replies">
+                    <div class="media" ng-repeat="reply in comment.replies">
+                      <div class="media-left">
+                        <a ui-sref="{{ userState(reply.user) }}">
+                          <div profile-picture="reply.user" class="media-object profile-picture comment-user img-circle">
+                          </div>
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <a class="comment-user" ui-sref="{{ userState(reply.user) }}">
+                          <b>{{ reply.user.name }}</b>
+                        </a>
+                        <div ta-bind ng-model="reply.message" class="comment-text"></div>
+                        <span class="comment-date" am-time-ago="reply.registration_date"></span>
+                        <span ng-if="canRemoveComment(reply)">
+                          ·
+                          <a ng-click="removeComment(reply, comment)">
+                            {{ 'delete' | translate }}
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+                    <div ng-if="commentHasReplies(comment) || isReplyCommentFormOpened(comment)" class="media comments-comment">
+                      <div class="media-left">
+                        <div profile-picture="user()" class="media-object profile-picture comment-user img-circle">
+                        </div>
+                      </div>
+                      <div class="media-body">
+                        <form name="commentForm" class="form-horizontal">
+                          <div class="form-group">
+                            <div class="col-md-9">
+                              <div text-angular name="reply" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_reply' | translate }}" required>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <button ng-disabled="commentForm.reply.$pristine || commentForm.reply.$invalid" ng-click="replyComment(comment, message); message = '';" type="button" class="btn btn-info btn-block">
+                                {{ 'reply_button' | translate }}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div ng-if="(isContestProgress('running') || isContestProgress('waiting') || isContestProgress('waiting_time')) && hasAuditions(latestAuditions)">
     <div class="row">
       <div class="col-md-12">

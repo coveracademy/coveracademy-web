@@ -233,6 +233,15 @@ angular
     });
     return deferred.promise;
   };
+  this.ensureAuthentication = function() {
+    var deferred = $q.defer();
+    if(!this.isAuthenticated()) {
+      deferred.resolve(this.login());
+    } else {
+      deferred.resolve();
+    }
+    return deferred.promise;
+  };
 }])
 .service('modalService', ['$modal', function($modal) {
   var modalOptions = {
@@ -530,19 +539,28 @@ angular
     return $http.post('/api/contest/audition/submit', {audition: audition, contest: contest.id});
   };
   this.isContestant = function(contest) {
-    return $http.get('/api/contest/isContestant', {params: {contest_id: contest.id}});
+    return $http.get('/api/contest/isContestant', {params: {contest: contest.id}});
   };
   this.getUserAudition = function(contest) {
-    return $http.get('/api/contest/audition', {params: {contest_id: contest.id}});
+    return $http.get('/api/contest/audition', {params: {contest: contest.id}});
   };
-  this.voteInAudition = function(audition) {
-    return $http.post('/api/contest/audition/vote', {audition_id: audition.id});
+  this.vote = function(audition) {
+    return $http.post('/api/contest/audition/vote', {audition: audition.id});
   };
-  this.removeVoteInAudition = function(audition) {
-    return $http.post('/api/contest/audition/removeVote', {audition_id: audition.id});
+  this.removeVote = function(audition) {
+    return $http.delete('/api/contest/audition/vote', {params: {audition: audition.id}});
+  };
+  this.comment = function(audition, message) {
+    return $http.post('/api/contest/audition/comment', {audition: audition.id, message: message});
+  };
+  this.replyComment = function(comment, message) {
+    return $http.post('/api/contest/audition/replyComment', {comment: comment.id, message: message});
+  };
+  this.removeComment = function(comment) {
+    return $http.delete('/api/contest/audition/comment', {params: {comment: comment.id}});
   };
   this.getUserVote = function(audition) {
-    return $http.get('/api/contest/audition/vote', {params: {audition_id: audition.id}});
+    return $http.get('/api/contest/audition/vote', {params: {audition: audition.id}});
   };
   this.bestAuditions = function(contest, page) {
     return $http.get('/api/contest/audition/best', {params: {contest: contest.id, page: page}});

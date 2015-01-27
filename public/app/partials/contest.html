@@ -85,9 +85,9 @@
     <div class="row" ng-repeat="row in contest.prizes | partition: 3">
       <div class="col-md-4 prize align-center" ng-repeat="prize in row">
         <div class="card with-padding">
-          <span ng-if="isPrizePlace(prize, 1)"><img class="prize-place" src="/img/contests/first.png"></span>
-          <span ng-if="isPrizePlace(prize, 2)"><img class="prize-place" src="/img/contests/second.png"></span>
-          <span ng-if="isPrizePlace(prize, 3)"><img class="prize-place" src="/img/contests/third.png"></span>
+          <h3 ng-if="isPrizePlace(prize, 1)" class="nomargin">{{ 'first_place' | translate }}</h3>
+          <h3 ng-if="isPrizePlace(prize, 2)" class="nomargin">{{ 'second_place' | translate }}</h3>
+          <h3 ng-if="isPrizePlace(prize, 3)" class="nomargin">{{ 'third_place' | translate }}</h3>
           <h2 class="nomargin">
             <span class="text-muted">{{ prize.name }}</span>
             <small ng-if="hasPrizeDetails(prize)">
@@ -96,10 +96,11 @@
               </a>
             </small>
           </h2>
+          <hr ng-if="prize.image || prize.sponsor.id"/>
           <div ng-if="isShowPrizeDetails(prize)" class="well">
-            <p ng-if="prize.full_name" class="nomargin"><b>{{ prize.full_name }}</b></p>
-            <p ng-if="prize.description" class="nomargin align-left">{{ prize.description }}</p>
-            <p ng-if="prize.link" class="nomargin">
+            <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
+            <p ng-if="prize.description" class="align-justify">{{ prize.description }}</p>
+            <p ng-if="prize.link">
               <a ng-href="{{ prize.link }}" target="_blank" rel="nofollow">{{ 'see_on_sponsors_website' | translate }}</a>
             </p>
           </div>

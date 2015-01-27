@@ -90,8 +90,8 @@ img.brand {
   margin: 20px;
 }
 img.small-brand {
-  max-height: 130px;
-  max-width: 156px;
+  max-height: 100px;
+  max-width: 120px;
   margin: 5px;
 }
 .land-section {
@@ -173,7 +173,6 @@ img.small-brand {
   height: 160px;
   width: 160px;
   position: relative;
-  margin-right: 20px;
 }
 .profile-picture.small {
   height: 80px;
@@ -677,13 +676,17 @@ form.compacted .form-group {
   max-height: 50px;
   max-width: 50px;
   position: absolute;
-  margin-left: 0;
+  margin-right: -10px;
   margin-top: -14px;
-  left: 0;
+  right: 0;
   top: 0;
 }
 .prize .prize-image {
   width: 100%;
+}
+.prize hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .audition .cover {
   font-size: 15px;
@@ -885,5 +888,44 @@ form.compacted .form-group {
   top: 13px;
   left: 10px;
 }
-
 /* Custom loading bar */
+
+/* Comment box */
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1;
+}
+.media-body {
+  width: 10000px;
+}
+.comments-comment .ta-scroll-window > .ta-bind, .comments-comment .ta-editor.ta-html, .ta-scroll-window.form-control {
+  min-height: 53px;
+}
+.comments-box {
+  margin-top: 20px;
+}
+.comment-user.profile-picture {
+  width: 45px;
+  height: 45px;
+}
+.comment-user, .comment-user:hover {
+  color: #494d55;
+}
+.comment-text p {
+  margin: 0;
+}
+.comment-date {
+  color: #888;
+}
+.comment-input p {
+  margin: 0;
+  line-height: 1.5;
+}
+.comment-replies {
+  border-left: 5px solid #ddd;
+  padding-left: 10px;
+}
+.comment-replies .media:first-child {
+  margin-top: 15px;
+}
+/* Comments END */

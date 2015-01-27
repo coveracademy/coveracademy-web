@@ -33,10 +33,9 @@ module.exports = function(router, app) {
 
   // AUTHENTICATED ROUTES
   router.post('/audition/submit', isAuthenticated, function(req, res, next) {
-    var user = req.user;
     var contest = Contest.forge({id: req.param('contest')});
     var auditionData = req.param('audition');
-    contestService.submitAudition(user, contest, auditionData).then(function(audition) {
+    contestService.submitAudition(req.user, contest, auditionData).then(function(audition) {
       res.json(audition);
     }).catch(function(err) {
       logger.error(err);
@@ -45,7 +44,7 @@ module.exports = function(router, app) {
   });
 
   router.post('/audition/vote', isAuthenticated, function(req, res, next) {
-    var audition = Audition.forge({id: req.param('audition_id')});
+    var audition = Audition.forge({id: req.param('audition')});
     contestService.vote(req.user, audition).then(function(userVote) {
       res.json(userVote);
     }).catch(function(err) {
@@ -54,8 +53,8 @@ module.exports = function(router, app) {
     });
   });
 
-  router.post('/audition/removeVote', isAuthenticated, function(req, res, next) {
-    var audition = Audition.forge({id: req.param('audition_id')});
+  router.delete('/audition/vote', isAuthenticated, function(req, res, next) {
+    var audition = Audition.forge({id: req.param('audition')});
     contestService.removeVote(req.user, audition).then(function(userVote) {
       res.json(userVote);
     }).catch(function(err) {
@@ -65,7 +64,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/audition/vote', isAuthenticated, function(req, res, next) {
-    var audition = Audition.forge({id: req.param('audition_id')});
+    var audition = Audition.forge({id: req.param('audition')});
     contestService.getUserVote(req.user, audition).then(function(userVote) {
       this.userVote = userVote;
       return contestService.getAudition(audition.id);
@@ -82,8 +81,37 @@ module.exports = function(router, app) {
     }).bind({});
   });
 
+  router.post('/audition/comment', isAuthenticated, function(req, res, next) {
+    var audition = Audition.forge({id: req.param('audition')});
+    var message = req.param('message');
+    contestService.comment(req.user, audition, message).then(function(userComment) {
+      res.json(userComment);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.post('/audition/replyComment', isAuthenticated, function(req, res, next) {
+    contestService.replyComment(req.user, req.param('comment'), req.param('message')).then(function(userComment) {
+      res.json(userComment);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.delete('/audition/comment', isAuthenticated, function(req, res, next) {
+    contestService.removeComment(req.user, req.param('comment')).then(function() {
+      res.json();
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   router.get('/isContestant', isAuthenticated, function(req, res, next) {
-    var contest = Contest.forge({id: req.param('contest_id')});
+    var contest = Contest.forge({id: req.param('contest')});
     contestService.isContestant(req.user, contest).then(function(isContestant) {
       res.json(isContestant);
     }).catch(function(err) {
@@ -93,7 +121,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/audition', isAuthenticated, function(req, res, next) {
-    var contest = Contest.forge({id: req.param('contest_id')});
+    var contest = Contest.forge({id: req.param('contest')});
     contestService.getUserAudition(req.user, contest).then(function(userAudition) {
       res.json(userAudition ? userAudition : {});
     }).catch(function(err) {

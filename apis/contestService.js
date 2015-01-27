@@ -2,6 +2,7 @@ var Contest     = require('../models/models').Contest,
     Audition    = require('../models/models').Audition,
     Sponsor     = require('../models/models').Sponsor,
     UserVote    = require('../models/models').UserVote,
+    UserComment = require('../models/models').UserComment,
     User        = require('../models/models').User,
     Bookshelf   = require('../models/models').Bookshelf,
     settings    = require('../configs/settings'),
@@ -23,6 +24,9 @@ var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest']};
 var auditionWithContestAndUserRelated = {withRelated: ['contest', 'user']};
 var contestWithSponsorsAndPrizesRelated = {withRelated: ['prizes', 'prizes.sponsor', 'sponsorsInContest', 'sponsorsInContest.sponsor']};
+var userCommentRelated = {withRelated: ['user']};
+var userCommentWithRepliesRelated = {withRelated: ['user', 'audition', 'replies', 'replies.user']};
+var userCommentWithAuditionAndRepliesRelated = {withRelated: ['user', 'audition', 'replies', 'replies.user']};
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};
@@ -584,6 +588,27 @@ exports.countUserVotes = function(user, contest) {
   });
 }
 
+exports.totalVotes = function(contests) {
+  return new Promise(function(resolve, reject) {
+    var qb = Bookshelf.knex('user_vote')
+    .select('contest.id')
+    .count('user_vote.id as total_votes')
+    .join('audition', 'user_vote.audition_id', 'audition.id')
+    .join('contest', 'audition.contest_id', 'contest.id')
+    .whereIn('contest.id', entities.getIds(contests))
+    .groupBy('contest.id')
+    .then(function(rows) {
+      var totalVotes = {};
+      rows.forEach(function(row) {
+        totalVotes[row.id] = row.total_votes;
+      });
+      resolve(totalVotes);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
     if(user.get('verified') === 0) {
@@ -651,6 +676,64 @@ exports.removeVote = function(user, audition) {
   });
 }
 
+exports.comment = function(user, audition, message) {
+  return new Promise(function(resolve, reject) {
+    if(user.get('verified') === 0) {
+      reject(messages.apiError('audition.comment.userNotVerified', 'The user can not comment because he is not verified'));
+      return;
+    }
+    audition.fetch().then(function(audition) {
+      if(audition.get('approved') === 0) {
+        reject(messages.apiError('audition.comment.auditionNotApproved', 'The user can not comment in audition not approved'));
+        return;
+      }
+      var comment = UserComment.forge({user_id: user.id, audition_id: audition.id, message: message});
+      return comment.save().then(function(comment) {
+        resolve($.getComment(comment.id));
+      });
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error commenting in audition', err));
+    });
+  });
+}
+
+exports.replyComment = function(user, commentId, message) {
+  return new Promise(function(resolve, reject) {
+    $.getComment(commentId).then(function(comment) {
+      var comment = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});
+      return comment.save().then(function(comment) {
+        resolve($.getComment(comment.id));
+      });
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error replying comment in audition', err));
+    });
+  });
+};
+
+exports.listComments = function(audition) {
+  return UserComment.collection().query(function(qb) {
+    qb.where('audition_id', audition.id);
+    qb.whereNull('comment_id');
+    qb.orderBy('registration_date', 'desc');
+  }).fetch(userCommentWithRepliesRelated);
+};
+
+exports.getComment = function(id) {
+  return UserComment.forge({id: id}).fetch(userCommentWithAuditionAndRepliesRelated);
+};
+
+exports.removeComment = function(user, id) {
+  return $.getComment(id).then(function(comment) {
+    if(!user || (user.id !== comment.get('user_id') && user.id !== comment.related('audition').get('user_id'))) {
+      throw messages.apiError('audition.comment.noPermissionToRemove', 'The comment can not be remove becaus user has no permission');
+    }
+    var commentClone = comment.clone();
+    return comment.destroy().then(function() {
+      return commentClone;
+    });
+  });
+};
+
 exports.isContestant = function(user, contest) {
   return new Promise(function(resolve, reject) {
     if(user) {
@@ -667,27 +750,6 @@ exports.isContestant = function(user, contest) {
     } else {
       resolve(false);
     }
-  });
-}
-
-exports.totalVotes = function(contests) {
-  return new Promise(function(resolve, reject) {
-    var qb = Bookshelf.knex('user_vote')
-    .select('contest.id')
-    .count('user_vote.id as total_votes')
-    .join('audition', 'user_vote.audition_id', 'audition.id')
-    .join('contest', 'audition.contest_id', 'contest.id')
-    .whereIn('contest.id', entities.getIds(contests))
-    .groupBy('contest.id')
-    .then(function(rows) {
-      var totalVotes = {};
-      rows.forEach(function(row) {
-        totalVotes[row.id] = row.total_votes;
-      });
-      resolve(totalVotes);
-    }).catch(function(err) {
-      reject(err);
-    });
   });
 }
 

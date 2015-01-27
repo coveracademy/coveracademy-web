@@ -169,6 +169,19 @@ create table user_vote (
   constraint `fk_user_vote_audition_id` foreign key (`audition_id`) references `audition` (`id`)
 ) engine = innodb default charset = utf8;
 
+create table user_comment (
+  id                int not null auto_increment,
+  user_id           int not null,
+  audition_id       int not null,
+  comment_id        int default null,
+  message           text not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id),
+  constraint `fk_user_comment_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_user_comment_audition_id` foreign key (`audition_id`) references `audition` (`id`),
+  constraint `fk_user_comment_comment_id` foreign key (`comment_id`) references `user_comment` (`id`) on delete cascade
+) engine = innodb default charset = utf8;
+
 create table verification_token (
   token             varchar(255) not null,
   user_id           int not null,
