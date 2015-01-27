@@ -4,7 +4,7 @@
 <div id="contest" ng-class="{'small': isContestProgress('finished')}" class="pretty-header background-style" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ contest.image }}');">
   <div class="content">
     <div class="container">
-      <div class="row">
+      <div class="row" ng-if="!isContestProgress('finished')">
         <div class="col-md-3">
           <div class="join">
             <div ng-if="isContestProgress('running')">
@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-6 nopadding">
           <div class="title">
-            <h1 ng-class="{'nomargin': !isContestProgress('finished')}">
+            <h1>
               <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
                 {{ contest.name }}
               </a>
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div ng-if="!isContestProgress('finished')" class="share">
+          <div class="share">
             <h4>{{ 'share_this_contest' | translate }}:</h4>
             <div>
               <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
@@ -76,6 +76,18 @@
             </p>
           </div>
         </div>
+      </div>
+      <div class="title align-center" ng-if="isContestProgress('finished')">
+        <h1>
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+            {{ contest.name }}
+          </a>
+        </h1>
+        <h2 class="nomargin">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+            ({{ 'contest_finished' | translate }})
+          </a>
+        </h2>
       </div>
     </div>
   </div>
