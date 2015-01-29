@@ -246,12 +246,11 @@ angular
     return score;
   };
 }])
-.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService) {
+.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', 'userService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService, userService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.userAudition = backendResponse.data.audition;
-  $scope.usingYoutubeAccount = false;
 
   $translate(['seo.title.join_contest', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.join_contest']);
@@ -267,8 +266,10 @@ angular
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.userAudition = null;
-    $scope.usingYoutubeAccount = false;
   });
+  $scope.isConnectedWithYouTube = function() {
+    return userService.isConnectedWithNetwork($scope.user(), 'youtube');
+  };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && $scope.userAudition.id);
   };

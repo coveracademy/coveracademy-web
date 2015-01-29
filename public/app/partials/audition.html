@@ -83,11 +83,6 @@
                 <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
               </button>
             </div>
-            <div ng-if="isContestProgress('finished')">
-              <button class="btn btn-default btn-lg btn-block margin-top">
-                {{ 'contest_finished' | translate }}
-              </button>
-            </div>
           </div>
           <div ng-if="isContestProgress('running')">
             <h3>{{ 'help_sharing' | translate }}</h3>

@@ -53,7 +53,7 @@ angular
     return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
   };
 }])
-.controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', function($scope, $translate, constants, alertService, userService, seoService, translationService) {
+.controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', 'authenticationService', function($scope, $translate, constants, alertService, userService, seoService, translationService, authenticationService) {
   $scope.siteUrl = constants.SITE_URL;
 
   $scope.setUser = function(user) {
@@ -63,6 +63,11 @@ angular
   };
 
   $scope.setUser($scope.user());
+  $scope.showNetworks = {};
+
+  $scope.user.socialAccounts.forEach(function(socialAccount) {
+    $scope.showNetworks[socialAccount.network] = socialAccount.show === 1 ? true : false
+  });
 
   $translate('seo.title.settings').then(function(translation) {
     seoService.setTitle(translation);
@@ -90,9 +95,6 @@ angular
   $scope.canEditUsername = function() {
     return Boolean(!$scope.initialUsername);
   };
-  $scope.hasProfilePicture = function(network) {
-    return userService.hasProfilePicture($scope.user, network);
-  };
   $scope.selectProfilePicture = function(network) {
     $scope.user.profile_picture = network;
   };
@@ -102,6 +104,43 @@ angular
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {
       $scope.setUser(response.data);
+      $translate('alerts.changes_saved_successfully').then(function(translation) {
+        alertService.alert('success', translation);
+      });
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.connectNetwork = function(network) {
+    authenticationService.login(network).then(function() {
+      return authenticationService.updateUser();
+    }).then(function(user) {
+      $scope.setUser(user);
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.disconnectNetwork = function(network) {
+    userService.disconnectNetwork(network).then(function(user) {
+      return authenticationService.updateUser();
+    }).then(function(user) {
+      $scope.setUser(user);
+      delete $scope.showNetworks[network];
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.isConnectedWithNetwork = function(network) {
+    return userService.isConnectedWithNetwork($scope.user, network);
+  };
+  $scope.showNetwork = function(network) {
+    userService.showNetwork(network, $scope.showNetworks[network]).then(function(response) {
       $translate('alerts.changes_saved_successfully').then(function(translation) {
         alertService.alert('success', translation);
       });

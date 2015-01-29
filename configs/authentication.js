@@ -5,6 +5,8 @@ var userService      = require('../apis/userService'),
     logger           = require('./logger'),
     YoutubeStrategy  = require('passport-youtube-v3').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
+    TwitterStrategy  = require('passport-twitter').Strategy,
+    GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy,
     _                = require('underscore');
 
 exports.configure = function(app, passport) {
@@ -36,7 +38,7 @@ exports.configure = function(app, passport) {
     if(_.isObject(user)) {
       done(null, user);
     } else {
-      userService.findById(user).then(function(userFound) {
+      userService.findById(user, false).then(function(userFound) {
         if(userFound) {
           return userFound;
         }
@@ -53,22 +55,73 @@ exports.configure = function(app, passport) {
       email: profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null,
       picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null
     };
-    userService.findByFacebookAccount(profileInfos.id).then(function(user) {
+    userService.findBySocialAccount('facebook', profileInfos.id).then(function(user) {
       if(user) {
         return user;
       } else {
         if(profileInfos.email) {
-          return userService.create({facebook_account: profileInfos.id, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
+          return userService.create({facebook_account: profileInfos.id, facebook_picture: profileInfos.picture, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
         } else {
-          return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.name, profileInfos.gender);
+          return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.picture, profileInfos.name, profileInfos.gender);
         }
       }
     }).nodeify(new CustomDone(done).done);
   }));
 
-  passport.use(new YoutubeStrategy(settings.youtube, function(accessToken, refreshToken, profile, done) {
-    var account = profile._json.items[0];
-    new CustomDone(done).done(null, userService.createTemporaryYouTubeAccount(account.id, account.snippet.title));
+  passport.use(new TwitterStrategy(_.extend(settings.twitter, {passReqToCallback: true}), function(req, accessToken, refreshToken, profile, done) {
+    if(!req.user) {
+      throw messages.apiError('user.connect.notAuthenticated', 'The user must be authenticated to connect with Twitter');
+    }
+    var profileInfos = {
+      id: profile.id,
+      url: profile.username,
+      picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
+    };
+    userService.findBySocialAccount('twitter', profileInfos.id).then(function(user) {
+      if(user) {
+        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Twitter account');
+      }
+      var user = req.user;
+      user.set('twitter_picture', profileInfos.picture);
+      return userService.save(user, ['twitter_picture']).then(function(user) {
+        return userService.connectNetwork(user, 'twitter', profileInfos.id, profileInfos.url);
+      });
+    }).nodeify(new CustomDone(done).done);
+  }));
+
+  passport.use(new GoogleStrategy(_.extend(settings.google, {passReqToCallback: true}), function(req, accessToken, refreshToken, profile, done) {
+    if(!req.user) {
+      throw messages.apiError('user.connect.notAuthenticated', 'The user must be authenticated to connect with Google');
+    }
+    var profileInfos = {
+      id: profile.id,
+      picture: profile._json.picture
+    };
+    userService.findBySocialAccount('google', profileInfos.id).then(function(user) {
+      if(user) {
+        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Google account');
+      }
+      var user = req.user;
+      user.set('google_picture', profileInfos.picture);
+      return userService.save(user, ['google_picture']).then(function(user) {
+        return userService.connectNetwork(user, 'google', profileInfos.id);
+      });
+    }).nodeify(new CustomDone(done).done);
+  }));
+
+  passport.use(new YoutubeStrategy(_.extend(settings.youtube, {passReqToCallback: true}), function(req, accessToken, refreshToken, profile, done) {
+    if(!req.user) {
+      throw messages.apiError('user.connect.notAuthenticated', 'The user must be authenticated to connect with YouTube');
+    }
+    var profileInfos = {
+      id: profile._json.items[0].id,
+    };
+    userService.findBySocialAccount('youtube', profileInfos.id).then(function(user) {
+      if(user) {
+        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this YouTube account');
+      }
+      return userService.connectNetwork(req.user, 'youtube', profileInfos.id);
+    }).nodeify(new CustomDone(done).done);
   }));
 
 }

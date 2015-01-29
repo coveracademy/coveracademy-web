@@ -1,4 +1,5 @@
 var User              = require('../models/models').User,
+    SocialAccount     = require('../models/models').SocialAccount,
     VerificationToken = require('../models/models').VerificationToken,
     Bookshelf         = require('../models/models').Bookshelf,
     entities          = require('../utils/entities'),
@@ -12,54 +13,80 @@ var User              = require('../models/models').User,
     _                 = require('underscore'),
     $                 = this;
 
+var userRelated = {withRelated: ['socialAccounts']};
+var socialAccountRelated = {withRelated: ['user']};
+var networksToConnect = ['facebook', 'youtube', 'twitter', 'google', 'soundcloud'];
+var networksToDisconnect = ['youtube', 'twitter', 'google', 'soundcloud'];
+
 exports.forge = function(userData) {
   return User.forge(userData);
 }
 
-exports.createTemporaryFacebookAccount = function(facebookAccount, name, gender, email) {
-  return $.forge({name: name, gender: gender, email: email, facebook_email: email, profile_picture: 'facebook', facebook_account: facebookAccount});
+exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPicture, name, gender, email) {
+  return $.forge({name: name, gender: gender, email: email, facebook_email: email, profile_picture: 'facebook', facebook_account: facebookAccount, facebook_picture: facebookPicture});
 }
 
-exports.createTemporaryTwitterAccount = function(twitterAccount, picture) {
-  return $.forge({twitter_account: twitterAccount, twitter_picture: picture});
-}
-
-exports.createTemporaryGoogleAccount = function(googleAccount, picture) {
-  return $.forge({google_account: googleAccount, google_picture: picture});
-}
-
-exports.createTemporaryYouTubeAccount = function(youTubeAccount) {
-  return $.forge({youtube_account: youTubeAccount});
-}
-
-exports.connectNetwork = function(user, networkType, networkAccount) {
+exports.connectNetwork = function(user, network, account, url, transaction) {
   return new Promise(function(resolve, reject) {
-    var association = null;
-    if(networkType === 'twitter') {
-      association = {twitter_account: networkAccount};
-    } else if(networkType === 'google') {
-      association = {google_account: networkAccount};
-    } else if(networkType === 'youtube') {
-      association = {youtube_account: networkAccount};
+    if(!_.contains(networksToConnect, network)) {
+      reject(messages.apiError('user.auth.unsupportedNetworkAssociation', 'Association with network ' + network + ' is not supported'));
     }
-    if(association) {
-      resolve(user.save(association, {patch: true}));
-    } else {
-      reject(messages.apiError('user.auth.unsupportedNetworkAssociation', 'Association with network ' + networkType + ' is not supported'));
-    }
+    var socialAccount = SocialAccount.forge({user_id: user.id, network: network, account: account, url: url});
+    resolve(
+      socialAccount.save(null, {transacting: transaction}).then(function(socialAccount) {
+        if(!transaction) {
+          return socialAccount.load(socialAccountRelated.withRelated).then(function(socialAccountLoaded) {
+            return socialAccountLoaded.related('user');
+          });
+        } else {
+          user.related('socialAccounts').add(socialAccount);
+          return user;
+        }
+      })
+    );
   });
 }
 
-exports.connectTwitterAccount = function(user, twitterAccount) {
-  return $.connectNetwork(user, 'twitter', twitterAccount);
+exports.disconnectNetwork = function(user, network) {
+  return new Promise(function(resolve, reject) {
+    if(!_.contains(networksToDisconnect, network)) {
+      reject(messages.apiError('user.auth.unsupportedNetworkDisassociation', 'Disassociation with network ' + network + ' is not supported'));
+    }
+    SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
+      if(!socialAccount) {
+        return null;
+      }
+      return socialAccount.destroy();
+    }).then(function() {
+      resolve();
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
 }
 
-exports.connectGoogleAccount = function(user, googleAccount) {
-  return $.connectNetwork(user, 'google', googleAccount);
+exports.showNetwork = function(user, network, show) {
+  return new Promise(function(resolve, reject) {
+    SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
+      return socialAccount.save({show: show === true ? 1 : 0}, {patch: true});
+    }).then(function(socialAccount) {
+      resolve();
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
 }
 
-exports.connectYouTubeAccount = function(user, youTubeAccount) {
-  return $.connectNetwork(user, 'youtube', youTubeAccount);
+exports.isConnectedWithNetwork = function(user, network) {
+  return new Promise(function(resolve, reject) {
+    if(!user) {
+      resolve(false);
+      return;
+    }
+    resolve(SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
+      return socialAccount ? true : false;
+    }));
+  });
 }
 
 exports.create = function(userData) {
@@ -78,15 +105,22 @@ exports.create = function(userData) {
     if(userData.verifyEmail === true) {
       user.set('verified', 0);
     }
-    user.save().then(function(userSaved) {
-      resolve(userSaved);
-      if(userSaved.get('verified') === 0) {
-        $.sendVerificationEmail(userSaved, true).catch(function(err) {
-          logger.error('Error sending "user verification" email to user %d: ' + err, userSaved.id);
+
+    Bookshelf.transaction(function(transaction) {
+      return user.save(null, {transacting: transaction}).then(function(userSaved) {
+        return $.connectNetwork(userSaved, 'facebook', userData.facebook_account, null, transaction);
+      }).then(function(userConnected) {
+        return userConnected;
+      });
+    }).then(function(userConnected) {
+      resolve(userConnected);
+      if(userConnected.get('verified') === 0) {
+        $.sendVerificationEmail(userConnected, true).catch(function(err) {
+          logger.error('Error sending "user verification" email to user %d: ' + err, userConnected.id);
         });
       } else {
-        mailService.userRegistration(userSaved).catch(function(err) {
-          logger.error('Error sending "user registration" email to user %d: ' + err, userSaved.id);
+        mailService.userRegistration(userConnected).catch(function(err) {
+          logger.error('Error sending "user registration" email to user %d: ' + err, userConnected.id);
         });
       }
     }).catch(function(err) {
@@ -137,28 +171,30 @@ exports.update = function(user, edited) {
   });
 }
 
-exports.findById = function(id) {
-  return $.forge({id: id}).fetch();
+exports.findById = function(id, relations) {
+  return $.forge({id: id}).fetch(relations === false ? null : userRelated);
 }
 
 exports.findByFacebookAccount = function(facebookAccount) {
-  return $.forge({facebook_account: facebookAccount}).fetch();
-}
-
-exports.findByTwitterAccount = function(twitterAccount) {
-  return $.forge({twitter_account: twitterAccount}).fetch();
-}
-
-exports.findByGoogleAccount = function(googleAccount) {
-  return $.forge({google_account: googleAccount}).fetch();
+  return $.forge({facebook_account: facebookAccount}).fetch(userRelated);
 }
 
 exports.findByEmail = function(email) {
-  return $.forge({email: email}).fetch();
+  return $.forge({email: email}).fetch(userRelated);
 }
 
 exports.findByUsername = function(username) {
-  return $.forge({username: username}).fetch();
+  return $.forge({username: username}).fetch(userRelated);
+}
+
+exports.findBySocialAccount = function(network, account) {
+  return SocialAccount.forge({network: network, account: account}).fetch(socialAccountRelated).then(function(socialAccount) {
+    if(!socialAccount) {
+      return null;
+    } else {
+      return socialAccount.related('user');
+    }
+  });
 }
 
 exports.verifyEmail = function(token) {

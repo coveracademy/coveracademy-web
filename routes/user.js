@@ -9,7 +9,16 @@ var userService     = require('../apis/userService'),
 module.exports = function(router, app) {
 
   router.get('/authenticated', function(req, res, next) {
-    res.json(req.user);
+    if(!req.user) {
+      res.json(null);
+    } else {
+      userService.findById(req.user.id).then(function(user) {
+        res.json(user);
+      }).catch(function(err) {
+        logger.error(err);
+        messages.respondWithError(err, res);
+      });
+    }
   });
 
   router.get('/temporary', function(req, res, next) {
@@ -23,19 +32,6 @@ module.exports = function(router, app) {
     var message = req.param('message');
     mailService.receive(name, email, subject, message).then(function() {
       res.send(200);
-    }).catch(function(err) {
-      logger.error(err);
-      messages.respondWithError(err, res);
-    });
-  });
-
-  router.post('/connect', isAuthenticated, function(req, res, next) {
-    var networkType = req.param('network_type');
-    var networkAccount = req.param('network_account');
-    userService.connectNetwork(req.user, networkType, networkAccount).then(function(userAssociated) {
-      return authorization.refreshUser(req, userAssociated);
-    }).then(function(refreshedUser) {
-      res.json(refreshedUser);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -84,6 +80,37 @@ module.exports = function(router, app) {
     var user = userService.forge({id: req.param('user')});
     userService.resendVerificationEmail(user).then(function() {
       res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.post('/disconnect', isAuthenticated, function(req, res, next) {
+    var network = req.param('network');
+    userService.disconnectNetwork(req.user, network).then(function() {
+      res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.post('/showNetwork', isAuthenticated, function(req, res, next) {
+    var network = req.param('network');
+    var show = req.param('show');
+    userService.showNetwork(req.user, network, show).then(function() {
+      res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/isConnectedWithNetwork', isAuthenticated, function(req, res, next) {
+    var network = req.param('network');
+    userService.isConnectedWithNetwork(req.user, network).then(function(connected) {
+      res.json({connected: connected});
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);

@@ -129,7 +129,7 @@ angular
       accessLevel: accessLevel.USER,
       resolve: {
         viewService: 'viewService',
-        backendResponse: function($stateParams, viewService) {
+        backendResponse: function(viewService) {
           return viewService.settingsView();
         }
       }

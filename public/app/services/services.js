@@ -197,10 +197,10 @@ angular
           if(result === 'success') {
             $.updateUser().then(function(userUpdated) {
               deferred.resolve(userUpdated);
-              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS);
+              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);
             }).catch(function(err) {
               deferred.reject(err);
-              $rootScope.$broadcast(authEvents.LOGIN_FAILED);
+              $rootScope.$broadcast(authEvents.LOGIN_FAILED, provider);
             });
           } else if(result === 'fail') {
             deferred.reject();
@@ -310,15 +310,15 @@ angular
     return deferred.promise;
   };
 }])
-.service('userService', ['$http', function($http) {
+.service('userService', ['$http', '$underscore', function($http, $underscore) {
   var $ = this;
-  var defaultProfilePicture = '/img/users/default.jpg';
   var networkPictures = {
     facebook: {
       url: 'http://graph.facebook.com/v2.2/{{ facebook_account }}/picture?type=large',
       token: '{{ facebook_account }}',
       get: function(user) {
-        return this.url.replace(this.token, user.facebook_account);
+        var socialAccount = $.getSocialAccount(user, 'facebook');
+        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
       }
     },
     twitter: {
@@ -336,7 +336,6 @@ angular
       }
     }
   };
-
   this.loginEndpoint = function(provider) {
     return '/api/auth/' + provider;
   };
@@ -361,48 +360,41 @@ angular
   this.update = function(user) {
     return $http.put('/api/user', {user: user});
   };
-  this.connect = function(networkType, networkAccount) {
-    return $http.post('/api/user/connect', {network_type: networkType, network_account: networkAccount});
-  };
   this.get = function(id) {
     return $http.get('/api/user', {params: {id: id}});
   };
   this.getByEmail = function(email) {
     return $http.get('/api/user', {params: {email: email}});
   };
-  this.getProfilePictureType = function(user) {
-    var connection = null;
-    if(user.profile_picture === 'facebook') {
-      connection = {type: 'facebook', account: user.facebook_account};
-    } else if(user.profile_picture === 'twitter') {
-      connection = {type: 'twitter', account: user.twitter_account};
-    } else if(user.profile_picture === 'google') {
-      connection = {type: 'google', account: user.google_account};
-    }
-    return connection;
+  this.disconnectNetwork = function(network) {
+    return $http.post('/api/user/disconnect', {network: network});
+  };
+  this.showNetwork = function(network, show) {
+    return $http.post('/api/user/showNetwork', {network: network, show: show});
+  };
+  this.isConnectedWithNetwork = function(network) {
+    return $http.get('/api/user/isConnectedWithNetwork', {params: {network: network}});
   };
   this.getProfilePicture = function(user, network) {
-    var url = defaultProfilePicture;
+    var url = '';
     var picture = networkPictures[network ? network : user.profile_picture];
     if(picture) {
       url = picture.get(user);
     }
     return url;
   };
-  this.hasProfilePicture = function(user, network) {
-    var hasConnection = false;
-    if(network === 'facebook') {
-      hasConnection = Boolean(user.facebook_account);
-    } else if(network === 'twitter') {
-      hasConnection = Boolean(user.twitter_account);
-    } else if(network === 'google') {
-      hasConnection = Boolean(user.google_account);
-    }
-    return hasConnection;
-  };
   this.isProfilePicture = function(user, network) {
-    var connection = $.getProfilePictureType(user);
-    return connection.type === network;
+    return user.profile_picture === network;
+  };
+  this.isConnectedWithNetwork = function(user, network) {
+    return $underscore.some(user.socialAccounts, function(socialAccount) {
+      return socialAccount.network === network;
+    });
+  };
+  this.getSocialAccount = function(user, network) {
+    return $underscore.find(user.socialAccounts, function(socialAccount) {
+      return socialAccount.network === network;
+    });
   };
 }])
 .service('oembedService', ['$http', function($http) {

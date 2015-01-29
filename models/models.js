@@ -17,7 +17,18 @@ Bookshelf.plugin('virtuals');
 
 var User = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'user'
+  tableName: 'user',
+  socialAccounts: function() {
+    return this.hasMany(SocialAccount, 'user_id');
+  }
+});
+
+var SocialAccount = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'social_account',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  }
 });
 
 var MusicGenre = Bookshelf.Model.extend({
@@ -156,6 +167,7 @@ module.exports = {
   Music: Music,
   MusicGenre: MusicGenre,
   PotentialCover: PotentialCover,
+  SocialAccount: SocialAccount,
   Sponsor: Sponsor,
   SponsorInContest: SponsorInContest,
   User: User,

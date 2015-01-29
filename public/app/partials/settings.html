@@ -1,6 +1,6 @@
 <div class="container">
   <h1>{{ 'menus.settings' | translate }}</h1>
-  <div class="tabbable-panel">
+  <div id="settings" class="tabbable-panel">
     <div class="tabbable-line">
       <tabset type="tabs">
         <tab heading="{{ 'menus.profile' | translate | uppercase }}">
@@ -77,21 +77,21 @@
                 {{ 'forms.picture' | translate }}
               </label>
               <div id="primary-pictures" class="col-md-10">
-                <div class="thumbnail pull-left" ng-if="hasProfilePicture('facebook')" ng-click="selectProfilePicture('facebook')" ng-class="{selected: isProfilePicture('facebook')}">
+                <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('facebook')" ng-click="selectProfilePicture('facebook')" ng-class="{selected: isProfilePicture('facebook')}">
                   <div profile-picture="user" network="facebook" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
                     <i ng-show="isProfilePicture('facebook')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_facebook_picture' | translate }}
                   </div>
                 </div>
-                <div class="thumbnail pull-left" ng-if="hasProfilePicture('twitter')" ng-click="selectProfilePicture('twitter')" ng-class="{selected: isProfilePicture('twitter')}">
+                <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('twitter')" ng-click="selectProfilePicture('twitter')" ng-class="{selected: isProfilePicture('twitter')}">
                   <div profile-picture="user" network="twitter" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
                     <i ng-show="isProfilePicture('twitter')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_twitter_picture' | translate }}
                   </div>
                 </div>
-                <div class="thumbnail pull-left" ng-if="hasProfilePicture('google')" ng-click="selectProfilePicture('google')" ng-class="{selected: isProfilePicture('google')}">
+                <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('google')" ng-click="selectProfilePicture('google')" ng-class="{selected: isProfilePicture('google')}">
                   <div profile-picture="user" network="google" class="profile-picture img-circle align-center">
                   </div>
                   <div class="caption align-center">
@@ -108,7 +108,124 @@
           </form>
         </tab>
         <tab heading="{{ 'menus.social_networks' | translate | uppercase }}">
-
+          <div class="row">
+            <div class="col-md-8">
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-facebook">
+                      <i class="fa fa-facebook"></i>
+                    </a>
+                    <span class="network-name">Facebook</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div>
+                      <input type="checkbox" ng-model="showNetworks['facebook']" ng-change="showNetwork('facebook')">
+                      <span class="network-show">Show in your profile</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                  </div>
+                </div>
+              </div>
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-youtube">
+                      <i class="fa fa-youtube"></i>
+                    </a>
+                    <span class="network-name">YouTube</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div ng-if="isConnectedWithNetwork('youtube')">
+                      <input type="checkbox" ng-model="showNetworks['youtube']" ng-change="showNetwork('youtube')">
+                      <span class="network-show">Show in your profile</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button ng-if="!isConnectedWithNetwork('youtube')" ng-click="connectNetwork('youtube')" class="btn btn-lg btn-primary pull-right">
+                      Connect
+                    </button>
+                    <button ng-if="isConnectedWithNetwork('youtube')" ng-click="disconnectNetwork('youtube')" class="btn btn-lg btn-default pull-right">
+                      Disconnect
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-twitter">
+                      <i class="fa fa-twitter"></i>
+                    </a>
+                    <span class="network-name">Twitter</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div ng-if="isConnectedWithNetwork('twitter')">
+                      <input type="checkbox" ng-model="showNetworks['twitter']" ng-change="showNetwork('twitter')">
+                      <span class="network-show">Show in your profile</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button ng-if="!isConnectedWithNetwork('twitter')" ng-click="connectNetwork('twitter')" class="btn btn-lg btn-primary pull-right">
+                      Connect
+                    </button>
+                    <button ng-if="isConnectedWithNetwork('twitter')" ng-click="disconnectNetwork('twitter')" class="btn btn-lg btn-default pull-right">
+                      Disconnect
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-google-plus">
+                      <i class="fa fa-google-plus"></i>
+                    </a>
+                    <span class="network-name">Google+</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div ng-if="isConnectedWithNetwork('google')">
+                      <input type="checkbox" ng-model="showNetworks['google']" ng-change="showNetwork('google')">
+                      <span class="network-show">Show in your profile</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button ng-if="!isConnectedWithNetwork('google')" ng-click="connectNetwork('google')" class="btn btn-lg btn-primary pull-right">
+                      Connect
+                    </button>
+                    <button ng-if="isConnectedWithNetwork('google')" ng-click="disconnectNetwork('google')" class="btn btn-lg btn-default pull-right">
+                      Disconnect
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-soundcloud">
+                      <i class="fa fa-soundcloud"></i>
+                    </a>
+                    <span class="network-name">SoundCloud</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div ng-if="isConnectedWithNetwork('soundcloud')">
+                      <input type="checkbox" ng-model="showNetworks['soundcloud']" ng-change="showNetwork('soundcloud')">
+                      <span class="network-show">Show in your profile</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button ng-if="!isConnectedWithNetwork('soundcloud')" ng-click="connectNetwork('soundcloud')" class="btn btn-lg btn-primary pull-right">
+                      Connect
+                    </button>
+                    <button ng-if="isConnectedWithNetwork('soundcloud')" ng-click="disconnectNetwork('soundcloud')" class="btn btn-lg btn-default pull-right">
+                      Disconnect
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </tab>
       </tabset>
     </div>

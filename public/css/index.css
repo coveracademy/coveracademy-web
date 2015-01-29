@@ -746,6 +746,18 @@ form.compacted .form-group {
 .user-label {
   margin-right: 10px;
 }
+#settings .social-account .network-name {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 22px;
+}
+#settings .social-account .network-show {
+  display: inline-block;
+  margin-top: 10px;
+}
+#settings .social-account {
+  padding: 20px;
+}
 /* Social buttons */
 .btn-youtube {
   color: #fff;

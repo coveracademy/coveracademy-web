@@ -10,11 +10,8 @@ create table user (
   state             varchar(255) default null,
   facebook_account  varchar(255) default null,
   facebook_picture  varchar(255) default null,
-  twitter_account   varchar(255) default null,
   twitter_picture   varchar(255) default null,
-  google_account    varchar(255) default null,
   google_picture    varchar(255) default null,
-  youtube_account   varchar(255) default null,
   profile_picture   varchar(20) default null,
   voting_power      decimal(6, 3) default 1.000,
   verified          tinyint default 0,
@@ -22,10 +19,20 @@ create table user (
   primary key (id),
   unique key `uq_user_username` (`username`),
   unique key `uq_user_email` (`email`),
-  unique key `uq_user_facebook_account` (`facebook_account`),
-  unique key `uq_user_twitter_account` (`twitter_account`),
-  unique key `uq_user_google_account` (`google_account`),
-  unique key `uq_user_youtube_account` (`youtube_account`)
+  unique key `uq_user_facebook_account` (`facebook_account`)
+) engine = innodb default charset = utf8;
+
+create table social_account (
+  id      int not null auto_increment,
+  user_id int not null,
+  network varchar(100) not null,
+  account varchar(255) not null,
+  url     varchar(255) default null,
+  show    tinyint default 0,
+  primary key(id),
+  unique key `uq_social_account_user_id_network` (`user_id`, `network`),
+  key `fk_social_account_user_id` (`user_id`),
+  constraint `fk_social_account_user_id` foreign key (`user_id`) references `user` (`id`)
 ) engine = innodb default charset = utf8;
 
 create table music_genre (

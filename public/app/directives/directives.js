@@ -98,13 +98,16 @@ angular
   return {
     restrict: 'A',
     scope: {
-      profilePicture: '=',
+      user: '=profilePicture',
       network: '@'
     },
     link: function(scope, element, attrs, ctrl) {
-      element.css({
-        'background-image': 'url(' + userService.getProfilePicture(scope.profilePicture, scope.network) +')',
-      });
+      var url = userService.getProfilePicture(scope.user, scope.network);
+      if(url) {
+        element.css({
+          'background-image': 'url(' + url +')',
+        });
+      }
     }
   }
 }]);
