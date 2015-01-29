@@ -75,10 +75,10 @@ exports.disconnectNetwork = function(user, network) {
   });
 }
 
-exports.showNetwork = function(user, network, show) {
+exports.showNetwork = function(user, network, showLink) {
   return new Promise(function(resolve, reject) {
     SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
-      return socialAccount.save({show: show === true ? 1 : 0}, {patch: true});
+      return socialAccount.save({show_link: showLink === true ? 1 : 0}, {patch: true});
     }).then(function(socialAccount) {
       resolve();
     }).catch(function(err) {

@@ -23,13 +23,13 @@ create table user (
 ) engine = innodb default charset = utf8;
 
 create table social_account (
-  id      int not null auto_increment,
-  user_id int not null,
-  network varchar(100) not null,
-  account varchar(255) not null,
-  url     varchar(255) default null,
-  show    tinyint default 0,
-  primary key(id),
+  id        int not null auto_increment,
+  user_id   int not null,
+  network   varchar(100) not null,
+  account   varchar(255) not null,
+  url       varchar(255) default null,
+  show_link tinyint default 0,
+  primary key (id),
   unique key `uq_social_account_user_id_network` (`user_id`, `network`),
   key `fk_social_account_user_id` (`user_id`),
   constraint `fk_social_account_user_id` foreign key (`user_id`) references `user` (`id`)
@@ -198,21 +198,6 @@ create table verification_token (
   constraint `fk_verification_token_user_id` foreign key (`user_id`) references `user` (`id`)
 ) engine = innodb default charset = utf8;
 
-create table prize (
-  id          int not null auto_increment,
-  contest_id  int not null,
-  sponsor_id  int default null,
-  place       tinyint not null,
-  name        varchar(100) not null,
-  full_name   varchar(100) default null,
-  description varchar(255) default null,
-  image       varchar(255) default null,
-  link        varchar(255) default null,
-  primary key (id),
-  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`),
-  constraint `fk_prize_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`)
-) engine = innodb default charset = utf8;
-
 create table sponsor (
   id                int not null auto_increment,
   name              varchar(255) not null,
@@ -230,4 +215,19 @@ create table sponsor_contest (
   primary key (id),
   constraint `fk_sponsor_contest_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`),
   constraint `fk_sponsor_contest_contest_id` foreign key (`contest_id`) references `contest` (`id`)
+) engine = innodb default charset = utf8;
+
+create table prize (
+  id          int not null auto_increment,
+  contest_id  int not null,
+  sponsor_id  int default null,
+  place       tinyint not null,
+  name        varchar(100) not null,
+  full_name   varchar(100) default null,
+  description varchar(255) default null,
+  image       varchar(255) default null,
+  link        varchar(255) default null,
+  primary key (id),
+  constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`),
+  constraint `fk_prize_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`)
 ) engine = innodb default charset = utf8;

@@ -58,7 +58,7 @@ angular
   $scope.showNetworkLink = function(network) {
     var socialAccount = userService.getSocialAccount($scope.user, network);
     if(socialAccount) {
-      return socialAccount.show === 1 ? true : false;
+      return socialAccount.show_link === 1 ? true : false;
     } else {
       return false;
     }
