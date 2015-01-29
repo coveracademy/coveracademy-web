@@ -45,6 +45,12 @@ try {
         profileURL: 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&mine=true',
         scope: ['https://www.googleapis.com/auth/youtube.readonly']
       },
+      _soundcloud = {
+        clientID: '1ab460a1e8ac82995b5420f85df7cb4a',
+        clientSecret: '13002719f9896bad73a4ded9fa764638',
+        callbackURL: _siteUrl + '/api/auth/soundcloud/callback',
+        profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails', 'profileUrl']
+      },
       _email = {
         contact: 'sandro.csimas@gmail.com',
         apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
@@ -93,6 +99,7 @@ try {
   exports.twitter = _twitter;
   exports.google = _google;
   exports.youtube = _youtube;
+  exports.soundcloud = _soundcloud;
 
   exports.email = _email;
   exports.database = _database;

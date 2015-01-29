@@ -23,7 +23,17 @@ exports.forge = function(userData) {
 }
 
 exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPicture, name, gender, email) {
-  return $.forge({name: name, gender: gender, email: email, facebook_email: email, profile_picture: 'facebook', facebook_account: facebookAccount, facebook_picture: facebookPicture});
+  var temporary = $.forge({
+    name: name,
+    gender: gender,
+    email: email,
+    profile_picture: 'facebook',
+    facebook_account: facebookAccount,
+    facebook_picture: facebookPicture,
+    facebook_email: email
+  });
+  temporary.related('socialAccounts').add(SocialAccount.forge({network: 'facebook', account: facebookAccount}));
+  return temporary;
 }
 
 exports.connectNetwork = function(user, network, account, url, transaction) {
@@ -173,10 +183,6 @@ exports.update = function(user, edited) {
 
 exports.findById = function(id, relations) {
   return $.forge({id: id}).fetch(relations === false ? null : userRelated);
-}
-
-exports.findByFacebookAccount = function(facebookAccount) {
-  return $.forge({facebook_account: facebookAccount}).fetch(userRelated);
 }
 
 exports.findByEmail = function(email) {

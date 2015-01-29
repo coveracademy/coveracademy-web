@@ -28,6 +28,23 @@
               {{ 'member_since' | translate }} <span am-time-ago="user.registration_date"></span>
             </span>
           </h4>
+          <div class="networks">
+            <a ng-if="showNetworkLink('facebook')" ng-href="{{ getNetworkProfileUrl('facebook') }}" class="btn btn-social-icon btn-facebook" target="_blank" title="{{ 'go_to_network_profile' | translate: {user: user.name, network: 'Facebook'} }}">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a ng-if="showNetworkLink('twitter')" ng-href="{{ getNetworkProfileUrl('twitter') }}" class="btn btn-social-icon btn-twitter" target="_blank" title="{{ 'go_to_network_profile' | translate: {user: user.name, network: 'Twitter'} }}">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a ng-if="showNetworkLink('google')" ng-href="{{ getNetworkProfileUrl('google') }}" class="btn btn-social-icon btn-google-plus" target="_blank" title="{{ 'go_to_network_profile' | translate: {user: user.name, network: 'Google+'} }}">
+              <i class="fa fa-google-plus"></i>
+            </a>
+            <a ng-if="showNetworkLink('youtube')" ng-href="{{ getNetworkProfileUrl('youtube') }}" class="btn btn-social-icon btn-youtube" target="_blank" title="{{ 'go_to_network_profile' | translate: {user: user.name, network: 'YouTube'} }}">
+              <i class="fa fa-youtube"></i>
+            </a>
+            <a ng-if="showNetworkLink('soundcloud')" ng-href="{{ getNetworkProfileUrl('soundcloud') }}" class="btn btn-social-icon btn-soundcloud" target="_blank" title="{{ 'go_to_network_profile' | translate: {user: user.name, network: 'SoundCloud'} }}">
+              <i class="fa fa-soundcloud"></i>
+            </a>
+          </div>
           <h4 class="padding-top">
             {{ user.biography }}
           </h4>
@@ -38,7 +55,7 @@
   <img class="background" ng-src="/img/backgrounds/user-back1.jpg">
 </div>
 <div class="container">
-  <div class="row">
+  <div ng-if="hasAuditions()" class="row">
     <div class="col-md-8">
       <h1>{{ 'auditions' | translate }}</h1>
     </div>

@@ -1,13 +1,14 @@
-var userService      = require('../apis/userService'),
-    mailService      = require('../apis/mailService'),
-    messages         = require('../apis/messages'),
-    settings         = require('./settings'),
-    logger           = require('./logger'),
-    YoutubeStrategy  = require('passport-youtube-v3').Strategy,
-    FacebookStrategy = require('passport-facebook').Strategy,
-    TwitterStrategy  = require('passport-twitter').Strategy,
-    GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy,
-    _                = require('underscore');
+var userService        = require('../apis/userService'),
+    mailService        = require('../apis/mailService'),
+    messages           = require('../apis/messages'),
+    settings           = require('./settings'),
+    logger             = require('./logger'),
+    YoutubeStrategy    = require('passport-youtube-v3').Strategy,
+    FacebookStrategy   = require('passport-facebook').Strategy,
+    TwitterStrategy    = require('passport-twitter').Strategy,
+    SoundCloudStrategy = require('passport-soundcloud').Strategy,
+    GoogleStrategy     = require('passport-google-oauth').OAuth2Strategy,
+    _                  = require('underscore');
 
 exports.configure = function(app, passport) {
   logger.info('Configuring authentication');
@@ -106,6 +107,23 @@ exports.configure = function(app, passport) {
       return userService.save(user, ['google_picture']).then(function(user) {
         return userService.connectNetwork(user, 'google', profileInfos.id);
       });
+    }).nodeify(new CustomDone(done).done);
+  }));
+
+  passport.use(new SoundCloudStrategy(_.extend(settings.soundcloud, {passReqToCallback: true}), function(req, accessToken, refreshToken, profile, done) {
+    if(!req.user) {
+      throw messages.apiError('user.connect.notAuthenticated', 'The user must be authenticated to connect with SoundCloud');
+    }
+    console.log(profile)
+    var profileInfos = {
+      id: profile.id,
+      url: profile._json.permalink
+    };
+    userService.findBySocialAccount('soundcloud', profileInfos.id).then(function(user) {
+      if(user) {
+        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this SoundCloud account');
+      }
+      return userService.connectNetwork(req.user, 'soundcloud', profileInfos.id, profileInfos.url);
     }).nodeify(new CustomDone(done).done);
   }));
 

@@ -336,6 +336,48 @@ angular
       }
     }
   };
+  var networkUrls = {
+    facebook: {
+      url: 'http://www.facebook.com/{{ facebook_account }}',
+      token: '{{ facebook_account }}',
+      get: function(user) {
+        var socialAccount = $.getSocialAccount(user, 'facebook');
+        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+      }
+    },
+    twitter: {
+      url: 'http://www.twitter.com/{{ twitter_username }}',
+      token: '{{ twitter_username }}',
+      get: function(user) {
+        var socialAccount = $.getSocialAccount(user, 'twitter');
+        return socialAccount ? this.url.replace(this.token, socialAccount.url) : null;
+      }
+    },
+    google: {
+      url: 'http://plus.google.com/{{ google_account }}',
+      token: '{{ google_account }}',
+      get: function(user) {
+        var socialAccount = $.getSocialAccount(user, 'google');
+        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+      }
+    },
+    youtube: {
+      url: 'https://www.youtube.com/channel/{{ youtube_account }}',
+      token: '{{ youtube_account }}',
+      get: function(user) {
+        var socialAccount = $.getSocialAccount(user, 'youtube');
+        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+      }
+    },
+    soundcloud: {
+      url: 'http://www.soundcloud.com/{{ soundcloud_permalink }}',
+      token: '{{ soundcloud_permalink }}',
+      get: function(user) {
+        var socialAccount = $.getSocialAccount(user, 'soundcloud');
+        return socialAccount ? this.url.replace(this.token, socialAccount.url) : null;
+      }
+    }
+  };
   this.loginEndpoint = function(provider) {
     return '/api/auth/' + provider;
   };
@@ -380,6 +422,14 @@ angular
     var picture = networkPictures[network ? network : user.profile_picture];
     if(picture) {
       url = picture.get(user);
+    }
+    return url;
+  };
+  this.getNetworkProfileUrl = function(user, network) {
+    var url = '';
+    var networkUrl = networkUrls[network];
+    if(networkUrl) {
+      url = networkUrl.get(user);
     }
     return url;
   };

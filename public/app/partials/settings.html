@@ -121,7 +121,7 @@
                   <div class="col-md-4">
                     <div>
                       <input type="checkbox" ng-model="showNetworks['facebook']" ng-change="showNetwork('facebook')">
-                      <span class="network-show">Show in your profile</span>
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -139,15 +139,15 @@
                   <div class="col-md-4">
                     <div ng-if="isConnectedWithNetwork('youtube')">
                       <input type="checkbox" ng-model="showNetworks['youtube']" ng-change="showNetwork('youtube')">
-                      <span class="network-show">Show in your profile</span>
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <button ng-if="!isConnectedWithNetwork('youtube')" ng-click="connectNetwork('youtube')" class="btn btn-lg btn-primary pull-right">
-                      Connect
+                      {{ 'forms.connect' | translate }}
                     </button>
                     <button ng-if="isConnectedWithNetwork('youtube')" ng-click="disconnectNetwork('youtube')" class="btn btn-lg btn-default pull-right">
-                      Disconnect
+                      {{ 'forms.disconnect' | translate }}
                     </button>
                   </div>
                 </div>
@@ -163,15 +163,15 @@
                   <div class="col-md-4">
                     <div ng-if="isConnectedWithNetwork('twitter')">
                       <input type="checkbox" ng-model="showNetworks['twitter']" ng-change="showNetwork('twitter')">
-                      <span class="network-show">Show in your profile</span>
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <button ng-if="!isConnectedWithNetwork('twitter')" ng-click="connectNetwork('twitter')" class="btn btn-lg btn-primary pull-right">
-                      Connect
+                      {{ 'forms.connect' | translate }}
                     </button>
                     <button ng-if="isConnectedWithNetwork('twitter')" ng-click="disconnectNetwork('twitter')" class="btn btn-lg btn-default pull-right">
-                      Disconnect
+                      {{ 'forms.disconnect' | translate }}
                     </button>
                   </div>
                 </div>
@@ -187,15 +187,15 @@
                   <div class="col-md-4">
                     <div ng-if="isConnectedWithNetwork('google')">
                       <input type="checkbox" ng-model="showNetworks['google']" ng-change="showNetwork('google')">
-                      <span class="network-show">Show in your profile</span>
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <button ng-if="!isConnectedWithNetwork('google')" ng-click="connectNetwork('google')" class="btn btn-lg btn-primary pull-right">
-                      Connect
+                      {{ 'forms.connect' | translate }}
                     </button>
                     <button ng-if="isConnectedWithNetwork('google')" ng-click="disconnectNetwork('google')" class="btn btn-lg btn-default pull-right">
-                      Disconnect
+                      {{ 'forms.disconnect' | translate }}
                     </button>
                   </div>
                 </div>
@@ -211,15 +211,15 @@
                   <div class="col-md-4">
                     <div ng-if="isConnectedWithNetwork('soundcloud')">
                       <input type="checkbox" ng-model="showNetworks['soundcloud']" ng-change="showNetwork('soundcloud')">
-                      <span class="network-show">Show in your profile</span>
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <button ng-if="!isConnectedWithNetwork('soundcloud')" ng-click="connectNetwork('soundcloud')" class="btn btn-lg btn-primary pull-right">
-                      Connect
+                      {{ 'forms.connect' | translate }}
                     </button>
                     <button ng-if="isConnectedWithNetwork('soundcloud')" ng-click="disconnectNetwork('soundcloud')" class="btn btn-lg btn-default pull-right">
-                      Disconnect
+                      {{ 'forms.disconnect' | translate }}
                     </button>
                   </div>
                 </div>

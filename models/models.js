@@ -1,4 +1,6 @@
-var settings = require('../configs/settings');
+var settings = require('../configs/settings'),
+           _ = require('underscore');
+
 var knex = require('knex')({
   client: settings.database.dialect,
   debug: settings.debug,
@@ -20,6 +22,11 @@ var User = Bookshelf.Model.extend({
   tableName: 'user',
   socialAccounts: function() {
     return this.hasMany(SocialAccount, 'user_id');
+  },
+  getSocialAccount: function(network) {
+    return _.find(this.related('socialAccounts').models, function(socialAccount) {
+      return socialAccount.get('network') === network;
+    });
   }
 });
 

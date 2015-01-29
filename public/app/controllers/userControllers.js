@@ -52,6 +52,20 @@ angular
   $scope.isOwner = function() {
     return $scope.userAuthenticated() && $scope.userAuthenticated().id === $scope.user.id;
   };
+  $scope.hasAuditions = function() {
+    return $scope.auditions && $scope.auditions.length > 0;
+  };
+  $scope.showNetworkLink = function(network) {
+    var socialAccount = userService.getSocialAccount($scope.user, network);
+    if(socialAccount) {
+      return socialAccount.show === 1 ? true : false;
+    } else {
+      return false;
+    }
+  };
+  $scope.getNetworkProfileUrl = function(network) {
+    return userService.getNetworkProfileUrl($scope.user, network);
+  };
 }])
 .controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', 'authenticationService', function($scope, $translate, constants, alertService, userService, seoService, translationService, authenticationService) {
   $scope.siteUrl = constants.SITE_URL;
