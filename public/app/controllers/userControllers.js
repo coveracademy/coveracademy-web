@@ -42,7 +42,7 @@ angular
     });
   };
 }])
-.controller('userController', ['$scope', 'backendResponse', 'authenticationService', 'userService', 'seoService', function($scope, backendResponse, authenticationService, userService, seoService) {
+.controller('userController', ['$scope', 'backendResponse', 'userService', 'seoService', function($scope, backendResponse, userService, seoService) {
   $scope.user = backendResponse.data.user;
   $scope.auditions = backendResponse.data.auditions;
 
@@ -50,7 +50,7 @@ angular
   seoService.setDescription($scope.user.biography);
 
   $scope.isOwner = function() {
-    return authenticationService.getUser() && authenticationService.getUser().id === $scope.user.id;
+    return $scope.userAuthenticated() && $scope.userAuthenticated().id === $scope.user.id;
   };
 }])
 .controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', 'authenticationService', function($scope, $translate, constants, alertService, userService, seoService, translationService, authenticationService) {
@@ -62,7 +62,7 @@ angular
     $scope.initialEmail = $scope.user.email;
   };
 
-  $scope.setUser($scope.user());
+  $scope.setUser($scope.userAuthenticated());
   $scope.showNetworks = {};
 
   $scope.user.socialAccounts.forEach(function(socialAccount) {

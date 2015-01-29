@@ -76,11 +76,11 @@
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
                 {{ 'vote_now' | translate }}
-                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
+                <h5 ng-if="userAuthenticated()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
                 {{ 'you_voted' | translate }}
-                <h5 ng-if="user()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
+                <h5 ng-if="userAuthenticated()" class="nomargin">{{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}</h5>
               </button>
             </div>
           </div>
@@ -193,9 +193,9 @@
       <div class="row">
         <div class="col-md-9">
           <div class="comments">
-            <div ng-if="user()" class="media comments-comment">
+            <div ng-if="userAuthenticated()" class="media comments-comment">
               <div class="media-left">
-                <div profile-picture="user()" class="media-object profile-picture comment-user img-circle">
+                <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
                 </div>
               </div>
               <div class="media-body">
@@ -214,7 +214,7 @@
                 </form>
               </div>
             </div>
-            <div ng-if="!user()">
+            <div ng-if="!userAuthenticated()">
               <button ng-click="login()" type="button" class="btn btn-info">
                 {{ 'login_to_post_a_comment' | translate }}
               </button>
@@ -269,7 +269,7 @@
                     </div>
                     <div ng-if="commentHasReplies(comment) || isReplyCommentFormOpened(comment)" class="media comments-comment">
                       <div class="media-left">
-                        <div profile-picture="user()" class="media-object profile-picture comment-user img-circle">
+                        <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
                         </div>
                       </div>
                       <div class="media-body">

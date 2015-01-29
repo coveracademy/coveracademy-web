@@ -13,7 +13,7 @@ angular
 
   // Authentication
   $scope.isAuthenticated = authenticationService.isAuthenticated;
-  $scope.user = authenticationService.getUser;
+  $scope.userAuthenticated = authenticationService.getUser;
   $scope.login = authenticationService.login;
   $scope.logout = authenticationService.logout;
 

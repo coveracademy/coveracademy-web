@@ -268,7 +268,7 @@ angular
     $scope.userAudition = null;
   });
   $scope.isConnectedWithYouTube = function() {
-    return userService.isConnectedWithNetwork($scope.user(), 'youtube');
+    return userService.isConnectedWithNetwork($scope.userAuthenticated(), 'youtube');
   };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && $scope.userAudition.id);
@@ -307,7 +307,7 @@ angular
         alertService.alert('info', translation)
       });
     }).catch(function(err) {
-      translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
+      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -397,7 +397,7 @@ angular
     }
   };
   $scope.canVote = function() {
-    return !authenticationService.getUser() || (authenticationService.getUser().id !== $scope.audition.user.id);
+    return !$scope.userAuthenticated() || ($scope.userAuthenticated().id !== $scope.audition.user.id);
   };
   $scope.voted = function() {
     return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
@@ -445,7 +445,7 @@ angular
         }, 2000);
       }
     }).catch(function(err) {
-      translationService.translateError(err, {user: $scope.user()}).then(function(translation) {
+      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -491,7 +491,7 @@ angular
     return $scope.replyCommentFormOpened[comment.id] === true;
   };
   $scope.canRemoveComment = function(comment) {
-    var user = $scope.user();
+    var user = $scope.userAuthenticated();
     return user && (user.id === $scope.audition.user_id || user.id === comment.user_id);
   };
   $scope.removeComment = function(comment, parentComment) {
