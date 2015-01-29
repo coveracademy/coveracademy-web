@@ -80,7 +80,7 @@ angular
   $scope.showNetworks = {};
 
   $scope.user.socialAccounts.forEach(function(socialAccount) {
-    $scope.showNetworks[socialAccount.network] = socialAccount.show === 1 ? true : false
+    $scope.showNetworks[socialAccount.network] = socialAccount.show_link === 1 ? true : false
   });
 
   $translate('seo.title.settings').then(function(translation) {
