@@ -317,8 +317,7 @@ angular
       url: 'http://graph.facebook.com/v2.2/{{ facebook_account }}/picture?type=large',
       token: '{{ facebook_account }}',
       get: function(user) {
-        var socialAccount = $.getSocialAccount(user, 'facebook');
-        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+        return this.url.replace(this.token, user.facebook_account);
       }
     },
     twitter: {
@@ -341,8 +340,7 @@ angular
       url: 'http://www.facebook.com/{{ facebook_account }}',
       token: '{{ facebook_account }}',
       get: function(user) {
-        var socialAccount = $.getSocialAccount(user, 'facebook');
-        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+        return this.url.replace(this.token, user.facebook_account);
       }
     },
     twitter: {
@@ -357,16 +355,14 @@ angular
       url: 'http://plus.google.com/{{ google_account }}',
       token: '{{ google_account }}',
       get: function(user) {
-        var socialAccount = $.getSocialAccount(user, 'google');
-        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+        return this.url.replace(this.token, user.google_account);
       }
     },
     youtube: {
       url: 'https://www.youtube.com/channel/{{ youtube_account }}',
       token: '{{ youtube_account }}',
       get: function(user) {
-        var socialAccount = $.getSocialAccount(user, 'youtube');
-        return socialAccount ? this.url.replace(this.token, socialAccount.account) : null;
+        return this.url.replace(this.token, user.youtube_account);
       }
     },
     soundcloud: {
@@ -414,9 +410,6 @@ angular
   this.showNetwork = function(network, show) {
     return $http.post('/api/user/showNetwork', {network: network, show: show});
   };
-  this.isConnectedWithNetwork = function(network) {
-    return $http.get('/api/user/isConnectedWithNetwork', {params: {network: network}});
-  };
   this.getProfilePicture = function(user, network) {
     var url = '';
     var picture = networkPictures[network ? network : user.profile_picture];
@@ -437,9 +430,7 @@ angular
     return user.profile_picture === network;
   };
   this.isConnectedWithNetwork = function(user, network) {
-    return $underscore.some(user.socialAccounts, function(socialAccount) {
-      return socialAccount.network === network;
-    });
+    return Boolean(user[network + '_account']);
   };
   this.getSocialAccount = function(user, network) {
     return $underscore.find(user.socialAccounts, function(socialAccount) {

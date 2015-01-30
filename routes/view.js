@@ -445,7 +445,7 @@ module.exports = function(router, app) {
 
   router.get('/user/:username', function(req, res, next) {
     var username = req.param('username');
-    userService.findByUsername(username).then(function(user) {
+    userService.findByUsername(username, true).then(function(user) {
       if(!user) {
         messages.respondWithNotFound(res);
       } else {
@@ -464,7 +464,7 @@ module.exports = function(router, app) {
 
   router.get('/user', function(req, res, next) {
     var id = req.param('id');
-    userService.findById(id).then(function(user) {
+    userService.findById(id, true).then(function(user) {
       if(!user) {
         messages.respondWithNotFound(res);
       } else if(user.get('username')) {

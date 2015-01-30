@@ -12,7 +12,7 @@ module.exports = function(router, app) {
     if(!req.user) {
       res.json(null);
     } else {
-      userService.findById(req.user.id).then(function(user) {
+      userService.findById(req.user.id, true).then(function(user) {
         res.json(user);
       }).catch(function(err) {
         logger.error(err);
@@ -101,16 +101,6 @@ module.exports = function(router, app) {
     var show = req.param('show');
     userService.showNetwork(req.user, network, show).then(function() {
       res.json({});
-    }).catch(function(err) {
-      logger.error(err);
-      messages.respondWithError(err, res);
-    });
-  });
-
-  router.get('/isConnectedWithNetwork', isAuthenticated, function(req, res, next) {
-    var network = req.param('network');
-    userService.isConnectedWithNetwork(req.user, network).then(function(connected) {
-      res.json({connected: connected});
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);

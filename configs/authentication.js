@@ -39,7 +39,7 @@ exports.configure = function(app, passport) {
     if(_.isObject(user)) {
       done(null, user);
     } else {
-      userService.findById(user, false).then(function(userFound) {
+      userService.findById(user).then(function(userFound) {
         if(userFound) {
           return userFound;
         }
@@ -82,11 +82,7 @@ exports.configure = function(app, passport) {
       if(user) {
         throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Twitter account');
       }
-      var user = req.user;
-      user.set('twitter_picture', profileInfos.picture);
-      return userService.save(user, ['twitter_picture']).then(function(user) {
-        return userService.connectNetwork(user, 'twitter', profileInfos.id, profileInfos.url);
-      });
+      return userService.connectNetwork(req.user, 'twitter', profileInfos.id, profileInfos.picture, profileInfos.url);
     }).nodeify(new CustomDone(done).done);
   }));
 
@@ -102,11 +98,7 @@ exports.configure = function(app, passport) {
       if(user) {
         throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Google account');
       }
-      var user = req.user;
-      user.set('google_picture', profileInfos.picture);
-      return userService.save(user, ['google_picture']).then(function(user) {
-        return userService.connectNetwork(user, 'google', profileInfos.id);
-      });
+      return userService.connectNetwork(req.user, 'google', profileInfos.id, profileInfos.picture);
     }).nodeify(new CustomDone(done).done);
   }));
 
@@ -114,7 +106,6 @@ exports.configure = function(app, passport) {
     if(!req.user) {
       throw messages.apiError('user.connect.notAuthenticated', 'The user must be authenticated to connect with SoundCloud');
     }
-    console.log(profile)
     var profileInfos = {
       id: profile.id,
       url: profile._json.permalink
@@ -123,7 +114,7 @@ exports.configure = function(app, passport) {
       if(user) {
         throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this SoundCloud account');
       }
-      return userService.connectNetwork(req.user, 'soundcloud', profileInfos.id, profileInfos.url);
+      return userService.connectNetwork(req.user, 'soundcloud', profileInfos.id, null, profileInfos.url);
     }).nodeify(new CustomDone(done).done);
   }));
 

@@ -267,9 +267,6 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.userAudition = null;
   });
-  $scope.isConnectedWithYouTube = function() {
-    return userService.isConnectedWithNetwork($scope.userAuthenticated(), 'youtube');
-  };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && $scope.userAudition.id);
   };

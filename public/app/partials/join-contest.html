@@ -84,7 +84,7 @@
       </div>
     </div>
   </div>
-  <div ng-if="isAuthenticated() && !isConnectedWithYouTube()">
+  <div ng-if="isAuthenticated() && !userAuthenticated().youtube_account">
     <h1 class="align-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
     <h2 class="align-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
     <div class="row padding">
@@ -95,7 +95,7 @@
       </div>
     </div>
   </div>
-  <form ng-if="isAuthenticated() && isConnectedWithYouTube()" name="auditionForm" class="form-horizontal">
+  <form ng-if="isAuthenticated() && userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal">
     <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
     <div class="row">
       <div class="col-md-12 align-center">

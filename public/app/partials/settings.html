@@ -131,30 +131,6 @@
               <div class="social-account">
                 <div class="row">
                   <div class="col-md-4">
-                    <a class="btn btn-lg btn-social-icon btn-youtube">
-                      <i class="fa fa-youtube"></i>
-                    </a>
-                    <span class="network-name">YouTube</span>
-                  </div>
-                  <div class="col-md-4">
-                    <div ng-if="isConnectedWithNetwork('youtube')">
-                      <input type="checkbox" ng-model="showNetworks['youtube']" ng-change="showNetwork('youtube')">
-                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <button ng-if="!isConnectedWithNetwork('youtube')" ng-click="connectNetwork('youtube')" class="btn btn-lg btn-primary pull-right">
-                      {{ 'forms.connect' | translate }}
-                    </button>
-                    <button ng-if="isConnectedWithNetwork('youtube')" ng-click="disconnectNetwork('youtube')" class="btn btn-lg btn-default pull-right">
-                      {{ 'forms.disconnect' | translate }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="social-account">
-                <div class="row">
-                  <div class="col-md-4">
                     <a class="btn btn-lg btn-social-icon btn-twitter">
                       <i class="fa fa-twitter"></i>
                     </a>
@@ -195,6 +171,30 @@
                       {{ 'forms.connect' | translate }}
                     </button>
                     <button ng-if="isConnectedWithNetwork('google')" ng-click="disconnectNetwork('google')" class="btn btn-lg btn-default pull-right">
+                      {{ 'forms.disconnect' | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="social-account">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a class="btn btn-lg btn-social-icon btn-youtube">
+                      <i class="fa fa-youtube"></i>
+                    </a>
+                    <span class="network-name">YouTube</span>
+                  </div>
+                  <div class="col-md-4">
+                    <div ng-if="isConnectedWithNetwork('youtube')">
+                      <input type="checkbox" ng-model="showNetworks['youtube']" ng-change="showNetwork('youtube')">
+                      <span class="network-show">{{ 'forms.show_link_in_profile' | translate }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button ng-if="!isConnectedWithNetwork('youtube')" ng-click="connectNetwork('youtube')" class="btn btn-lg btn-primary pull-right">
+                      {{ 'forms.connect' | translate }}
+                    </button>
+                    <button ng-if="isConnectedWithNetwork('youtube')" ng-click="disconnectNetwork('youtube')" class="btn btn-lg btn-default pull-right">
                       {{ 'forms.disconnect' | translate }}
                     </button>
                   </div>

@@ -24,7 +24,6 @@ var auditionRelated = {withRelated: ['user']};
 var auditionWithContestRelated = {withRelated: ['contest']};
 var auditionWithContestAndUserRelated = {withRelated: ['contest', 'user']};
 var contestWithSponsorsAndPrizesRelated = {withRelated: ['prizes', 'prizes.sponsor', 'sponsorsInContest', 'sponsorsInContest.sponsor']};
-var userRelated = {withRelated: ['socialAccounts']};
 var userCommentRelated = {withRelated: ['user']};
 var userCommentWithRepliesRelated = {withRelated: ['user', 'audition', 'replies', 'replies.user']};
 var userCommentWithAuditionAndRepliesRelated = {withRelated: ['user', 'audition', 'replies', 'replies.user']};
@@ -252,16 +251,13 @@ exports.submitAudition = function(user, contest, auditionData) {
       reject(messages.apiError('contest.join.userNotVerified', 'The user can not submit his audidion because he is not verified'));
       return;
     }
-    user.load(userRelated.withRelated).then(function(user) {
-      return Contest.forge({id: contest.id}).fetch();
-    }).then(function(contestFetched) {
+    Contest.forge({id: contest.id}).fetch().then(function(contestFetched) {
       if(contestFetched.get('progress') === 'finished') {
         reject(messages.apiError('contest.join.alreadyFinished', 'The contest was already finished'));
         return;
       }
       youtube.getVideoInfos(auditionData.url).then(function(videoInfos) {
-        var youtubeAccount = user.getSocialAccount('youtube');
-        if(!youtubeAccount || videoInfos.channelId !== youtubeAccount.get('account')) {
+        if(videoInfos.channelId !== user.get('youtube_account')) {
           reject(messages.apiError('contest.join.videoNotOwnedByUser', 'This video URL is not owned by the user'));
           return;
         }

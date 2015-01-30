@@ -8,8 +8,12 @@
   <div id="incentive">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="align-center nomargin">{{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes} }}</h3>
-        <h4>{{ 'incentive_vote_modal_description' | translate }}</h4>
+        <h3 class="align-center nomargin">
+          {{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes} }}
+        </h3>
+        <div class="alert alert-info margin-top">
+          <h4>{{ 'incentive_vote_modal_description' | translate }}</h4>
+        </div>
       </div>
     </div>
     <div class="row padding" ng-repeat="row in randomAuditions | partition: 3">
