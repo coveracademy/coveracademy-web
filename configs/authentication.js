@@ -61,7 +61,7 @@ exports.configure = function(app, passport) {
         return user;
       } else {
         if(profileInfos.email) {
-          return userService.create({facebook_account: profileInfos.id, facebook_picture: profileInfos.picture, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
+          return userService.create({facebook_account: profileInfos.id, facebook_picture: null, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'});
         } else {
           return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.picture, profileInfos.name, profileInfos.gender);
         }
