@@ -409,7 +409,7 @@ angular
       your_audition: 'Sua audição',
       your_votes: 'Seus votos',
       alerts: {
-        changes_saved_successfully: 'Alterações atualizadas com sucesso.',
+        changes_saved_successfully: 'Informações atualizadas com sucesso.',
         confirm_your_email: 'Bem-vindo! Por favor, verifique o seu email e confirme a sua conta.',
         congratulations_now_you_are_in_the_contest: 'Parabéns, agora você está participando da competição. Boa sorte!',
         email_verified: 'Seu email foi verificado com sucesso, agora você pode votar nos competidores e participar da competição.',

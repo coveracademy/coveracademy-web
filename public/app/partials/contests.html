@@ -1,14 +1,24 @@
 <div class="container">
 	<h1 class="page-header">{{ 'latest_contests' | translate }}</h1>
 	<div ng-repeat="contest in contests">
-		<div class="row contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ contest.image }}');">
+		<div class="row contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ contest.image }}');">
 			<div class="col-md-12">
 				<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
-					<h1 class="align-center nomargin">{{ contest.name }}</h1>
+					<h1 class="align-center nomargin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
 				</a>
-				<h3>
-					{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
-				</h3>
+				<div class="contest-infos">
+					<h3 class="nomargin">
+						{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
+						<span ng-if="contest.start_date">
+							·
+							{{ contest.start_date | amCalendar }}
+						</span>
+						<span ng-if="contest.end_date">
+							·
+							{{ contest.end_date | amCalendar }}
+						</span>
+					</h3>
+				</div>
 				<div ng-if="hasWinnerAuditions(contest)">
 			    <h3 class="align-center">{{ 'winners' | translate }}</h3>
 			    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding">

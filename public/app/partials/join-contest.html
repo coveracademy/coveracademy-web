@@ -33,12 +33,16 @@
         <div class="col-md-6 nopadding">
           <div class="title">
             <h1 ng-class="{'nomargin': !isContestProgress('finished')}">
-              <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">{{ contest.name }}</a>
+              <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+                {{ contest.name }}
+              </a>
             </h1>
           </div>
           <div ng-if="hasSponsors()" class="sponsors">
             <div class="become-sponsor">
-              <a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a>
+              <a ui-sref="app.contact()">
+                {{ 'want_to_become_a_sponsor' | translate }}
+              </a>
             </div>
             <a ng-repeat="sponsor in contest.sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank">
               <img ng-src="{{ sponsor.image }}">
