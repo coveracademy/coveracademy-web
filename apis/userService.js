@@ -173,35 +173,35 @@ exports.save = function(user, attributes) {
 
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
-    if(user.permission === 'admin' || user.id === edited.id) {
-      $.forge({id: edited.id}).fetch().then(function(userFetched) {
-        if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
-          reject(messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore'));
-          return;
+    if(user.id !== edited.id && user.permission !== 'admin') {
+      reject(messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission'));
+      return;
+    }
+    $.forge({id: edited.id}).fetch().then(function(userFetched) {
+      if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
+        reject(messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore'));
+        return;
+      }
+      if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
+        reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
+        return;
+      }
+      if(userFetched.get('email') !== edited.get('email')) {
+        edited.set('verified', 0);
+      }
+      edited.save(edited.pick(entities.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
+        resolve(userEdited);
+        if(userEdited.get('verified') === 0) {
+          $.sendVerificationEmail(userEdited).catch(function(err) {
+            logger.error('Error sending "user verification" email to user %d: ' + err, userEdited.id);
+          });
         }
-        if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
-          reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
-          return;
-        }
-        if(userFetched.get('email') !== edited.get('email')) {
-          edited.set('verified', 0);
-        }
-        edited.save(edited.pick(entities.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
-          resolve(userEdited);
-          if(userEdited.get('verified') === 0) {
-            $.sendVerificationEmail(userEdited).catch(function(err) {
-              logger.error('Error sending "user verification" email to user %d: ' + err, userEdited.id);
-            });
-          }
-        }).catch(function(err) {
-          reject(messages.unexpectedError('Error editing user', err));
-        });
       }).catch(function(err) {
         reject(messages.unexpectedError('Error editing user', err));
       });
-    } else {
-      reject(messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because has no permission'));
-    }
+    }).catch(function(err) {
+      reject(messages.unexpectedError('Error editing user', err));
+    });
   });
 }
 
@@ -266,4 +266,8 @@ exports.resendVerificationEmail = function(user) {
     }
     return $.sendVerificationEmail(userFetched);
   });
+}
+
+exports.listAllUsers = function() {
+  return User.collection().fetch();
 }

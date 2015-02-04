@@ -246,6 +246,9 @@ a:hover {
 .margin-top {
   margin-top: 10px;
 }
+.margin-top20 {
+  margin-top: 20px;
+}
 .nomargin {
   margin: 0px;
 }

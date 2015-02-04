@@ -565,11 +565,20 @@ angular
   };
 }])
 .service('contestService', ['$http', function($http) {
+  this.listUnfinishedContests = function() {
+    return $http.get('/api/contest/unfinished');
+  };
+  this.sendInscriptionEmail = function(contest) {
+    return $http.post('/api/contest/inscriptionEmail', {contest: contest.id});
+  };
   this.getAuditionVideoInfos = function(url) {
     return $http.get('/api/contest/audition/videoInfos', {params: {url: url}});
   };
   this.submitAudition = function(audition, contest) {
     return $http.post('/api/contest/audition/submit', {audition: audition, contest: contest.id});
+  };
+  this.updateContest = function(contest) {
+    return $http.put('/api/contest/', {contest: contest});
   };
   this.isContestant = function(contest) {
     return $http.get('/api/contest/isContestant', {params: {contest: contest.id}});

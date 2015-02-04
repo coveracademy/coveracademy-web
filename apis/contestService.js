@@ -753,7 +753,7 @@ exports.isContestant = function(user, contest) {
   });
 }
 
-exports.getContestants = function(contest) {
+exports.listContestants = function(contest) {
   return new Promise(function(resolve, reject) {
     $.latestAuditions(contest).then(function(auditions) {
       var users = User.collection();
@@ -767,9 +767,9 @@ exports.getContestants = function(contest) {
   });
 }
 
-exports.getNonContestants = function(contest) {
+exports.listNonContestants = function(contest) {
   return new Promise(function(resolve, reject) {
-    $.getContestants(contest).then(function(contestants) {
+    $.listContestants(contest).then(function(contestants) {
       this.contestants = contestants;
       return User.fetchAll();
     }).then(function(users) {
@@ -796,4 +796,17 @@ exports.getSponsorsOfUnfinishedContests = function() {
     qb.join('contest', 'sponsor_contest.contest_id', 'contest.id');
     qb.where('contest.progress', '!=', 'finished');
   }).fetch();
+}
+
+exports.updateContest = function(user, contest) {
+  return new Promise(function(resolve, reject) {
+    if(user.get('permission') !== 'admin') {
+      reject(messages.apiError('contest.edit.noPermission', 'The contest informations cannot be edited because user has no permission'));
+      return;
+    }
+    if(contest.get('name')) {
+      contest.set('slug', slug.slugify(contest.get('name')));
+    }
+    resolve(contest.save());
+  });
 }

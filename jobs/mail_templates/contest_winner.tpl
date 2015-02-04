@@ -18,9 +18,18 @@
     <p>
       Veja o que você ganhou desta vez:
     </p>
-    <h1 style="text-align: center; font-weight: bold;">
-      {{ prize.name }}
-    </h1>
+    <div style="text-align: center;">
+      <h1 style="font-weight: bold;">
+        {% if prize.full_name %}
+          {{ prize.full_name }}
+        {% else %}
+          {{ prize.name }}
+        {% endif %}
+      </h1>
+      {% if prize.image %}
+        <img src="{{ prize.image }}" style="max-height: 120px;">
+      {% endif %}
+    </div>
     <p>
       Entraremos em contato em breve para entregar o prêmio, fica ligado!
     </p>
@@ -36,7 +45,7 @@
       Não esqueça de sempre acompanhar o projeto Cover Academy através do site e redes sociais.
     </p>
     <p>
-      Continue nos ajudando a criar a maior comunidade de músicos independentes e apaixonados por música, juntos com certeza conseguiremos ajudar os nossos talentosos artistas.
+      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por uma boa música, juntos conseguiremos beneficiar ainda mais os artistas que passam por aqui.
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

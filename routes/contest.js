@@ -1,4 +1,5 @@
 var contestService  = require('../apis/contestService'),
+    mailService     = require('../apis/mailService'),
     constants       = require('../apis/constants'),
     logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
@@ -10,6 +11,28 @@ var contestService  = require('../apis/contestService'),
 module.exports = function(router, app) {
 
   // ADMIN ROUTES
+  router.put('/', isAdmin, function(req, res, next) {
+    var contest = Contest.forge(req.param('contest'));
+    contestService.updateContest(req.user, contest).then(function(contest) {
+      res.json({
+        contest: contest
+      });
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.post('/inscriptionEmail', isAdmin, function(req, res, next) {
+    var contest = Contest.forge({id: req.param('contest')});
+    mailService.contestInscription(contest).then(function() {
+      res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   router.post('/audition/approve', isAdmin, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition')});
     contestService.approveAudition(audition).then(function() {
@@ -25,6 +48,15 @@ module.exports = function(router, app) {
     var reason = req.param('reason');
     contestService.disapproveAudition(audition, reason).then(function() {
       res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/unfinished', isAdmin, function(req, res, next) {
+    contestService.listUnfinishedContests().then(function(contests) {
+      res.json(contests);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);

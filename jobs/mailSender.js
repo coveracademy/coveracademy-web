@@ -26,6 +26,7 @@ var userVerificationTemplate = env.getTemplate('user_verification.tpl');
 var auditionSubmitTemplate = env.getTemplate('audition_submit.tpl');
 var auditionApprovedTemplate = env.getTemplate('audition_approved.tpl');
 var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
+var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
@@ -129,10 +130,24 @@ server.post('/audition/disapproved', function(req, res, next) {
   }).bind({});
 });
 
+server.post('/contest/inscription', function(req, res, next) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, allUsers) {
+    allUsers.forEach(function(user) {
+      renderPromise(contestInscriptionTemplate, {user: user.toJSON(), contest: contest.toJSON()}).then(function(email) {
+        mailService.send(user.get('email'), 'Você já pode se inscrever na competição do Cover Academy.', email);
+      });
+    });
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest inscription" email: ' + err);
+    res.send(500);
+  }).bind({});
+});
+
 server.post('/contest/start', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     this.contest = contest;
-    return Promise.all([contestService.latestAuditions(contest), contestService.getNonContestants(contest)]);
+    return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
     auditions.forEach(function(audition) {
       var user = audition.related('user');
@@ -155,7 +170,7 @@ server.post('/contest/start', function(req, res, next) {
 server.post('/contest/draw', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     this.contest = contest;
-    return Promise.all([contestService.latestAuditions(contest), contestService.getNonContestants(contest)]);
+    return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
     auditions.forEach(function(audition) {
       var user = audition.related('user');
@@ -178,7 +193,7 @@ server.post('/contest/draw', function(req, res, next) {
 server.post('/contest/finish', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     this.contest = contest;
-    return Promise.all([contestService.latestAuditions(contest), contestService.getNonContestants(contest)]);
+    return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
     auditions.forEach(function(audition) {
       var user = audition.related('user');

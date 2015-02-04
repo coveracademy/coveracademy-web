@@ -92,6 +92,17 @@ exports.auditionDisapproved = function(user, contest, reason) {
   });
 }
 
+exports.contestInscription = function(contest) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/inscription', {contest: contest.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
 
 exports.contestStart = function(contest) {
   return new Promise(function(resolve, reject) {

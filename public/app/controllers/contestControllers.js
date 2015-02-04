@@ -28,6 +28,7 @@ angular
   $scope.totalVotes = backendResponse.data.totalVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.winnerAuditions = backendResponse.data.winnerAuditions;
+
   $translate(['seo.title.contests', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.contests']);
     seoService.setDescription(translations['seo.description.contest']);
@@ -53,6 +54,7 @@ angular
 .controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;
   $scope.auditionsToReview = backendResponse.data.auditionsToReview;
+  $scope.newContest = {};
   $translate('seo.title.admin').then(function(translation) {
     seoService.setTitle(translation);
   });
@@ -96,6 +98,47 @@ angular
           alertService.alert('danger', 'Error disapproving audition');
         });
       }
+    });
+  };
+  $scope.isContestProgress = function(contest, expectedProgress) {
+    var progress;
+    if(contest.progress === 'waiting' && contest.start_date && new Date() < new Date(contest.start_date)) {
+      progress = 'waiting_time';
+    } else {
+      progress = contest.progress;
+    }
+    return progress === expectedProgress;
+  };
+  $scope.updateContest = function(contest) {
+    contestService.updateContest(contest).then(function(contest) {
+      alertService.alert('success', 'Contest updated');
+    }).catch(function(err) {
+      alertService.alert('danger', 'Error updating contest');
+    });
+  };
+  $scope.createNewContest = function() {
+    $scope.creatingContest = true;
+  };
+  $scope.createContest = function() {
+    contestService.updateContest($scope.newContest).then(function(response) {
+      contestService.listUnfinishedContests().then(function(response) {
+        $scope.contests = response.data;
+      });
+      $scope.creatingContest = false;
+      alertService.alert('success', 'Contest created');
+    }).catch(function(err) {
+      alertService.alert('danger', 'Error creating contest');
+    });
+  };
+  $scope.cancelContest = function() {
+    $scope.creatingContest = false;
+    $scope.newContest = {};
+  };
+  $scope.sendInscriptionEmail = function(contest) {
+    contestService.sendInscriptionEmail(contest).then(function() {
+      alertService.alert('success', 'Inscription email sended');
+    }).catch(function(err) {
+      alertService.alert('danger', 'Error sending inscription email');
     });
   };
 }])

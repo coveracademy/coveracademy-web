@@ -132,7 +132,6 @@ create table contest (
   id                  int not null auto_increment,
   name                varchar(255) not null,
   slug                varchar(255) not null,
-  description         text not null,
   image               varchar(255) not null,
   minimum_contestants tinyint not null,
   acceptance_date     date not null,

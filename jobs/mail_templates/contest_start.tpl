@@ -21,7 +21,7 @@
       Não esqueça de sempre acompanhar o projeto Cover Academy através do site e redes sociais.
     </p>
     <p>
-      Continue nos ajudando a criar a maior comunidade de músicos independentes e apaixonados por música, juntos com certeza conseguiremos ajudar os nossos talentosos artistas.
+      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por uma boa música, juntos conseguiremos beneficiar ainda mais os artistas que passam por aqui.
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

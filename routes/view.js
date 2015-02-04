@@ -31,7 +31,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/contests/admin', isAdmin, function(req, res, next) {
-    Promise.all([contestService.latestContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
+    Promise.all([contestService.listUnfinishedContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
       res.json({
         contests: contests,
         auditionsToReview: auditionsToReview
