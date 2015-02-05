@@ -10,7 +10,7 @@ var settings     = require('../configs/settings'),
 
 exports.receive = function(fromName, from, subject, text) {
   return new Promise(function(resolve, reject) {
-  	mailgun.messages().send({from: fromName + ' <' + from + '>', to: emailContact, subject: '[Cover Academy] ' + subject, html: text}, function (err, body) {
+  	mailgun.messages().send({from: fromName + ' <' + from + '>', to: emailContact, subject: subject, html: text}, function (err, body) {
       if(err) {
         reject(err);
       } else {

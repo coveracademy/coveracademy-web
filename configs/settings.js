@@ -52,7 +52,7 @@ try {
         profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails', 'profileUrl']
       },
       _email = {
-        contact: 'sandro.csimas@gmail.com',
+        contact: 'contato@coveracademy.com',
         apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
       },
       _database = {
