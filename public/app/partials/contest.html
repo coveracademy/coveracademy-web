@@ -132,47 +132,62 @@
 </div>
 <div id="auditions">
   <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')" class="container">
-    <div class="jumbotron margin10 align-center">
-      <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
-      <h2 ng-if="isContestProgress('waiting')">
-        {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
-      </h2>
-      <h2 ng-if="isContestProgress('waiting_time')">
-        {{ 'time_remaining_to_start' | translate }}:
-      </h2>
-      <h1 ng-if="isContestProgress('waiting_time')">
-        <span ng-if="remainingOneDay(contest.start_date)">
-          <timer interval="60000" end-time="contest.start_date">
-            {{ hours }}
-            <small>{{ 'hours' | translate }}</small>
-            {{ minutes }}
-            <small>{{ 'minutes' | translate }}</small>
-          </timer>
-        </span>
-        <span ng-if="!remainingOneDay(contest.start_date)">
-          <timer interval="60000" end-time="contest.start_date">
-            {{ days }}
-            <small>{{ 'days' | translate }}</small>
-            {{ hours }}
-            <small>{{ 'hours' | translate }}</small>
-          </timer>
-        </span>
-      </h1>
-      <div ng-if="!isContestant()" class="padding-top">
-        <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-          {{ 'join_now' | translate }}
-        </a>
-        <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-          {{ 'see_the_guideline' | translate }}
-        </a>
+    <div class="jumbotron white margin10 align-center">
+      <div ng-if="!hasAuditions() && !isContestant()">
+        <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
+        <div class="padding-top">
+          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
+            {{ 'join_now' | translate }}
+          </a>
+          <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
+            {{ 'see_the_guideline' | translate }}
+          </a>
+        </div>
       </div>
-      <div ng-if="isContestant()" class="padding-top">
-        <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
-          {{ 'you_are_participating' | translate }}
-          <h4 ng-if="!isAuditionApproved()">
-            {{ 'waiting_for_approval' | translate }}
-          </h4>
-        </a>
+      <div ng-if="hasAuditions() || isContestant()">
+        <h2>{{ 'this_contest_is_not_happening_yet' | translate }}</h2>
+        <h2 ng-if="isContestProgress('waiting')">
+          {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
+        </h2>
+        <div ng-if="isContestProgress('waiting_time')">
+          <h2>
+            {{ 'time_remaining_to_start' | translate }}:
+          </h2>
+          <h1>
+            <span ng-if="remainingOneDay(contest.start_date)">
+              <timer interval="60000" end-time="contest.start_date">
+                {{ hours }}
+                <small>{{ 'hours' | translate }}</small>
+                {{ minutes }}
+                <small>{{ 'minutes' | translate }}</small>
+              </timer>
+            </span>
+            <span ng-if="!remainingOneDay(contest.start_date)">
+              <timer interval="60000" end-time="contest.start_date">
+                {{ days }}
+                <small>{{ 'days' | translate }}</small>
+                {{ hours }}
+                <small>{{ 'hours' | translate }}</small>
+              </timer>
+            </span>
+          </h1>
+        </div>
+        <div ng-if="!isContestant()" class="padding-top">
+          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
+            {{ 'join_now' | translate }}
+          </a>
+          <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
+            {{ 'see_the_guideline' | translate }}
+          </a>
+        </div>
+        <div ng-if="isContestant()" class="padding-top">
+          <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
+            {{ 'you_are_participating' | translate }}
+            <h4 ng-if="!isAuditionApproved()">
+              {{ 'waiting_for_approval' | translate }}
+            </h4>
+          </a>
+        </div>
       </div>
       <h2>
         {{ 'help_sharing' | translate }}
@@ -209,7 +224,7 @@
     </div>
   </div>
   <div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
-    <div class="jumbotron margin10 align-center">
+    <div class="jumbotron white margin10 align-center">
       <div ng-if="!isContestant()">
         <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
         <div class="padding-top">
@@ -282,7 +297,7 @@
       </div>
     </div>
     <div ng-if="!hasWinners()">
-      <div class="jumbotron">
+      <div class="jumbotron white">
         <h1 class="align-center">{{ 'we_have_no_winners' | translate }} =(</h1>
       </div>
     </div>
