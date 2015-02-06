@@ -285,6 +285,7 @@ angular
     'contest.join.userNotVerified': 'errors.join_contest_user_not_verified',
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
+    'user.connect.alreadyConnected': 'errors.user_connect_already_connected',
     'user.edit.invalidUsername': 'errors.user_edit_invalid_username',
     'user.verification.emailAlreadyVerified': 'errors.user_verification_email_already_verified',
     'user.verification.errorSendingVerificationEmail': 'errors.user_verification_error_sending_verification_email',
