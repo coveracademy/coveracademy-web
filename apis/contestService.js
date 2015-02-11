@@ -41,8 +41,8 @@ exports.getContestFromAudition = function(audition) {
   } else if(audition.get('contest_id')) {
     return $.getContest(audition.get('contest_id'));
   } else {
-    return $.getAudition(audition.id).then(function(auditionFetched) {
-      return auditionFetched.related('contest');
+    return $.loadAudition(audition).then(function(audition) {
+      return audition.related('contest');
     });
   }
 }
@@ -322,10 +322,10 @@ exports.disapproveAudition = function(audition, reason) {
       reject(reject(messages.apiError('audition.disapprove.reasonMustBeProvided', 'The reason must be provided', err)));
       return;
     }
-    $.getAudition(audition.id).then(function(auditionLoaded) {
-      this.user = auditionLoaded.related('user').clone();
-      this.contest = auditionLoaded.related('contest').clone();
-      return auditionLoaded.destroy();
+    $.loadAudition(audition).then(function(audition) {
+      this.user = audition.related('user').clone();
+      this.contest = audition.related('contest').clone();
+      return audition.destroy();
     }).then(function() {
       mailService.auditionDisapproved(this.user, this.contest, reason).catch(function(err) {
         logger.error('Error sending "audition disapproved" email to user %d: ' + err.message, this.user.id);
@@ -373,6 +373,10 @@ exports.getWinnerAuditions = function(obj) {
 
 exports.getAudition = function(id) {
   return Audition.forge({id: id}).fetch(auditionWithContestAndUserRelated);
+}
+
+exports.loadAudition = function(audition) {
+  return audition.fetch(auditionWithContestAndUserRelated);
 }
 
 exports.getUserAudition = function(user, contest) {
