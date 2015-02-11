@@ -19,6 +19,7 @@ create table user (
   profile_picture    varchar(20) default null,
   voting_power       decimal(6, 3) default 1.000,
   verified           tinyint default 0,
+  contestant         tinyint default 0,
   registration_date  timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_username` (`username`),

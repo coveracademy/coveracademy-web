@@ -299,20 +299,31 @@ exports.submitAudition = function(user, contest, auditionData) {
 
 exports.approveAudition = function(audition) {
   return new Promise(function(resolve, reject) {
-    audition.set('approved', 1);
-    audition.save({approved: audition.get('approved')}, {patch: true}).then(function(auditionSaved) {
-      resolve(auditionSaved);
-      $.getContestFromAudition(auditionSaved).then(function(contest) {
-        $.startContest(contest).catch(function(err) {
-          // Ignore
-        });
+    Bookshelf.transaction(function(transaction) {
+      return $.getAudition(audition.id).then(function(audition) {
+        this.audition = audition;
+        audition.set('approved', 1);
+        return audition.save({approved: audition.get('approved')}, {patch: true, transacting: transaction});
+      }).then(function(audition) {
+        return audition.related('user').save({contestant: 1}, {patch: true, transacting: transaction})
+      }).then(function(contest) {
+        return this.audition;
       });
-      mailService.auditionApproved(auditionSaved).catch(function(err) {
-        logger.error('Error sending "audition approved" email to audition %d owner: ' + err.message, auditionSaved.id);
+    }).then(function(audition) {
+      resolve(audition);
+      // When an audition is approved, an email is sent to audition's owner
+      mailService.auditionApproved(audition).catch(function(err) {
+        logger.error('Error sending "audition approved" email to audition %d owner: ' + err.message, audition.id);
+      });
+      // When an audition is approved, we try to start the contest
+      $.getContestFromAudition(audition).then(function(contest) {
+        return $.startContest(contest);
+      }).catch(function(err) {
+        // Ignore
       });
     }).catch(function(err) {
       reject(messages.unexpectedError('Error approving audition', err));
-    });
+    }).bind({});
   });
 }
 

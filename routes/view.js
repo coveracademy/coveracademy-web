@@ -443,18 +443,22 @@ module.exports = function(router, app) {
     });
   });
 
+  var getUserInfos = function(user, res) {
+    return contestService.getUserAuditions(user).then(function(auditions) {
+      res.json({
+        user: user,
+        auditions: auditions
+      });
+    });
+  };
+
   router.get('/user/:username', function(req, res, next) {
     var username = req.param('username');
     userService.findByUsername(username, true).then(function(user) {
       if(!user) {
         messages.respondWithNotFound(res);
       } else {
-        return contestService.getUserAuditions(user).then(function(auditions) {
-          res.json({
-            user: user,
-            auditions: auditions
-          });
-        });
+        return getUserInfos(user, res);
       }
     }).catch(function(err) {
       logger.error(err);
@@ -470,12 +474,7 @@ module.exports = function(router, app) {
       } else if(user.get('username')) {
         messages.respondWithMovedPermanently('user', {username: user.get('username')}, res);
       } else {
-        return contestService.getUserAuditions(user).then(function(auditions) {
-          res.json({
-            user: user,
-            auditions: auditions
-          });
-        });
+        return getUserInfos(user, res);
       }
     }).catch(function(err) {
       logger.error(err);

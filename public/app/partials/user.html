@@ -20,6 +20,9 @@
               <i class="glyphicon glyphicon-screenshot"></i>
               {{ 'voting_power' | translate }}: {{ user.voting_power }}
             </span>
+            <span ng-if="isContestant()" class="user-label label label-primary">
+              <i class="glyphicon glyphicon-ok"></i> {{ 'contestant' | translate }}
+            </span>
             <span class="user-label label label-info">
               <i class="glyphicon glyphicon-map-marker"></i> {{ user.city }} / {{ user.state }}
             </span>

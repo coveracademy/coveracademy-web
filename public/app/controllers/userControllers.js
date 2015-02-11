@@ -49,6 +49,9 @@ angular
   seoService.setTitle($scope.user.name);
   seoService.setDescription($scope.user.biography);
 
+  $scope.isContestant = function() {
+    return $scope.user.contestant === 1;
+  };
   $scope.isOwner = function() {
     return $scope.userAuthenticated() && $scope.userAuthenticated().id === $scope.user.id;
   };
