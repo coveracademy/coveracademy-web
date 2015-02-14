@@ -14,7 +14,7 @@
     "connect-multiparty": "~1.2.5",
     "connect-redis": "~2.1.0",
     "cookie-parser": "~1.0.1",
-    "deasync": "0.0.7",
+    "deasync": "0.0.10",
     "debug": "~0.7.4",
     "decay": "~1.0.6",
     "express": "~4.2.0",
