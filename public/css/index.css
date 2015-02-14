@@ -88,11 +88,16 @@ img.brand {
   max-height: 250px;
   max-width: 300px;
   margin: 20px;
+  border-radius: 5px;
 }
 img.small-brand {
   max-height: 100px;
   max-width: 120px;
   margin: 5px;
+  border-radius: 5px;
+}
+.jumbotron.white {
+  background-color: #fff;
 }
 .land-section {
   padding-top: 80px;
@@ -565,6 +570,7 @@ form.compacted .form-group {
   position: relative;
 }
 .pretty-header.background-style {
+  background-size: cover;
   height: auto;
   overflow: visible;
   position: static;

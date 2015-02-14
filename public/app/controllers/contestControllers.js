@@ -167,7 +167,7 @@ angular
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
   seoService.setTitle($scope.contest.name);
-  seoService.setImage('/img/contests/' + $scope.contest.image);
+  seoService.setImage($scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
@@ -300,7 +300,7 @@ angular
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
-  seoService.setImage('/img/contests/' + $scope.contest.image);
+  seoService.setImage($scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
     contestService.getUserAudition($scope.contest).then(function(response) {
