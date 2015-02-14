@@ -14,7 +14,8 @@ var express        = require('express'),
     middlewares    = require('./configs/middlewares'),
     authentication = require('./configs/authentication'),
     settings       = require('./configs/settings'),
-    logger         = require('./configs/logger');
+    logger         = require('./configs/logger'),
+    serverLogger   = require('./configs/server-logger');
 
 var app = express();
 
@@ -24,7 +25,7 @@ app.set('views', settings.viewsPath);
 app.set('public', settings.publicPath);
 
 app.use(favicon(settings.publicPath + '/img/favicon.ico'));
-app.use(morgan('dev'));
+app.use(morgan({format: 'tiny', stream: serverLogger.stream}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());

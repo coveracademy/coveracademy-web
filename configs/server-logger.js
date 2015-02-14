@@ -2,8 +2,7 @@ var winston = require('winston');
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({timestamp: true, colorize: true}),
-    new (winston.transports.File)({filename: 'cover-academy.log'})
+    new (winston.transports.Console)({timestamp: true, colorize: true})
   ]
 });
 
