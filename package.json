@@ -37,6 +37,7 @@
     "passport-youtube-v3": "~0.0.2",
     "passport-twitter": "~1.0.2",
     "passport-soundcloud": "~0.1.2",
+    "pmx": "~0.3.1",
     "prerender-node": "~1.1.0",
     "properties": "1.2.1",
     "request": "~2.37.0",

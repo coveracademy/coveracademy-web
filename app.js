@@ -1,4 +1,5 @@
 require('newrelic');
+require('pmx').init();
 
 var express        = require('express'),
     favicon        = require('serve-favicon'),
