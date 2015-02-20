@@ -825,3 +825,14 @@ exports.updateContest = function(user, contest) {
     resolve(contest.save());
   });
 }
+
+exports.latestContestants = function(page, pageSize) {
+  return User.collection().query(function(qb) {
+    qb.where('contestant', 1);
+    qb.orderBy('registration_date', 'desc');
+    if(page && pageSize) {
+      qb.offset((page - 1) * pageSize);
+      qb.limit(pageSize);
+    }
+  }).fetch();
+}

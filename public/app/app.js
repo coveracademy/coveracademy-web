@@ -285,6 +285,18 @@ angular
         }
       }
     })
+    .state('app.contestants', {
+      url: '/contestants',
+      templateUrl: '/app/partials/contestants.html',
+      controller: 'contestantsController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function(viewService) {
+          return viewService.contestantsView();
+        }
+      }
+    })
     .state('app.joinContest', {
       url: '/contest/:id/:slug/join',
       templateUrl: '/app/partials/join-contest.html',

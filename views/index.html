@@ -61,6 +61,9 @@
             <li ng-class="{'active': isSectionActive('covers')}">
               <a ui-sref="app.covers({locale: locale()})">{{ 'menus.covers' | translate }}</a>
             </li>
+            <li ng-class="{'active': isSectionActive('contestants')}">
+              <a ui-sref="app.contestants({locale: locale()})">{{ 'menus.contestants' | translate }}</a>
+            </li>
             <li ng-class="{'active': isSectionActive('contact')}">
               <a ui-sref="app.contact({locale: locale()})">{{ 'menus.contact' | translate }}</a>
             </li>
@@ -143,6 +146,11 @@
                 <li>
                   <a ui-sref="app.contests({locale: locale()})">
                     {{ 'menus.contests' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a ui-sref="app.contestants({locale: locale()})">
+                    {{ 'menus.contestants' | translate }}
                   </a>
                 </li>
               </ul>

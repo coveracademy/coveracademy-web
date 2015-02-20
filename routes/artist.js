@@ -8,7 +8,7 @@ module.exports = function(router, app) {
   router.get('/', function(req, res, next) {
     var musicGenre = MusicGenre.forge({id: req.param('musicGenre')});
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.listArtists(musicGenre, page, constants.ARTISTS_IN_LIST).then(function(artists) {
+    coverService.listArtists(musicGenre, page, constants.NUMBER_OF_ARTISTS_IN_PAGE).then(function(artists) {
       res.json(artists);
     }).catch(function(err) {
       console.log(err);

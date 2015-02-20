@@ -19,7 +19,7 @@ module.exports = function(router, app) {
 
   // ADMIN ROUTES
   router.get('/covers/admin', isAdmin, function(req, res, next) {
-    Promise.all([coverService.musicGenres(), coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)]).spread(function(musicGenres, potentialCovers) {
+    Promise.all([coverService.musicGenres(), coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE)]).spread(function(musicGenres, potentialCovers) {
       res.json({
         musicGenres: musicGenres,
         potentialCovers: potentialCovers
@@ -143,7 +143,7 @@ module.exports = function(router, app) {
     if(!validRankType(rank)) {
       messages.respondWithNotFound(res);
     } else {
-      var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST);
+      var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE);
       Promise.all([
         coversPromise,
         coverService.totalCovers(constants.WEEK_PERIOD)
@@ -203,7 +203,7 @@ module.exports = function(router, app) {
     var genre = req.param('genre');
     coverService.getMusicGenreBySlug(genre).then(function(musicGenre) {
       this.musicGenre = musicGenre;
-      return Promise.all([coverService.listArtists(musicGenre, constants.FIRST_PAGE, constants.ARTISTS_IN_LIST), coverService.totalArtists(musicGenre)]);
+      return Promise.all([coverService.listArtists(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_PAGE), coverService.totalArtists(musicGenre)]);
     }).spread(function(artists, totalArtists) {
       res.json({
         musicGenre: this.musicGenre,
@@ -226,7 +226,7 @@ module.exports = function(router, app) {
         var coversOfMusicPromise = rank === 'best' ? coverService.bestCoversOfMusic : coverService.latestCoversOfMusic;
         return Promise.all([
           coverService.totalCoversOfMusic(music),
-          coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_LIST)
+          coversOfMusicPromise(music, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE)
         ]).spread(function(totalCoversOfMusic, coversOfMusic) {
           res.json({
             music: music,
@@ -279,7 +279,7 @@ module.exports = function(router, app) {
         } else {
           var coversOfMusicGenrePromise = rank === 'best' ? coverService.bestCoversOfMusicGenre : coverService.latestCoversOfMusicGenre;
           return Promise.all([
-            coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST),
+            coversOfMusicGenrePromise(musicGenre, page, constants.NUMBER_OF_COVERS_IN_PAGE),
             coverService.totalCoversOfMusicGenre(musicGenre)
           ]).spread(function(coversOfMusicGenre, totalCoversOfMusicGenre) {
             res.json({
@@ -329,7 +329,7 @@ module.exports = function(router, app) {
         var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
         return Promise.all([
-          auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_LIST),
+          auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE),
           contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest),
           winnersPromise,
           contestService.getUserVotes(req.user, contest),
@@ -387,14 +387,25 @@ module.exports = function(router, app) {
   });
 
   router.get('/contests', function(req, res, next) {
-    contestService.latestContests(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTS_IN_LIST).then(function(contests) {
+    contestService.latestContests(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTS_IN_PAGE).then(function(contests) {
       return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.getWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
         res.json({
           contests: contests,
           totalVotes: totalVotes,
           totalAuditions: totalAuditions,
           winnerAuditions: winnerAuditions
-        })
+        });
+      });
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/contestants', function(req, res, next) {
+    contestService.latestContestants(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTANTS_IN_PAGE).then(function(contestants) {
+      res.json({
+        contestants: contestants
       });
     }).catch(function(err) {
       logger.error(err);

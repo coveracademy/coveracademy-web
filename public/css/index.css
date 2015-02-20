@@ -32,7 +32,7 @@ header.navbar-default .navbar-nav > li > a:hover {
   color: #999;
 }
 header.navbar-default .navbar-form input {
-  width: 350px !important;
+  width: 280px !important;
 }
 main.with-header {
   padding-top: 64px;
@@ -722,6 +722,43 @@ form.compacted .form-group {
 .audition {
   background-color: #fff;
   color: #000;
+}
+.contestants figure:hover figcaption {
+  opacity: 1;
+}
+.contestants figure .profile-picture {
+  width: 262px;
+  height: 262px;
+  float: left;
+}
+.contestants figcaption {
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: all 0.45s ease-in-out;
+  -moz-transition: all 0.45s ease-in-out;
+  -o-transition: all 0.45s ease-in-out;
+  -ms-transition: all 0.45s ease-in-out;
+  transition: all 0.45s ease-in-out;
+}
+.contestants figcaption .blur {
+  position: absolute;
+  height: 262px;
+  width: 262px;
+  z-index: 5;
+  background-color: rgba(0,0,0,0.65);
+}
+.contestants figcaption .text {
+  position: absolute;
+  width: 262px;
+  height: 262px;
+  z-index: 10;
+  color: #fff;
+  text-align: center;
+  top: 100px;
+}
+.contestants figcaption h1 {
+  text-transform: uppercase;
+  font-size: 24px;
 }
 .contest-cover {
   background-position: center top;

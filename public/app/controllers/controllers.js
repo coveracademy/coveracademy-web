@@ -72,6 +72,7 @@ angular
   $scope.sectionActive = '';
   $scope.sections = {
     contact: ['app.contact'],
+    contestants: ['app.contestants'],
     covers: ['app.cover', 'app.covers', 'app.coversRank', 'app.artist', 'app.artists', 'app.music', 'app.musicGenre', 'app.musicGenreRank', 'app.search']
   };
   $scope.isSectionActive = function(section) {

@@ -61,7 +61,7 @@ module.exports = function(router, app) {
 
   router.get('/latest', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.latestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.latestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -71,7 +71,7 @@ module.exports = function(router, app) {
 
   router.get('/best', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -82,7 +82,7 @@ module.exports = function(router, app) {
   router.get('/latestOfMusic', function(req, res, next) {
     var music = Music.forge({id: req.param('music')});
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.latestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.latestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -93,7 +93,7 @@ module.exports = function(router, app) {
   router.get('/bestOfMusic', function(req, res, next) {
     var music = Music.forge({id: req.param('music')});
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.bestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.bestCoversOfMusic(music, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -104,7 +104,7 @@ module.exports = function(router, app) {
   router.get('/latestOfMusicGenre', function(req, res, next) {
     var musicGenre = MusicGenre.forge({id: req.param('musicGenre')});
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.latestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.latestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -115,7 +115,7 @@ module.exports = function(router, app) {
   router.get('/bestOfMusicGenre', function(req, res, next) {
     var musicGenre = MusicGenre.forge({id: req.param('musicGenre')});
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.bestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_LIST).then(function(covers) {
+    coverService.bestCoversOfMusicGenre(musicGenre, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);

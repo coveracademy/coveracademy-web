@@ -105,7 +105,24 @@ angular
       var url = userService.getProfilePicture(scope.user, scope.network);
       if(url) {
         element.css({
-          'background-image': 'url(' + url +')',
+          'background-image': 'url(' + url +')'
+        });
+      }
+    }
+  }
+}])
+.directive('profilePictureSrc', ['userService', function(userService) {
+  return {
+    restrict: 'A',
+    scope: {
+      user: '=profilePictureSrc',
+      network: '@'
+    },
+    link: function(scope, element, attrs, ctrl) {
+      var url = userService.getProfilePicture(scope.user, scope.network);
+      if(url) {
+        element.attr({
+          'src': url
         });
       }
     }

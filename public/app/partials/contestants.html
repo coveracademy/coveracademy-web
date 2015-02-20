@@ -1,0 +1,18 @@
+<div class="container">
+  <h1 class="page-header">{{ 'contestants' | translate }}</h1>
+  <div ng-repeat="row in contestants | partition: 4" class="row padding contestants">
+    <div ng-repeat="contestant in row" class="col-md-3">
+      <a ui-sref="{{ userState(contestant) }}">
+        <figure>
+          <div profile-picture="contestant" class="profile-picture"></div>
+          <figcaption class="caption">
+            <div class="blur"></div>
+            <div class="text">
+              <h1>{{ contestant.name }}</h1>
+            </div>
+          </div>
+         </figcaption>
+      </a>
+    </div>
+  </div>
+</div>

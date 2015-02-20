@@ -487,6 +487,9 @@ angular
   this.contestsView = function() {
     return $http.get('/view/contests');
   };
+  this.contestantsView = function() {
+    return $http.get('/view/contestants');
+  };
   this.contestsAdminView = function() {
     return $http.get('/view/contests/admin');
   };
