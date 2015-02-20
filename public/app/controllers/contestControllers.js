@@ -59,6 +59,7 @@ angular
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
+  seoService.setImage('https://raw.githubusercontent.com/coveracademy/coveracademy.github.io/master/backgrounds/og-contestants.jpg');
 }])
 .controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;
