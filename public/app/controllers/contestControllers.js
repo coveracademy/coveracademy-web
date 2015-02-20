@@ -51,9 +51,8 @@ angular
     return contest.progress === 'finished';
   };
 }])
-.controller('contestantsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
+.controller('contestantsController', ['$scope', '$translate', 'backendResponse', 'seoService', function($scope, $translate, backendResponse, seoService) {
   $scope.contestants = backendResponse.data.contestants;
-
   $translate(['seo.title.contestants', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.contestants']);
     seoService.setDescription(translations['seo.description.contest']);

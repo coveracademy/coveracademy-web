@@ -49,7 +49,7 @@ angular
   $scope.isLocale = function(locale) {
     return $translate.use() === locale;
   };
-  $scope.userState = function(user) {
+  $scope.userState = function(user) {    
     if(user.username) {
       return 'app.user({locale: "' + $scope.locale() + '", username: "' + user.username + '"})';
     } else {
