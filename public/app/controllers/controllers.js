@@ -1,3 +1,5 @@
+angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 500);
+
 angular
 .module('coverAcademy.controllers', [])
 .controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
@@ -49,7 +51,7 @@ angular
   $scope.isLocale = function(locale) {
     return $translate.use() === locale;
   };
-  $scope.userState = function(user) {    
+  $scope.userState = function(user) {
     if(user.username) {
       return 'app.user({locale: "' + $scope.locale() + '", username: "' + user.username + '"})';
     } else {

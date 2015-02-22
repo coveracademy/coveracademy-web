@@ -623,4 +623,7 @@ angular
   this.disapproveAudition = function(audition, reason) {
     return $http.post('/api/contest/audition/disapprove', {audition: audition.id, reason: reason});
   };
+  this.latestContestants = function(page) {
+    return $http.get('/api/contest/latest', {params: {page: page}});
+  };
 }]);

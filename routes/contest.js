@@ -206,6 +206,16 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/latest', function(req, res, next) {
+    var page = req.param('page') || constants.FIRST_PAGE;
+    contestService.latestContestants(page, constants.NUMBER_OF_CONTESTANTS_IN_PAGE).then(function(contestants) {
+      res.json(contestants);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   app.use('/api/contest', router);
 
 }

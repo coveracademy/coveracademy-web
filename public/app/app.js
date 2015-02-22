@@ -10,6 +10,7 @@ angular
   'angularMoment',
   'angulartics',
   'angulartics.google.analytics',
+  'infinite-scroll',
   'ngCookies',
   'ngProgress',
   'ngSanitize',

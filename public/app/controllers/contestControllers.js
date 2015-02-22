@@ -51,14 +51,34 @@ angular
     return contest.progress === 'finished';
   };
 }])
-.controller('contestantsController', ['$scope', '$translate', 'backendResponse', 'seoService', function($scope, $translate, backendResponse, seoService) {
+.controller('contestantsController', ['$scope', '$translate', 'backendResponse', 'seoService', 'contestService', function($scope, $translate, backendResponse, seoService, contestService) {
   $scope.contestants = backendResponse.data.contestants;
+  $scope.loadMoreContestants = true;
+  var nextPage = 2;
+
   $translate(['seo.title.contestants', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.contestants']);
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
   seoService.setImage('https://raw.githubusercontent.com/coveracademy/coveracademy.github.io/master/backgrounds/og-contestants.jpg');
+
+  $scope.loadContestants = function() {
+    if($scope.loadMoreContestants === true) {
+      contestService.latestContestants(nextPage).then(function(response) {
+        nextPage++;
+        var contestants = response.data;
+        if(contestants.length < 60) {
+          $scope.loadMoreContestants = false;
+        }
+        $scope.contestants = $scope.contestants.concat(contestants);
+      }).catch(function(err) {
+        translationService.translateError(err).then(function(translation) {
+          alertService.alert('danger', translation);
+        });
+      });
+    }
+  };
 }])
 .controller('contestsAdminController', ['$scope', '$translate', '$filter', '$underscore', 'backendResponse', 'contestService', 'alertService', 'modalService', 'seoService', function($scope, $translate, $filter, $underscore, backendResponse, contestService, alertService, modalService, seoService) {
   $scope.contests = backendResponse.data.contests;

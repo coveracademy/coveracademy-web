@@ -18,8 +18,9 @@
     "bootswatch": "v3.3.1+2",
     "font-awesome": "~4.2.0",
     "ng-videosharing-embed": "~0.2.1",
+    "ngInfiniteScroll": "~1.2.0",
     "ngprogress": "~1.0.4",
-    "textAngular": "~v1.3.1",
+    "textAngular": "~v1.3.7",
     "underscore": "~1.6.0"
   }
 }

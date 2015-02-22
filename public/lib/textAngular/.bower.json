@@ -1,19 +1,17 @@
 {
   "name": "textAngular",
-  "version": "1.3.1",
+  "version": "1.3.7",
   "main": [
     "./src/textAngular.js",
     "./src/textAngular-sanitize.js",
     "./src/textAngularSetup.js",
-    "./src/textAngular.css",
-    "../rangy-official/rangy-selectionsaverestore.js"
+    "./src/textAngular.css"
   ],
   "description": "A radically powerful Text-Editor/Wysiwyg editor for Angular.js",
   "keywords": [
     "editor",
     "angular",
-    "wysiwyg",
-    "jquery"
+    "wysiwyg"
   ],
   "ignore": [
     "**/.*",
@@ -26,9 +24,9 @@
   ],
   "dependencies": {
     "angular": "^1.2.x",
-    "bootstrap": "^3.0.x",
+    "bootstrap-css-only": "^3.0.x",
     "font-awesome": "^4.0.x",
-    "rangy": "^1.3.0"
+    "rangy": "^1.2.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.x",
@@ -36,13 +34,13 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/fraywing/textAngular",
-  "_release": "1.3.1",
+  "_release": "1.3.7",
   "_resolution": {
     "type": "version",
-    "tag": "v1.3.1",
-    "commit": "d0f53b88659dddab712dea25e09a5e76ab130e52"
+    "tag": "v1.3.7",
+    "commit": "b6bc09f032f212b886b841897ed924623be74ffa"
   },
   "_source": "git://github.com/fraywing/textAngular.git",
-  "_target": "v1.3.1",
+  "_target": "~v1.3.7",
   "_originalSource": "textAngular"
 }
