@@ -382,12 +382,12 @@ exports.getWinnerAuditions = function(obj) {
   }
 }
 
-exports.getAudition = function(id) {
-  return Audition.forge({id: id}).fetch(auditionWithContestAndUserRelated);
+exports.getAudition = function(id, related) {
+  return Audition.forge({id: id}).fetch(related ? {withRelated: related} : auditionWithContestAndUserRelated);
 }
 
-exports.loadAudition = function(audition) {
-  return audition.fetch(auditionWithContestAndUserRelated);
+exports.loadAudition = function(audition, related) {
+  return audition.fetch(related ? {withRelated: related} : auditionWithContestAndUserRelated);
 }
 
 exports.getUserAudition = function(user, contest) {
@@ -697,14 +697,19 @@ exports.comment = function(user, audition, message) {
       reject(messages.apiError('audition.comment.userNotVerified', 'The user can not comment because he is not verified'));
       return;
     }
-    audition.fetch().then(function(audition) {
+    $.loadAudition(audition, []).then(function(audition) {
       if(audition.get('approved') === 0) {
         reject(messages.apiError('audition.comment.auditionNotApproved', 'The user can not comment in audition not approved'));
         return;
       }
       var comment = UserComment.forge({user_id: user.id, audition_id: audition.id, message: message});
       return comment.save().then(function(comment) {
-        resolve($.getComment(comment.id));
+        return $.getComment(comment.id);
+      }).then(function(comment) {
+        resolve(comment);
+        mailService.auditionComment(user, comment).catch(function(err) {
+          logger.error('Error sending "audition comment" email: ' + err.message);
+        });
       });
     }).catch(function(err) {
       reject(messages.unexpectedError('Error commenting in audition', err));
@@ -715,9 +720,14 @@ exports.comment = function(user, audition, message) {
 exports.replyComment = function(user, commentId, message) {
   return new Promise(function(resolve, reject) {
     $.getComment(commentId).then(function(comment) {
-      var comment = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});
-      return comment.save().then(function(comment) {
-        resolve($.getComment(comment.id));
+      var reply = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});
+      return reply.save().then(function(reply) {
+        return $.getComment(reply.id);
+      }).then(function(reply) {
+        resolve(reply);
+        mailService.auditionReplyComment(user, reply).catch(function(err) {
+          logger.error('Error sending "audition reply comment" email: ' + err.message);
+        });
       });
     }).catch(function(err) {
       reject(messages.unexpectedError('Error replying comment in audition', err));
@@ -733,8 +743,8 @@ exports.listComments = function(audition) {
   }).fetch(userCommentWithRepliesRelated);
 };
 
-exports.getComment = function(id) {
-  return UserComment.forge({id: id}).fetch(userCommentWithAuditionAndRepliesRelated);
+exports.getComment = function(id, related) {
+  return UserComment.forge({id: id}).fetch(related ? {withRelated: related} : userCommentWithAuditionAndRepliesRelated);
 };
 
 exports.removeComment = function(user, id) {

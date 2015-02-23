@@ -115,6 +115,9 @@ var UserComment = Bookshelf.Model.extend({
   audition: function() {
     return this.belongsTo(Audition, 'audition_id');
   },
+  repliedComment: function() {
+    return this.belongsTo(UserComment, 'comment_id');
+  },
   replies: function() {
     return this.hasMany(UserComment, 'comment_id').query(function(qb) {
       qb.orderBy('registration_date', 'asc');

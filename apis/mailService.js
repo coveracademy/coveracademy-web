@@ -92,6 +92,30 @@ exports.auditionDisapproved = function(user, contest, reason) {
   });
 }
 
+exports.auditionComment = function(user, comment) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/audition/comment', {user: user.id, comment: comment.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
+exports.auditionReplyComment = function(user, reply) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/audition/replyComment', {user: user.id, reply: reply.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 exports.contestInscription = function(contest) {
   return new Promise(function(resolve, reject) {
     mailClient.post('/contest/inscription', {contest: contest.id}, function(err, req, res, obj) {

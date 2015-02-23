@@ -21,17 +21,13 @@
         </tr>
       <tr>
         <td style="text-align: center; padding-top:20px; padding-bottom: 20px; padding-right: 0px; padding-left: 0px; font-family: monospace; font-size: 12px; line-height: 1.5; color: #888888; border-collapse: collapse;">
-          <a href="https://www.facebook.com/coveracademy" style="color: #3686be" target="_blank">
+          <a href="https://www.facebook.com/coveracademy" target="_blank">
             <img src="{{ siteUrl }}/img/icons/facebook.png" height="50">
           </a>
-        </td>
-         <td style="text-align: center; padding-top:20px; padding-bottom: 20px; padding-right: 0px; padding-left: 0px; font-family: monospace; font-size: 12px; line-height: 1.5; color: #888888; border-collapse: collapse;">
-          <a href="https://twitter.com/coveracademy" style="color: #3686be" target="_blank">
+          <a href="https://twitter.com/coveracademy" target="_blank">
             <img src="{{ siteUrl }}/img/icons/twitter.png" height="50">
           </a>
-        </td>
-         <td style="text-align: center; padding-top:20px; padding-bottom: 20px; padding-right: 0px; padding-left: 0px; font-family: monospace; font-size: 12px; line-height: 1.5; color: #888888; border-collapse: collapse;">
-          <a href="https://www.youtube.com/channel/UCz8R6ECuqsnCrPIKd3HCtdg" style="color: #3686be" target="_blank">
+          <a href="https://www.youtube.com/channel/UCz8R6ECuqsnCrPIKd3HCtdg" target="_blank">
             <img src="{{ siteUrl }}/img/icons/youtube.png" height="50">
           </a>
         </td>

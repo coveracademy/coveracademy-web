@@ -26,6 +26,8 @@ var userVerificationTemplate = env.getTemplate('user_verification.tpl');
 var auditionSubmitTemplate = env.getTemplate('audition_submit.tpl');
 var auditionApprovedTemplate = env.getTemplate('audition_approved.tpl');
 var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
+var auditionCommentTemplate = env.getTemplate('audition_comment.tpl');
+var auditionReplyCommentTemplate = env.getTemplate('audition_reply_comment.tpl');
 var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
@@ -126,6 +128,49 @@ server.post('/audition/disapproved', function(req, res, next) {
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "audition disapproved" email to user %d: ' + err, req.body.user);
+    res.send(500);
+  }).bind({});
+});
+
+server.post('/audition/comment', function(req, res, next) {
+  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.comment, ['audition.user'])]).spread(function(user, comment) {
+    this.user = user;
+    this.comment = comment;
+    this.audition = comment.related('audition');
+    this.auditionOwner = comment.related('audition').related('user');
+    if(this.user.id === this.audition.get('user_id')) {
+      return;
+    } else {
+      return renderPromise(auditionCommentTemplate, {user: user.toJSON(), comment: comment.toJSON(), audition: audition.toJSON()}).then(function(email) {
+        return mailService.send(this.auditionOwner.get('email'), this.user.get('name') + ' comentou sobre a sua audição.', email);
+      });
+    }
+  }).then(function(mailResponse) {
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "audition comment" email to %d: ' + err, this.auditionOwner.id);
+    res.send(500);
+  }).bind({});
+});
+
+server.post('/audition/replyComment', function(req, res, next) {
+  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.reply, ['repliedComment', 'repliedComment.user', 'repliedComment.audition'])]).spread(function(user, reply) {
+    this.user = user;
+    this.reply = reply;
+    this.comment = reply.related('repliedComment');
+    this.commentOwner = this.comment.related('user');
+    this.audition = this.comment.related('audition');
+    if(this.user.id === this.comment.get('user_id')) {
+      return;
+    } else {
+      return renderPromise(auditionReplyCommentTemplate, {user: user.toJSON(), reply: reply.toJSON(), audition: audition.toJSON()}).then(function(email) {
+        return mailService.send(this.commentOwner.get('email'), this.user.get('name') + ' respondeu o seu comentário.', email);
+      });
+    }
+  }).then(function(mailResponse) {
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "audition reply comment" email to %d: ' + err, this.commentOwner.id);
     res.send(500);
   }).bind({});
 });
