@@ -1,3 +1,5 @@
+"use strict"
+
 var slug = require('slug');
 slug.charmap['$'] = 's';
 slug.charmap['.'] = ' ';

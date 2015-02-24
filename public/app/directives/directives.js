@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.directives', ['coverAcademy.services'])
 .directive('audition', function() {

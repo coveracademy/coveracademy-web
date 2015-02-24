@@ -1,3 +1,5 @@
+"use strict"
+
 var logger   = require('./logger'),
     nunjucks = require('nunjucks'),
     _        = require('underscore');

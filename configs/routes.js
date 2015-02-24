@@ -1,3 +1,5 @@
+"use strict"
+
 var logger = require('./logger');
 
 exports.configure = function(express, app, passport) {

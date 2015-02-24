@@ -1,3 +1,5 @@
+"use strict"
+
 var settings = require('../configs/settings'),
     request  = require('request'),
     mime     = require('mime'),

@@ -1,3 +1,5 @@
+"use strict"
+
 var contestService  = require('../apis/contestService'),
     mailService     = require('../apis/mailService'),
     constants       = require('../apis/constants'),
@@ -97,7 +99,7 @@ module.exports = function(router, app) {
 
   router.get('/audition/vote', isAuthenticated, function(req, res, next) {
     var audition = Audition.forge({id: req.param('audition')});
-    contestService.getUserVote(req.user, audition).then(function(userVote) {
+    contestService.getUserVote(req.user, audition).bind({}).then(function(userVote) {
       this.userVote = userVote;
       return contestService.getAudition(audition.id);
     }).then(function(audition) {
@@ -110,7 +112,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
-    }).bind({});
+    });
   });
 
   router.post('/audition/comment', isAuthenticated, function(req, res, next) {

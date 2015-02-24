@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.controllers')
 .controller('coversController', ['$scope', '$state', '$filter', '$translate', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, backendResponse, seoService) {
@@ -13,7 +15,7 @@ angular
 
   $scope.carouselSlidesInterval = 10000;
   $scope.carouselSlides = $filter('partition')($scope.musicGenres, 6);
-  for(index in $scope.carouselSlides) {
+  for(var index in $scope.carouselSlides) {
     $scope.carouselSlides[index] = {item: $scope.carouselSlides[index], active: false};
   }
 }])

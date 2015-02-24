@@ -1,3 +1,5 @@
+"use strict"
+
 var coverService = require('../apis/coverService'),
     logger       = require('../configs/logger'),
     Promise      = require('bluebird');

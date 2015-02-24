@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.controllers')
 .controller('indexController', ['$scope', '$state', '$filter', '$translate', '$underscore', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, $underscore, backendResponse, seoService) {
@@ -566,14 +568,14 @@ angular
   $scope.removeComment = function(comment, parentComment) {
     contestService.removeComment(comment).then(function(response) {
       if(parentComment) {
-        for(index in parentComment.replies) {
+        for(var index in parentComment.replies) {
           var reply = parentComment.replies[index];
           if(reply.id === comment.id) {
             parentComment.replies.splice(index, 1);
           }
         }
       } else {
-        for(index in $scope.comments) {
+        for(var index in $scope.comments) {
           var currentComment = $scope.comments[index];
           if(currentComment.id === comment.id) {
             $scope.comments.splice(index, 1);

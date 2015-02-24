@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.controllers')
 .controller('registerController', ['$scope', '$modalInstance', '$translate', 'constants', 'temporaryUser', 'translationService', 'alertService', 'userService', function($scope, $modalInstance, $translate, constants, temporaryUser, translationService, alertService, userService) {

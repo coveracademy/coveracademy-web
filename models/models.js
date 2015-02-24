@@ -1,3 +1,5 @@
+"use strict"
+
 var settings = require('../configs/settings');
 var knex = require('knex')({
   client: settings.database.dialect,

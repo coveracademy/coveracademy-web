@@ -1,3 +1,5 @@
+"use strict"
+
 require('newrelic');
 require('pmx').init();
 

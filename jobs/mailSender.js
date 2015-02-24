@@ -1,3 +1,5 @@
+"use strict"
+
 var settings       = require('../configs/settings'),
     logger         = require('../configs/logger'),
     mailService    = require('../apis/mailService'),
@@ -49,7 +51,7 @@ var renderPromise = function(template, obj) {
 }
 
 server.post('/user/registration', function(req, res, next) {
-  userService.findById(req.body.user).then(function(user) {
+  userService.findById(req.body.user).bind({}).then(function(user) {
     this.user = user;
     return renderPromise(userRegistrationTemplate, {user: user.toJSON()});
   }).then(function(email) {
@@ -59,12 +61,12 @@ server.post('/user/registration', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "user registration" email to user %d: ' + err, req.body.user);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/user/verification', function(req, res, next) {
   if(req.body.registration === true) {
-    userService.findById(req.body.user).then(function(user) {
+    userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
       return renderPromise(userRegistrationTemplate, {user: user.toJSON(), token: req.body.token, verify: true});
     }).then(function(email) {
@@ -74,9 +76,9 @@ server.post('/user/verification', function(req, res, next) {
     }).catch(function(err) {
       logger.error('Error sending "user registration" email to user %d: ' + err, req.body.user);
       res.send(500);
-    }).bind({});
+    });
   } else {
-    userService.findById(req.body.user).then(function(user) {
+    userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
       return renderPromise(userVerificationTemplate, {user: user.toJSON(), token: req.body.token});
     }).then(function(email) {
@@ -86,12 +88,12 @@ server.post('/user/verification', function(req, res, next) {
     }).catch(function(err) {
       logger.error('Error sending "user verification" email to user %d: ' + err, req.body.user);
       res.send(500);
-    }).bind({});
+    });
   }
 });
 
 server.post('/audition/submit', function(req, res, next) {
-  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).spread(function(user, contest, audition) {
+  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest), contestService.getAudition(req.body.audition)]).bind({}).spread(function(user, contest, audition) {
     this.user = user;
     return renderPromise(auditionSubmitTemplate, {user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()});
   }).then(function(email) {
@@ -101,11 +103,11 @@ server.post('/audition/submit', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "audition submit" email to user %d: ' + err, req.body.user);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/audition/approved', function(req, res, next) {
-  contestService.getAudition(req.body.audition).then(function(audition) {
+  contestService.getAudition(req.body.audition).bind({}).then(function(audition) {
     this.user = audition.related('user');
     return renderPromise(auditionApprovedTemplate, {user: this.user.toJSON(), contest: audition.related('contest').toJSON(), audition: audition.toJSON()});
   }).then(function(email) {
@@ -115,11 +117,11 @@ server.post('/audition/approved', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "audition approved" email to user %d: ' + err, req.body.user);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/audition/disapproved', function(req, res, next) {
-  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest)]).spread(function(user, contest, audition) {
+  Promise.all([userService.findById(req.body.user), contestService.getContest(req.body.contest)]).bind({}).spread(function(user, contest, audition) {
     this.user = user;
     return renderPromise(auditionDisapprovedTemplate, {user: user.toJSON(), contest: contest.toJSON(), reason: req.body.reason});
   }).then(function(email) {
@@ -129,11 +131,11 @@ server.post('/audition/disapproved', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "audition disapproved" email to user %d: ' + err, req.body.user);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/audition/comment', function(req, res, next) {
-  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.comment, ['audition.user'])]).spread(function(user, comment) {
+  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.comment, ['audition.user'])]).bind({}).spread(function(user, comment) {
     this.user = user;
     this.comment = comment;
     this.audition = comment.related('audition');
@@ -150,11 +152,11 @@ server.post('/audition/comment', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "audition comment" email to %d: ' + err, this.auditionOwner.id);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/audition/replyComment', function(req, res, next) {
-  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.reply, ['repliedComment', 'repliedComment.user', 'repliedComment.audition'])]).spread(function(user, reply) {
+  Promise.all([userService.findById(req.body.user), contestService.getComment(req.body.reply, ['repliedComment', 'repliedComment.user', 'repliedComment.audition'])]).bind({}).spread(function(user, reply) {
     this.user = user;
     this.reply = reply;
     this.comment = reply.related('repliedComment');
@@ -172,7 +174,7 @@ server.post('/audition/replyComment', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "audition reply comment" email to %d: ' + err, this.commentOwner.id);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/contest/inscription', function(req, res, next) {
@@ -186,11 +188,11 @@ server.post('/contest/inscription', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "contest inscription" email: ' + err);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/contest/start', function(req, res, next) {
-  contestService.getContest(req.body.contest).then(function(contest) {
+  contestService.getContest(req.body.contest).bind({}).then(function(contest) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
@@ -209,11 +211,11 @@ server.post('/contest/start', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "contest start" email: ' + err);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/contest/draw', function(req, res, next) {
-  contestService.getContest(req.body.contest).then(function(contest) {
+  contestService.getContest(req.body.contest).bind({}).then(function(contest) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
@@ -232,11 +234,11 @@ server.post('/contest/draw', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "contest draw" email: ' + err);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.post('/contest/finish', function(req, res, next) {
-  contestService.getContest(req.body.contest).then(function(contest) {
+  contestService.getContest(req.body.contest).bind({}).then(function(contest) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
@@ -262,7 +264,7 @@ server.post('/contest/finish', function(req, res, next) {
   }).catch(function(err) {
     logger.error('Error sending "contest finish" email: ' + err);
     res.send(500);
-  }).bind({});
+  });
 });
 
 server.listen(settings.mailPort, function() {

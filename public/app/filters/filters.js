@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.filters', [])
 .filter('partition', function() {

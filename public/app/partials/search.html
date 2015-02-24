@@ -25,7 +25,7 @@
           <a ui-sref="app.music({locale: locale(), music: music.slug})">
             {{ music.title }}
           </a>
-          by
+          {{ 'by_lowercase' | translate }}
           <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">
             {{ music.artist.name }}
           </a>

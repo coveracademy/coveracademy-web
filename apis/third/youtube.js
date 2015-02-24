@@ -1,3 +1,5 @@
+"use strict"
+
 var settings   = require('../../configs/settings'),
     messages   = require('../messages'),
     youtubeAPI = require('youtube-api'),
@@ -55,7 +57,7 @@ function getIdFromURL(url) {
 var getVideoData = function(videoId, parts) {
   return new Promise(function(resolve, reject) {
     var partsString = '';
-    for(index in parts) {
+    for(var index in parts) {
       partsString += parts[index];
       if(index < parts.length - 1) {
         partsString += ',';

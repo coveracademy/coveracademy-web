@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.factories', [])
 .factory('$underscore', ['$window', function($window) {

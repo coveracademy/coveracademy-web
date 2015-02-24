@@ -1,3 +1,5 @@
+"use strict"
+
 var settings     = require('../configs/settings'),
     Mailgun      = require('mailgun-js'),
     Promise      = require('bluebird'),

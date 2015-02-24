@@ -1,3 +1,5 @@
+"use strict"
+
 var User              = require('../models/models').User,
     SocialAccount     = require('../models/models').SocialAccount,
     VerificationToken = require('../models/models').VerificationToken,
@@ -234,7 +236,7 @@ exports.findBySocialAccount = function(network, account, relations) {
 exports.verifyEmail = function(token) {
   return new Promise(function(resolve, reject) {
     Bookshelf.transaction(function(transaction) {
-      return VerificationToken.forge({token: token}).fetch({withRelated: ['user'], require: true}).then(function(activationToken) {
+      return VerificationToken.forge({token: token}).fetch({withRelated: ['user'], require: true}).bind({}).then(function(activationToken) {
         this.user = activationToken.related('user');
         return activationToken.destroy({transacting: transaction});
       }).then(function() {
@@ -242,7 +244,7 @@ exports.verifyEmail = function(token) {
         return this.user.save({verified: this.user.get('verified')}, {patch: true, transacting: transaction});
       }).then(function(user) {
         return user;
-      }).bind({});
+      });
     }).then(function(user) {
       resolve(user);
     }).catch(function(err) {

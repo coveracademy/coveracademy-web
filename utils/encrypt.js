@@ -1,3 +1,5 @@
+"use strict"
+
 var Promise = require('bluebird'),
     bcrypt  = require('bcrypt');
 

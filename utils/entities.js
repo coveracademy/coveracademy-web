@@ -1,3 +1,5 @@
+"use strict"
+
 var Bookshelf = require('../models/models').Bookshelf,
     _         = require('underscore');
 

@@ -1,3 +1,5 @@
+"use strict"
+
 var settings   = require('../../configs/settings'),
     Promise    = require('bluebird'),
     LastFmNode = require('lastfm').LastFmNode,

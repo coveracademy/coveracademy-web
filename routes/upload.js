@@ -1,3 +1,5 @@
+"use strict"
+
 var userService = require('../apis/userService'),
     settings    = require('../configs/settings'),
     flow        = require('../utils/flow-node.js')(settings.tmpUploadPath),

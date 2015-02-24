@@ -1,3 +1,5 @@
+"use strict"
+
 var properties = require('./properties'),
     logger     = require('./logger'),
     path       = require('path'),
@@ -106,7 +108,7 @@ try {
   exports.redis = _redis;
 
   var env = _envs[_nodeEnv];
-  for(property in env) {
+  for(var property in env) {
     exports[property] = env[property];
   }
 } catch(err) {

@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.providers', [])
 .provider('$languages', function() {
@@ -580,7 +582,7 @@ angular
     return {
       all: languages,
       contains: function(languageId) {
-        for(index in languages) {
+        for(var index in languages) {
           if(languages[index].id === languageId) {
             return true;
           }

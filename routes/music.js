@@ -1,3 +1,5 @@
+"use strict"
+
 var coverService = require('../apis/coverService'),
     constants    = require('../apis/constants'),
     logger       = require('../configs/logger'),

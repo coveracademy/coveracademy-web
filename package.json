@@ -46,7 +46,7 @@
     "slug": "~0.4.2",
     "underscore": "~1.6.0",
     "underscore.string": "~2.3.3",
-    "winston": "0.8.3",
+    "winston": "~0.9.0",
     "youtube-api": "~0.3.0"
   }
 }

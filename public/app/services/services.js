@@ -1,3 +1,5 @@
+"use strict"
+
 angular
 .module('coverAcademy.services', [])
 .service('stateService', ['$state', function($state) {

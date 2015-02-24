@@ -1,3 +1,5 @@
+"use strict"
+
 var settings = require('../../configs/settings'),
     Promise  = require('bluebird'),
     request  = require('request');

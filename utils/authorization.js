@@ -1,3 +1,5 @@
+"use strict"
+
 var Promise = require('bluebird');
 
 exports.isAdmin = function(req, res, next) {

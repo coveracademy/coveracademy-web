@@ -1,3 +1,5 @@
+"use strict"
+
 module.exports = {
   TIME_TO_FINISH_THE_CONTEST: 21,
   TIMES_TO_START_THE_CONTEST: [9, 10, 20, 21],

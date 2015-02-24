@@ -1,3 +1,5 @@
+"use strict"
+
 var coverService    = require('../apis/coverService'),
     contestService  = require('../apis/contestService'),
     userService     = require('../apis/userService'),
@@ -116,7 +118,8 @@ module.exports = function(router, app) {
       coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
       coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
       coverService.musicGenres()
-    ]).spread(function(topCover, bestCovers, latestCovers, musicGenres) {
+    ]).bind({
+    }).spread(function(topCover, bestCovers, latestCovers, musicGenres) {
       this.topCover = topCover;
       this.bestCovers = bestCovers;
       this.latestCovers = latestCovers;
@@ -134,7 +137,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
-    }).bind();
+    });
   });
 
   router.get('/covers/:rank', function(req, res, next) {
@@ -147,7 +150,8 @@ module.exports = function(router, app) {
       Promise.all([
         coversPromise,
         coverService.totalCovers(constants.WEEK_PERIOD)
-      ]).spread(function(coversRank, totalCoversRank) {
+      ]).bind({        
+      }).spread(function(coversRank, totalCoversRank) {
         this.coversRank = coversRank;
         this.totalCoversRank = totalCoversRank;
         return coverService.artistsOfCovers(coversRank);
@@ -160,21 +164,22 @@ module.exports = function(router, app) {
       }).catch(function(err) {
         logger.error(err);
         messages.respondWithError(err, res);
-      }).bind({});
+      });
     }
   });
 
   router.get('/artist/:slug', function(req, res, next) {
     var slug = req.param('slug');
     var rank = req.param('rank') || 'best';
-    coverService.getArtistBySlug(slug).bind({}).then(function(artist) {
+    coverService.getArtistBySlug(slug).then(function(artist) {
       if(!artist) {
         messages.respondWithNotFound(res);
       } else {
         return Promise.all([
           coverService.totalMusicsByArtist(artist),
           coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)
-        ]).spread(function(totalMusicsByArtist, musicsByArtist) {
+        ]).bind({          
+        }).spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
           var coversOfMusics;
@@ -201,7 +206,7 @@ module.exports = function(router, app) {
 
   router.get('/artists', function(req, res, next) {
     var genre = req.param('genre');
-    coverService.getMusicGenreBySlug(genre).then(function(musicGenre) {
+    coverService.getMusicGenreBySlug(genre).bind({}).then(function(musicGenre) {  
       this.musicGenre = musicGenre;
       return Promise.all([coverService.listArtists(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_PAGE), coverService.totalArtists(musicGenre)]);
     }).spread(function(artists, totalArtists) {
@@ -213,7 +218,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
-    }).bind({});
+    });
   });
 
   router.get('/music/:slug', function(req, res, next) {
@@ -298,8 +303,11 @@ module.exports = function(router, app) {
 
   router.get('/search', function(req, res, next) {
     var query = req.param('query');
-    Promise.all([coverService.searchArtists(query), coverService.searchMusics(query)])
-    .spread(function(artists, musics) {
+    Promise.all([
+      coverService.searchArtists(query), 
+      coverService.searchMusics(query)
+    ]).bind({      
+    }).spread(function(artists, musics) {
       this.artists = artists;
       this.musics = musics;
       return Promise.all([coverService.bestCoversByArtists(artists, 6), coverService.bestCoversOfMusics(musics, 6)]);
@@ -313,7 +321,7 @@ module.exports = function(router, app) {
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
-    }).bind({});
+    });
   });
 
   router.get('/contest/:id/:slug', function(req, res, next) {
@@ -334,7 +342,8 @@ module.exports = function(router, app) {
           winnersPromise,
           contestService.getUserVotes(req.user, contest),
           contestService.countUserVotes(req.user, contest),
-        ]).spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes, totalUserVotes) {
+        ]).bind({          
+        }).spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes, totalUserVotes) {
           this.auditions = auditions;
           this.userVotes = userVotes;
           this.totalUserVotes = totalUserVotes;
@@ -345,7 +354,7 @@ module.exports = function(router, app) {
         }).spread(function(scoreByAudition, votesByAudition) {
           res.json({
             contest: contest,
-            winnerAuditions: winnerAuditions,
+            winnerAuditions: this.winnerAuditions,
             auditions: this.auditions,
             audition: this.audition,
             userVotes: this.userVotes,
@@ -356,7 +365,7 @@ module.exports = function(router, app) {
             rankType: rankType,
             voteLimit: constants.VOTE_LIMIT
           });
-        }).bind({});
+        });
       }
     }).catch(function(err) {
       logger.error(err);

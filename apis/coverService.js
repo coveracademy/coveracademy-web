@@ -1,3 +1,5 @@
+"use strict"
+
 var Cover          = require('../models/models').Cover,
     PotentialCover = require('../models/models').PotentialCover,
     MusicGenre     = require('../models/models').MusicGenre,
@@ -140,7 +142,7 @@ exports.addCover = function(user, coverData) {
   coverData.artist = _.str.trim(coverData.artist);
   coverData.music = _.str.trim(coverData.music);
   coverData.author = coverData.author ? _.str.trim(coverData.author) : null;
-  return $.discoverArtist(coverData.artist).then(function(artist) {
+  return $.discoverArtist(coverData.artist).bind({}).then(function(artist) {
     this.artist = artist;
     return $.discoverMusic(artist, coverData.music);
   }).then(function(music) {
@@ -176,7 +178,7 @@ exports.addCover = function(user, coverData) {
     this.music.set('last_cover_date', new Date());
     this.music.save();
     return cover;
-  }).bind({});
+  });
 }
 
 exports.removeCover = function(cover) {
@@ -516,17 +518,18 @@ exports.potentialCovers = function(page, pageSize) {
 }
 
 exports.acceptCover = function(user, potentialCover) {
-  return this.addCover(user, {
+  return $.addCover(user, {
     artist: potentialCover.get('artist'),
     music: potentialCover.get('music'),
     author: potentialCover.get('author'),
     url: potentialCover.get('url')
+  }).bind({        
   }).then(function(cover) {
     this.cover = cover;
     return potentialCover.destroy();
   }).then(function(potentialCover) {
     return this.cover;
-  }).bind({});
+  });
 }
 
 exports.refuseCover = function(potentialCover) {

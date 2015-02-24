@@ -1,3 +1,5 @@
+"use strict"
+
 var Contest     = require('../models/models').Contest,
     Audition    = require('../models/models').Audition,
     Sponsor     = require('../models/models').Sponsor,
@@ -300,7 +302,7 @@ exports.submitAudition = function(user, contest, auditionData) {
 exports.approveAudition = function(audition) {
   return new Promise(function(resolve, reject) {
     Bookshelf.transaction(function(transaction) {
-      return $.getAudition(audition.id).then(function(audition) {
+      return $.getAudition(audition.id).bind({}).then(function(audition) {
         this.audition = audition;
         audition.set('approved', 1);
         return audition.save({approved: audition.get('approved')}, {patch: true, transacting: transaction});
@@ -323,7 +325,7 @@ exports.approveAudition = function(audition) {
       });
     }).catch(function(err) {
       reject(messages.unexpectedError('Error approving audition', err));
-    }).bind({});
+    });
   });
 }
 
@@ -333,7 +335,7 @@ exports.disapproveAudition = function(audition, reason) {
       reject(reject(messages.apiError('audition.disapprove.reasonMustBeProvided', 'The reason must be provided', err)));
       return;
     }
-    $.loadAudition(audition).then(function(audition) {
+    $.loadAudition(audition).bind({}).then(function(audition) {
       this.user = audition.related('user').clone();
       this.contest = audition.related('contest').clone();
       return audition.destroy();
@@ -344,7 +346,7 @@ exports.disapproveAudition = function(audition, reason) {
       resolve();
     }).catch(function(err) {
       reject(messages.unexpectedError('Error disapproving audition', err));
-    }).bind({});
+    });
   });
 }
 
@@ -779,39 +781,31 @@ exports.isContestant = function(user, contest) {
 }
 
 exports.listContestants = function(contest) {
-  return new Promise(function(resolve, reject) {
-    $.latestAuditions(contest).then(function(auditions) {
-      var users = User.collection();
-      auditions.forEach(function(audition) {
-        users.add(audition.related('user'));
-      });
-      resolve(users);
-    }).catch(function(err) {
-      reject(err);
+  return $.latestAuditions(contest).then(function(auditions) {
+    var users = User.collection();
+    auditions.forEach(function(audition) {
+      users.add(audition.related('user'));
     });
+    return users;
   });
 }
 
 exports.listNonContestants = function(contest) {
-  return new Promise(function(resolve, reject) {
-    $.listContestants(contest).then(function(contestants) {
-      this.contestants = contestants;
-      return User.fetchAll();
-    }).then(function(users) {
-      var nonContestants = User.collection();
-      var contestantsArray = this.contestants.toArray();
-      users.forEach(function(user) {
-        var contains = _.some(contestantsArray, function(contestant) {
-          return contestant.id === user.id;
-        });
-        if(!contains) {
-          nonContestants.add(user);
-        }
+  return $.listContestants(contest).bind({}).then(function(contestants) {
+    this.contestants = contestants;
+    return User.fetchAll();
+  }).then(function(users) {
+    var nonContestants = User.collection();
+    var contestantsArray = this.contestants.toArray();
+    users.forEach(function(user) {
+      var contains = _.some(contestantsArray, function(contestant) {
+        return contestant.id === user.id;
       });
-      resolve(nonContestants);
-    }).catch(function(err) {
-      reject(err);
-    }).bind({});
+      if(!contains) {
+        nonContestants.add(user);
+      }
+    });
+    return nonContestants;  
   });
 }
 
