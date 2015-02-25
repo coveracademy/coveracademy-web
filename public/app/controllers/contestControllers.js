@@ -67,11 +67,13 @@ angular
 
   $scope.loadContestants = function() {
     if($scope.loadMoreContestants === true) {
+      var stopLoadingMoreContestants = false;
+      $scope.loadMoreContestants = false;
       contestService.latestContestants(nextPage).then(function(response) {
         nextPage++;
         var contestants = response.data;
         if(contestants.length < 60) {
-          $scope.loadMoreContestants = false;
+          stopLoadingMoreContestants = true;
         }
         $scope.contestants = $scope.contestants.concat(contestants);
       }).catch(function(err) {
@@ -79,6 +81,9 @@ angular
           alertService.alert('danger', translation);
         });
       });
+      if(!stopLoadingMoreContestants) {
+        $scope.loadMoreContestants = true;
+      }
     }
   };
 }])
