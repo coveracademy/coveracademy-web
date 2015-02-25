@@ -1,5 +1,10 @@
+<div class="page-header-background">
+  <div class="container">
+    <h1>{{ 'meet_the_contestants' | translate }}</h1>
+    <h4>{{ 'meet_the_contestants_description' | translate }}</h4>
+  </div>
+</div>
 <div class="container">
-  <h1 class="page-header">{{ 'contestants' | translate }}</h1>
   <div class="contestants-section" infinite-scroll="loadContestants()" infinite-scroll-disabled="!loadMoreContestants" infinite-scroll-distance="1">
     <div ng-repeat="row in contestants | partition: 4" class="row padding contestants">
       <div ng-repeat="contestant in row" class="col-md-3">

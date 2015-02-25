@@ -385,6 +385,13 @@ a:hover {
   background-color: #777;
   border-color: #666;
 }
+.page-header-background {
+  margin-top: -12px;
+  margin-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #f1f4f4;
+}
 .page-section {
   margin-top: 10px;
 }
@@ -669,7 +676,7 @@ form.compacted .form-group {
   text-align: center;
   padding-top: 40px;
   padding-bottom: 60px;
-  background-color: #eee;
+  background-color: #f1f4f4;
 }
 #brands {
   padding: 20px;
@@ -683,7 +690,7 @@ form.compacted .form-group {
 }
 .prize .card {
   background-color: #363b3f;
-  border-radius: 20px;
+  border-radius: 4px;
   box-shadow: 5px 5px 2px rgba(0,0,0,.1);
 }
 .prize .text-muted {
