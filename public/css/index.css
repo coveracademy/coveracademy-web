@@ -679,7 +679,7 @@ form.compacted .form-group {
   height: 66px;
 }
 #prizes {
-  padding: 20px 0px 20px 0px;
+  padding-top: 20px;
 }
 .prize .card {
   background-color: #363b3f;
