@@ -63,7 +63,7 @@ angular
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
-  seoService.setImage('https://raw.githubusercontent.com/coveracademy/coveracademy.github.io/master/backgrounds/og-contestants.jpg');
+  seoService.setImage('/img/backgrounds/contestants.jpg');
 
   $scope.loadContestants = function() {
     if($scope.loadMoreContestants === true) {
