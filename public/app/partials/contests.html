@@ -23,8 +23,10 @@
 			    <h3 class="align-center">{{ 'winners' | translate }}</h3>
 			    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding">
 			      <div ng-repeat="audition in row" class="col-md-4">
-			        <audition ng-model="audition" locale="{{ locale() }}" border="false">
-			        </audition>
+			      	<div class="thumbnail">
+				        <audition ng-model="audition" locale="{{ locale() }}" border="false">
+				        </audition>
+				      </div>
 			      </div>
 			    </div>
 			  </div>

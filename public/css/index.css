@@ -726,6 +726,11 @@ form.compacted .form-group {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+.audition {
+  background-color: #fff;
+  color: #000;
+  margin-bottom: 20px
+}
 .audition .cover {
   font-size: 15px;
 }
@@ -746,10 +751,6 @@ form.compacted .form-group {
 }
 .audition.medium .label {
   font-size: 25px;
-}
-.audition {
-  background-color: #fff;
-  color: #000;
 }
 .contestants figure:hover figcaption {
   opacity: 1;
