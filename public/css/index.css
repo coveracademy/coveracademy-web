@@ -468,7 +468,7 @@ input.big {
   padding: 2px 5px 2px 5px;
   position: absolute;
 }
-.winner .audition.thumbnail {
+.winner .audition {
   margin-bottom: 0px;
 }
 .winner .medal.label {
@@ -736,6 +736,9 @@ form.compacted .form-group {
 }
 .audition .cover .legend {
   font-size: 25px;
+}
+.audition .cover .caption {
+  padding: 0px 5px 10px 5px;
 }
 .audition.large .cover {
   font-size: 26px;
