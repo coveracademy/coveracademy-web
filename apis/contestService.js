@@ -340,7 +340,7 @@ exports.disapproveAudition = function(audition, reason) {
       this.contest = audition.related('contest').clone();
       return audition.destroy();
     }).then(function() {
-      mailService.auditionDisapproved(this.user, this.contest, reason).catch(function(err) {
+      mailService.auditionDisapproved(this.user, this.contest, reason).bind(this).catch(function(err) {
         logger.error('Error sending "audition disapproved" email to user %d.', this.user.id, err);
       });
       resolve();

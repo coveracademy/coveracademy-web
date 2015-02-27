@@ -143,7 +143,7 @@ server.post('/audition/comment', function(req, res, next) {
     if(this.user.id === this.audition.get('user_id')) {
       return;
     } else {
-      return renderPromise(auditionCommentTemplate, {user: user.toJSON(), comment: comment.toJSON(), audition: audition.toJSON()}).then(function(email) {
+      return renderPromise(auditionCommentTemplate, {user: this.user.toJSON(), comment: this.comment.toJSON(), audition: this.audition.toJSON()}).bind(this).then(function(email) {
         return mailService.send(this.auditionOwner.get('email'), this.user.get('name') + ' comentou sobre a sua audição.', email);
       });
     }
@@ -165,7 +165,7 @@ server.post('/audition/replyComment', function(req, res, next) {
     if(this.user.id === this.comment.get('user_id')) {
       return;
     } else {
-      return renderPromise(auditionReplyCommentTemplate, {user: user.toJSON(), reply: reply.toJSON(), audition: audition.toJSON()}).then(function(email) {
+      return renderPromise(auditionReplyCommentTemplate, {user: this.user.toJSON(), reply: this.reply.toJSON(), audition: this.audition.toJSON()}).bind(this).then(function(email) {
         return mailService.send(this.commentOwner.get('email'), this.user.get('name') + ' respondeu o seu comentário.', email);
       });
     }
