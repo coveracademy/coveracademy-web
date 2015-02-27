@@ -4,17 +4,22 @@ var settings = require('../configs/settings'),
     util     = require('util');
 
 function APIError(statusCode, errorKey, errorMessage, cause) {
-  APIError.super_.call(this, errorKey);
+  APIError.super_.call(this);
+  APIError.super_.captureStackTrace(this, this.constructor);
   this.statusCode = statusCode;
   this.errorKey = errorKey;
   this.errorMessage = errorMessage;
   this.cause = cause;
-  this.toJSON = function() {
+  this.message = '[statusCode: ' + statusCode + ', errorKey: ' + errorKey + ', errorMessage: "' + errorMessage + '", cause: ' + cause + ']';
+  this.json = function() {
     var json = {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
     if(settings.debug === true) {
       json.cause = cause;
     }
     return json;
+  };
+  this.toString = function() {
+    return this.message;
   };
 };
 util.inherits(APIError, Error);
@@ -45,10 +50,10 @@ function internalError(errorMessage, cause) {
 
 function respondWithError(err, res) {
   if(err instanceof APIError) {
-    res.json(err.statusCode, err.toJSON());
+    res.json(err.statusCode, err.json());
   } else {
     var internal = internalError(err.message, err);
-    res.json(internal.statusCode, internal.toJSON());
+    res.json(internal.statusCode, internal.json());
   }
 }
 

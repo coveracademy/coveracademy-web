@@ -18,7 +18,7 @@ exports.configure = function(app, passport) {
   var CustomDone = function(originalDone) {
     this.done = function(err, obj) {
       if(err) {
-        logger.error('Error authenticating user: [err: ' + JSON.stringify(err) + ', obj: ' + JSON.stringify(obj) + ']');
+        logger.error('Error authenticating user %j.', obj, err);
         originalDone(null, false, {message: messages.getErrorKey(err)});
       } else {
         originalDone(null, obj);

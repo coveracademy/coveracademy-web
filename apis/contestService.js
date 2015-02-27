@@ -181,11 +181,11 @@ exports.finishContest = function(contest) {
     }).then(function(draw) {
       if(draw === true) {
         mailService.contestDraw(contest).catch(function(err) {
-          logger.error('Error sending "contest draw" email: ' + err.message);
+          logger.error('Error sending "contest draw" email.', err);
         });
       } else {
         mailService.contestFinish(contest).catch(function(err) {
-          logger.error('Error sending "contest finish" email: ' + err.message);
+          logger.error('Error sending "contest finish" email.', err);
         });
       }
       return;
@@ -206,7 +206,7 @@ exports.startContest = function(contest) {
             contest.save({progress: contest.get('progress')}, {patch: true}).then(function(contestSaved) {
               resolve(contest);
               mailService.contestStart(contest).catch(function(err) {
-                logger.error('Error sending "contest start" email: ' + err.message);
+                logger.error('Error sending "contest start" email.', err);
               });
             }).catch(function(err) {
               reject(messages.unexpectedError('Error starting the contest', err));
@@ -281,7 +281,7 @@ exports.submitAudition = function(user, contest, auditionData) {
         audition.save().then(function(auditionSaved) {
           resolve(auditionSaved);
           mailService.auditionSubmit(user, contestFetched, auditionSaved).catch(function(err) {
-            logger.error('Error sending "audition submit" email to user %d: ' + err.message, user.id);
+            logger.error('Error sending "audition submit" email to user %d.', user.id, err);
           });
         }).catch(function(err) {
           if(err.code === 'ER_DUP_ENTRY') {
@@ -315,7 +315,7 @@ exports.approveAudition = function(audition) {
       resolve(audition);
       // When an audition is approved, an email is sent to audition's owner
       mailService.auditionApproved(audition).catch(function(err) {
-        logger.error('Error sending "audition approved" email to audition %d owner: ' + err.message, audition.id);
+        logger.error('Error sending "audition approved" email to audition %d owner.', audition.id, err);
       });
       // When an audition is approved, we try to start the contest
       $.getContestFromAudition(audition).then(function(contest) {
@@ -341,7 +341,7 @@ exports.disapproveAudition = function(audition, reason) {
       return audition.destroy();
     }).then(function() {
       mailService.auditionDisapproved(this.user, this.contest, reason).catch(function(err) {
-        logger.error('Error sending "audition disapproved" email to user %d: ' + err.message, this.user.id);
+        logger.error('Error sending "audition disapproved" email to user %d.', this.user.id, err);
       });
       resolve();
     }).catch(function(err) {
@@ -710,7 +710,7 @@ exports.comment = function(user, audition, message) {
       }).then(function(comment) {
         resolve(comment);
         mailService.auditionComment(user, comment).catch(function(err) {
-          logger.error('Error sending "audition comment" email: ' + err.message);
+          logger.error('Error sending "audition comment" email.', err);
         });
       });
     }).catch(function(err) {
@@ -728,7 +728,7 @@ exports.replyComment = function(user, commentId, message) {
       }).then(function(reply) {
         resolve(reply);
         mailService.auditionReplyComment(user, reply).catch(function(err) {
-          logger.error('Error sending "audition reply comment" email: ' + err.message);
+          logger.error('Error sending "audition reply comment" email.', err);
         });
       });
     }).catch(function(err) {
@@ -805,7 +805,7 @@ exports.listNonContestants = function(contest) {
         nonContestants.add(user);
       }
     });
-    return nonContestants;  
+    return nonContestants;
   });
 }
 

@@ -152,11 +152,11 @@ exports.create = function(userData) {
       resolve(userConnected);
       if(userConnected.get('verified') === 0) {
         $.sendVerificationEmail(userConnected, true).catch(function(err) {
-          logger.error('Error sending "user verification" email to user %d: ' + err, userConnected.id);
+          logger.error('Error sending "user verification" email to user %d.', userConnected.id, err);
         });
       } else {
         mailService.userRegistration(userConnected).catch(function(err) {
-          logger.error('Error sending "user registration" email to user %d: ' + err, userConnected.id);
+          logger.error('Error sending "user registration" email to user %d.', userConnected.id, err);
         });
       }
     }).catch(function(err) {
@@ -195,7 +195,7 @@ exports.update = function(user, edited) {
         resolve(userEdited);
         if(userEdited.get('verified') === 0) {
           $.sendVerificationEmail(userEdited).catch(function(err) {
-            logger.error('Error sending "user verification" email to user %d: ' + err, userEdited.id);
+            logger.error('Error sending "user verification" email to user %d.', userEdited.id, err);
           });
         }
       }).catch(function(err) {

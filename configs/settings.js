@@ -112,5 +112,5 @@ try {
     exports[property] = env[property];
   }
 } catch(err) {
-  logger.error('Error loading settings: ' + err);
+  logger.error('Error loading settings.', err);
 }

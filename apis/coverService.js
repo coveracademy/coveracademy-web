@@ -381,7 +381,7 @@ exports.addArtist = function(name) {
           artist.save();
         }
       }).catch(function(err) {
-        logger.error('Error fetching %s infos from last.fm api: ' + err, name);
+        logger.error('Error fetching %s infos from last.fm api.', name, err);
       });
     }).catch(function(err) {
       reject(err);
@@ -474,7 +474,7 @@ exports.addMusic = function(artist, title) {
         music.set('large_thumbnail', musicInfos.thumbnails.large);
         music.save();
       }).catch(function(err) {
-        logger.error('Error fetching %s - %s infos from last.fm api: ' + err, artist.get('name'), title);
+        logger.error('Error fetching %s - %s infos from last.fm api.', artist.get('name'), title, err);
       });
     });
   });
@@ -523,7 +523,7 @@ exports.acceptCover = function(user, potentialCover) {
     music: potentialCover.get('music'),
     author: potentialCover.get('author'),
     url: potentialCover.get('url')
-  }).bind({        
+  }).bind({
   }).then(function(cover) {
     this.cover = cover;
     return potentialCover.destroy();

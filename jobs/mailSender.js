@@ -59,7 +59,7 @@ server.post('/user/registration', function(req, res, next) {
   }).then(function(emailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "user registration" email to user %d: ' + err, req.body.user);
+    logger.error('Error sending "user registration" email to user %d.', req.body.user, err);
     res.send(500);
   });
 });
@@ -74,7 +74,7 @@ server.post('/user/verification', function(req, res, next) {
     }).then(function(emailResponse) {
       res.send(200);
     }).catch(function(err) {
-      logger.error('Error sending "user registration" email to user %d: ' + err, req.body.user);
+      logger.error('Error sending "user registration" email to user %d.', req.body.user, err);
       res.send(500);
     });
   } else {
@@ -86,7 +86,7 @@ server.post('/user/verification', function(req, res, next) {
     }).then(function(mailResponse) {
       res.send(200);
     }).catch(function(err) {
-      logger.error('Error sending "user verification" email to user %d: ' + err, req.body.user);
+      logger.error('Error sending "user verification" email to user %d.', req.body.user, err);
       res.send(500);
     });
   }
@@ -101,7 +101,7 @@ server.post('/audition/submit', function(req, res, next) {
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "audition submit" email to user %d: ' + err, req.body.user);
+    logger.error('Error sending "audition submit" email to user %d.', req.body.user, err);
     res.send(500);
   });
 });
@@ -115,7 +115,7 @@ server.post('/audition/approved', function(req, res, next) {
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "audition approved" email to user %d: ' + err, req.body.user);
+    logger.error('Error sending "audition approved" email to user %d.', req.body.user, err);
     res.send(500);
   });
 });
@@ -129,7 +129,7 @@ server.post('/audition/disapproved', function(req, res, next) {
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "audition disapproved" email to user %d: ' + err, req.body.user);
+    logger.error('Error sending "audition disapproved" email to user %d.', req.body.user, err);
     res.send(500);
   });
 });
@@ -150,7 +150,7 @@ server.post('/audition/comment', function(req, res, next) {
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "audition comment" email to %d: ' + err, this.auditionOwner.id);
+    logger.error('Error sending "audition comment" email to user %d.', this.auditionOwner.id, err);
     res.send(500);
   });
 });
@@ -172,7 +172,7 @@ server.post('/audition/replyComment', function(req, res, next) {
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "audition reply comment" email to %d: ' + err, this.commentOwner.id);
+    logger.error('Error sending "audition reply comment" email to user %d.', this.commentOwner.id, err);
     res.send(500);
   });
 });
@@ -186,7 +186,7 @@ server.post('/contest/inscription', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest inscription" email: ' + err);
+    logger.error('Error sending "contest inscription" email.', err);
     res.send(500);
   });
 });
@@ -209,7 +209,7 @@ server.post('/contest/start', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest start" email: ' + err);
+    logger.error('Error sending "contest start" email.', err);
     res.send(500);
   });
 });
@@ -232,7 +232,7 @@ server.post('/contest/draw', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest draw" email: ' + err);
+    logger.error('Error sending "contest draw" email.', err);
     res.send(500);
   });
 });
@@ -262,7 +262,7 @@ server.post('/contest/finish', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest finish" email: ' + err);
+    logger.error('Error sending "contest finish" email.', err);
     res.send(500);
   });
 });

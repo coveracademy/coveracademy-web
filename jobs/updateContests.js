@@ -11,7 +11,7 @@ var startContests = function() {
       contestService.startContest(contest).then(function(contest) {
         logger.info('Contest %d started successfully', contest.id);
       }).catch(function(err) {
-        logger.error('Error starting contest %d: ' + JSON.stringify(err), contest.id);
+        logger.error('Error starting contest %d.', contest.id, err);
       });
     });
   });
@@ -24,7 +24,7 @@ var finishContests = function() {
       contestService.finishContest(contest).then(function() {
         logger.info('Contest ' + contest.id + ' was finished');
       }).catch(function(err) {
-        logger.error('Error finishing contest %d: ' + JSON.stringify(err), contest.id);
+        logger.error('Error finishing contest %d.', contest.id, err);
       });
     });
   });
