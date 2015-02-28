@@ -31,6 +31,7 @@ var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var auditionCommentTemplate = env.getTemplate('audition_comment.tpl');
 var auditionReplyCommentTemplate = env.getTemplate('audition_reply_comment.tpl');
 var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
+var contestNextTemplate = env.getTemplate('contest_next.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
@@ -178,10 +179,24 @@ server.post('/audition/replyComment', function(req, res, next) {
 });
 
 server.post('/contest/inscription', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, allUsers) {
-    allUsers.forEach(function(user) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
+    users.forEach(function(user) {
       renderPromise(contestInscriptionTemplate, {user: user.toJSON(), contest: contest.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'Você já pode se inscrever na competição do Cover Academy.', email);
+      });
+    });
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest inscription" email.', err);
+    res.send(500);
+  });
+});
+
+server.post('/contest/next', function(req, res, next) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
+    users.forEach(function(user) {
+      renderPromise(contestNextTemplate, {user: user.toJSON(), contest: contest.toJSON()}).then(function(email) {
+        mailService.send(user.get('email'), 'A competição vai começar em breve!', email);
       });
     });
     res.send(200);
