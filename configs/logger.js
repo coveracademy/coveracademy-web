@@ -1,11 +1,12 @@
 "use strict"
 
-var winston = require('winston');
+var winston    = require('winston'),
+    properties = require('./properties');
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({timestamp: true, colorize: true}),
-    new (winston.transports.File)({filename: 'cover-academy.log'})
+    new (winston.transports.Console)({timestamp: true, colorize: true, level: properties.getValue('log.level', 'info')}),
+    new (winston.transports.File)({filename: 'cover-academy.log', level: properties.getValue('log.level', 'info')})
   ]
 });
 

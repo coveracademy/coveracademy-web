@@ -2,15 +2,14 @@
 
 var properties = require('./properties'),
     logger     = require('./logger'),
-    path       = require('path'),
-    config     = properties.load();
+    path       = require('path');
 
 try {
-  var _debug = properties.getValue(config, 'app.debug', false),
-      _nodeEnv = properties.getValue(config, 'app.env', 'dev'),
-      _nodeIP = properties.getValue(config, 'app.ip', '127.0.0.1'),
-      _nodePort = properties.getValue(config, 'app.port', 3000),
-      _mailPort = properties.getValue(config, 'app.mailPort', 5000),
+  var _debug = properties.getValue('app.debug', false),
+      _nodeEnv = properties.getValue('app.env', 'dev'),
+      _nodeIP = properties.getValue('app.ip', '127.0.0.1'),
+      _nodePort = properties.getValue('app.port', 3000),
+      _mailPort = properties.getValue('app.mailPort', 5000),
       _publicPath = path.join(__dirname, '../public'),
       _viewsPath = path.join(__dirname, '../views'),
       _tmpUploadPath = path.join(__dirname, '../tmp'),
@@ -58,22 +57,22 @@ try {
         apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
       },
       _database = {
-        dialect: properties.getValue(config, 'database.dialect', 'mysql'),
-        host: properties.getValue(config, 'database.host', 'localhost'),
-        port: properties.getValue(config, 'database.port', 3306),
-        user: properties.getValue(config, 'database.user', 'root'),
-        password: properties.getValue(config, 'database.password'),
-        schema: properties.getValue(config, 'database.schema', 'cover_academy'),
-        charset: properties.getValue(config, 'database.charset', 'utf8')
+        dialect: properties.getValue('database.dialect', 'mysql'),
+        host: properties.getValue('database.host', 'localhost'),
+        port: properties.getValue('database.port', 3306),
+        user: properties.getValue('database.user', 'root'),
+        password: properties.getValue('database.password'),
+        schema: properties.getValue('database.schema', 'cover_academy'),
+        charset: properties.getValue('database.charset', 'utf8')
       },
       _redis = {
-        host: properties.getValue(config, 'redis.host', 'localhost'),
-        port: properties.getValue(config, 'redis.port', 6379),
-        password: properties.getValue(config, 'redis.password')
+        host: properties.getValue('redis.host', 'localhost'),
+        port: properties.getValue('redis.port', 6379),
+        password: properties.getValue('redis.password')
       },
       _envs = {
         prod: {
-          prerenderUrl: properties.getValue(config, 'prerender.url', 'http://localhost:9000')
+          prerenderUrl: properties.getValue('prerender.url', 'http://localhost:9000')
         }
       };
 
