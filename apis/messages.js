@@ -4,13 +4,17 @@ var settings = require('../configs/settings'),
     util     = require('util');
 
 function APIError(statusCode, errorKey, errorMessage, cause) {
-  APIError.super_.call(this);
-  APIError.super_.captureStackTrace(this, this.constructor);
+  if (APIError.super_.captureStackTrace) {
+    APIError.super_.captureStackTrace(this, this.constructor);
+  }
+
+  this.name = this.constructor.name;
   this.statusCode = statusCode;
   this.errorKey = errorKey;
   this.errorMessage = errorMessage;
   this.cause = cause;
   this.message = '[statusCode: ' + statusCode + ', errorKey: ' + errorKey + ', errorMessage: "' + errorMessage + '", cause: ' + cause + ']';
+
   this.json = function() {
     var json = {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
     if(settings.debug === true) {
