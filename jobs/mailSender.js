@@ -31,6 +31,7 @@ var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var auditionCommentTemplate = env.getTemplate('audition_comment.tpl');
 var auditionReplyCommentTemplate = env.getTemplate('audition_reply_comment.tpl');
 var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
+var contestNextTemplate = env.getTemplate('contest_next.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
@@ -178,10 +179,24 @@ server.post('/audition/replyComment', function(req, res, next) {
 });
 
 server.post('/contest/inscription', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, allUsers) {
-    allUsers.forEach(function(user) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
+    users.forEach(function(user) {
       renderPromise(contestInscriptionTemplate, {user: user.toJSON(), contest: contest.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'Você já pode se inscrever na competição do Cover Academy.', email);
+      });
+    });
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest inscription" email.', err);
+    res.send(500);
+  });
+});
+
+server.post('/contest/next', function(req, res, next) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
+    users.forEach(function(user) {
+      renderPromise(contestNextTemplate, {user: user.toJSON(), contest: contest.toJSON()}).then(function(email) {
+        mailService.send(user.get('email'), 'A competição vai começar em breve!', email);
       });
     });
     res.send(200);
@@ -196,14 +211,15 @@ server.post('/contest/start', function(req, res, next) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
+    var that = this;
     auditions.forEach(function(audition) {
       var user = audition.related('user');
-      renderPromise(contestStartToContestantTemplate, {user: user.toJSON(), contest: this.contest.toJSON(), audition: audition.toJSON()}).then(function(email) {
+      renderPromise(contestStartToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'A competição começou, boa sorte!', email);
       });
     });
     nonContestants.forEach(function(user) {
-      renderPromise(contestStartTemplate, {user: user.toJSON(), contest: this.contest.toJSON()}).then(function(email) {
+      renderPromise(contestStartTemplate, {user: user.toJSON(), contest: that.contest.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'A competição começou, apoie os competidores com o seu voto.', email);
       });
     });
@@ -219,14 +235,15 @@ server.post('/contest/draw', function(req, res, next) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
+    var that = this;
     auditions.forEach(function(audition) {
       var user = audition.related('user');
-      renderPromise(contestDrawToContestantTemplate, {user: user.toJSON(), contest: this.contest.toJSON(), audition: audition.toJSON()}).then(function(email) {
+      renderPromise(contestDrawToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'A competição está empatada, é agora ou nunca!', email);
       });
     });
     nonContestants.forEach(function(user) {
-      renderPromise(contestDrawTemplate, {user: user.toJSON(), contest: this.contest.toJSON()}).then(function(email) {
+      renderPromise(contestDrawTemplate, {user: user.toJSON(), contest: that.contest.toJSON()}).then(function(email) {
         mailService.send(user.get('email'), 'A competição está empatada, os competidores precisam do seu apoio!', email);
       });
     });
@@ -242,21 +259,22 @@ server.post('/contest/finish', function(req, res, next) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
+    var that = this;
     auditions.forEach(function(audition) {
       var user = audition.related('user');
       if(audition.get('place') > 0) {
-        var prize = contestService.getPrizeForPlace(this.contest, audition.get('place'));
-        renderPromise(contestWinnerTemplate, {user: user.toJSON(), contest: this.contest.toJSON(), audition: audition.toJSON(), prize: prize.toJSON()}).then(function(email) {
+        var prize = contestService.getPrizeForPlace(that.contest, audition.get('place'));
+        renderPromise(contestWinnerTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), prize: prize.toJSON()}).then(function(email) {
           mailService.send(user.get('email'), 'Parabéns, você foi um dos vencedores!', email);
         });
       } else {
-        renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: this.contest.toJSON(), isContestant: true}).then(function(email) {
+        renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), isContestant: true}).then(function(email) {
           mailService.send(user.get('email'), 'A competição terminou, confira o resultado.', email);
         });
       }
     });
     nonContestants.forEach(function(user) {
-      renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: this.contest.toJSON(), isContestant: false}).then(function(email) {
+      renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), isContestant: false}).then(function(email) {
         mailService.send(user.get('email'), 'A competição terminou, confira o resultado.', email);
       });
     });

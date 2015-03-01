@@ -3,10 +3,16 @@
 {% set contestLink = siteUrl + "/pt-br/contest/" + contest.id + "/" + contest.slug %}
 
 {% block content %}
-  <h3>Vamos lá, {{ user.name }}!</h3>
+  <h3>{{ user.name }}, fique ligado!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
-      Você já pode se inscrever na competição online de música do Cover Academy. Se você não puder ou não quiser participar, divulgue a competição para os seus amigos, ficaremos muito grato por isso!
+      Em breve mais uma competição online de música do Cover Academy vai começar.
+    </p>
+    <p>
+      Se você está competindo, prepare-se para ser visto pelo Brasil inteiro. Conquiste votos da comunidade com o seu talento e aproveite para divulgar ainda mais o seu trabalho.
+    </p>
+    <p>
+      Se você não está competindo, continue apoiando os competidores com o seu voto. Acredite, o seu voto é muito importante. Ahhhhhhh, lembre-se que você pode votar em até 5 competidores!
     </p>
     <p style="text-align: center; font-weight: bold;">
       <a href="{{ contestLink }}" target="_blank" style="text-decoration: none;">
@@ -14,7 +20,7 @@
       </a>
     </p>
     <p>
-      Confira os prêmios para os três primeiros colocados:
+      Confira os prêmios da competição:
     </p>
     {% for prize in contest.prizes %}
       <div>
@@ -41,10 +47,10 @@
       </div>
     {% endfor %}
     <p>
-      Gostou? Não esqueça de sempre acompanhar o projeto Cover Academy através do site e redes sociais.
+      Curtiu? Não esqueça de sempre acompanhar o projeto Cover Academy através do site e redes sociais.
     </p>
     <p>
-      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por uma boa música, juntos conseguiremos beneficiar ainda mais os artistas que passam por aqui.
+      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por música, juntos conseguiremos beneficiar ainda mais os artistas que fazem parte disso.
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas

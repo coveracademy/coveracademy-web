@@ -142,6 +142,18 @@ exports.contestStart = function(contest) {
   });
 }
 
+exports.contestNext = function(contest) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/next', {contest: contest.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+}
+
 exports.contestDraw = function(contest) {
   return new Promise(function(resolve, reject) {
     mailClient.post('/contest/draw', {contest: contest.id}, function(err, req, res, obj) {
