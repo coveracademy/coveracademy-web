@@ -15,6 +15,10 @@ module.exports = function(router, app) {
       res.json(null);
     } else {
       userService.findById(req.user.id, true).then(function(user) {
+        var newUser = req.flash('newUser');
+        if(newUser.length > 0 && newUser[0] === true) {
+          user.set('new', true);
+        }
         res.json(user);
       }).catch(function(err) {
         logger.error(err);
@@ -44,6 +48,7 @@ module.exports = function(router, app) {
     var userData = req.param('user');
     userData.verifyEmail = true;
     userService.create(userData).then(function(user) {
+      req.flash('newUser', true);
       return authorization.refreshUser(req, user);
     }).then(function(refreshedUser) {
       res.json(refreshedUser);

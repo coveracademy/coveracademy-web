@@ -119,7 +119,7 @@ angular
     }, 8000);
   };
 }])
-.service('authenticationService', ['$rootScope', '$modal', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
+.service('authenticationService', ['$rootScope', '$modal', '$timeout', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $timeout, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
   var changeUser = function(newUser) {
@@ -160,6 +160,11 @@ angular
     },
     controller: 'registerController'
   };
+  var joinCommunityModalOptions = {
+    size: 'lg',
+    templateUrl: '/app/partials/widgets/join-community-modal.html'
+    // controller: 'joinCommunityController'
+  };
   this.isAuthenticated = function() {
     return user ? true : false;
   };
@@ -186,6 +191,11 @@ angular
               $.updateUser().then(function(userUpdated) {
                 deferred.resolve(userUpdated);
                 $rootScope.$broadcast(authEvents.USER_REGISTERED);
+                if(userUpdated.new && userUpdated.new === true) {
+                  $timeout(function() {
+                    $modal.open(joinCommunityModalOptions);                  
+                  }, 4000);
+                }
               }).catch(function(err) {
                 deferred.reject(err);
                 $rootScope.$broadcast(authEvents.FAIL_REGISTERING_USER);
@@ -199,7 +209,12 @@ angular
           if(result === 'success') {
             $.updateUser().then(function(userUpdated) {
               deferred.resolve(userUpdated);
-              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);
+              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);            
+              if(userUpdated.new && userUpdated.new === true) {
+                $timeout(function() {
+                  $modal.open(joinCommunityModalOptions);                  
+                }, 4000);
+              } 
             }).catch(function(err) {
               deferred.reject(err);
               $rootScope.$broadcast(authEvents.LOGIN_FAILED, provider);

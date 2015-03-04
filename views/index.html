@@ -218,6 +218,12 @@
         {{ alert.msg }}
       </alert>
     </div>
+    <div ng-if="isAuthenticated() && !isUserVerified()" class="fixed-alerts">
+      <alert type="warning">
+        <p class="nomargin">{{ 'alerts.user_not_verified' | translate: {user: userAuthenticated()} }}</p>
+        <p class="nomargin">{{ 'alerts.user_not_verified_change_email' | translate }}</p>
+      </alert>
+    </div>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/lib/moment/min/moment.min.js"></script>

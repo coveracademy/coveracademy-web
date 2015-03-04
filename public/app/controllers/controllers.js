@@ -69,6 +69,9 @@ angular
   $scope.isRedirectionStatusCode = function() {
     return $scope.statusCode === 301;
   };
+  $scope.isUserVerified = function() {
+    return $scope.isAuthenticated() && $scope.userAuthenticated().verified === 1;
+  };
 }])
 .controller('headerController', ['$scope', '$state', '$languages', 'authenticationService', 'coverService', 'searchService', function($scope, $state, $languages, authenticationService, coverService, searchService) {
   $scope.searchQuery = '';
