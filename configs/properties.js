@@ -17,5 +17,5 @@ exports.getValue = function(key, defaultValue) {
     }
     value = value[split];
   }
-  return found ? value : defaultValue;
+  return found === true ? value : defaultValue;
 }
