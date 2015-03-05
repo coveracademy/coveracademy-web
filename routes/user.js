@@ -114,6 +114,36 @@ module.exports = function(router, app) {
     });
   });
 
+  router.post('/fan', isAuthenticated, function(req, res, next) {
+    var user = userService.forge({id: req.param('user')});
+    userService.fan(req.user, user).then(function() {
+      res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.delete('/fan', isAuthenticated, function(req, res, next) {
+    var user = userService.forge({id: req.param('user')});
+    userService.unfan(req.user, user).then(function() {
+      res.json({});
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/isFan', isAuthenticated, function(req, res, next) {
+    var user = userService.forge({id: req.param('user')});
+    userService.isFan(req.user, user).then(function(fan) {
+      res.json(fan);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   app.use('/api/user', router);
 
 }

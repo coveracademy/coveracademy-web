@@ -44,13 +44,27 @@ angular
     });
   };
 }])
-.controller('userController', ['$scope', 'backendResponse', 'userService', 'seoService', function($scope, backendResponse, userService, seoService) {
+.controller('userController', ['$scope', 'authEvents', 'backendResponse', 'userService', 'seoService', 'translationService', 'alertService', function($scope, authEvents, backendResponse, userService, seoService, translationService, alertService) {
   $scope.user = backendResponse.data.user;
   $scope.auditions = backendResponse.data.auditions;
+  $scope.isFan = backendResponse.data.fan;
+  $scope.totalFans = backendResponse.data.totalFans;
 
   seoService.setTitle($scope.user.name);
   seoService.setDescription($scope.user.biography);
 
+  $scope.$on(authEvents.LOGIN_SUCCESS, function() {
+    userService.isFan($scope.user).then(function(response) {
+      $scope.isFan = response.data;
+    });
+  });
+  $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
+    $scope.isFan = false;
+  });
+
+  $scope.hasFans = function() {
+    return $scope.totalFans > 0;
+  };
   $scope.isContestant = function() {
     return $scope.user.contestant === 1;
   };
@@ -70,6 +84,27 @@ angular
   };
   $scope.getNetworkProfileUrl = function(network) {
     return userService.getNetworkProfileUrl($scope.user, network);
+  };
+  $scope.showFanButtons = function() {
+    return !$scope.isOwner() || !$scope.isAuthenticated();
+  };
+  $scope.fan = function() {
+    userService.fan($scope.user).then(function(response) {
+      $scope.isFan = true;
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
+  };
+  $scope.unfan = function() {
+    userService.unfan($scope.user).then(function(response) {
+      $scope.isFan = false;
+    }).catch(function(err) {
+      translationService.translateError(err).then(function(translation) {
+        alertService.alert('danger', translation);
+      });
+    });
   };
 }])
 .controller('settingsController', ['$scope', '$translate', 'constants', 'alertService', 'userService', 'seoService', 'translationService', 'authenticationService', function($scope, $translate, constants, alertService, userService, seoService, translationService, authenticationService) {

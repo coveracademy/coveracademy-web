@@ -660,9 +660,6 @@ form.compacted .form-group {
 #contest.pretty-header .contestant i.glyphicon-ok {
   font-size: 100px;
 }
-#user.pretty-header {
-  height: 300px;
-}
 #user.pretty-header .container {
   padding-left: 100px;
   padding-right: 100px;
@@ -676,6 +673,9 @@ form.compacted .form-group {
 #user .profile-picture {
   height: 210px;
   width: 210px;
+}
+#user .actions {
+  margin-top: 20px;
 }
 #author .profile-picture {
   width: 126px;

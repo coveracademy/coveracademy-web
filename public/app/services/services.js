@@ -428,6 +428,15 @@ angular
   this.showNetwork = function(network, show) {
     return $http.post('/api/user/showNetwork', {network: network, show: show});
   };
+  this.fan = function(user) {
+    return $http.post('/api/user/fan', {user: user.id});
+  };
+  this.unfan = function(user) {
+    return $http.delete('/api/user/fan', {params: {user: user.id}});
+  };
+  this.isFan = function(user) {
+    return $http.get('/api/user/isFan', {params: {user: user.id}});
+  };
   this.getProfilePicture = function(user, network) {
     var url = '';
     var picture = networkPictures[network ? network : user.profile_picture];
@@ -624,6 +633,9 @@ angular
   };
   this.getUserVote = function(audition) {
     return $http.get('/api/contest/audition/vote', {params: {audition: audition.id}});
+  };
+  this.getUserVotes = function(contest) {
+    return $http.get('/api/contest/votes', {params: {contest: contest.id}});
   };
   this.bestAuditions = function(contest, page) {
     return $http.get('/api/contest/audition/best', {params: {contest: contest.id, page: page}});

@@ -206,12 +206,16 @@ angular
   seoService.setImage($scope.contest.image);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
+    contestService.getUserVotes($scope.contest).then(function(response) {
+      $scope.userVotes = response.data;
+    });
     contestService.getUserAudition($scope.contest).then(function(response) {
       $scope.audition = response.data;
     });
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.audition = null;
+    $scope.userVotes = null;
   });
   $scope.isAuditionApproved = function() {
     return $scope.isContestant() && $scope.audition.approved === 1;

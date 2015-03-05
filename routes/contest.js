@@ -218,6 +218,16 @@ module.exports = function(router, app) {
     });
   });
 
+  router.get('/votes', isAuthenticated, function(req, res, next) {
+    var contest = Contest.forge({id: req.param('contest')});
+    contestService.getUserVotes(req.user, contest).then(function(userVotes) {
+      res.json(userVotes);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
   app.use('/api/contest', router);
 
 }

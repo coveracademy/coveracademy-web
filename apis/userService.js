@@ -1,6 +1,7 @@
 "use strict"
 
 var User              = require('../models/models').User,
+    UserFan           = require('../models/models').UserFan,
     SocialAccount     = require('../models/models').SocialAccount,
     VerificationToken = require('../models/models').VerificationToken,
     Bookshelf         = require('../models/models').Bookshelf,
@@ -51,6 +52,7 @@ exports.connectNetwork = function(user, network, account, picture, url) {
   return new Promise(function(resolve, reject) {
     if(!_.contains(networksToConnect, network)) {
       reject(messages.apiError('user.auth.unsupportedNetworkAssociation', 'Association with network ' + network + ' is not supported'));
+      return;
     }
     Bookshelf.transaction(function(transaction) {
       var accountAttribute = getAccountAttribute(network);
@@ -272,4 +274,62 @@ exports.resendVerificationEmail = function(user) {
 
 exports.listAllUsers = function() {
   return User.collection().fetch();
+}
+
+exports.totalFans = function(user) {
+  return new Promise(function(resolve, reject) {
+    var qb = Bookshelf.knex('user_fan')
+    .count('id as total_fans')
+    .where('user_id', user.id)
+    .then(function(rows) {
+      resolve(rows[0].total_fans);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
+exports.isFan = function(fan, user) {
+  if(!fan || !user) {
+    return Promise.resolve(false);
+  } else {
+    return UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
+      return fan ? true  : false;
+    });  
+  }
+}
+
+exports.fan = function(userFan, user) {
+  return new Promise(function(resolve, reject) {
+    if(userFan.id === user.id) {
+      reject(messages.apiError('user.fan.canNotFanYourSelf', 'You can not fan yourself.'));
+      return;
+    }
+    var fan = UserFan.forge({user_id: user.id, fan_id: userFan.id});
+    fan.save().then(function(fan) {
+      resolve(fan);
+    }).catch(function(err) {
+      if(err.code === 'ERR_DUP_ENTRY') {
+        resolve(fan);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
+exports.unfan = function(fan, user) {
+  return new Promise(function(resolve, reject) {
+    UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
+      if(!fan) {
+        resolve();
+      }  else {
+        return fan.destroy().then(function() {
+          resolve();
+        });
+      }
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
 }

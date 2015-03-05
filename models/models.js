@@ -23,6 +23,9 @@ var User = Bookshelf.Model.extend({
   socialAccounts: function() {
     return this.hasMany(SocialAccount, 'user_id');
   },
+  fans: function() {
+    return this.hasMany(User).through(UserFan, 'fan_id');
+  }
 });
 
 var SocialAccount = Bookshelf.Model.extend({
@@ -127,6 +130,17 @@ var UserComment = Bookshelf.Model.extend({
   }
 });
 
+var UserFan = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'user_fan',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  },
+  fan: function() {
+    return this.belongsTo(User, 'fan_id');
+  }
+});
+
 var VerificationToken = Bookshelf.Model.extend({
   idAttribute: 'token',
   tableName: 'verification_token',
@@ -176,6 +190,7 @@ module.exports = {
   Sponsor: Sponsor,
   SponsorInContest: SponsorInContest,
   User: User,
+  UserFan: UserFan,
   UserComment: UserComment,
   UserVote: UserVote
 }

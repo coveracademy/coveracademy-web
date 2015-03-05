@@ -196,6 +196,17 @@ create table user_comment (
   constraint `fk_user_comment_comment_id` foreign key (`comment_id`) references `user_comment` (`id`) on delete cascade
 ) engine = innodb default charset = utf8;
 
+create table user_fan (
+  id                int not null auto_increment,
+  user_id           int not null,
+  fan_id            int not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id),
+  unique key `uq_user_fan_user_id_fan_id` (`user_id`, `fan_id`),
+  constraint `fk_user_fan_user_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `fk_user_fan_fan_id` foreign key (`fan_id`) references `user` (`id`)
+) engine = innodb default charset = utf8;
+
 create table verification_token (
   token             varchar(255) not null,
   user_id           int not null,
