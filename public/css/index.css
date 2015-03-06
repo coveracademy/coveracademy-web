@@ -767,15 +767,15 @@ form.compacted .form-group {
 .audition.medium .label {
   font-size: 25px;
 }
-.contestants figure:hover figcaption {
+.profile-overview figure:hover figcaption {
   opacity: 1;
 }
-.contestants figure .profile-picture {
+.profile-overview figure .profile-picture {
   width: 262px;
   height: 262px;
   float: left;
 }
-.contestants figcaption {
+.profile-overview figcaption {
   position: absolute;
   opacity: 0;
   -webkit-transition: all 0.45s ease-in-out;
@@ -784,14 +784,14 @@ form.compacted .form-group {
   -ms-transition: all 0.45s ease-in-out;
   transition: all 0.45s ease-in-out;
 }
-.contestants figcaption .blur {
+.profile-overview figcaption .blur {
   position: absolute;
   height: 262px;
   width: 262px;
   z-index: 5;
   background-color: rgba(0,0,0,0.65);
 }
-.contestants figcaption .text {
+.profile-overview figcaption .text {
   position: absolute;
   width: 262px;
   height: 262px;
@@ -800,7 +800,7 @@ form.compacted .form-group {
   text-align: center;
   top: 100px;
 }
-.contestants figcaption h1 {
+.profile-overview figcaption h1 {
   text-transform: uppercase;
   font-size: 24px;
 }
@@ -854,6 +854,13 @@ form.compacted .form-group {
 }
 #settings .social-account {
   padding: 20px;
+}
+#user-menu ul {
+  padding-top: 20px;
+}
+#user-menu li {
+  min-width: 200px;
+  text-align: center
 }
 /* Social buttons */
 .btn-youtube {

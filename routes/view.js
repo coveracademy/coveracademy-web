@@ -464,11 +464,12 @@ module.exports = function(router, app) {
   });
 
   var getUserInfos = function(user, req, res) {
-    return Promise.all([userService.isFan(req.user, user), userService.totalFans(user), contestService.getUserAuditions(user)]).spread(function(fan, totalFans, auditions) {
+    return Promise.all([userService.isFan(req.user, user), userService.totalFans(user), userService.latestFans(user, constants.FIRST_PAGE, constants.NUMBER_OF_FANS_IN_PAGE), contestService.getUserAuditions(user)]).spread(function(fan, totalFans, fans, auditions) {
       res.json({
         user: user,
         auditions: auditions,
         fan: fan,
+        fans: fans,
         totalFans: totalFans
       });
     });

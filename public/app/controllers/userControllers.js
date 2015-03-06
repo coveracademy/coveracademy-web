@@ -49,6 +49,9 @@ angular
   $scope.auditions = backendResponse.data.auditions;
   $scope.isFan = backendResponse.data.fan;
   $scope.totalFans = backendResponse.data.totalFans;
+  $scope.fans = backendResponse.data.fans;
+  $scope.loadMoreFans = true;
+  var nextFanPage = 2;
 
   seoService.setTitle($scope.user.name);
   seoService.setDescription($scope.user.biography);
@@ -62,6 +65,22 @@ angular
     $scope.isFan = false;
   });
 
+  $scope.loadFans = function() {
+    if($scope.loadMoreFans === true) {
+      userService.latestFans(nextFanPage).then(function(response) {
+        nextFanPage++;
+        var fans = response.data;
+        if(fans.length < 60) {
+          $scope.loadMoreFans = false;
+        }
+        $scope.fans = $scope.fans.concat(fans);
+      }).catch(function(err) {
+        translationService.translateError(err).then(function(translation) {
+          alertService.alert('danger', translation);
+        });
+      });
+    }
+  };
   $scope.hasFans = function() {
     return $scope.totalFans > 0;
   };
@@ -91,6 +110,7 @@ angular
   $scope.fan = function() {
     userService.fan($scope.user).then(function(response) {
       $scope.isFan = true;
+      $scope.totalFans++;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);
@@ -100,6 +120,7 @@ angular
   $scope.unfan = function() {
     userService.unfan($scope.user).then(function(response) {
       $scope.isFan = false;
+      $scope.totalFans--;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);

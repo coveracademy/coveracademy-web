@@ -68,15 +68,37 @@
   </div>
 </div>
 <div class="container">
-  <div ng-if="hasAuditions()" class="row">
-    <div class="col-md-8">
-      <h1>{{ 'auditions' | translate }}</h1>
-    </div>
-  </div>
-  <div class="row" ng-repeat="row in auditions | partition: 3">
-    <div ng-repeat="audition in row" class="col-md-4">
-      <audition ng-model="audition" locale="{{ locale() }}" show-score="false">
-      </audition>
+  <div id="user-menu" class="tabbable-panel">
+    <div class="tabbable-line">
+      <tabset type="tabs">
+        <tab ng-if="hasAuditions()" heading="{{ 'menus.auditions' | translate | uppercase }}">
+          <div class="row" ng-repeat="row in auditions | partition: 3">
+            <div ng-repeat="audition in row" class="col-md-4">
+              <audition ng-model="audition" locale="{{ locale() }}" show-score="false">
+              </audition>
+            </div>
+          </div>        
+        </tab>
+        <tab ng-if="hasFans()" heading="{{ 'menus.fans' | translate | uppercase }}">
+          <div infinite-scroll="loadFans()" infinite-scroll-disabled="!loadMoreFans" infinite-scroll-distance="1">
+            <div ng-repeat="row in fans | partition: 4" class="row padding profile-overview">
+              <div ng-repeat="fan in row" class="col-md-3">
+                <a ui-sref="{{ userState(fan) }}">
+                  <figure>
+                    <div profile-picture="fan" class="profile-picture"></div>
+                    <figcaption class="caption">
+                      <div class="blur"></div>
+                      <div class="text">
+                        <h1>{{ fan.name }}</h1>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </a>
+              </div>
+            </div>
+          </div>
+        </tab>
+      </tabset>
     </div>
   </div>
 </div>

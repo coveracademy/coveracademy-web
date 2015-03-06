@@ -67,23 +67,18 @@ angular
 
   $scope.loadContestants = function() {
     if($scope.loadMoreContestants === true) {
-      var stopLoadingMoreContestants = false;
-      $scope.loadMoreContestants = false;
       contestService.latestContestants(nextPage).then(function(response) {
         nextPage++;
         var contestants = response.data;
         if(contestants.length < 60) {
-          stopLoadingMoreContestants = true;
+          $scope.loadMoreContestants = false;
         }
-        $scope.contestants = $scope.contestants.concat(contestants);
+        $scope.contestants = $scope.contestants.concat(contestants);    
       }).catch(function(err) {
         translationService.translateError(err).then(function(translation) {
           alertService.alert('danger', translation);
         });
-      });
-      if(!stopLoadingMoreContestants) {
-        $scope.loadMoreContestants = true;
-      }
+      });      
     }
   };
 }])

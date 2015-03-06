@@ -333,3 +333,15 @@ exports.unfan = function(fan, user) {
     });
   });
 }
+
+exports.latestFans = function(user, page, pageSize) {
+  return User.collection().query(function(qb) {
+    qb.join('user_fan', 'user.id', 'user_fan.fan_id');
+    qb.where('user_fan.user_id', user.id);
+    qb.orderBy('user_fan.registration_date', 'desc');
+    if(page && pageSize) {
+      qb.offset((page - 1) * pageSize);
+      qb.limit(pageSize);
+    }
+  }).fetch();
+}
