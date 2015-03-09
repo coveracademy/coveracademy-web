@@ -5,7 +5,7 @@ var winston    = require('winston'),
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({timestamp: true, colorize: true, level: properties.getValue('log.level', 'info')}),
+    new (winston.transports.Console)({timestamp: true, colorize: true, level: properties.getValue('log.level', 'info'), debugStdout: properties.getValue('log.level', 'info') === 'debug' ? true : false}),
     new (winston.transports.File)({filename: 'cover-academy.log', level: properties.getValue('log.level', 'info')})
   ]
 });
