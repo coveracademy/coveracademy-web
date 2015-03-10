@@ -43,9 +43,9 @@
     "request": "~2.37.0",
     "restify": "~2.8.3",
     "serve-favicon": "~2.1.6",
-    "slug": "~0.4.2",
-    "underscore": "~1.6.0",
-    "underscore.string": "~2.3.3",
+    "slug": "~0.8.0",
+    "underscore": "~1.8.2",
+    "underscore.string": "~3.0.3",
     "winston": "~0.9.0",
     "youtube-api": "~0.3.0"
   }

@@ -38,7 +38,7 @@
       <form id="register-form" name="registerForm" class="form-horizontal padding-top">
         <div class="form-group">
           <label for="name" class="col-md-3 control-label">
-            {{ 'forms.name' | translate }}
+            {{ 'forms.name' | translate }} <span class="label-required">*</span>
           </label>
           <div class="col-md-9" ng-class="{'has-error': registerForm.name.$dirty && registerForm.name.$invalid}">
             <input ng-model="temporaryUser.name" type="text" id="name" name="name" class="form-control" required>
@@ -46,7 +46,7 @@
         </div>
         <div class="form-group">
           <label for="email" class="col-md-3 control-label">
-            {{ 'forms.email' | translate }}
+            {{ 'forms.email' | translate }} <span class="label-required">*</span>
           </label>
           <div class="col-md-9" ng-class="{'has-error': registerForm.email.$dirty && registerForm.email.$invalid}">
             <input ng-model="temporaryUser.email" type="email" id="email" name="email" class="form-control" required>
@@ -69,7 +69,12 @@
             </span>
             <span class="help-block">
               <alert type="warning">
-                {{ 'forms.username_second_help' | translate }}
+                <p class="nomargin">
+                  {{ 'errors.user_edit_invalid_username' | translate }}
+                </p>
+                <p class="nomargin">
+                  {{ 'forms.username_second_help' | translate }}
+                </p>
               </alert>
             </span>
           </div>

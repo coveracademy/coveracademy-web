@@ -119,7 +119,38 @@ angular
     }, 8000);
   };
 }])
-.service('authenticationService', ['$rootScope', '$modal', '$timeout', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', function($rootScope, $modal, $timeout, $window, $q, $cookieStore, $underscore, constants, authEvents, userService) {
+.service('modalService', ['$modal', function($modal) {
+  var modalOptions = {
+    backdrop: true,
+    keyboard: true,
+    templateUrl: '/app/partials/widgets/modal.html',
+  };
+  var modalScope = {
+    headerText: 'Do you really want to procede with this action?',
+    bodyText: '',
+    cancelText: 'No',
+    confirmText: 'Yes',
+  };
+  this.show = function(customOptions, customScope) {
+    var extendedOptions = {};
+    var extendedScope = {};
+    angular.extend(extendedOptions, modalOptions, customOptions);
+    if(!extendedOptions.controller) {
+      angular.extend(extendedScope, modalScope, customScope);
+      extendedOptions.controller = function($scope, $modalInstance) {
+        $scope.modalScope = extendedScope;
+        $scope.modalScope.confirm = function(result) {
+          $modalInstance.close(result);
+        };
+        $scope.modalScope.cancel = function(reason) {
+          $modalInstance.dismiss(reason || 'cancel');
+        };
+      };
+    }
+    return $modal.open(extendedOptions).result;
+  };
+}])
+.service('authenticationService', ['$rootScope', '$timeout', '$window', '$q', '$cookieStore', '$underscore', 'constants', 'authEvents', 'userService', 'modalService', function($rootScope, $timeout, $window, $q, $cookieStore, $underscore, constants, authEvents, userService, modalService) {
   var $ = this;
   var user = $cookieStore.get(constants.USER_COOKIE) || null;
   var changeUser = function(newUser) {
@@ -186,14 +217,14 @@ angular
       $window.authResult = function(result, message) {
         if(result === 'must-register') {
           win.close();
-          $modal.open(registerModalOptions).result.then(function(registered) {
+          modalService.show(registerModalOptions).then(function(registered) {
             if(registered === true) {
               $.updateUser().then(function(userUpdated) {
                 deferred.resolve(userUpdated);
                 $rootScope.$broadcast(authEvents.USER_REGISTERED);
                 if(userUpdated.new && userUpdated.new === true) {
                   $timeout(function() {
-                    $modal.open(joinCommunityModalOptions);                  
+                    modalService.show(joinCommunityModalOptions);
                   }, 4000);
                 }
               }).catch(function(err) {
@@ -209,12 +240,12 @@ angular
           if(result === 'success') {
             $.updateUser().then(function(userUpdated) {
               deferred.resolve(userUpdated);
-              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);            
+              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);
               if(userUpdated.new && userUpdated.new === true) {
                 $timeout(function() {
-                  $modal.open(joinCommunityModalOptions);                  
+                  modalService.show(joinCommunityModalOptions);
                 }, 4000);
-              } 
+              }
             }).catch(function(err) {
               deferred.reject(err);
               $rootScope.$broadcast(authEvents.LOGIN_FAILED, provider);
@@ -228,7 +259,7 @@ angular
       }
       return deferred.promise;
     } else {
-      $modal.open(loginModalOptions).result.then(function(authenticated) {
+      modalService.show(loginModalOptions).then(function(authenticated) {
         if(authenticated === true) {
           deferred.resolve(user);
         } else {
@@ -260,43 +291,14 @@ angular
     return deferred.promise;
   };
 }])
-.service('modalService', ['$modal', function($modal) {
-  var modalOptions = {
-    backdrop: true,
-    keyboard: true,
-    templateUrl: '/app/partials/widgets/modal.html',
-  };
-  var modalScope = {
-    headerText: 'Do you really want to procede with this action?',
-    bodyText: '',
-    cancelText: 'No',
-    confirmText: 'Yes',
-  };
-  this.show = function(customOptions, customScope) {
-    var extendedOptions = {};
-    var extendedScope = {};
-    angular.extend(extendedOptions, modalOptions, customOptions);
-    if(!extendedOptions.controller) {
-      angular.extend(extendedScope, modalScope, customScope);
-      extendedOptions.controller = function($scope, $modalInstance) {
-        $scope.modalScope = extendedScope;
-        $scope.modalScope.confirm = function(result) {
-          $modalInstance.close(result);
-        };
-        $scope.modalScope.cancel = function(reason) {
-          $modalInstance.dismiss(reason || 'cancel');
-        };
-      };
-    }
-    return $modal.open(extendedOptions).result;
-  };
-}])
 .service('translationService', ['$q', '$translate', function($q, $translate) {
   var errorKeys = {
-    'audition.vote.canNotVoteForYourself': 'errors.user_vote_can_not_vote_for_yourself',
-    'audition.vote.contestWasFinished': 'errors.user_vote_contest_was_finished',
-    'audition.vote.reachVoteLimit': 'errors.user_vote_reach_vote_limit',
-    'audition.vote.userNotVerified': 'errors.user_vote_user_not_verified',
+    'audition.comment.empty': 'errors.audition_comment_empty',
+    'audition.comment.userNotVerified': 'errors.audition_comment_user_not_verified',
+    'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
+    'audition.vote.contestWasFinished': 'errors.audition_vote_contest_was_finished',
+    'audition.vote.reachVoteLimit': 'errors.audition_vote_reach_vote_limit',
+    'audition.vote.userNotVerified': 'errors.audition_vote_user_not_verified',
     'contest.join.alreadyFinished': 'errors.join_contest_already_finished',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
     'contest.join.userNotVerified': 'errors.join_contest_user_not_verified',

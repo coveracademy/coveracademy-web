@@ -324,6 +324,10 @@ a:hover {
   border: none;
   color: #fff;
 }
+.alert a, .alert a:hover, .alert a:active {
+  color: #fff;
+  text-decoration: underline;
+}
 .alert-success {
   background-color: #4caf50;
 }
@@ -377,6 +381,9 @@ a:hover {
   -moz-animation: fadeOut 1s;
   -o-animation: fadeOut 1s;
   animation: fadeOut 1s;
+}
+.label-required {
+  color: #f00;
 }
 .label.label-gold {
   background-color: #dfbb10;

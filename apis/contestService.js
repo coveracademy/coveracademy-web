@@ -233,7 +233,7 @@ exports.startContest = function(contest) {
                 mailService.contestNext(contest).catch(function(err) {
                   logger.error('Error sending "contest next" email.', err);
                 });
-              } 
+              }
             }).catch(function(err) {
               reject(messages.unexpectedError('Error starting the contest', err));
             });
@@ -698,10 +698,25 @@ exports.removeVote = function(user, audition) {
   });
 }
 
+var formatComment = function(message) {
+  var formatted = '';
+  if(message) {
+    formatted = _.str.replaceAll(message, '<p><br/></p>', '');
+    formatted = _.str.replaceAll(formatted, '(<br/>)+', '<br/>');
+    formatted = formatted.trim();
+  }
+  return formatted;
+}
+
 exports.comment = function(user, audition, message) {
   return new Promise(function(resolve, reject) {
+    message = formatComment(message);
     if(user.get('verified') === 0) {
       reject(messages.apiError('audition.comment.userNotVerified', 'The user can not comment because he is not verified'));
+      return;
+    }
+    if(message === '') {
+      reject(messages.apiError('audition.comment.empty', 'The comment message can not be empty'));
       return;
     }
     $.loadAudition(audition, []).then(function(audition) {
@@ -726,6 +741,11 @@ exports.comment = function(user, audition, message) {
 
 exports.replyComment = function(user, commentId, message) {
   return new Promise(function(resolve, reject) {
+    message = formatComment(message);
+    if(message === '') {
+      reject(messages.apiError('audition.comment.empty', 'The comment message can not be empty'));
+      return;
+    }
     $.getComment(commentId).then(function(comment) {
       var reply = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});
       return reply.save().then(function(reply) {

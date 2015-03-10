@@ -233,7 +233,7 @@
                   </a>
                   <div ta-bind ng-model="comment.message" class="comment-text"></div>
                   <span class="comment-date" am-time-ago="comment.registration_date"></span>
-                  <span ng-if="!commentHasReplies(comment)">
+                  <span>
                     ·
                     <a ng-click="openReplyCommentForm(comment)">
                       {{ 'reply' | translate }}
@@ -259,6 +259,12 @@
                         </a>
                         <div ta-bind ng-model="reply.message" class="comment-text"></div>
                         <span class="comment-date" am-time-ago="reply.registration_date"></span>
+                        <span>
+                          ·
+                          <a ng-click="openReplyCommentForm(comment)">
+                            {{ 'reply' | translate }}
+                          </a>
+                        </span>
                         <span ng-if="canRemoveComment(reply)">
                           ·
                           <a ng-click="removeComment(reply, comment)">
@@ -267,7 +273,7 @@
                         </span>
                       </div>
                     </div>
-                    <div ng-if="userAuthenticated() && (commentHasReplies(comment) || isReplyCommentFormOpened(comment))" class="media comments-comment">
+                    <div ng-if="userAuthenticated() && isReplyCommentFormOpened(comment)" class="media comments-comment">
                       <div class="media-left">
                         <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
                         </div>

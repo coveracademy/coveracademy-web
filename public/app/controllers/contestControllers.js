@@ -73,12 +73,12 @@ angular
         if(contestants.length < 60) {
           $scope.loadMoreContestants = false;
         }
-        $scope.contestants = $scope.contestants.concat(contestants);    
+        $scope.contestants = $scope.contestants.concat(contestants);
       }).catch(function(err) {
         translationService.translateError(err).then(function(translation) {
           alertService.alert('danger', translation);
         });
-      });      
+      });
     }
   };
 }])
@@ -541,9 +541,10 @@ angular
   $scope.comment = function(message) {
     contestService.comment($scope.audition, message).then(function(response) {
       $scope.comments.unshift(response.data);
+      $scope.closeReplyCommentForm(response.data);
       message = '';
     }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
+      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -551,8 +552,9 @@ angular
   $scope.replyComment = function(comment, message) {
     contestService.replyComment(comment, message).then(function(response) {
       comment.replies.push(response.data);
+      $scope.closeReplyCommentForm(comment);
     }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
+      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -561,6 +563,9 @@ angular
     authenticationService.ensureAuthentication().then(function() {
       $scope.replyCommentFormOpened[comment.id] = true;
     });
+  };
+  $scope.closeReplyCommentForm = function(comment) {
+    $scope.replyCommentFormOpened[comment.id] = false;
   };
   $scope.isReplyCommentFormOpened = function(comment) {
     return $scope.replyCommentFormOpened[comment.id] === true;
