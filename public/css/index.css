@@ -96,6 +96,10 @@ img.small-brand {
   margin: 5px;
   border-radius: 5px;
 }
+.promo-video {
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
 .jumbotron.white {
   background-color: #fff;
 }
