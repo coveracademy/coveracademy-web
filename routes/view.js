@@ -150,7 +150,7 @@ module.exports = function(router, app) {
       Promise.all([
         coversPromise,
         coverService.totalCovers(constants.WEEK_PERIOD)
-      ]).bind({        
+      ]).bind({
       }).spread(function(coversRank, totalCoversRank) {
         this.coversRank = coversRank;
         this.totalCoversRank = totalCoversRank;
@@ -178,7 +178,7 @@ module.exports = function(router, app) {
         return Promise.all([
           coverService.totalMusicsByArtist(artist),
           coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)
-        ]).bind({          
+        ]).bind({
         }).spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
@@ -206,7 +206,7 @@ module.exports = function(router, app) {
 
   router.get('/artists', function(req, res, next) {
     var genre = req.param('genre');
-    coverService.getMusicGenreBySlug(genre).bind({}).then(function(musicGenre) {  
+    coverService.getMusicGenreBySlug(genre).bind({}).then(function(musicGenre) {
       this.musicGenre = musicGenre;
       return Promise.all([coverService.listArtists(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_PAGE), coverService.totalArtists(musicGenre)]);
     }).spread(function(artists, totalArtists) {
@@ -304,9 +304,9 @@ module.exports = function(router, app) {
   router.get('/search', function(req, res, next) {
     var query = req.param('query');
     Promise.all([
-      coverService.searchArtists(query), 
+      coverService.searchArtists(query),
       coverService.searchMusics(query)
-    ]).bind({      
+    ]).bind({
     }).spread(function(artists, musics) {
       this.artists = artists;
       this.musics = musics;
@@ -342,7 +342,7 @@ module.exports = function(router, app) {
           winnersPromise,
           contestService.getUserVotes(req.user, contest),
           contestService.countUserVotes(req.user, contest),
-        ]).bind({          
+        ]).bind({
         }).spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes, totalUserVotes) {
           this.auditions = auditions;
           this.userVotes = userVotes;
@@ -362,8 +362,7 @@ module.exports = function(router, app) {
             totalAuditions: this.totalAuditions,
             scoreByAudition: scoreByAudition,
             votesByAudition: votesByAudition,
-            rankType: rankType,
-            voteLimit: constants.VOTE_LIMIT
+            rankType: rankType
           });
         });
       }
@@ -441,7 +440,8 @@ module.exports = function(router, app) {
           contestService.latestAuditions(contest, 1, 8),
           contestService.totalAuditions(contest),
           contestService.listComments(audition),
-        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions, comments) {
+          userService.isFan(req.user, audition.related('user'))
+        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions, comments, fan) {
           res.json({
             contest: contest,
             audition: audition,
@@ -450,10 +450,10 @@ module.exports = function(router, app) {
             latestAuditions: latestAuditions,
             totalAuditions: totalAuditions,
             totalUserVotes: totalUserVotes,
-            voteLimit: constants.VOTE_LIMIT,
             votes: votes,
             score: score,
-            comments: comments
+            comments: comments,
+            fan: fan
           });
         });
       }

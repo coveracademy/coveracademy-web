@@ -315,8 +315,9 @@
         <div class="col-md-12">
           <h2>
             {{ 'your_votes' | translate }}
-            <small ng-if="hasRemainingVotes()">• {{ 'you_can_still_vote_in_other_contestants' | translate: {remainingVotes: remainingVotes()} }}</small>
-            <small ng-if="!hasRemainingVotes()">• {{ 'you_have_already_voted_on_five_contestants' | translate }}</small>
+            <small>
+              • {{ 'you_voted_for_contestants' | translate: {totalVotes: totalUserVotes} }}
+            </small>
           </h2>
           <div ng-repeat="userVote in userVotes" class="pull-left">
             <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">

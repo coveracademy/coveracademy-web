@@ -3,6 +3,7 @@
 var userService     = require('../apis/userService'),
     mailService     = require('../apis/mailService'),
     messages        = require('../apis/messages'),
+    constants       = require('../apis/constants'),
     logger          = require('../configs/logger'),
     authorization   = require('../utils/authorization'),
     isAuthenticated = authorization.isAuthenticated,
@@ -138,6 +139,17 @@ module.exports = function(router, app) {
     var user = userService.forge({id: req.param('user')});
     userService.isFan(req.user, user).then(function(fan) {
       res.json(fan);
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
+  });
+
+  router.get('/fans/latest', function(req, res, next) {
+    var user = userService.forge({id: req.param('user')});
+    var page = req.param('page') || constants.FIRST_PAGE;
+    userService.latestFans(user, page, constants.NUMBER_OF_FANS_IN_PAGE).then(function(fans) {
+      res.json(fans);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);

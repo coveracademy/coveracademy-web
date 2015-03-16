@@ -96,6 +96,9 @@ img.small-brand {
   margin: 5px;
   border-radius: 5px;
 }
+a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
+  text-decoration: none;
+}
 .jumbotron.white {
   background-color: #fff;
 }
@@ -137,7 +140,7 @@ img.small-brand {
   padding: 0;
 }
 #incentive-vote #incentive {
-  padding: 30px;
+  padding: 0px 30px;
 }
 #incentive-vote #join-community {
   background-color: #363b3f;
@@ -684,6 +687,19 @@ form.compacted .form-group {
 #user .actions {
   margin-top: 20px;
 }
+#user-menu .profile-picture {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .blur {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .text {
+  width: 160px;
+  height: 160px;
+  top: 20px;
+}
 #author .profile-picture {
   width: 126px;
   height: 126px;
@@ -1032,13 +1048,13 @@ form.compacted .form-group {
   width: 45px;
   height: 45px;
 }
-.comment-user, .comment-user:hover {
-  color: #494d55;
-}
 .comment-text p {
   margin: 0;
 }
 .comment-date {
+  color: #888;
+}
+.comment-actions a {
   color: #888;
 }
 .comment-input p {

@@ -297,7 +297,6 @@ angular
     'audition.comment.userNotVerified': 'errors.audition_comment_user_not_verified',
     'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
     'audition.vote.contestWasFinished': 'errors.audition_vote_contest_was_finished',
-    'audition.vote.reachVoteLimit': 'errors.audition_vote_reach_vote_limit',
     'audition.vote.userNotVerified': 'errors.audition_vote_user_not_verified',
     'contest.join.alreadyFinished': 'errors.join_contest_already_finished',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',
@@ -438,6 +437,9 @@ angular
   };
   this.isFan = function(user) {
     return $http.get('/api/user/isFan', {params: {user: user.id}});
+  };
+  this.latestFans = function(user, page) {
+    return $http.get('/api/user/fans/latest', {params: {user: user.id, page: page}});
   };
   this.getProfilePicture = function(user, network) {
     var url = '';
@@ -655,6 +657,6 @@ angular
     return $http.post('/api/contest/audition/disapprove', {audition: audition.id, reason: reason});
   };
   this.latestContestants = function(page) {
-    return $http.get('/api/contest/latest', {params: {page: page}});
+    return $http.get('/api/contest/contestants/latest', {params: {page: page}});
   };
 }]);

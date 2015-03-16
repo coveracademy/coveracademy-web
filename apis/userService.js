@@ -295,7 +295,7 @@ exports.isFan = function(fan, user) {
   } else {
     return UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
       return fan ? true  : false;
-    });  
+    });
   }
 }
 

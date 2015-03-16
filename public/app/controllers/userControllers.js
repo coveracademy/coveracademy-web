@@ -44,7 +44,7 @@ angular
     });
   };
 }])
-.controller('userController', ['$scope', 'authEvents', 'backendResponse', 'userService', 'seoService', 'translationService', 'alertService', function($scope, authEvents, backendResponse, userService, seoService, translationService, alertService) {
+.controller('userController', ['$scope', '$underscore', 'authEvents', 'backendResponse', 'userService', 'seoService', 'translationService', 'alertService', function($scope, $underscore, authEvents, backendResponse, userService, seoService, translationService, alertService) {
   $scope.user = backendResponse.data.user;
   $scope.auditions = backendResponse.data.auditions;
   $scope.isFan = backendResponse.data.fan;
@@ -67,7 +67,7 @@ angular
 
   $scope.loadFans = function() {
     if($scope.loadMoreFans === true) {
-      userService.latestFans(nextFanPage).then(function(response) {
+      userService.latestFans($scope.user, nextFanPage).then(function(response) {
         nextFanPage++;
         var fans = response.data;
         if(fans.length < 60) {
@@ -111,6 +111,7 @@ angular
     userService.fan($scope.user).then(function(response) {
       $scope.isFan = true;
       $scope.totalFans++;
+      $scope.fans.unshift($scope.userAuthenticated());
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);
@@ -121,6 +122,9 @@ angular
     userService.unfan($scope.user).then(function(response) {
       $scope.isFan = false;
       $scope.totalFans--;
+      $scope.fans = $underscore.filter($scope.fans, function(fan) {
+        return $scope.userAuthenticated().id !== fan.id;
+      });
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);

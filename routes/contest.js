@@ -3,10 +3,10 @@
 var contestService  = require('../apis/contestService'),
     mailService     = require('../apis/mailService'),
     constants       = require('../apis/constants'),
+    messages        = require('../apis/messages'),
     logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     isAdmin         = require('../utils/authorization').isAdmin,
-    messages        = require('../apis/messages'),
     Audition        = require('../models/models').Audition,
     Contest         = require('../models/models').Contest;
 
