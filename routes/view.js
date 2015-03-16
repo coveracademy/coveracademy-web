@@ -362,7 +362,8 @@ module.exports = function(router, app) {
             totalAuditions: this.totalAuditions,
             scoreByAudition: scoreByAudition,
             votesByAudition: votesByAudition,
-            rankType: rankType
+            rankType: rankType,
+            voteLimit: constants.VOTE_LIMIT
           });
         });
       }
@@ -450,6 +451,7 @@ module.exports = function(router, app) {
             latestAuditions: latestAuditions,
             totalAuditions: totalAuditions,
             totalUserVotes: totalUserVotes,
+            voteLimit: constants.VOTE_LIMIT,
             votes: votes,
             score: score,
             comments: comments,

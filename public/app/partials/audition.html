@@ -80,11 +80,17 @@
             </h1>
             <h2 class="nomargin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
             <div ng-if="isContestProgress('running')">
-              <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)">
+              <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
                 <h2 class="nomargin">{{ 'vote_now' | translate }}</h2>
+                <h5 ng-if="userAuthenticated()" class="nomargin">
+                  {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
+                </h5>
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
                 <h2 class="nomargin">{{ 'you_voted' | translate }}</h2>
+                <h5 ng-if="userAuthenticated()" class="nomargin">
+                  {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
+                </h5>
               </button>
             </div>
           </div>

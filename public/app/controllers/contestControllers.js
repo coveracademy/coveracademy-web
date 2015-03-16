@@ -180,6 +180,7 @@ angular
   $scope.audition = backendResponse.data.audition;
   $scope.auditions = backendResponse.data.auditions;
   $scope.userVotes = backendResponse.data.userVotes;
+  $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.totalUserVotes = backendResponse.data.totalUserVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
@@ -250,6 +251,12 @@ angular
   };
   $scope.hasUserVotes = function() {
     return $scope.userVotes && $scope.userVotes.length > 0;
+  };
+  $scope.hasRemainingVotes = function() {
+    return $scope.remainingVotes() > 0;
+  };
+  $scope.remainingVotes = function() {
+    return $scope.voteLimit - $scope.totalUserVotes;
   };
   $scope.isMedal = function(audition, expected) {
     return $scope.getMedal(audition) === expected;
@@ -390,6 +397,7 @@ angular
   $scope.latestAuditions = backendResponse.data.latestAuditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.totalUserVotes = backendResponse.data.totalUserVotes;
+  $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
   $scope.isFan = backendResponse.data.fan;
@@ -430,6 +438,12 @@ angular
         alertService.alert('danger', translation);
       });
     });
+  };
+  $scope.remainingVotes = function() {
+    return $scope.voteLimit - $scope.totalUserVotes;
+  };
+  $scope.hasRemainingVotes = function() {
+    return $scope.remainingVotes() > 0;
   };
   $scope.isAuditionApproved = function() {
     return $scope.audition.approved === 1;
@@ -489,6 +503,9 @@ angular
     size: 'lg',
     templateUrl: '/app/partials/widgets/incentive-vote-modal.html',
     resolve: {
+      remainingVotes: function() {
+        return $scope.remainingVotes();
+      },
       randomAuditions: function() {
         return contestService.randomAuditions($scope.contest, 6).then(function(response) {
           return response.data;
@@ -498,7 +515,8 @@ angular
         return $scope.locale();
       }
     },
-    controller: function($scope, $modalInstance, randomAuditions, locale) {
+    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
+      $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
       $scope.locale = locale;
       $scope.close = function() {
@@ -517,7 +535,7 @@ angular
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(translation) {
         alertService.alert('success', translation);
       });
-      if($scope.totalUserVotes < 3) {
+      if($scope.remainingVotes() > 2) {
         $timeout(function() {
           modalService.show(incentiveVoteModalOptions);
         }, 2000);
