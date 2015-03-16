@@ -99,6 +99,10 @@ img.small-brand {
 a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
   text-decoration: none;
 }
+.promo-video {
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
 .jumbotron.white {
   background-color: #fff;
 }
