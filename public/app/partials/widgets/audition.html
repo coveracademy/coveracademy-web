@@ -1,4 +1,4 @@
-<div class="audition {{ thumbSizeFinal }}" ng-class="{'noborder': noBorderFinal}">
+<div class="audition {{ thumbSizeFinal }}" ng-class="{'no-border': noBorderFinal}">
   <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})" ng-click="auditionClick()">
     <div class="cover">
       <div class="darken"></div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="legend">
-        <span class="label label-primary" ng-if="showScoreFinal">
+        <span class="label label-primary no-radius" ng-if="showScoreFinal">
           {{ scoreByAudition() }}
         </span>
       </div>

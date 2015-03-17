@@ -103,6 +103,9 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
   margin-top: 35px;
   margin-bottom: 35px;
 }
+.modal-backdrop {
+  height: 100%;
+}
 .jumbotron.white {
   background-color: #fff;
 }
@@ -136,9 +139,6 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 #land-community-section {
   background-color: #3a5795;
   color: #fff;
-}
-.modal-backdrop {
-  height: 100%;
 }
 #incentive-vote {
   padding: 0;
@@ -261,11 +261,14 @@ a:hover {
 .margin-top20 {
   margin-top: 20px;
 }
-.nomargin {
+.no-margin {
   margin: 0px;
 }
-.noborder {
+.no-border {
   border: none;
+}
+.no-radius {
+  border-radius: 0px;
 }
 .overflow-hidden {
   overflow: hidden;

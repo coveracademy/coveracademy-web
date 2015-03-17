@@ -221,13 +221,13 @@
     <div class="fixed-alerts">
       <div ng-if="isAuthenticated() && !isUserVerified()" class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p class="nomargin">{{ 'alerts.user_not_verified' | translate: {user: userAuthenticated()} }}</p>
-        <p class="nomargin">{{ 'alerts.user_not_verified_change_email' | translate }}</p>
+        <p class="no-margin">{{ 'alerts.user_not_verified' | translate: {user: userAuthenticated()} }}</p>
+        <p class="no-margin">{{ 'alerts.user_not_verified_change_email' | translate }}</p>
       </div>
       <div ng-if="isAuthenticated() && isUserVerified() && userAuthenticated().new" class="alert alert-info alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p class="nomargin">{{ 'alerts.use_the_email_to_receive_updates' | translate: {user: userAuthenticated()} }}</p>
-        <p class="nomargin">
+        <p class="no-margin">{{ 'alerts.use_the_email_to_receive_updates' | translate: {user: userAuthenticated()} }}</p>
+        <p class="no-margin">
           <a ui-sref="app.settings()">
             {{ 'alerts.no_i_want_to_use_another_email' | translate }}
           </a>

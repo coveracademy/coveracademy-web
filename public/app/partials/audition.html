@@ -7,7 +7,7 @@
             {{ contest.name }}
           </a>
         </h1>
-        <h2 ng-if="isContestProgress('finished')" class="nomargin">
+        <h2 ng-if="isContestProgress('finished')" class="no-margin">
           <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
             ({{ 'contest_finished' | translate }})
           </a>
@@ -54,7 +54,7 @@
                 </div>
               </div>
               <div class="media-body">
-                <h3 class="nomargin">
+                <h3 class="no-margin">
                   <a ui-sref="{{ userState(audition.user) }}" class="no-decoration">
                     {{ audition.user.name }}
                   </a>
@@ -65,7 +65,7 @@
                     Unfan
                   </button>
                 </h3>
-                <h4 class="nomargin">{{ audition.description }}</h4>
+                <h4 class="no-margin">{{ audition.description }}</h4>
               </div>
             </div>
           </div>
@@ -75,20 +75,20 @@
         <div>
           <div class="align-center">
             <img ng-if="isWinner()" class="medium-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
-            <h1 class="nomargin">
+            <h1 class="no-margin">
               {{ score }} {{ 'points' | translate }}
             </h1>
-            <h2 class="nomargin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
+            <h2 class="no-margin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
-                <h2 class="nomargin">{{ 'vote_now' | translate }}</h2>
-                <h5 ng-if="userAuthenticated()" class="nomargin">
+                <h2 class="no-margin">{{ 'vote_now' | translate }}</h2>
+                <h5 ng-if="userAuthenticated()" class="no-margin">
                   {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
                 </h5>
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
-                <h2 class="nomargin">{{ 'you_voted' | translate }}</h2>
-                <h5 ng-if="userAuthenticated()" class="nomargin">
+                <h2 class="no-margin">{{ 'you_voted' | translate }}</h2>
+                <h5 ng-if="userAuthenticated()" class="no-margin">
                   {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
                 </h5>
               </button>
@@ -115,10 +115,10 @@
       <div class="col-md-12">
         <alert ng-if="isAuditionApproved()" type="warning">
           <div class="font-biggest">
-            <p class="nomargin align-center">
+            <p class="no-margin align-center">
               {{ 'this_contest_is_not_happening_yet' | translate }}
             </p>
-            <p class="nomargin" ng-if="isContestProgress('waiting_time')">
+            <p class="no-margin" ng-if="isContestProgress('waiting_time')">
               {{ 'time_remaining_to_start' | translate }}:
               <span ng-if="remainingOneDay(contest.start_date)">
                 <timer interval="60000" end-time="contest.start_date">
@@ -137,7 +137,7 @@
                 </timer>
               </span>
             </p>
-            <p class="nomargin" ng-if="isContestProgress('waiting')">
+            <p class="no-margin" ng-if="isContestProgress('waiting')">
               {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}.
             </p>
             <div>
@@ -155,7 +155,7 @@
           </div>
         </alert>
         <alert ng-if="!isAuditionApproved()" type="warning">
-          <h2 class="align-center nomargin">{{ 'this_audition_is_under_review_wait_for_approval' | translate }}</h2>
+          <h2 class="align-center no-margin">{{ 'this_audition_is_under_review_wait_for_approval' | translate }}</h2>
         </alert>
       </div>
     </div>
@@ -178,12 +178,12 @@
             </div>
           </div>
           <div class="media-body">
-            <h3 class="nomargin">
+            <h3 class="no-margin">
               <a ui-sref="{{ userState(audition.user) }}" class="no-decoration">
                 {{ audition.user.name }}
               </a>
             </h3>
-            <h4 class="nomargin">{{ audition.description }}</h4>
+            <h4 class="no-margin">{{ audition.description }}</h4>
           </div>
         </div>
       </div>
