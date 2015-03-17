@@ -76,14 +76,14 @@ exports.listUnfinishedContests = function() {
   }).fetch();
 }
 
-exports.listContestsToStart = function() {
+exports.listWaitingContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'waiting');
     qb.orderBy('registration_date', 'desc');
   }).fetch();
 }
 
-exports.listContestsToFinish = function() {
+exports.listRunningContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'running');
     qb.orderBy('registration_date', 'desc');

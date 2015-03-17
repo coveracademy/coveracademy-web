@@ -6,7 +6,7 @@ var contestService = require('../apis/contestService'),
 
 var startContests = function() {
   logger.info('Starting contests');
-  contestService.listContestsToStart().then(function(contests) {
+  contestService.listWaitingContests().then(function(contests) {
     contests.forEach(function(contest) {
       contestService.startContest(contest).then(function(contest) {
         logger.info('Contest %d started successfully', contest.id);
@@ -19,7 +19,7 @@ var startContests = function() {
 
 var finishContests = function() {
   logger.info('Finishing contests');
-  contestService.listContestsToFinish().then(function(contests) {
+  contestService.listRunningContests().then(function(contests) {
     contests.forEach(function(contest) {
       contestService.finishContest(contest).then(function() {
         logger.info('Contest ' + contest.id + ' was finished');
