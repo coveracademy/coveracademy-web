@@ -35,7 +35,7 @@ var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user'
 
 exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch(contestWithSponsorsAndPrizesRelated);
-}
+};
 
 exports.getContestFromAudition = function(audition) {
   if(audition.related('contest') && audition.related('contest').id) {
@@ -47,7 +47,7 @@ exports.getContestFromAudition = function(audition) {
       return audition.related('contest');
     });
   }
-}
+};
 
 exports.getPrizeForPlace = function(contest, place) {
   var prize = null;
@@ -57,7 +57,7 @@ exports.getPrizeForPlace = function(contest, place) {
     }
   });
   return prize;
-}
+};
 
 exports.latestContests = function(page, pageSize) {
   return Contest.collection().query(function(qb) {
@@ -67,28 +67,28 @@ exports.latestContests = function(page, pageSize) {
       qb.limit(pageSize);
     }
   }).fetch();
-}
+};
 
 exports.listUnfinishedContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', '!=', 'finished');
     qb.orderBy('registration_date', 'desc');
   }).fetch();
-}
+};
 
 exports.listWaitingContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'waiting');
     qb.orderBy('registration_date', 'desc');
   }).fetch();
-}
+};
 
 exports.listRunningContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'running');
     qb.orderBy('registration_date', 'desc');
   }).fetch();
-}
+};
 
 var getPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -116,7 +116,7 @@ var getPotentialWinners = function(contest) {
       reject(err)
     });
   });
-}
+};
 
 var chooseWinners = function(contest, transaction) {
   return new Promise(function(resolve, reject) {
@@ -137,7 +137,7 @@ var chooseWinners = function(contest, transaction) {
       reject(err);
     });
   });
-}
+};
 
 var hasDraw = function(potentialWinners) {
   if(potentialWinners.length > 3) {
@@ -152,7 +152,7 @@ var hasDraw = function(potentialWinners) {
     busyPlaces[potentialWinner.get('place')] = true;
   });
   return draw;
-}
+};
 
 exports.finishContest = function(contest) {
   return Bookshelf.transaction(function(transaction) {
@@ -191,7 +191,7 @@ exports.finishContest = function(contest) {
       return;
     });
   });
-}
+};
 
 exports.startContest = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -250,7 +250,7 @@ exports.startContest = function(contest) {
       reject(messages.apiError('contest.alreadyFinished', 'The contest was already finished'));
     }
   });
-}
+};
 
 exports.submitAudition = function(user, contest, auditionData) {
   return new Promise(function(resolve, reject) {
@@ -302,7 +302,7 @@ exports.submitAudition = function(user, contest, auditionData) {
       reject(messages.unexpectedError('Error submitting audition', err));
     });
   });
-}
+};
 
 exports.approveAudition = function(audition) {
   return new Promise(function(resolve, reject) {
@@ -332,7 +332,7 @@ exports.approveAudition = function(audition) {
       reject(messages.unexpectedError('Error approving audition', err));
     });
   });
-}
+};
 
 exports.disapproveAudition = function(audition, reason) {
   return new Promise(function(resolve, reject) {
@@ -353,7 +353,7 @@ exports.disapproveAudition = function(audition, reason) {
       reject(messages.unexpectedError('Error disapproving audition', err));
     });
   });
-}
+};
 
 exports.getWinnerAuditions = function(obj) {
   if(entities.isCollection(obj)) {
@@ -387,15 +387,15 @@ exports.getWinnerAuditions = function(obj) {
       qb.orderBy('place', 'asc');
     }).fetch(auditionRelated);
   }
-}
+};
 
 exports.getAudition = function(id, related) {
   return Audition.forge({id: id}).fetch(related ? {withRelated: related} : auditionWithContestAndUserRelated);
-}
+};
 
 exports.loadAudition = function(audition, related) {
   return audition.fetch(related ? {withRelated: related} : auditionWithContestAndUserRelated);
-}
+};
 
 exports.getUserAudition = function(user, contest) {
   return new Promise(function(resolve, reject) {
@@ -405,7 +405,7 @@ exports.getUserAudition = function(user, contest) {
       resolve(Audition.forge({user_id: user.id, contest_id: contest.id}).fetch(auditionRelated));
     }
   });
-}
+};
 
 exports.getUserAuditions = function(user) {
   return Audition.collection().query(function(qb) {
@@ -413,7 +413,7 @@ exports.getUserAuditions = function(user) {
     qb.where('approved', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch(auditionWithContestAndUserRelated);
-}
+};
 
 exports.listAuditionsToReview = function() {
   return Audition.collection().query(function(qb) {
@@ -421,7 +421,7 @@ exports.listAuditionsToReview = function() {
     qb.where('approved', 0);
     qb.where('contest.progress', '!=', 'finished');
   }).fetch(auditionWithContestRelated);
-}
+};
 
 var listAuditions = function(rankType, contest, page, pageSize) {
   page = parseInt(page);
@@ -441,15 +441,15 @@ var listAuditions = function(rankType, contest, page, pageSize) {
       qb.orderBy(Bookshelf.knex.raw('sum(user_vote.voting_power)'), 'desc');
     }
   }).fetch(auditionRelated);
-}
+};
 
 exports.latestAuditions = function(contest, page, pageSize) {
   return listAuditions('latest', contest, page, pageSize);
-}
+};
 
 exports.bestAuditions = function(contest, page, pageSize) {
   return listAuditions('best', contest, page, pageSize);
-}
+};
 
 exports.randomAuditions = function(contest, size) {
   return $.latestAuditions(contest).then(function(auditions) {
@@ -462,7 +462,7 @@ exports.randomAuditions = function(contest, size) {
     });
     return randomAuditions;
   });
-}
+};
 
 exports.totalAuditions = function(obj) {
   return new Promise(function(resolve, reject) {
@@ -494,7 +494,7 @@ exports.totalAuditions = function(obj) {
       });
     }
   });
-}
+};
 
 exports.getScoreByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
@@ -516,7 +516,7 @@ exports.getScoreByAudition = function(auditions) {
       });
     }
   });
-}
+};
 
 exports.getVotesByAudition = function(auditions) {
   return new Promise(function(resolve, reject) {
@@ -539,31 +539,31 @@ exports.getVotesByAudition = function(auditions) {
       });
     }
   });
-}
+};
 
 exports.getAuditionVideoInfos = function(url) {
   return youtube.getVideoInfos(url);
-}
+};
 
 exports.getAuditionScore = function(audition) {
   var collection = Audition.collection().add(audition);
   return $.getScoreByAudition(collection).then(function(scoreByAudition) {
     return scoreByAudition[audition.id];
   });
-}
+};
 
 exports.getAuditionVotes = function(audition) {
   var collection = Audition.collection().add(audition);
   return $.getVotesByAudition(collection).then(function(votesByAudition) {
     return votesByAudition[audition.id];
   });
-}
+};
 
 exports.getUsersVotes = function(auditions) {
   return UserVote.collection().query(function(qb) {
     qb.whereIn('audition_id', entities.getIds(auditions));
   }).fetch(userVoteWithUserRelated);
-}
+};
 
 exports.getUserVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
@@ -573,7 +573,7 @@ exports.getUserVote = function(user, audition) {
       resolve(UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch());
     }
   });
-}
+};
 
 exports.getUserVotes = function(user, contest) {
   return new Promise(function(resolve, reject) {
@@ -589,7 +589,7 @@ exports.getUserVotes = function(user, contest) {
       resolve(promise);
     }
   });
-}
+};
 
 exports.countUserVotes = function(user, contest) {
   return new Promise(function(resolve, reject) {
@@ -608,7 +608,7 @@ exports.countUserVotes = function(user, contest) {
       });
     }
   });
-}
+};
 
 exports.totalVotes = function(contests) {
   return new Promise(function(resolve, reject) {
@@ -629,7 +629,7 @@ exports.totalVotes = function(contests) {
       reject(err);
     });
   });
-}
+};
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
@@ -673,7 +673,7 @@ exports.vote = function(user, audition) {
       reject(messages.unexpectedError('Error voting in audition', err));
     });
   });
-}
+};
 
 exports.removeVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
@@ -696,7 +696,7 @@ exports.removeVote = function(user, audition) {
       reject(messages.unexpectedError('Error removing vote in audition', err));
     });
   });
-}
+};
 
 var formatComment = function(message) {
   var formatted = '';
@@ -706,7 +706,7 @@ var formatComment = function(message) {
     formatted = formatted.trim();
   }
   return formatted;
-}
+};
 
 exports.comment = function(user, audition, message) {
   return new Promise(function(resolve, reject) {
@@ -737,7 +737,7 @@ exports.comment = function(user, audition, message) {
       reject(messages.unexpectedError('Error commenting in audition', err));
     });
   });
-}
+};
 
 exports.replyComment = function(user, commentId, message) {
   return new Promise(function(resolve, reject) {
@@ -803,7 +803,7 @@ exports.isContestant = function(user, contest) {
       resolve(false);
     }
   });
-}
+};
 
 exports.listContestants = function(contest) {
   return $.latestAuditions(contest).then(function(auditions) {
@@ -813,7 +813,7 @@ exports.listContestants = function(contest) {
     });
     return users;
   });
-}
+};
 
 exports.listNonContestants = function(contest) {
   return $.listContestants(contest).bind({}).then(function(contestants) {
@@ -832,7 +832,7 @@ exports.listNonContestants = function(contest) {
     });
     return nonContestants;
   });
-}
+};
 
 exports.getSponsorsOfUnfinishedContests = function() {
   return Sponsor.collection().query(function(qb) {
@@ -840,7 +840,7 @@ exports.getSponsorsOfUnfinishedContests = function() {
     qb.join('contest', 'sponsor_contest.contest_id', 'contest.id');
     qb.where('contest.progress', '!=', 'finished');
   }).fetch();
-}
+};
 
 exports.updateContest = function(user, contest) {
   return new Promise(function(resolve, reject) {
@@ -853,7 +853,7 @@ exports.updateContest = function(user, contest) {
     }
     resolve(contest.save());
   });
-}
+};
 
 exports.latestContestants = function(page, pageSize) {
   return User.collection().query(function(qb) {
@@ -864,4 +864,4 @@ exports.latestContestants = function(page, pageSize) {
       qb.limit(pageSize);
     }
   }).fetch();
-}
+};

@@ -409,12 +409,16 @@ angular
   seoService.setImage($scope.audition.large_thumbnail);
 
   $scope.$on(authEvents.LOGIN_SUCCESS, function() {
+    userService.isFan($scope.audition.user).then(function(response) {
+      $scope.isFan = response.data;
+    });
     contestService.getUserVote($scope.audition).then(function(response) {
       $scope.userVote = response.data.userVote;
       $scope.totalUserVotes = response.data.totalUserVotes;
     });
   });
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
+    $scope.isFan = false;
     $scope.userVote = null;
     $scope.totalUserVotes = 0;
   });

@@ -15,7 +15,7 @@ var startContests = function() {
       });
     });
   });
-}
+};
 
 var finishContests = function() {
   logger.info('Finishing contests');
@@ -28,7 +28,7 @@ var finishContests = function() {
       });
     });
   });
-}
+};
 
 var sched = later.parse.recur().on(0).minute();
 var finishContestsInterval = later.setInterval(finishContests, sched);

@@ -9,6 +9,7 @@ var settings       = require('../configs/settings'),
     restify        = require('restify'),
     nunjucks       = require('nunjucks'),
     path           = require('path'),
+    moment         = require('moment'),
     Promise        = require('bluebird');
 
 var server = restify.createServer({
@@ -36,6 +37,8 @@ var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
 var contestDrawToContestantTemplate = env.getTemplate('contest_draw_contestant.tpl');
+var contestIncentiveVoteTemplate = env.getTemplate('contest_incentive_vote.tpl');
+var contestIncentiveVoteToContestantTemplate = env.getTemplate('contest_incentive_vote_contestant.tpl');
 var contestFinishTemplate = env.getTemplate('contest_finish.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
 
@@ -229,6 +232,32 @@ server.post('/contest/start', function(req, res, next) {
     res.send(500);
   });
 });
+
+server.post('/contest/incentiveVote', function(req, res, next) {
+  contestService.getContest(req.body.contest).bind({}).then(function(contest) {
+    this.contest = contest;
+    return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
+  }).spread(function(auditions, nonContestants) {
+    var remainingTime = moment.duration({days: req.body.daysBeforeTheEnd}).humanize();
+    var that = this;
+    auditions.forEach(function(audition) {
+      var user = audition.related('user');
+      renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime}).then(function(email) {
+        mailService.send(user.get('email'), remainingTime + ' para terminar a competição, é hora de ganhar mais votos!', email);
+      });
+    });
+    nonContestants.forEach(function(user) {
+      renderPromise(contestIncentiveVoteTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
+        mailService.send(user.get('email'), remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email);
+      });
+    });
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest draw" email.', err);
+    res.send(500);
+  });
+});
+
 
 server.post('/contest/draw', function(req, res, next) {
   contestService.getContest(req.body.contest).bind({}).then(function(contest) {

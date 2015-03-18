@@ -20,7 +20,7 @@ exports.receive = function(fromName, from, subject, text) {
       }
     });
   });
-}
+};
 
 exports.send = function(to, subject, text) {
   return new Promise(function(resolve, reject) {
@@ -32,7 +32,7 @@ exports.send = function(to, subject, text) {
       }
     });
   });
-}
+};
 
 exports.userRegistration = function(user) {
   return new Promise(function(resolve, reject) {
@@ -44,7 +44,7 @@ exports.userRegistration = function(user) {
       }
     });
   });
-}
+};
 
 exports.userVerification = function(user, verificationToken, registration) {
   return new Promise(function(resolve, reject) {
@@ -56,7 +56,7 @@ exports.userVerification = function(user, verificationToken, registration) {
       }
     });
   });
-}
+};
 
 exports.auditionSubmit = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
@@ -68,7 +68,7 @@ exports.auditionSubmit = function(user, contest, audition) {
       }
     });
   });
-}
+};
 
 exports.auditionApproved = function(audition) {
   return new Promise(function(resolve, reject) {
@@ -80,7 +80,7 @@ exports.auditionApproved = function(audition) {
       }
     });
   });
-}
+};
 
 exports.auditionDisapproved = function(user, contest, reason) {
   return new Promise(function(resolve, reject) {
@@ -92,7 +92,7 @@ exports.auditionDisapproved = function(user, contest, reason) {
       }
     });
   });
-}
+};
 
 exports.auditionComment = function(user, comment) {
   return new Promise(function(resolve, reject) {
@@ -104,7 +104,7 @@ exports.auditionComment = function(user, comment) {
       }
     });
   });
-}
+};
 
 exports.auditionReplyComment = function(user, reply) {
   return new Promise(function(resolve, reject) {
@@ -116,7 +116,7 @@ exports.auditionReplyComment = function(user, reply) {
       }
     });
   });
-}
+};
 
 exports.contestInscription = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -128,7 +128,7 @@ exports.contestInscription = function(contest) {
       }
     });
   });
-}
+};
 
 exports.contestStart = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -140,7 +140,7 @@ exports.contestStart = function(contest) {
       }
     });
   });
-}
+};
 
 exports.contestNext = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -152,7 +152,7 @@ exports.contestNext = function(contest) {
       }
     });
   });
-}
+};
 
 exports.contestDraw = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -164,7 +164,7 @@ exports.contestDraw = function(contest) {
       }
     });
   });
-}
+};
 
 
 exports.contestFinish = function(contest) {
@@ -177,7 +177,7 @@ exports.contestFinish = function(contest) {
       }
     });
   });
-}
+};
 
 exports.contestWinner = function(user, contest, audition) {
   return new Promise(function(resolve, reject) {
@@ -189,4 +189,16 @@ exports.contestWinner = function(user, contest, audition) {
       }
     });
   });
-}
+};
+
+exports.contestIncentiveVote = function(contest, daysBeforeTheEnd) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/incentiveVote', {contest: contest.id, daysBeforeTheEnd: daysBeforeTheEnd}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+};
