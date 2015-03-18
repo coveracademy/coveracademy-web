@@ -30,11 +30,12 @@ var scheduleIncentiveVote = function(contest, daysBeforeTheEnd) {
   if(now.isBefore(date)) {
     var sched = later.parse.recur().on(date.toDate()).fullDate();
     var timeout = later.setTimeout(new IncentiveEmail(contest, daysBeforeTheEnd).send, sched);
+    logger.info('Incentive vote email scheduled for %s', date.format());
   }
 };
 
 var scheduleIncentiveVoteEmails = function() {
-  logger.info('Scheduling incentive votes emails');
+  logger.info('Scheduling incentive vote emails');
   contestService.listRunningContests().then(function(contests) {
     contests.forEach(function(contest) {
       if(!scheduledContests[contest.id] || scheduledContests[contest.id] === false) {
