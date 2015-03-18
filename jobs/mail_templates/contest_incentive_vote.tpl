@@ -3,7 +3,7 @@
 {% set contestLink = siteUrl + "/pt-br/contest/" + contest.id + "/" + contest.slug %}
 
 {% block content %}
-  <h3>Falta pouco para terminar a competição!</h3>
+  <h3>É hora de apoiar os competidores!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       Faltam apenas <span style="font-size: 25px;">{{ remainingTime }}</span> para terminar a competição. O seu voto é muito importante e pode fazer a diferença.

@@ -12,6 +12,8 @@ var settings       = require('../configs/settings'),
     moment         = require('moment'),
     Promise        = require('bluebird');
 
+moment.locale('pt-br');
+
 var server = restify.createServer({
   name: 'mailSender'
 });
