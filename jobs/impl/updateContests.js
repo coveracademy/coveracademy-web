@@ -1,7 +1,7 @@
 "use strict"
 
-var contestService = require('../apis/contestService'),
-    logger         = require('../configs/logger'),
+var contestService = require('../../apis/contestService'),
+    logger         = require('../../configs/logger'),
     later          = require('later');
 
 var startContests = function() {

@@ -1,9 +1,9 @@
 "use strict"
 
-var contestService = require('../apis/contestService'),
-    mailService    = require('../apis/mailService'),
-    logger         = require('../configs/logger'),
-    constants      = require('./constants'),
+var contestService = require('../../apis/contestService'),
+    mailService    = require('../../apis/mailService'),
+    logger         = require('../../configs/logger'),
+    constants      = require('../constants'),
     later          = require('later'),
     moment         = require('moment');
 
@@ -20,24 +20,16 @@ IncentiveEmail.prototype.send = function() {
   });
 };
 
-var scheduleIncentiveVote = function(contest, daysBeforeTheEnd, hourToSend) {
+var scheduleIncentiveVote = function(contest, daysBeforeTheEnd) {
   var now = moment();
   var end = moment(contest.get('end_date'));
   var date = moment(end).subtract(daysBeforeTheEnd, 'days');
-  date.hour(hourToSend);
+  date.hour(constants.incentiveVote.HOUR_TO_SEND_EMAIL);
   date.minute(constants.incentiveVote.MINUTE_TO_SEND_EMAIL);
   date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
   if(now.isBefore(date)) {
-    var sched = later.parse.recur()
-      .on(date.date()).dayOfMonth()
-      .on(date.month()).month()
-      .on(date.year()).year()
-      .on(date.hour()).hour()
-      .on(date.minute()).minute()
-      .on(date.second()).second();
+    var sched = later.parse.recur().on(date.toDate()).fullDate();
     var timeout = later.setTimeout(new IncentiveEmail(contest, daysBeforeTheEnd).send, sched);
-    console.log(timeout);
-    console.log(scheduledContests)
   }
 };
 

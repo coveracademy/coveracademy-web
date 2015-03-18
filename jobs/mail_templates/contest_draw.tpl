@@ -14,7 +14,7 @@
       </a>
     </p>
     <p>
-      Não esqueça que você pode votar em até <span style="font-size: 2em;">5</span> competidores, ok?
+      Não esqueça que você pode votar em até <span style="font-size: 2em;">5</span> competidores!
     </p>
     <p style="text-align: right; font-weight: bold;">
       - Sandro Simas
