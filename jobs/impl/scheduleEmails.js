@@ -15,8 +15,9 @@ var IncentiveEmail = function(contest, daysBeforeTheEnd) {
 };
 
 IncentiveEmail.prototype.send = function() {
+  logger.info('Sending "incentive vote" emails for contest %d', this.contest.id);
   mailService.contestIncentiveVote(this.contest, this.daysBeforeTheEnd).catch(function(err) {
-    logger.error('Error sending "contest incentive vote" email.', err);
+    logger.error('Error sending "contest incentive vote" emails.', err);
   });
 };
 
@@ -29,7 +30,7 @@ var scheduleIncentiveVote = function(contest, daysBeforeTheEnd) {
   date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
   if(now.isBefore(date)) {
     var sched = later.parse.recur().on(date.toDate()).fullDate();
-    var timeout = later.setTimeout(new IncentiveEmail(contest, daysBeforeTheEnd).send, sched);
+    var timeout = later.setTimeout(function() { new IncentiveEmail(contest, daysBeforeTheEnd).send(); }, sched);
     logger.info('Incentive vote email scheduled for %s', date.format());
   }
 };
