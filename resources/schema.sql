@@ -217,11 +217,13 @@ create table verification_token (
 ) engine = innodb default charset = utf8;
 
 create table sponsor (
-  id                int not null auto_increment,
-  name              varchar(255) not null,
-  logo              varchar(255) not null,
-  website           varchar(255) not null,
-  registration_date timestamp not null default current_timestamp,
+  id                       int not null auto_increment,
+  name                     varchar(255) not null,
+  logo                     varchar(255) not null,
+  website                  varchar(255) not null,
+  beginning_of_sponsorship date not null,
+  end_of_sponsorship       date not null,
+  registration_date        timestamp not null default current_timestamp,
   primary key (id)
 ) engine = innodb default charset = utf8;
 

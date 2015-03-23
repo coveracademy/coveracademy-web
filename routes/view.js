@@ -63,7 +63,7 @@ module.exports = function(router, app) {
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
     if(!req.user) {
-      Promise.all([contestService.listUnfinishedContests(), contestService.getSponsorsOfUnfinishedContests()]).spread(function(contests, sponsors) {
+      Promise.all([contestService.listUnfinishedContests(), contestService.getCurrentSponsors()]).spread(function(contests, sponsors) {
         res.json({
           contests: contests,
           sponsors: sponsors

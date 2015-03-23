@@ -834,6 +834,14 @@ exports.listNonContestants = function(contest) {
   });
 };
 
+exports.getCurrentSponsors = function() {
+  return Sponsor.collection().query(function(qb) {
+    var now = new Date();
+    qb.where('beginning_of_sponsorship', '<=', now);
+    qb.where('end_of_sponsorship', '>=', now);
+  }).fetch();
+}
+
 exports.getSponsorsOfUnfinishedContests = function() {
   return Sponsor.collection().query(function(qb) {
     qb.join('sponsor_contest', 'sponsor_contest.sponsor_id', 'sponsor.id');
