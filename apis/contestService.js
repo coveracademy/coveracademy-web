@@ -208,6 +208,12 @@ exports.startContest = function(contest) {
               mailService.contestStart(contest).catch(function(err) {
                 logger.error('Error sending "contest start" email.', err);
               });
+              mailService.scheduleIncentiveVote(contest).catch(function(err) {
+                logger.error('Error scheduling "contest incentive vote" emails.', err);
+              });
+              mailService.scheduleContestJoinFans(contest).catch(function(err) {
+                logger.error('Error scheduling "contest join fans" emails.', err);
+              });
             }).catch(function(err) {
               reject(messages.unexpectedError('Error starting the contest', err));
             });
@@ -312,8 +318,8 @@ exports.approveAudition = function(audition) {
         audition.set('approved', 1);
         return audition.save({approved: audition.get('approved')}, {patch: true, transacting: transaction});
       }).then(function(audition) {
-        return audition.related('user').save({contestant: 1}, {patch: true, transacting: transaction})
-      }).then(function(contest) {
+        return audition.related('user').save({contestant: 1}, {patch: true, transacting: transaction});
+      }).then(function(user) {
         return this.audition;
       });
     }).then(function(audition) {
@@ -322,9 +328,20 @@ exports.approveAudition = function(audition) {
       mailService.auditionApproved(audition).catch(function(err) {
         logger.error('Error sending "audition approved" email to audition %d owner.', audition.id, err);
       });
-      // When an audition is approved, we try to start the contest
       $.getContestFromAudition(audition).then(function(contest) {
-        return $.startContest(contest);
+        if(contest.get('progress') === 'waiting') {
+          // When an audition is approved, we try to start the contest
+          return $.startContest(contest);
+        } else {
+          // When the contest is running, we send emails to user fans
+          if(contest.get('progress') === 'running') {
+            var contestant = audition.related('user');
+            mailService.contestJoinContestantFans(contestant, contest).catch(function(err) {
+              logger.error('Error sending "contest join contestant fans" emails to contestant %d fans.', contestant.id, err);
+            });
+          }
+          return null;
+        }
       }).catch(function(err) {
         // Ignore
       });
@@ -397,12 +414,12 @@ exports.loadAudition = function(audition, related) {
   return audition.fetch(related ? {withRelated: related} : auditionWithContestAndUserRelated);
 };
 
-exports.getUserAudition = function(user, contest) {
+exports.getUserAudition = function(user, contest, related) {
   return new Promise(function(resolve, reject) {
     if(!user) {
       resolve();
     } else {
-      resolve(Audition.forge({user_id: user.id, contest_id: contest.id}).fetch(auditionRelated));
+      resolve(Audition.forge({user_id: user.id, contest_id: contest.id}).fetch(related ? {withRelated: related} : auditionRelated));
     }
   });
 };

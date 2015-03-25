@@ -27,7 +27,7 @@
           <a href="https://twitter.com/coveracademy" target="_blank">
             <img src="{{ siteUrl }}/img/icons/twitter.png" height="50">
           </a>
-          <a href="https://www.youtube.com/channel/UCz8R6ECuqsnCrPIKd3HCtdg" target="_blank">
+          <a href="https://www.youtube.com/c/CoverAcademy" target="_blank">
             <img src="{{ siteUrl }}/img/icons/youtube.png" height="50">
           </a>
         </td>

@@ -251,3 +251,13 @@ create table prize (
   constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`),
   constraint `fk_prize_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`)
 ) engine = innodb default charset = utf8;
+
+create table scheduled_email (
+  id                int not null auto_increment,
+  type              varchar(100) not null,
+  parameters        text not null,
+  status            enum('none', 'scheduled', 'sent') default 'none',
+  schedule_date     timestamp not null,
+  registration_date timestamp not null default current_timestamp,
+  primary key (id)
+) engine = innodb default charset = utf8;

@@ -29,8 +29,5 @@
       </a>
     </div>
     {% endif %}
-    <p style="text-align: right; font-weight: bold;">
-      - Sandro Simas
-    </p>
   </div>
 {% endblock %}

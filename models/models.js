@@ -176,6 +176,11 @@ var SponsorInContest = Bookshelf.Model.extend({
   }
 });
 
+var ScheduledEmail = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'scheduled_email'
+});
+
 module.exports = {
   VerificationToken: VerificationToken,
   Artist: Artist,
@@ -186,6 +191,7 @@ module.exports = {
   Music: Music,
   MusicGenre: MusicGenre,
   PotentialCover: PotentialCover,
+  ScheduledEmail: ScheduledEmail,
   SocialAccount: SocialAccount,
   Sponsor: Sponsor,
   SponsorInContest: SponsorInContest,

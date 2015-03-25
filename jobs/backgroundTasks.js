@@ -1,2 +1,2 @@
-require('./impl/scheduleEmails');
+require('./impl/scheduledEmails');
 require('./impl/updateContests');

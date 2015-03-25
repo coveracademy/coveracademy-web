@@ -1,7 +1,5 @@
 {% extends "base.tpl" %}
 
-{% set contestLink = siteUrl + "/pt-br/contest/" + contest.id + "/" + contest.slug %}
-
 {% block content %}
   <h3>Vamos lá, {{ user.name }}!</h3>
   <div style="color: #555; font-size: 16px;">
@@ -9,7 +7,7 @@
       Você já pode se inscrever na competição online de música do Cover Academy. Se você não puder ou não quiser participar, divulgue a competição para os seus amigos, ficaremos muito grato por isso!
     </p>
     <p style="text-align: center; font-weight: bold;">
-      <a href="{{ contestLink }}" target="_blank" style="text-decoration: none;">
+      <a href="{{ contest | contestLink }}" target="_blank" style="text-decoration: none;">
         {{ contest.name }}
       </a>
     </p>
@@ -32,7 +30,7 @@
           {% endif %}
           {% if prize.sponsor.id %}
             <p style="font-size: 14px;">
-              Oferecido por 
+              Oferecido por
               <a href="{{ prize.sponsor.website }}" style="text-decoration: none;">{{ prize.sponsor.name }}</a>
             </p>
           {% endif %}
@@ -44,10 +42,7 @@
       Gostou? Não esqueça de sempre acompanhar o projeto Cover Academy através do site e redes sociais.
     </p>
     <p>
-      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por uma boa música, juntos conseguiremos beneficiar ainda mais os artistas que passam por aqui.
-    </p>
-    <p style="text-align: right; font-weight: bold;">
-      - Sandro Simas
+      Continue nos ajudando a criar a maior comunidade de músicos independentes e pessoas apaixonadas por música. Juntos conseguiremos beneficiar ainda mais os artistas que passam por aqui.
     </p>
   </div>
 {% endblock %}

@@ -26,6 +26,13 @@ var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(mailTemplates))
 
 env.addGlobal('siteUrl', settings.siteUrl);
 
+env.addFilter('auditionLink', function(audition) {
+  return settings.siteUrl + '/pt-br/audition/' + audition.id + '/' + audition.slug;
+});
+env.addFilter('contestLink', function(contest) {
+  return settings.siteUrl + '/pt-br/contest/' + contest.id + '/' + contest.slug;
+});
+
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
 var userVerificationTemplate = env.getTemplate('user_verification.tpl');
 var auditionSubmitTemplate = env.getTemplate('audition_submit.tpl');
@@ -41,6 +48,8 @@ var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
 var contestDrawToContestantTemplate = env.getTemplate('contest_draw_contestant.tpl');
 var contestIncentiveVoteTemplate = env.getTemplate('contest_incentive_vote.tpl');
 var contestIncentiveVoteToContestantTemplate = env.getTemplate('contest_incentive_vote_contestant.tpl');
+var contestJoinContestantFansTemplate = env.getTemplate('contest_join_contestant_fans.tpl');
+var contestJoinFansTemplate = env.getTemplate('contest_join_fans.tpl');
 var contestFinishTemplate = env.getTemplate('contest_finish.tpl');
 var contestWinnerTemplate = env.getTemplate('contest_winner.tpl');
 
@@ -206,7 +215,7 @@ server.post('/contest/next', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest inscription" email.', err);
+    logger.error('Error sending "contest inscription" emails.', err);
     res.send(500);
   });
 });
@@ -230,7 +239,7 @@ server.post('/contest/start', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest start" email.', err);
+    logger.error('Error sending "contest start" emails.', err);
     res.send(500);
   });
 });
@@ -255,7 +264,7 @@ server.post('/contest/incentiveVote', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest draw" email.', err);
+    logger.error('Error sending "contest incentive vote" emails.', err);
     res.send(500);
   });
 });
@@ -280,7 +289,7 @@ server.post('/contest/draw', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest draw" email.', err);
+    logger.error('Error sending "contest draw" emails.', err);
     res.send(500);
   });
 });
@@ -311,7 +320,79 @@ server.post('/contest/finish', function(req, res, next) {
     });
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest finish" email.', err);
+    logger.error('Error sending "contest finish" emails.', err);
+    res.send(500);
+  });
+});
+
+server.post('/contest/join/contestantFans', function(req, res, next) {
+  var contestant = {id: req.body.contestant};
+  var contest = {id: req.body.contest};
+  Promise.all([contestService.getUserAudition(contestant, contest, ['user', 'contest']), userService.latestFans(contestant)]).spread(function(audition, fans) {
+    contestant = audition.related('user');
+    contest = audition.related('contest');
+    fans.forEach(function(fan) {
+      Promise.all([fan, renderPromise(contestJoinContestantFansTemplate, {fan: fan.toJSON(), contestant: contest.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()})]).spread(function(userFan, email) {
+        mailService.send(userFan.get('email'), contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email);
+      });
+    });
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest join contestant fans" emails.', err);
+    res.send(500);
+  });
+});
+
+var partition = function(arr, size) {
+  var newArray = [];
+  for (var i = 0; i < arr.length; i += size) {
+    newArray.push(arr.slice(i, i + size));
+  }
+  return newArray;
+}
+
+server.post('/contest/join/fans', function(req, res, next) {
+  contestService.getContest(req.body.contest).bind({}).then(function(contest) {
+    this.contest = contest;
+    return contestService.latestAuditions(contest);
+  }).then(function(auditions) {
+    var contestantsRelationsPromises = [];
+    auditions.forEach(function(audition) {
+      if(audition.get('registration_date') < contest.get('start_date')) {
+        var contestant = audition.related('user');
+        contestantsRelationsPromises.push(userService.latestFans(contestant).then(function(fans) {
+          return {contestant: contestant, audition: audition, fans: fans};
+        }));
+      }
+    });
+    return Promise.all(contestantsRelationsPromises);
+  }).then(function(contestantsRelations) {
+    var fansRelations = {};
+    contestantsRelations.forEach(function(contestantRelations) {
+      contestantRelations.fans.forEach(function(fan) {
+        if(!fansRelations[fan.id]) {
+          fansRelations[fan.id] = {fan: fan, contestants: []};
+        }
+        fansRelations[fan.id].contestants.push({user: contestantRelations.contestant.toJSON(), audition: contestantRelations.audition.toJSON()});
+      });
+    });
+    return fansRelations;
+  }).then(function(fansRelations) {
+    for(var key in fansRelations) {
+      var fanRelations = fansRelations[key];
+      var lastContestants = partition(fanRelations.contestants, 3);
+      var moreContestants = false;
+      if(lastContestants.length > 3) {
+        lastContestants = lastContestants.slice(0, 3);
+        moreContestants = true;
+      }
+      Promise.all([fanRelations, renderPromise(contestJoinFansTemplate, {fan: fanRelations.fan.toJSON(), contestants: lastContestants, contest: this.contest.toJSON(), moreContestants: moreContestants})]).spread(function(relations, email) {
+        mailService.send(relations.fan.get('email'), 'Os competidores que você gosta estão participando da competição!', email);
+      });
+    }
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest join fans" emails.', err);
     res.send(500);
   });
 });
