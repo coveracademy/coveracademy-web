@@ -4,7 +4,7 @@ var coverService = require('../apis/coverService'),
     constants    = require('../apis/constants'),
     logger       = require('../configs/logger'),
     isAdmin      = require('../utils/authorization').isAdmin,
-    Music        = require('../models/models').Music;
+    Music        = require('../models').Music;
 
 module.exports = function(router, app) {
 

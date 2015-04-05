@@ -1,11 +1,6 @@
 "use strict"
 
-var Cover          = require('../models/models').Cover,
-    PotentialCover = require('../models/models').PotentialCover,
-    MusicGenre     = require('../models/models').MusicGenre,
-    Artist         = require('../models/models').Artist,
-    Music          = require('../models/models').Music,
-    Bookshelf      = require('../models/models').Bookshelf,
+var models         = require('../models'),
     settings       = require('../configs/settings'),
     logger         = require('../configs/logger'),
     slug           = require('../utils/slug'),
@@ -16,6 +11,12 @@ var Cover          = require('../models/models').Cover,
     request        = require('request'),
     Promise        = require('bluebird'),
     _              = require('underscore'),
+    Cover          = models.Cover,
+    PotentialCover = models.PotentialCover,
+    MusicGenre     = models.MusicGenre,
+    Artist         = models.Artist,
+    Music          = models.Music,
+    Bookshelf      = models.Bookshelf,
     $              = this;
 
 _.str = require('underscore.string');

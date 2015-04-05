@@ -7,8 +7,8 @@ var contestService  = require('../apis/contestService'),
     logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     isAdmin         = require('../utils/authorization').isAdmin,
-    Audition        = require('../models/models').Audition,
-    Contest         = require('../models/models').Contest;
+    Audition        = require('../models').Audition,
+    Contest         = require('../models').Contest;
 
 module.exports = function(router, app) {
 

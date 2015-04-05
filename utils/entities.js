@@ -1,6 +1,6 @@
 "use strict"
 
-var Bookshelf = require('../models/models').Bookshelf,
+var Bookshelf = require('../models').Bookshelf,
     _         = require('underscore');
 
 function filter(data, attributes) {

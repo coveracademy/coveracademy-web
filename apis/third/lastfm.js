@@ -23,7 +23,7 @@ var genres = {
   'Blues': ['.*blues'],
   'Jazz': ['.*jazz'],
   'Electronic': ['.*electronic', '.*electronica', '.*trance', '.*techno', '.*electro', 'dubstep', 'dub step', '.*dub']
-}
+};
 
 function createGenresRegexps() {
   var genresRegexps = {}
@@ -31,7 +31,7 @@ function createGenresRegexps() {
     genresRegexps[genre] = new RegExp(genres[genre].join('|'));
   });
   return genresRegexps;
-}
+};
 
 var genresRegexps = createGenresRegexps();
 
@@ -45,7 +45,7 @@ function findGenre(tags) {
     }
   });
   return genre;
-}
+};
 
 exports.getArtistInfos = function(artistName) {
   return new Promise(function(resolve, reject) {
@@ -75,7 +75,7 @@ exports.getArtistInfos = function(artistName) {
       }
     });
   });
-}
+};
 
 exports.getMusicInfos = function(artistName, musicTitle) {
   return new Promise(function(resolve, reject) {
@@ -108,4 +108,4 @@ exports.getMusicInfos = function(artistName, musicTitle) {
       }
     });
   });
-}
+};

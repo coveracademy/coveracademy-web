@@ -2,7 +2,7 @@
 
 var mailService    = require('../../apis/mailService'),
     logger         = require('../../configs/logger'),
-    ScheduledEmail = require('../../models/models').ScheduledEmail,
+    ScheduledEmail = require('../../models').ScheduledEmail,
     moment         = require('moment'),
     later          = require('later');
 

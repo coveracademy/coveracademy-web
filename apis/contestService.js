@@ -1,12 +1,6 @@
 "use strict"
 
-var Contest     = require('../models/models').Contest,
-    Audition    = require('../models/models').Audition,
-    Sponsor     = require('../models/models').Sponsor,
-    UserVote    = require('../models/models').UserVote,
-    UserComment = require('../models/models').UserComment,
-    User        = require('../models/models').User,
-    Bookshelf   = require('../models/models').Bookshelf,
+var models      = require('../models'),
     settings    = require('../configs/settings'),
     logger      = require('../configs/logger'),
     slug        = require('../utils/slug'),
@@ -18,6 +12,13 @@ var Contest     = require('../models/models').Contest,
     Promise     = require('bluebird'),
     moment      = require('moment'),
     _           = require('underscore'),
+    Contest     = models.Contest,
+    Audition    = models.Audition,
+    Sponsor     = models.Sponsor,
+    UserVote    = models.UserVote,
+    UserComment = models.UserComment,
+    User        = models.User,
+    Bookshelf   = models.Bookshelf,
     $           = this;
 
 _.str = require('underscore.string');

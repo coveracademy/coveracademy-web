@@ -1,13 +1,14 @@
 "use strict"
 
-var settings       = require('../configs/settings'),
-    ScheduledEmail = require('../models/models').ScheduledEmail,
-    Bookshelf      = require('../models/models').Bookshelf,
+var models         = require('../models'),
+    settings       = require('../configs/settings'),
     constants      = require('./constants'),
     Mailgun        = require('mailgun-js'),
     Promise        = require('bluebird'),
     restify        = require('restify'),
     moment         = require('moment'),
+    ScheduledEmail = models.ScheduledEmail,
+    Bookshelf      = models.Bookshelf,
     domain         = settings.domain,
     apiKey         = settings.email.apiKey,
     emailContact   = settings.email.contact,

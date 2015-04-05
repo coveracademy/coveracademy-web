@@ -1,10 +1,6 @@
 "use strict"
 
-var User              = require('../models/models').User,
-    UserFan           = require('../models/models').UserFan,
-    SocialAccount     = require('../models/models').SocialAccount,
-    VerificationToken = require('../models/models').VerificationToken,
-    Bookshelf         = require('../models/models').Bookshelf,
+var models            = require('../models'),
     entities          = require('../utils/entities'),
     slug              = require('../utils/slug'),
     logger            = require('../configs/logger'),
@@ -14,6 +10,11 @@ var User              = require('../models/models').User,
     moment            = require('moment'),
     Promise           = require('bluebird'),
     _                 = require('underscore'),
+    User              = models.User,
+    UserFan           = models.UserFan,
+    SocialAccount     = models.SocialAccount,
+    VerificationToken = models.VerificationToken,
+    Bookshelf         = models.Bookshelf,
     $                 = this;
 
 var userWithSocialAccountsRelated = {withRelated: ['socialAccounts']};
