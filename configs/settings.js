@@ -9,7 +9,6 @@ try {
       _nodeEnv = properties.getValue('app.env', 'dev'),
       _nodeIP = properties.getValue('app.ip', '127.0.0.1'),
       _nodePort = properties.getValue('app.port', 3000),
-      _mailPort = properties.getValue('app.mailPort', 5000),
       _publicPath = path.join(__dirname, '../public'),
       _viewsPath = path.join(__dirname, '../views'),
       _tmpUploadPath = path.join(__dirname, '../tmp'),
@@ -54,7 +53,9 @@ try {
       },
       _email = {
         contact: 'contato@coveracademy.com',
-        apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738'
+        apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738',
+        senderHost: properties.getValue('email.senderHost', 'localhost'),
+        senderPort: properties.getValue('email.senderPort', 5000),
       },
       _database = {
         dialect: properties.getValue('database.dialect', 'mysql'),
@@ -94,7 +95,6 @@ try {
   exports.googleAPIKey = _googleAPIKey;
   exports.siteUrl = _siteUrl;
   exports.domain = _domain;
-  exports.mailPort = _mailPort;
 
   exports.facebook = _facebook;
   exports.twitter = _twitter;

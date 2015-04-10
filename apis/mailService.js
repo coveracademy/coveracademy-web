@@ -13,7 +13,7 @@ var models         = require('../models'),
     apiKey         = settings.email.apiKey,
     emailContact   = settings.email.contact,
     mailgun        = new Mailgun({apiKey: apiKey, domain: domain}),
-    mailClient     = restify.createJsonClient(settings.siteUrl + ':' + settings.mailPort),
+    mailClient     = restify.createJsonClient('http://' + settings.email.senderHost + ':' + settings.email.senderPort),
     $              = this;
 
 exports.receive = function(fromName, from, subject, text) {
