@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-  <h3>Vamos lá, {{ user.name }}!</h3>
+  <h3>Vamos lá, %recipient.name%!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       Você já pode se inscrever na competição online de música do Cover Academy. Se você não puder ou não quiser participar, divulgue a competição para os seus amigos, ficaremos muito grato por isso!

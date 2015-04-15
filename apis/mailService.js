@@ -9,20 +9,16 @@ var models         = require('../models'),
     moment         = require('moment'),
     ScheduledEmail = models.ScheduledEmail,
     Bookshelf      = models.Bookshelf,
-    domain         = settings.domain,
-    apiKey         = settings.email.apiKey,
-    emailContact   = settings.email.contact,
-    mailgun        = new Mailgun({apiKey: apiKey, domain: domain}),
-    mailClient     = restify.createJsonClient('http://' + settings.email.senderHost + ':' + settings.email.senderPort),
+    mailClient     = restify.createJsonClient('http://' + settings.postman.host + ':' + settings.postman.port),
     $              = this;
 
 exports.receive = function(fromName, from, subject, text) {
   return new Promise(function(resolve, reject) {
-  	mailgun.messages().send({from: fromName + ' <' + from + '>', to: emailContact, subject: subject, html: text}, function (err, body) {
+    mailClient.post('/receive', {fromName: fromName, from: from, subject: subject, text: text}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
-        resolve(body);
+        resolve(obj);
       }
     });
   });
@@ -30,11 +26,11 @@ exports.receive = function(fromName, from, subject, text) {
 
 exports.send = function(to, subject, text) {
   return new Promise(function(resolve, reject) {
-    mailgun.messages().send({from: 'Cover Academy <' + emailContact + '>', to: to, subject: subject, html: text}, function (err, body) {
+    mailClient.post('/send', {to: to, subject: subject, text: text}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
-        resolve(body);
+        resolve(obj);
       }
     });
   });
@@ -234,40 +230,48 @@ exports.contestJoinFans = function(contest) {
 };
 
 exports.scheduleIncentiveVote = function(contest) {
-  if(contest.get('progress') === 'running') {
-    var daysBeforeTheEnd = [constants.incentiveVote.firstEmail.DAYS_BEFORE_THE_END, constants.incentiveVote.secondEmail.DAYS_BEFORE_THE_END]
-    daysBeforeTheEnd.forEach(function(daysBefore) {
-      var parameters = {contest: contest.id, daysBeforeTheEnd: daysBefore};
-      var now = moment();
-      var end = moment(contest.get('end_date'));
-      var date = moment(end).subtract(daysBefore, 'days');
-      date.hour(constants.incentiveVote.HOUR_TO_SEND_EMAIL);
-      date.minute(constants.incentiveVote.MINUTE_TO_SEND_EMAIL);
-      date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
-      var scheduledEmail = ScheduledEmail.forge({
-        schedule_date: date.toDate(),
-        parameters: JSON.stringify(parameters),
-        type: 'IncentiveVote',
-        status: 'none'
+  return new Promise(function(resolve, reject) {
+    if(contest.get('progress') === 'running') {
+      var daysBeforeTheEnd = [constants.incentiveVote.firstEmail.DAYS_BEFORE_THE_END, constants.incentiveVote.secondEmail.DAYS_BEFORE_THE_END]
+      var promises = [];
+      daysBeforeTheEnd.forEach(function(daysBefore) {
+        var parameters = {contest: contest.id, daysBeforeTheEnd: daysBefore};
+        var now = moment();
+        var end = moment(contest.get('end_date'));
+        var date = moment(end).subtract(daysBefore, 'days');
+        date.hour(constants.incentiveVote.HOUR_TO_SEND_EMAIL);
+        date.minute(constants.incentiveVote.MINUTE_TO_SEND_EMAIL);
+        date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
+        var scheduledEmail = ScheduledEmail.forge({
+          schedule_date: date.toDate(),
+          parameters: JSON.stringify(parameters),
+          type: 'IncentiveVote',
+          status: 'none'
+        });
+        promises.push(scheduledEmail.save());
       });
-      return scheduledEmail.save();
-    });
-  }
-  return Promise.resolve();
+      resolve(Promise.all(promises));
+    } else {
+      resolve();      
+    }
+  });
 };
 
 exports.scheduleContestJoinFans = function(contest) {
-  if(contest.get('progress') === 'running') {
-    var parameters = {contest: contest.id};
-    var scheduledEmail = ScheduledEmail.forge({
-      schedule_date: moment().add(1, 'hour').toDate(),
-      parameters: JSON.stringify(parameters),
-      type: 'JoinContest',
-      status: 'none'
-    });
-    return scheduledEmail.save();
-  }
-  return Promise.resolve();
+  return new Promise(function(resolve, reject) {
+    if(contest.get('progress') === 'running') {
+      var parameters = {contest: contest.id};
+      var scheduledEmail = ScheduledEmail.forge({
+        schedule_date: moment().add(1, 'hour').toDate(),
+        parameters: JSON.stringify(parameters),
+        type: 'JoinContest',
+        status: 'none'
+      });
+      resolve(scheduledEmail.save());
+    } else {
+      resolve();      
+    }
+  });
 };
 
 exports.listNonScheduledEmails = function() {

@@ -2,20 +2,25 @@
 
 var settings       = require('../configs/settings'),
     logger         = require('../configs/logger'),
-    mailService    = require('../apis/mailService'),
     contestService = require('../apis/contestService'),
     userService    = require('../apis/userService'),
     contestService = require('../apis/contestService'),
+    entities       = require('../utils/entities'),
+    PromiseWrapper = require('../utils/promises').PromiseWrapper,
     restify        = require('restify'),
     nunjucks       = require('nunjucks'),
     path           = require('path'),
     moment         = require('moment'),
-    Promise        = require('bluebird');
+    Promise        = require('bluebird'),
+    Mailgun        = require('mailgun-js'),
+    contact        = settings.postman.contact,
+    domain         = settings.domain,
+    mailgun        = new Mailgun({apiKey: settings.postman.apiKey, domain: domain});
 
 moment.locale('pt-br');
 
 var server = restify.createServer({
-  name: 'mailSender'
+  name: 'Postman'
 });
 
 server.use(restify.queryParser());
@@ -63,14 +68,97 @@ var renderPromise = function(template, obj) {
       }
     });
   });
-}
+};
+
+var partition = function(arr, size) {
+  var newArray = [];
+  for (var i = 0; i < arr.length; i += size) {
+    newArray.push(arr.slice(i, i + size));
+  }
+  return newArray;
+};
+
+
+var receive = function(fromName, from, subject, text) {
+  return new Promise(function(resolve, reject) {
+    mailgun.messages().send({from: fromName + ' <' + from + '>', to: contact, subject: subject, html: text}, function(err, body) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+var send = function(to, subject, text) {
+  return new Promise(function(resolve, reject) {
+    mailgun.messages().send({from: 'Cover Academy <' + contact + '>', to: to, subject: subject, html: text}, function(err, body) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+var batchSend = function(users, subject, text, variables) {
+  return new Promise(function(resolve, reject) {
+    var promises = [];
+    var usersPartitioned = partition(entities.isCollection(users) ? users.toArray() : users, 999);
+    usersPartitioned.forEach(function(partition) {
+      var emails = [];
+      var recipientVariables = {};
+      partition.forEach(function(user) {
+        emails.push(user.get('email'));
+        recipientVariables[user.get('email')] = {};
+        if(variables) {
+          variables.forEach(function(variable) {
+            recipientVariables[user.get('email')][variable] = user.get(variable);
+          });
+        }
+      });
+      promises.push(new Promise(function(resolve, reject) {
+        mailgun.messages().send({from: 'Cover Academy <' + contact + '>', to: emails.join(), subject: subject, html: text, 'recipient-variables': JSON.stringify(recipientVariables)}, function(err, body) {
+          if(err) {
+            reject(err);
+          } else {
+            resolve(body);
+          }
+        });
+      }));
+    });
+    Promise.all(promises).then(function() {
+      resolve();
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+};
+
+server.post('/receive', function(req, res, next) {
+  receive(req.body.fromName, req.body.from, req.body.subject, req.body.text).then(function() {
+    res.send(200);
+  }).catch(function(err) {
+    res.send(500);
+  });
+});
+
+server.post('/send', function(req, res, next) {
+  send(req.body.to, req.body.subject, req.body.text).then(function() {
+    res.send(200);
+  }).catch(function(err) {
+    res.send(500);
+  });
+});
 
 server.post('/user/registration', function(req, res, next) {
   userService.findById(req.body.user).bind({}).then(function(user) {
     this.user = user;
     return renderPromise(userRegistrationTemplate, {user: user.toJSON()});
   }).then(function(email) {
-    return mailService.send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
+    return send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
   }).then(function(emailResponse) {
     res.send(200);
   }).catch(function(err) {
@@ -85,7 +173,7 @@ server.post('/user/verification', function(req, res, next) {
       this.user = user;
       return renderPromise(userRegistrationTemplate, {user: user.toJSON(), token: req.body.token, verify: true});
     }).then(function(email) {
-      return mailService.send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
+      return send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
     }).then(function(emailResponse) {
       res.send(200);
     }).catch(function(err) {
@@ -97,7 +185,7 @@ server.post('/user/verification', function(req, res, next) {
       this.user = user;
       return renderPromise(userVerificationTemplate, {user: user.toJSON(), token: req.body.token});
     }).then(function(email) {
-      return mailService.send(this.user.get('email'), 'Confirme o seu email para participar do Cover Academy.', email);
+      return send(this.user.get('email'), 'Confirme o seu email para participar do Cover Academy.', email);
     }).then(function(mailResponse) {
       res.send(200);
     }).catch(function(err) {
@@ -112,7 +200,7 @@ server.post('/audition/submit', function(req, res, next) {
     this.user = user;
     return renderPromise(auditionSubmitTemplate, {user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON()});
   }).then(function(email) {
-    return mailService.send(this.user.get('email'), 'Você se inscreveu na competição, aguarde enquanto revisamos o seu vídeo.', email);
+    return send(this.user.get('email'), 'Você se inscreveu na competição, aguarde enquanto revisamos o seu vídeo.', email);
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
@@ -126,7 +214,7 @@ server.post('/audition/approved', function(req, res, next) {
     this.user = audition.related('user');
     return renderPromise(auditionApprovedTemplate, {user: this.user.toJSON(), contest: audition.related('contest').toJSON(), audition: audition.toJSON()});
   }).then(function(email) {
-    return mailService.send(this.user.get('email'), 'Parabéns, o seu vídeo foi aprovado e você está participando da competição.', email);
+    return send(this.user.get('email'), 'Parabéns, o seu vídeo foi aprovado e você está participando da competição.', email);
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
@@ -140,7 +228,7 @@ server.post('/audition/disapproved', function(req, res, next) {
     this.user = user;
     return renderPromise(auditionDisapprovedTemplate, {user: user.toJSON(), contest: contest.toJSON(), reason: req.body.reason});
   }).then(function(email) {
-    return mailService.send(this.user.get('email'), 'Infelizmente o seu vídeo não foi aprovado.', email);
+    return send(this.user.get('email'), 'Infelizmente o seu vídeo não foi aprovado.', email);
   }).then(function(mailResponse) {
     res.send(200);
   }).catch(function(err) {
@@ -159,7 +247,7 @@ server.post('/audition/comment', function(req, res, next) {
       return;
     } else {
       return renderPromise(auditionCommentTemplate, {user: this.user.toJSON(), comment: this.comment.toJSON(), audition: this.audition.toJSON()}).bind(this).then(function(email) {
-        return mailService.send(this.auditionOwner.get('email'), this.user.get('name') + ' comentou sobre a sua audição.', email);
+        return send(this.auditionOwner.get('email'), this.user.get('name') + ' comentou sobre a sua audição.', email);
       });
     }
   }).then(function(mailResponse) {
@@ -181,7 +269,7 @@ server.post('/audition/replyComment', function(req, res, next) {
       return;
     } else {
       return renderPromise(auditionReplyCommentTemplate, {user: this.user.toJSON(), reply: this.reply.toJSON(), audition: this.audition.toJSON()}).bind(this).then(function(email) {
-        return mailService.send(this.commentOwner.get('email'), this.user.get('name') + ' respondeu o seu comentário.', email);
+        return send(this.commentOwner.get('email'), this.user.get('name') + ' respondeu o seu comentário.', email);
       });
     }
   }).then(function(mailResponse) {
@@ -194,14 +282,11 @@ server.post('/audition/replyComment', function(req, res, next) {
 
 server.post('/contest/inscription', function(req, res, next) {
   Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
-    users.forEach(function(user) {
-      Promise.all([user, renderPromise(contestInscriptionTemplate, {user: user.toJSON(), contest: contest.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'Você já pode se inscrever na competição do Cover Academy.', email).catch(function(err) {
-          logger.error('Error sending "contest inscription" email to user %d.', currentUser.id, err);
-        });
-      });
+    return renderPromise(contestInscriptionTemplate, {contest: contest.toJSON()}).then(function(email) {
+      return batchSend(users, 'Você já pode se inscrever na competição do Cover Academy.', email, ['name']);
     });
-    res.send(200);
+  }).then(function() {
+    res.send(200);    
   }).catch(function(err) {
     logger.error('Error sending "contest inscription" email.', err);
     res.send(500);
@@ -210,14 +295,11 @@ server.post('/contest/inscription', function(req, res, next) {
 
 server.post('/contest/next', function(req, res, next) {
   Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
-    users.forEach(function(user) {
-      Promise.all([user, renderPromise(contestNextTemplate, {user: user.toJSON(), contest: contest.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição vai começar em breve!', email).catch(function(err) {
-          logger.error('Error sending "contest next" email to user %d.', currentUser.id, err);
-        });
-      });
+    return renderPromise(contestNextTemplate, {contest: contest.toJSON()}).then(function(email) {
+      return batchSend(users, 'A competição vai começar em breve!', email, ['name']);
     });
-    res.send(200);
+  }).then(function() {
+    res.send(200);  
   }).catch(function(err) {
     logger.error('Error sending "contest next" emails.', err);
     res.send(500);
@@ -230,21 +312,24 @@ server.post('/contest/start', function(req, res, next) {
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
     var that = this;
+
     auditions.forEach(function(audition) {
       var user = audition.related('user');
-      Promise.all([user, renderPromise(contestStartToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição começou, boa sorte!', email).catch(function(err) {
-          logger.error('Error sending "contest start" email to user %d.', currentUser.id, err);
+      Promise.all([user, renderPromise(contestStartToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()})]).spread(function(contestant, email) {
+        return send(contestant.get('email'), 'A competição começou, boa sorte!', email).catch(function(err) {
+          logger.error('Error sending "contest start" email to contestant %d.', contestant.id, err);
         });
+      }).catch(function(err) {
+        logger.error('Error rendering template', err);
       });
     });
-    nonContestants.forEach(function(user) {
-      Promise.all([user, renderPromise(contestStartTemplate, {user: user.toJSON(), contest: that.contest.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição começou, apoie os competidores com o seu voto.', email).catch(function(err) {
-          logger.error('Error sending "contest start" email to user %d.', currentUser.id, err);
-        });
-      });
-    });
+
+    renderPromise(contestStartTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+      return batchSend(nonContestants, 'A competição começou, apoie os competidores com o seu voto.', email, ['name']);
+    }).catch(function(err) {
+      logger.error('Error sending "contest start" email to non contestant users.', err);
+    });   
+    
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest start" emails.', err);
@@ -257,23 +342,25 @@ server.post('/contest/incentiveVote', function(req, res, next) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
-    var remainingTime = moment.duration({days: req.body.daysBeforeTheEnd}).humanize();
     var that = this;
+
     auditions.forEach(function(audition) {
       var user = audition.related('user');
-      Promise.all([user, renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), remainingTime + ' para terminar a competição, é hora de ganhar mais votos!', email).catch(function(err) {
-          logger.error('Error sending "contest incentive vote" email to user %d.', currentUser.id, err);
+      Promise.all([user, renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime})]).spread(function(contestant, email) {
+        return send(contestant.get('email'), remainingTime + ' para terminar a competição, é hora de ganhar mais votos!', email).catch(function(err) {
+          logger.error('Error sending "contest incentive vote" email to contestant %d.', contestant.id, err);
         });
+      }).catch(function(err) {
+        logger.error('Error rendering template', err);
       });
     });
-    nonContestants.forEach(function(user) {
-      Promise.all([user, renderPromise(contestIncentiveVoteTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), remainingTime: remainingTime})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email).catch(function(err) {
-          logger.error('Error sending "contest incentive vote" email to user %d.', currentUser.id, err);
-        });
-      });
-    });
+
+    renderPromise(contestIncentiveVoteTemplate, {contest: this.contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
+      return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
+    }).catch(function(err) {
+      logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
+    });   
+    
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest incentive vote" emails.', err);
@@ -288,21 +375,24 @@ server.post('/contest/draw', function(req, res, next) {
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(auditions, nonContestants) {
     var that = this;
+
     auditions.forEach(function(audition) {
       var user = audition.related('user');
-      Promise.all([user, renderPromise(contestDrawToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição está empatada, é agora ou nunca!', email).catch(function(err) {
-          logger.error('Error sending "contest draw" email to user %d.', currentUser.id, err);
+      Promise.all([user, renderPromise(contestDrawToContestantTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON()})]).spread(function(contestant, email) {
+        return send(contestant.get('email'), 'A competição está empatada, é agora ou nunca!', email).catch(function(err) {
+          logger.error('Error sending "contest draw" email to contestant %d.', contestant.id, err);
         });
+      }).catch(function(err) {
+        logger.error('Error rendering template', err);
       });
     });
-    nonContestants.forEach(function(user) {
-      Promise.all([user, renderPromise(contestDrawTemplate, {user: user.toJSON(), contest: that.contest.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição está empatada, os competidores precisam do seu apoio!', email).catch(function(err) {
-          logger.error('Error sending "contest draw" email to user %d.', currentUser.id, err);
-        });
-      });
-    });
+
+    renderPromise(contestDrawTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+      return batchSend(nonContestants, 'A competição está empatada, os competidores precisam do seu apoio!', email, ['name']);
+    }).catch(function(err) {
+      logger.error('Error sending "contest draw" email to non contestant users.', err);
+    });   
+    
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest draw" emails.', err);
@@ -314,32 +404,31 @@ server.post('/contest/finish', function(req, res, next) {
   contestService.getContest(req.body.contest).bind({}).then(function(contest) {
     this.contest = contest;
     return Promise.all([contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
-  }).spread(function(auditions, nonContestants) {
+  }).spread(function(auditions, nonWinners) {
     var that = this;
+
     auditions.forEach(function(audition) {
       var user = audition.related('user');
       if(audition.get('place') > 0) {
         var prize = contestService.getPrizeForPlace(that.contest, audition.get('place'));
-        Promise.all([user, renderPromise(contestWinnerTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), prize: prize.toJSON()})]).spread(function(currentUser, email) {
-          mailService.send(currentUser.get('email'), 'Parabéns, você foi um dos vencedores!', email).catch(function(err) {
-            logger.error('Error sending "contest finish" email to user %d.', currentUser.id, err);
+        Promise.all([user, renderPromise(contestWinnerTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), audition: audition.toJSON(), prize: prize.toJSON()})]).spread(function(contestant, email) {
+          send(contestant.get('email'), 'Parabéns, você foi um dos vencedores!', email).catch(function(err) {
+            logger.error('Error sending "contest finish" email to contestant %d.', contestant.id, err);
           });
+        }).catch(function(err) {
+          logger.error('Error rendering template', err);
         });
       } else {
-        Promise.all([user, renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), isContestant: true})]).spread(function(currentUser, email) {
-          mailService.send(currentUser.get('email'), 'A competição terminou, confira o resultado.', email).catch(function(err) {
-            logger.error('Error sending "contest finish" email to user %d.', currentUser.id, err);
-          });
-        });
+        nonWinners.add(user);
       }
     });
-    nonContestants.forEach(function(user) {
-      Promise.all([user, renderPromise(contestFinishTemplate, {user: user.toJSON(), contest: that.contest.toJSON(), isContestant: false})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), 'A competição terminou, confira o resultado.', email).catch(function(err) {
-          logger.error('Error sending "contest finish" email to user %d.', currentUser.id, err);
-        });
-      });
-    });
+
+    renderPromise(contestFinishTemplate, {contest: this.contest.toJSON(), isContestant: false}).then(function(email) {
+      return batchSend(nonWinners, 'A competição terminou, confira o resultado.', email, ['name']);
+    }).catch(function(err) {
+      logger.error('Error sending "contest finish" email to non contestant users.', err);
+    });   
+    
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest finish" emails.', err);
@@ -353,27 +442,19 @@ server.post('/contest/join/contestantFans', function(req, res, next) {
   Promise.all([contestService.getUserAudition(contestant, contest, ['user', 'contest']), userService.latestFans(contestant)]).spread(function(audition, fans) {
     contestant = audition.related('user');
     contest = audition.related('contest');
-    fans.forEach(function(fan) {
-      Promise.all([fan, renderPromise(contestJoinContestantFansTemplate, {fan: fan.toJSON(), contestant: contest.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()})]).spread(function(currentUser, email) {
-        mailService.send(currentUser.get('email'), contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email).catch(function(err) {
-          logger.error('Error sending "contest join contestant fans" email to user %d.', currentUser.id, err);
-        });
-      });
-    });
+
+    renderPromise(contestJoinContestantFansTemplate, {contestant: contest.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
+      return batchSend(fans, contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email, ['name']);
+    }).catch(function(err) {
+      logger.error('Error sending "contest join contestant" email to contestant %d fans.', contestant.id, err);
+    });   
+
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest join contestant fans" emails.', err);
     res.send(500);
   });
 });
-
-var partition = function(arr, size) {
-  var newArray = [];
-  for (var i = 0; i < arr.length; i += size) {
-    newArray.push(arr.slice(i, i + size));
-  }
-  return newArray;
-}
 
 server.post('/contest/join/fans', function(req, res, next) {
   contestService.getContest(req.body.contest).bind({}).then(function(contest) {
@@ -402,6 +483,7 @@ server.post('/contest/join/fans', function(req, res, next) {
     });
     return fansRelations;
   }).then(function(fansRelations) {
+    var wrappers = [];
     for(var key in fansRelations) {
       var fanRelations = fansRelations[key];
       var lastContestants = partition(fanRelations.contestants, 3);
@@ -410,12 +492,22 @@ server.post('/contest/join/fans', function(req, res, next) {
         lastContestants = lastContestants.slice(0, 3);
         moreContestants = true;
       }
-      Promise.all([fanRelations, renderPromise(contestJoinFansTemplate, {fan: fanRelations.fan.toJSON(), contestants: lastContestants, contest: this.contest.toJSON(), moreContestants: moreContestants})]).spread(function(relations, email) {
-        mailService.send(relations.fan.get('email'), 'Os competidores que você gosta estão participando da competição!', email).catch(function(err) {
-          logger.error('Error sending "contest join fans" email to user %d.', relations.fan.id, err);
-        });
-      });
+
+      wrappers.push(new PromiseWrapper(
+        Promise.all([fanRelations, renderPromise(contestJoinFansTemplate, {fan: fanRelations.fan.toJSON(), contestants: lastContestants, contest: this.contest.toJSON(), moreContestants: moreContestants})]).spread(function(relations, email) {
+          return send(relations.fan.get('email'), 'Os competidores que você gosta estão participando da competição!', email).catch(function(err) {
+            logger.error('Error sending "contest join fans" email to user %d.', relations.fan.id, err);
+          });
+        }).catch(function(err) {
+          logger.error('Error rendering template', err);
+        })
+      ));
     }
+    Promise.resolve(wrappers).each(function(wrapper) {
+      return wrapper.value();
+    }).then(function(results) {
+      resolve();
+    });
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest join fans" emails.', err);
@@ -423,6 +515,6 @@ server.post('/contest/join/fans', function(req, res, next) {
   });
 });
 
-server.listen(settings.email.senderPort, function() {
+server.listen(settings.postman.port, function() {
   logger.info('%s listening at %s', server.name, server.url);
 });

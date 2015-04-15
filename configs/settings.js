@@ -51,11 +51,11 @@ try {
         callbackURL: _siteUrl + '/api/auth/soundcloud/callback',
         profileFields: ['name', 'displayName', 'gender', 'picture.type(large)', 'emails', 'profileUrl']
       },
-      _email = {
+      _postman = {
         contact: 'contato@coveracademy.com',
         apiKey: 'key-335a52e99eb6d3aac9abc94e791a6738',
-        senderHost: properties.getValue('email.senderHost', 'localhost'),
-        senderPort: properties.getValue('email.senderPort', 5000),
+        host: properties.getValue('postman.host', 'localhost'),
+        port: properties.getValue('postman.port', 5000),
       },
       _database = {
         dialect: properties.getValue('database.dialect', 'mysql'),
@@ -102,7 +102,7 @@ try {
   exports.youtube = _youtube;
   exports.soundcloud = _soundcloud;
 
-  exports.email = _email;
+  exports.postman = _postman;
   exports.database = _database;
   exports.redis = _redis;
 

@@ -441,11 +441,11 @@ angular
         email_verified: 'Seu email foi verificado com sucesso, agora você pode votar nos competidores e participar da competição.',
         login_failed: 'Erro ao autenticar, por favor tente novamente.',
         login_success: 'Você está autenticado agora.',
-        no_i_want_to_use_another_email: 'Não, eu quero usar outro email!',
+        no_i_want_to_use_another_email: 'Não, eu quero utilizar outro email!',
         not_authenticated: 'Você está tentando acessar uma seção privilegiada, por favor acesse sua conta de rede social.',
         not_authorized: 'Você não tem autorização para acessar esta seção.',
         thank_you_for_voting: 'Obrigado pelo seu voto, ajude {{ user }} a vencer a competição compartilhando esta página.',
-        use_the_email_to_receive_updates: 'Você quer usar o email {{ user.email }} para receber atualizações dos usuários e do Cover Academy?',
+        use_the_email_to_receive_updates: 'Você quer utilizar o email {{ user.email }} para receber atualizações dos usuários e do Cover Academy?',
         user_not_verified: 'Você ainda não verificou o seu email. Por favor acesse {{ user.email }} e confirme a sua conta.',
         user_not_verified_change_email: 'Se este email está incorreto ou deseja utilizar outro, acesse as configurações da sua conta.',
         verification_email_sended: 'Email de verificação enviado com sucesso.'
