@@ -25,7 +25,7 @@ var finishContests = function() {
   contestService.listRunningContests().then(function(contests) {
     contests.forEach(function(contest) {
       contestService.finishContest(contest).then(function() {
-        logger.info('Contest ' + contest.id + ' was finished');
+        logger.info('Contest %d was finished', contest.id);
       }).catch(function(err) {
         logger.error('Error finishing contest %d.', contest.id, err);
       });
@@ -33,6 +33,6 @@ var finishContests = function() {
   });
 };
 
-var sched = later.parse.recur().on(0).minute();
+var sched = later.parse.recur().on(1).minute();
 var finishContestsInterval = later.setInterval(finishContests, sched);
 var startContestsInterval = later.setInterval(startContests, sched);

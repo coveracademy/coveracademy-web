@@ -36,6 +36,10 @@ function getErrorKey(err) {
   }
 }
 
+function isErrorKey(err, key) {
+  return key === getErrorKey(err);
+}
+
 function apiError(errorKey, errorMessage, cause) {
   return new APIError(400, errorKey, errorMessage, cause);
 }
@@ -75,6 +79,7 @@ function respondWithRedirection(toView, toParams, res) {
 
 module.exports = {
   getErrorKey: getErrorKey,
+  isErrorKey: isErrorKey,
   apiError: apiError,
   apiErrorWithCode: apiErrorWithCode,
   unexpectedError: unexpectedError,
