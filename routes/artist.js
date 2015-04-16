@@ -2,6 +2,7 @@
 
 var coverService = require('../apis/coverService'),
     constants    = require('../apis/constants'),
+    messages     = require('../apis/messages'),
     isAdmin      = require('../utils/authorization').isAdmin,
     Artist       = require('../models').Artist;
 
@@ -13,8 +14,8 @@ module.exports = function(router, app) {
     coverService.listArtists(musicGenre, page, constants.NUMBER_OF_ARTISTS_IN_PAGE).then(function(artists) {
       res.json(artists);
     }).catch(function(err) {
-      console.log(err);
-      res.send(500);
+      logger.error(err);
+      messages.respondWithError(err, res);
     });
   });
 
@@ -23,8 +24,8 @@ module.exports = function(router, app) {
     coverService.saveArtist(artist).then(function(artist) {
       res.json(artist);
     }).catch(function(err) {
-      console.log(err);
-      res.send(500);
+      logger.error(err);
+      messages.respondWithError(err, res);
     });
   });
 
