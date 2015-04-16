@@ -431,10 +431,10 @@ server.post('/contest/join/contestantFans', function(req, res, next) {
     contestant = audition.related('user');
     contest = audition.related('contest');
 
-    renderPromise(contestJoinContestantFansTemplate, {contestant: contest.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
+    renderPromise(contestJoinContestantFansTemplate, {contestant: contestant.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
       return batchSend(fans, contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email, ['name']);
     }).catch(function(err) {
-      logger.error('Error sending "contest join contestant" email to contestant %d fans.', contestant.id, err);
+      logger.error('Error sending "contest join contestant fans" email to contestant %d fans.', contestant.id, err);
     });
 
     res.send(200);
