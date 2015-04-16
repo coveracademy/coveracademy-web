@@ -321,11 +321,13 @@ server.post('/contest/start', function(req, res, next) {
       });
     });
 
-    renderPromise(contestStartTemplate, {contest: this.contest.toJSON()}).then(function(email) {
-      return batchSend(nonContestants, 'A competição começou, apoie os competidores com o seu voto.', email, ['name']);
-    }).catch(function(err) {
-      logger.error('Error sending "contest start" email to non contestant users.', err);
-    });
+    if(!nonContestants.isEmpty()) {
+      renderPromise(contestStartTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+        return batchSend(nonContestants, 'A competição começou, apoie os competidores com o seu voto.', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest start" email to non contestant users.', err);
+      });
+    }
 
     res.send(200);
   }).catch(function(err) {
@@ -349,11 +351,13 @@ server.post('/contest/incentiveVote', function(req, res, next) {
       });
     });
 
-    renderPromise(contestIncentiveVoteTemplate, {contest: this.contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
-      return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
-    }).catch(function(err) {
-      logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
-    });
+    if(!nonContestants.isEmpty()) {
+      renderPromise(contestIncentiveVoteTemplate, {contest: this.contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
+        return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
+      });
+    }
 
     res.send(200);
   }).catch(function(err) {
@@ -378,11 +382,13 @@ server.post('/contest/draw', function(req, res, next) {
       });
     });
 
-    renderPromise(contestDrawTemplate, {contest: this.contest.toJSON()}).then(function(email) {
-      return batchSend(nonContestants, 'A competição está empatada, os competidores precisam do seu apoio!', email, ['name']);
-    }).catch(function(err) {
-      logger.error('Error sending "contest draw" email to non contestant users.', err);
-    });
+    if(!nonContestants.isEmpty()) {
+      renderPromise(contestDrawTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+        return batchSend(nonContestants, 'A competição está empatada, os competidores precisam do seu apoio!', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest draw" email to non contestant users.', err);
+      });
+    }
 
     res.send(200);
   }).catch(function(err) {
@@ -411,11 +417,13 @@ server.post('/contest/finish', function(req, res, next) {
       }
     });
 
-    renderPromise(contestFinishTemplate, {contest: this.contest.toJSON(), isContestant: false}).then(function(email) {
-      return batchSend(nonWinners, 'A competição terminou, confira o resultado.', email, ['name']);
-    }).catch(function(err) {
-      logger.error('Error sending "contest finish" email to non contestant users.', err);
-    });
+    if(!nonWinners.isEmpty()) {
+      renderPromise(contestFinishTemplate, {contest: this.contest.toJSON(), isContestant: false}).then(function(email) {
+        return batchSend(nonWinners, 'A competição terminou, confira o resultado.', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest finish" email to non contestant users.', err);
+      });
+    }
 
     res.send(200);
   }).catch(function(err) {
@@ -431,11 +439,13 @@ server.post('/contest/join/contestantFans', function(req, res, next) {
     contestant = audition.related('user');
     contest = audition.related('contest');
 
-    renderPromise(contestJoinContestantFansTemplate, {contestant: contestant.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
-      return batchSend(fans, contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email, ['name']);
-    }).catch(function(err) {
-      logger.error('Error sending "contest join contestant fans" email to contestant %d fans.', contestant.id, err);
-    });
+    if(!fans.isEmpty()) {
+      renderPromise(contestJoinContestantFansTemplate, {contestant: contestant.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
+        return batchSend(fans, contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest join contestant fans" email to contestant %d fans.', contestant.id, err);
+      });
+    }
 
     res.send(200);
   }).catch(function(err) {
