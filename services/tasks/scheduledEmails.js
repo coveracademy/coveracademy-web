@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var mailService    = require('../../apis/mailService'),
     logger         = require('../../configs/logger'),

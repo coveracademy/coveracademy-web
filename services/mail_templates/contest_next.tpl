@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-  <h3>%recipient.name%, fique ligado!</h3>
+  <h3>%recipient.name%, prepare-se!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       Em breve mais uma competição online de música do Cover Academy vai começar.

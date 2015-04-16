@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var userService     = require('../apis/userService'),
     authorization   = require('../utils/authorization'),

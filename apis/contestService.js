@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var models      = require('../models'),
     settings    = require('../configs/settings'),
@@ -231,8 +231,8 @@ exports.startContest = function(contest) {
             if(foundTimeToStart === false) {
               momentToStart.add(1, 'days').hour(constants.TIMES_TO_START_THE_CONTEST[0]);
             }
-            contest.set('start_date', momentToStart.minutes(0).second(0).toDate());
-            contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hours(constants.TIME_TO_FINISH_THE_CONTEST).minutes(0).second(0).toDate());
+            contest.set('start_date', momentToStart.minute(0).second(0).millisecond(0).toDate());
+            contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hour(constants.TIME_TO_FINISH_THE_CONTEST).minute(0).second(0).millisecond(0).toDate());
             contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
               resolve(contest);
               if(now < contest.get('start_date')) {

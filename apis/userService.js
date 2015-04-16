@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var models            = require('../models'),
     entities          = require('../utils/entities'),

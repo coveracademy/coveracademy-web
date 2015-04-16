@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var settings = require('../configs/settings'),
     util     = require('util');

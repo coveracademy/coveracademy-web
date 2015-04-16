@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-  <h3>A competição começou, {{ user.name }}!</h3>
+  <h3>{{ user.name }}, a competição começou!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       Obrigado, a sua participação é muito importante para nós. O que seria do projeto sem você?

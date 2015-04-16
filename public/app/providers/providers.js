@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 angular
 .module('coverAcademy.providers', [])
@@ -133,7 +133,7 @@ angular
       write_a_comment: 'Write a comment...',
       write_a_reply: 'Write a reply...',
       you_are_already_in_the_contest: 'You\'re already in the contest',
-      you_are_participating: 'You are participating!',    
+      you_are_participating: 'You are participating!',
       you_can_still_vote_for_other_contestants: 'Você ainda pode votar em mais {{ remainingVotes }} competidores',
       you_have_already_voted_on_five_contestants: 'You have already voted on 5 contestants',
       you_participated: 'You participated!',
@@ -455,7 +455,7 @@ angular
         audition_comment_user_not_verified: 'Você não pode comentar porque ainda não confirmou o seu email, por favor verifique em {{ user.email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
         audition_vote_can_not_vote_for_yourself: 'Você não pode votar em si mesmo.',
         audition_vote_contest_was_finished: 'Você não pode votar porque esta competição já foi finalizado.',
-        audition_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição.',        
+        audition_vote_reach_vote_limit: 'Você alcançou o máximo de votos por competição.',
         audition_vote_user_not_verified: 'Você não pode votar porque ainda não confirmou o seu email, por favor verifique em {{ user.email }}. Você pode mudar o seu email ou reenviar um email de verificação indo nas configurações da sua conta.',
         authentication_required: 'Você não está logado, por favor acesse sua conta para continuar.',
         join_contest_already_finished: 'A competição já foi finalizada =(',

@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 module.exports = {
   TIME_TO_FINISH_THE_CONTEST: 21,

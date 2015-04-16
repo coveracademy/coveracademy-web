@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var models         = require('../models'),
     settings       = require('../configs/settings'),
@@ -242,6 +242,7 @@ exports.scheduleIncentiveVote = function(contest) {
         date.hour(constants.incentiveVote.HOUR_TO_SEND_EMAIL);
         date.minute(constants.incentiveVote.MINUTE_TO_SEND_EMAIL);
         date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
+        date.millisecond(0);
         var scheduledEmail = ScheduledEmail.forge({
           schedule_date: date.toDate(),
           parameters: JSON.stringify(parameters),
@@ -252,7 +253,7 @@ exports.scheduleIncentiveVote = function(contest) {
       });
       resolve(Promise.all(promises));
     } else {
-      resolve();      
+      resolve();
     }
   });
 };
@@ -262,14 +263,14 @@ exports.scheduleContestJoinFans = function(contest) {
     if(contest.get('progress') === 'running') {
       var parameters = {contest: contest.id};
       var scheduledEmail = ScheduledEmail.forge({
-        schedule_date: moment().add(1, 'hour').toDate(),
+        schedule_date: moment().add(1, 'hour').millisecond(0).toDate(),
         parameters: JSON.stringify(parameters),
         type: 'JoinContest',
         status: 'none'
       });
       resolve(scheduledEmail.save());
     } else {
-      resolve();      
+      resolve();
     }
   });
 };

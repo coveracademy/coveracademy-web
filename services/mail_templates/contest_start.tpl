@@ -1,7 +1,7 @@
 {% extends "base.tpl" %}
 
 {% block content %}
-  <h3>A competição começou, %recipient.name%!</h3>
+  <h3>%recipient.name%, a competição começou!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
       O seu voto é muito importante e acredite, ele faz a diferença. Ajude-nos a selecionar os competidores mais talentosos dessa competição.

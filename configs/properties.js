@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var properties = require('properties'),
     parse      = require('deasync')(properties.parse);
