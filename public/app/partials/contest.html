@@ -335,7 +335,7 @@
       <div class="col-md-8">
         <h2>
           <span ng-if="isRanked('best')">
-            {{ 'best_auditions' | translate }}
+            {{ 'top_rated_auditions' | translate }}
           </span>
           <span ng-if="isRanked('latest')">
             {{ 'latest_auditions' | translate }}
@@ -366,7 +366,7 @@
         <h4 ng-if="isRanked('latest')">
           <div>
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-              {{ 'see_the_best_auditions' | translate }}
+              {{ 'see_the_top_rated_auditions' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div>
@@ -380,7 +380,7 @@
         <h4 ng-if="isRanked('random')">
           <div>
             <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-              {{ 'see_the_best_auditions' | translate }}
+              {{ 'see_the_top_rated_auditions' | translate }}
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div>
