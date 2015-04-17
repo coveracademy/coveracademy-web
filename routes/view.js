@@ -327,17 +327,31 @@ module.exports = function(router, app) {
   router.get('/contest/:id/:slug', function(req, res, next) {
     var id = req.param('id');
     var slug = req.param('slug');
-    var rankType = req.param('rank') || 'best';
+    var rankType = req.param('rank') || 'random';
     contestService.getContest(id).then(function(contest) {
       if(!contest) {
         messages.respondWithNotFound(res);
       } else if(slug !== contest.get('slug')) {
         messages.respondWithMovedPermanently('contest', {id: contest.id, slug: contest.get('slug')}, res);
       } else {
-        var auditionsPromise = rankType === 'best' && contest.get('progress') !== 'waiting' ? contestService.bestAuditions : contestService.latestAuditions;
+        if(contest.get('progress') === 'waiting') {
+          rankType = 'latest';
+        } else if(contest.get('progress') === 'finished') {
+          rankType = 'best';
+        }
+
+        var auditionsPromise;
+        if(rankType === 'best') {
+          auditionsPromise = contestService.bestAuditions(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE);
+        } else if(rankType === 'latest') {
+          auditionsPromise = contestService.latestAuditions(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE);
+        } else {
+          auditionsPromise = contestService.randomAuditions(contest);
+        }
+
         var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
         return Promise.all([
-          auditionsPromise(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE),
+          auditionsPromise,
           contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest),
           winnersPromise,
           contestService.getUserVotes(req.user, contest),

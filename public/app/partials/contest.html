@@ -340,19 +340,56 @@
           <span ng-if="isRanked('latest')">
             {{ 'latest_auditions' | translate }}
           </span>
-          <small>• {{ 'many_auditions_in_this_contest' | translate: {totalAuditions: totalAuditions} }}</small>
+          <span ng-if="isRanked('random')">
+            {{ 'random_auditions' | translate }}
+          </span>
+          <small>
+            • {{ 'many_auditions_in_this_contest' | translate: {totalAuditions: totalAuditions} }}
+          </small>
         </h2>
       </div>
       <div class="col-md-4 align-right" style="padding-top: 27px;">
-        <h4>
-          <a ng-if="isRanked('best')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
-            {{ 'see_the_latest_auditions' | translate }}
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
-          <a ng-if="isRanked('latest')" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
-            {{ 'see_the_best_auditions' | translate }}
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
+        <h4 ng-if="isRanked('best')">
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
+              {{ 'see_the_latest_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'random'})">
+              {{ 'see_the_randomly_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+        </h4>
+        <h4 ng-if="isRanked('latest')">
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
+              {{ 'see_the_best_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'random'})">
+              {{ 'see_the_randomly_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+        </h4>
+        <h4 ng-if="isRanked('random')">
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'best'})">
+              {{ 'see_the_best_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+          <div>
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
+              {{ 'see_the_latest_auditions' | translate }}
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
         </h4>
       </div>
     </div>

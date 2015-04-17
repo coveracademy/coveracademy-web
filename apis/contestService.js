@@ -470,12 +470,12 @@ exports.bestAuditions = function(contest, page, pageSize) {
 
 exports.randomAuditions = function(contest, size) {
   return $.latestAuditions(contest).then(function(auditions) {
-    if(size > auditions.length) {
+    if(!size || size > auditions.length) {
       size = auditions.length;
     }
     var randomAuditions = Audition.collection();
-    _.range(size).forEach(function() {
-      randomAuditions.add(auditions.at(_.random(auditions.length - 1)));
+    _.shuffle(_.range(size)).forEach(function(index) {
+      randomAuditions.add(auditions.at(index - 1));
     });
     return randomAuditions;
   });

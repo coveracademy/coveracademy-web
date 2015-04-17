@@ -175,7 +175,7 @@ angular
 }])
 .controller('contestController', ['$scope', '$stateParams', '$translate', '$underscore', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, $underscore, authEvents, constants, backendResponse, contestService, seoService) {
   $scope.siteUrl = constants.SITE_URL;
-  $scope.rankType = $stateParams.rank || 'best';
+  $scope.rankType = backendResponse.data.rankType;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
   $scope.auditions = backendResponse.data.auditions;
