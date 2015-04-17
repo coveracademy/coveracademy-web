@@ -3,10 +3,12 @@
 var winston    = require('winston'),
     properties = require('./properties');
 
+var level = properties.getValue('app.debug', false) === true ? 'debug' : 'info';
+
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({timestamp: true, colorize: true, level: properties.getValue('log.level', 'info'), debugStdout: properties.getValue('log.level', 'info') === 'debug' ? true : false}),
-    new (winston.transports.File)({filename: 'cover-academy.log', level: properties.getValue('log.level', 'info')})
+    new (winston.transports.Console)({timestamp: true, colorize: true, level: level, debugStdout: level === 'debug' ? true : false}),
+    new (winston.transports.File)({filename: 'cover-academy.log', level: level})
   ]
 });
 
