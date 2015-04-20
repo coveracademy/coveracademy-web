@@ -3,7 +3,7 @@
 var settings = require('../configs/settings');
 var knex = require('knex')({
   client: settings.database.dialect,
-  debug: settings.debug,
+  debug: settings.database.debug,
   connection: {
     host: settings.database.host,
     port: settings.database.port,

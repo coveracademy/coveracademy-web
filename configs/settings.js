@@ -64,7 +64,8 @@ try {
         user: properties.getValue('database.user', 'root'),
         password: properties.getValue('database.password'),
         schema: properties.getValue('database.schema', 'cover_academy'),
-        charset: properties.getValue('database.charset', 'utf8')
+        charset: properties.getValue('database.charset', 'utf8'),
+        debug: properties.getValue('database.debug', false),
       },
       _redis = {
         host: properties.getValue('redis.host', 'localhost'),
