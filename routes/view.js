@@ -342,9 +342,9 @@ module.exports = function(router, app) {
 
         var auditionsPromise;
         if(rankType === 'best') {
-          auditionsPromise = contestService.bestAuditions(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE);
+          auditionsPromise = contestService.bestAuditions(contest);
         } else if(rankType === 'latest') {
-          auditionsPromise = contestService.latestAuditions(contest, constants.FIRST_PAGE, constants.NUMBER_OF_AUDITIONS_IN_PAGE);
+          auditionsPromise = contestService.latestAuditions(contest);
         } else {
           auditionsPromise = contestService.randomAuditions(contest);
         }
