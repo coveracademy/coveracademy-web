@@ -340,6 +340,7 @@ server.post('/contest/incentiveVote', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     return Promise.all([contest, contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
   }).spread(function(contest, auditions, nonContestants) {
+    var remainingTime = moment.duration({days: req.body.daysBeforeTheEnd}).humanize();
     auditions.forEach(function(audition) {
       var user = audition.related('user');
       Promise.all([user, renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime})]).spread(function(contestant, email) {
