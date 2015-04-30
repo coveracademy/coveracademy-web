@@ -36,7 +36,7 @@ var getPictureAttribute = function(network) {
 
 exports.forge = function(userData) {
   return User.forge(userData);
-}
+};
 
 exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPicture, name, gender) {
   var temporary = $.forge({
@@ -137,22 +137,23 @@ exports.showNetwork = function(user, network, showLink) {
 
 exports.create = function(userData) {
   return new Promise(function(resolve, reject) {
-    if(!userData.email || userData.email.trim().length === 0) {
-      reject(messages.apiError('user.auth.emailRequired', 'The email is required'));
-      return;
-    }
-    if(userData.username && !slug.isValidUsername(userData.username)) {
-      reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
-      return;
-    }
-    var user = $.forge(entities.filterAttributes(userData, 'UserCreationAttributes'));
-    user.set('permission', 'user');
-    user.set('verified', 1);
-    if(userData.verifyEmail === true) {
-      user.set('verified', 0);
-    }
-    $.connectNetwork(user, 'facebook', userData.facebook_account, userData.facebook_picture).then(function(userConnected) {
-      resolve(userConnected);
+    Promise.resolve().then(function() {      
+      if(!userData.email || userData.email.trim().length === 0) {
+        throw messages.apiError('user.auth.emailRequired', 'The email is required');        
+      }
+      if(userData.username && !slug.isValidUsername(userData.username)) {
+        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');        
+      }
+      var user = $.forge(userData));
+      user.set('permission', 'user');
+      user.set('verified', 1);
+      if(userData.verifyEmail === true) {
+        user.set('verified', 0);
+      }
+      return user.save(null, {scenario: 'creation'});
+    }).then(function(user) {
+      return $.connectNetwork(user, 'facebook', userData.facebook_account, userData.facebook_picture);
+    }).then(function(userConnected) {
       if(userConnected.get('verified') === 0) {
         $.sendVerificationEmail(userConnected, true).catch(function(err) {
           logger.error('Error sending "user verification" email to user %d.', userConnected.id, err);
@@ -162,6 +163,9 @@ exports.create = function(userData) {
           logger.error('Error sending "user registration" email to user %d.', userConnected.id, err);
         });
       }
+      resolve(userConnected);
+    }).catch(messages.APIError, function(err) {
+      reject(err);
     }).catch(function(err) {
       reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account', err));
     });
@@ -169,41 +173,36 @@ exports.create = function(userData) {
 }
 
 exports.save = function(user, attributes) {
-  if(attributes) {
-    return user.save(user.pick(attributes), {patch: true});
-  } else {
-    return user.save();
-  }
+  return attributes ? user.save(user.pick(attributes), {patch: true}) : user.save();
 }
 
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
-    if(user.id !== edited.id && user.permission !== 'admin') {
-      reject(messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission'));
-      return;
-    }
-    $.forge({id: edited.id}).fetch().then(function(userFetched) {
+    Promise.resolve().then(function() {      
+      if(user.id !== edited.id && user.permission !== 'admin') {
+        throw messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission');        
+      }
+      return $.forge({id: edited.id}).fetch();
+    }).then(function(userFetched) {
       if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
-        reject(messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore'));
-        return;
+        throw messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore');      
       }
       if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
-        reject(messages.apiError('user.edit.invalidUsername', 'The username is invalid'));
-        return;
+        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');      
       }
       if(userFetched.get('email') !== edited.get('email')) {
         edited.set('verified', 0);
       }
-      edited.save(edited.pick(entities.modelsAttributes.UserEditableAttributes), {patch: true}).then(function(userEdited) {
-        resolve(userEdited);
-        if(userEdited.get('verified') === 0) {
-          $.sendVerificationEmail(userEdited).catch(function(err) {
-            logger.error('Error sending "user verification" email to user %d.', userEdited.id, err);
-          });
-        }
-      }).catch(function(err) {
-        reject(messages.unexpectedError('Error editing user', err));
-      });
+      return edited.save(null, {patch: true, scenario: 'edition'});
+    }).then(function(userEdited) {
+      if(userEdited.get('verified') === 0) {
+        $.sendVerificationEmail(userEdited).catch(function(err) {
+          logger.error('Error sending "user verification" email to user %d.', userEdited.id, err);
+        });
+      }
+      resolve(userEdited);
+    }).catch(messages.APIError, function(err) {
+      reject(err);
     }).catch(function(err) {
       reject(messages.unexpectedError('Error editing user', err));
     });
@@ -302,16 +301,20 @@ exports.isFan = function(fan, user) {
 
 exports.fan = function(userFan, user) {
   return new Promise(function(resolve, reject) {
-    if(userFan.id === user.id) {
-      reject(messages.apiError('user.fan.canNotFanYourSelf', 'You can not fan yourself.'));
-      return;
-    }
-    var fan = UserFan.forge({user_id: user.id, fan_id: userFan.id});
-    fan.save().then(function(fan) {
+    Promise.resolve().bind({}).then(function() {      
+      if(userFan.id === user.id) {
+        throw messages.apiError('user.fan.canNotFanYourSelf', 'You can not fan yourself.');
+      }
+      var fan = UserFan.forge({user_id: user.id, fan_id: userFan.id});
+      this.fan = fan;
+      return fan.save();
+    }).then(function(fan) {
       resolve(fan);
+    }).catch(messages.APIError, function(err) {
+      reject(err);
     }).catch(function(err) {
       if(err.code === 'ERR_DUP_ENTRY') {
-        resolve(fan);
+        resolve(this.fan);
       } else {
         reject(err);
       }
@@ -320,18 +323,8 @@ exports.fan = function(userFan, user) {
 }
 
 exports.unfan = function(fan, user) {
-  return new Promise(function(resolve, reject) {
-    UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
-      if(!fan) {
-        resolve();
-      }  else {
-        return fan.destroy().then(function() {
-          resolve();
-        });
-      }
-    }).catch(function(err) {
-      reject(err);
-    });
+  return UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
+    return !fan ? Promise.resolve() : fan.destroy();   
   });
 }
 

@@ -31,7 +31,7 @@ var calculatePeriod = function(period) {
   var startDate = new Date();
   startDate.setDate(endDate.getDate() - period);
   return [startDate, endDate];
-}
+};
 
 var coversOfMusics = function(rankType, musics, pageSize) {
   return new Promise(function(resolve, reject) {
@@ -52,11 +52,9 @@ var coversOfMusics = function(rankType, musics, pageSize) {
       reject(err);
     });
   });
-}
+};
 
-var coversOfMusic = function(rankType, music, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+var coversOfMusic = function(rankType, music, page, pageSize) {  
   return Cover.collection().query(function(qb) {
     qb.where('music_id', music.id)
     .offset((page - 1) * pageSize)
@@ -64,7 +62,7 @@ var coversOfMusic = function(rankType, music, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch(coverRelated);
-}
+};
 
 var coversByArtists = function(rankType, artists, pageSize) {
   return new Promise(function(resolve, reject) {
@@ -85,11 +83,9 @@ var coversByArtists = function(rankType, artists, pageSize) {
       reject(err);
     });
   });
-}
+};
 
-var coversByArtist = function(rankType, artist, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+var coversByArtist = function(rankType, artist, page, pageSize) {  
   return Cover.collection().query(function(qb) {
     qb.where('artist_id', artist.id)
     .offset((page - 1) * pageSize)
@@ -97,11 +93,9 @@ var coversByArtist = function(rankType, artist, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch(coverRelated);
-}
+};
 
-var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {  
   return Cover.collection().query(function(qb) {
     qb.join('artist', 'cover.artist_id', 'artist.id')
     .where('artist.music_genre_id', musicGenre.id)
@@ -110,11 +104,9 @@ var coversOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.score', 'desc');
   }).fetch(coverRelated);
-}
+};
 
-var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {  
   return Artist.collection().query(function(qb) {
     qb.distinct('cover.artist_id as id')
     .select('artist.*')
@@ -125,11 +117,9 @@ var artistsOfMusicGenre = function(rankType, musicGenre, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('cover.registration_date', 'desc') : qb.orderBy('cover.score', 'desc');
   }).fetch();
-}
+};
 
-var listCovers = function(rankType, period, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+var listCovers = function(rankType, period, page, pageSize) {  
   return Cover.collection().query(function(qb) {
     qb.whereBetween('registration_date', calculatePeriod(period))
     .offset((page - 1) * pageSize)
@@ -137,7 +127,7 @@ var listCovers = function(rankType, period, page, pageSize) {
 
     rankType === 'latest' ? qb.orderBy('registration_date', 'desc') : qb.orderBy('score', 'desc');
   }).fetch(coverRelated);
-}
+};
 
 exports.addCover = function(user, coverData) {
   coverData.artist = _.str.trim(coverData.artist);
@@ -180,109 +170,98 @@ exports.addCover = function(user, coverData) {
     this.music.save();
     return cover;
   });
-}
+};
 
 exports.removeCover = function(cover) {
   return cover.destroy();
-}
+};
 
 exports.getCover = function(id) {
   return Cover.forge({id: id}).fetch(coverAllRelated);
-}
+};
 
 exports.topCover = function() {
   return this.bestCovers(7, 1, 1).then(function(covers) {
     return covers.at(0);
   });
-}
+};
 
 exports.latestCovers = function(period, page, pageSize) {
   return listCovers('latest', period, page, pageSize);
-}
+};
 
 exports.bestCovers = function(period, page, pageSize) {
   return listCovers('best', period, page, pageSize);
-}
+};
 
 exports.totalCovers = function(period) {
-  return new Promise(function(resolve, reject) {
-    var qb = Bookshelf.knex('cover')
-    .count('id as total_covers')
-    .whereBetween('registration_date', calculatePeriod(period))
-    .then(function(rows) {
-      resolve(rows[0].total_covers);
-    }).catch(function(err) {
-      reject(err);
-    });
+  return Bookshelf.knex('cover')
+  .count('id as total_covers')
+  .whereBetween('registration_date', calculatePeriod(period))
+  .then(function(rows) {
+    return rows[0].total_covers; 
   });
-}
+
+};
 
 exports.latestCoversOfMusic = function(music, page, pageSize) {
   return coversOfMusic('latest', music, page, pageSize);
-}
+};
 
 exports.bestCoversOfMusic = function(music, page, pageSize) {
   return coversOfMusic('best', music, page, pageSize);
-}
+};
 
 exports.latestCoversOfMusics = function(musics, pageSize) {
   return coversOfMusics('latest', musics, pageSize);
-}
+};
 
 exports.bestCoversOfMusics = function(musics, pageSize) {
   return coversOfMusics('best', musics, pageSize);
-}
+};
 
 exports.totalCoversOfMusic = function(music) {
-  return new Promise(function(resolve, reject) {
-    Bookshelf.knex('cover')
-    .count('id as total_covers')
-    .where('music_id', music.id)
-    .then(function(rows) {
-      resolve(rows[0].total_covers);
-    }).catch(function(err) {
-      reject(err);
-    });
+  return Bookshelf.knex('cover')
+  .count('id as total_covers')
+  .where('music_id', music.id)
+  .then(function(rows) {
+    return rows[0].total_covers;
   });
-}
+};
 
 exports.latestCoversByArtist = function(artist, page, pageSize) {
   return coversByArtist('latest', artist, page, pageSize);
-}
+};
 
 exports.bestCoversByArtist = function(artist, page, pageSize) {
   return coversByArtist('best', artist, page, pageSize);
-}
+};
 
 exports.latestCoversByArtists = function(artists, pageSize) {
   return coversByArtists('latest', artists, pageSize);
-}
+};
 
 exports.bestCoversByArtists = function(artists, pageSize) {
   return coversByArtists('best', artists, pageSize);
-}
+};
 
 exports.latestCoversOfMusicGenre = function(musicGenre, page, pageSize) {
   return coversOfMusicGenre('latest', musicGenre, page, pageSize);
-}
+};
 
 exports.bestCoversOfMusicGenre = function(musicGenre, page, pageSize) {
   return coversOfMusicGenre('best', musicGenre, page, pageSize);
-}
+};
 
 exports.totalCoversOfMusicGenre = function(musicGenre) {
-  return new Promise(function(resolve, reject) {
-    Bookshelf.knex('cover')
-    .join('artist', 'cover.artist_id', 'artist.id')
-    .where('artist.music_genre_id', musicGenre.id)
-    .count('cover.id as total_covers')
-    .then(function(rows) {
-      resolve(rows[0].total_covers)
-    }).catch(function(err) {
-      reject(err);
-    });
+  return Bookshelf.knex('cover')
+  .join('artist', 'cover.artist_id', 'artist.id')
+  .where('artist.music_genre_id', musicGenre.id)
+  .count('cover.id as total_covers')
+  .then(function(rows) {
+    return rows[0].total_covers;
   });
-}
+};
 
 exports.getMusicGenre = function(name) {
   if('Rap' === name || 'Hip-hop' == name) {
@@ -291,78 +270,68 @@ exports.getMusicGenre = function(name) {
     name = 'Jazz or Blues';
   }
   return MusicGenre.forge({name: name}).fetch();
-}
+};
 
 exports.getMusicGenreBySlug = function(slug) {
   if(!slug) {
-    return new Promise(function(resolve, reject) {
-      resolve();
-    });
+    return Promise.resolve();
   }
   return MusicGenre.forge({slug: slug}).fetch();
-}
+};
 
 exports.musicGenres = function() {
   return MusicGenre.fetchAll();
-}
+};
 
 exports.getArtist = function(name) {
   return this.getArtistBySlug(slug.slugify(name));
-}
+};
 
 exports.getArtistById = function(id) {
   return Artist.query({where: ['id', id]}).fetch(artistRelated);
-}
+};
 
 exports.getArtistBySlug = function(slug) {
   return Artist.query({where: ['slug', slug]}).fetch(artistRelated);
-}
+};
 
 exports.searchArtists = function(query, related) {
   return Artist.collection().query({where: ['name', 'like', '%' + query + '%']}).fetch(related);
-}
+};
 
-exports.latestArtists = function(page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+exports.latestArtists = function(page, pageSize) {  
   return Artist.collection().query(function(qb) {
     qb.orderBy('registration_date', 'desc')
     .offset((page - 1) * pageSize)
     .limit(pageSize);
   }).fetch();
-}
+};
 
 exports.latestArtistsOfMusicGenre = function(musicGenre, period, page, pageSize) {
   return artistsOfMusicGenre('latest', musicGenre, period, page, pageSize);
-}
+};
 
 exports.bestArtistsOfMusicGenre = function(musicGenre, period, page, pageSize) {
   return artistsOfMusicGenre('best', musicGenre, period, page, pageSize);
-}
+};
 
 exports.totalMusicsByArtist = function(artist) {
-  return new Promise(function(resolve, reject) {
-    Bookshelf.knex('music')
-    .count('id as total_musics')
-    .where('artist_id', artist.id)
-    .then(function(rows) {
-      resolve(rows[0].total_musics);
-    }).catch(function(err) {
-      reject(err);
-    });
+  return Bookshelf.knex('music')
+  .count('id as total_musics')
+  .where('artist_id', artist.id)
+  .then(function(rows) {
+    return rows[0].total_musics;
   });
-}
+};
 
-exports.lastMusicsByArtist = function(artist, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+exports.lastMusicsByArtist = function(artist, page, pageSize) {  
   return Music.collection().query(function(qb) {
     qb.where('artist_id', artist.id)
     .orderBy('last_cover_date', 'desc')
     .offset((page - 1) * pageSize)
     .limit(pageSize);
   }).fetch();
-}
+};
 
 exports.addArtist = function(name) {
   return new Promise(function(resolve, reject) {
@@ -388,27 +357,15 @@ exports.addArtist = function(name) {
       reject(err);
     });
   });
-}
+};
 
 exports.discoverArtist = function(name) {
-  return new Promise(function(resolve, reject) {
-    $.getArtist(name).then(function(artist) {
-      if(artist) {
-        resolve(artist);
-      } else {
-        $.addArtist(name).then(function(artist) {
-          resolve(artist);
-        });
-      }
-    }).catch(function(err) {
-      reject(err);
-    });
+  return $.getArtist(name).then(function(artist) {
+    return artist ? artist : $.addArtist(name);
   });
-}
+};
 
-exports.listArtists = function(musicGenre, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+exports.listArtists = function(musicGenre, page, pageSize) {  
   return Artist.collection().query(function(qb) {
     if(musicGenre) {
       qb.where('music_genre_id', musicGenre.id);
@@ -417,7 +374,7 @@ exports.listArtists = function(musicGenre, page, pageSize) {
     .offset((page - 1) * pageSize)
     .limit(pageSize);
   }).fetch(artistRelated);
-}
+};
 
 exports.totalArtists = function(musicGenre) {
   return new Promise(function(resolve, reject) {
@@ -431,38 +388,30 @@ exports.totalArtists = function(musicGenre) {
       reject(err);
     });
   });
-}
+};
 
 exports.getMusic = function(artist, title) {
   var slugified = slug.slugify(title) + '-' + artist.get('slug');
   return this.getMusicBySlug(slugified);
-}
+};
 
 exports.getMusicById = function(id) {
   return Music.query({where: ['id', id]}).fetch(musicRelated);
-}
+};
 
 exports.getMusicBySlug = function(slug) {
   return Music.query({where: ['slug', slug]}).fetch(musicRelated);
-}
+};
 
 exports.searchMusics = function(query) {
   return Music.collection().query({where: ['title', 'like', '%' + query + '%']}).fetch(musicRelated);
-}
+};
 
 exports.searchMusicsOfArtist = function(artistName, query) {
-  return new Promise(function(resolve, reject) {
-    $.getArtist(artistName).then(function(artist) {
-      if(artist) {
-        resolve(Music.collection().query({where: ['artist_id', artist.id], andWhere: ['title', 'like', '%' + query + '%']}).fetch());
-      } else {
-        resolve(Music.collection());
-      }
-    }).catch(function(err) {
-      reject(err);
-    });
+  return $.getArtist(artistName).then(function(artist) {
+    return artist ? Music.collection().query({where: ['artist_id', artist.id], andWhere: ['title', 'like', '%' + query + '%']}).fetch() : Music.collection();
   });
-}
+};
 
 exports.addMusic = function(artist, title) {
   return new Promise(function(resolve, reject) {
@@ -479,23 +428,13 @@ exports.addMusic = function(artist, title) {
       });
     });
   });
-}
+};
 
 exports.discoverMusic = function(artist, title) {
-  return new Promise(function(resolve, reject) {
-    $.getMusic(artist, title).then(function(music) {
-      if(music) {
-        resolve(music);
-      } else {
-        $.addMusic(artist, title).then(function(music) {
-          resolve(music);
-        });
-      }
-    }).catch(function(err) {
-      reject(err);
-    });
+  return $.getMusic(artist, title).then(function(music) {
+    return music ? music : $.addMusic(artist, title);
   });
-}
+};
 
 exports.artistsOfCovers = function(covers) {
   var artistsOfCovers = Artist.collection();
@@ -506,17 +445,15 @@ exports.artistsOfCovers = function(covers) {
     }
   });
   return artistsOfCovers;
-}
+};
 
-exports.potentialCovers = function(page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
+exports.potentialCovers = function(page, pageSize) {  
   return PotentialCover.collection().query(function(qb) {
     qb.orderBy('registration_date', 'desc')
     .offset((page - 1) * pageSize)
     .limit(pageSize);
   }).fetch();
-}
+};
 
 exports.acceptCover = function(user, potentialCover) {
   return $.addCover(user, {
@@ -524,24 +461,22 @@ exports.acceptCover = function(user, potentialCover) {
     music: potentialCover.get('music'),
     author: potentialCover.get('author'),
     url: potentialCover.get('url')
-  }).bind({
   }).then(function(cover) {
-    this.cover = cover;
-    return potentialCover.destroy();
-  }).then(function(potentialCover) {
-    return this.cover;
+    return Promise.all([cover, potentialCover.destroy()]);
+  }).spread(function(cover, potentialCover) {
+    return cover;
   });
-}
+};
 
 exports.refuseCover = function(potentialCover) {
   return potentialCover.destroy();
-}
+};
 
 exports.saveArtist = function(artist) {
   return artist.save().then(function(artist) {
     return $.getArtistById(artist.id);
   });
-}
+};
 
 exports.saveMusic = function(musicData) {
   musicData.artist = _.str.trim(musicData.artist);
@@ -554,4 +489,4 @@ exports.saveMusic = function(musicData) {
   }).then(function(music) {
     return $.getMusicById(music.id);
   });
-}
+};

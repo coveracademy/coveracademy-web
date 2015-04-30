@@ -120,23 +120,15 @@ var getPotentialWinners = function(contest) {
 };
 
 var chooseWinners = function(contest, transaction) {
-  return new Promise(function(resolve, reject) {
+  return getPotentialWinners(contest).then(function(potentialWinners) {
     var savePromises = [];
-    getPotentialWinners(contest).then(function(potentialWinners) {
-      potentialWinners.forEach(function(winner) {
-        winner.unset('score')
-        savePromises.push(winner.save({place: winner.get('place')}, {patch: true, transacting: transaction}));
-      });
-      Promise.all(savePromises).then(function(winners) {
-        var winnersCollection = Audition.collection();
-        winnersCollection.set(winners);
-        resolve(winnersCollection);
-      }).catch(function(err) {
-        reject(err);
-      });
-    }).catch(function(err) {
-      reject(err);
+    potentialWinners.forEach(function(winner) {
+      winner.unset('score')
+      savePromises.push(winner.save({place: winner.get('place')}, {patch: true, transacting: transaction}));
     });
+    return Promise.all(savePromises);
+  }).then(function(winners) {
+    return Audition.collection(winners);
   });
 };
 
@@ -370,29 +362,23 @@ exports.disapproveAudition = function(audition, reason) {
 
 exports.getWinnerAuditions = function(obj) {
   if(entities.isCollection(obj)) {
-    return new Promise(function(resolve, reject) {
-      Bookshelf.knex('audition')
-      .whereIn('contest_id', entities.getIds(obj))
-      .where('place', '<=', '3')
-      .orderBy('place', 'asc')
-      .then(function(rows) {
-        var winnerAuditions = {};
-        var allAuditions = Audition.collection();
-        rows.forEach(function(row) {
-          if(!winnerAuditions[row.contest_id]) {
-            winnerAuditions[row.contest_id] = Audition.collection();
-          }
-          var audition = Audition.forge(row);
-          winnerAuditions[row.contest_id].add(audition);
-          allAuditions.add(audition);
-        });
-        return allAuditions.load(auditionRelated.withRelated).then(function() {
-          return winnerAuditions;
-        });
-      }).then(function(winnerAuditions) {
-        resolve(winnerAuditions);
-      }).catch(function(err) {
-        reject(err);
+    return Bookshelf.knex('audition')
+    .whereIn('contest_id', entities.getIds(obj))
+    .where('place', '<=', '3')
+    .orderBy('place', 'asc')
+    .then(function(rows) {
+      var winnerAuditions = {};
+      var allAuditions = Audition.collection();
+      rows.forEach(function(row) {
+        if(!winnerAuditions[row.contest_id]) {
+          winnerAuditions[row.contest_id] = Audition.collection();
+        }
+        var audition = Audition.forge(row);
+        winnerAuditions[row.contest_id].add(audition);
+        allAuditions.add(audition);
+      });
+      return allAuditions.load(auditionRelated.withRelated).then(function() {
+        return winnerAuditions;
       });
     });
   } else {
@@ -561,14 +547,14 @@ exports.getAuditionVideoInfos = function(url) {
 };
 
 exports.getAuditionScore = function(audition) {
-  var collection = Audition.collection().add(audition);
+  var collection = Audition.collection(audition);
   return $.getScoreByAudition(collection).then(function(scoreByAudition) {
     return scoreByAudition[audition.id];
   });
 };
 
 exports.getAuditionVotes = function(audition) {
-  var collection = Audition.collection().add(audition);
+  var collection = Audition.collection(audition);
   return $.getVotesByAudition(collection).then(function(votesByAudition) {
     return votesByAudition[audition.id];
   });
@@ -648,28 +634,28 @@ exports.totalVotes = function(contests) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    if(user.get('verified') === 0) {
-      reject(messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified'));      
-      return;
-    }
-    audition.fetch(auditionWithContestAndUserRelated).bind({}).then(function(audition) {
+    Promise.resolve().then(function() {
+      if(user.get('verified') === 0) {
+        throw messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified');      
+      }      
+      return audition.fetch(auditionWithContestAndUserRelated);
+    }).then(function(audition) {
       var contest = audition.related('contest');
       if(contest.get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
       }
-      this.audition = audition;
-      return $.countUserVotes(user, contest);
-    }).then(function(totalAuditionsVotes) {
+      return Promise.all([audition, $.countUserVotes(user, contest)]);
+    }).spread(function(audition, totalAuditionsVotes) {
       if(totalAuditionsVotes >= constants.VOTE_LIMIT) {
         throw messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT);
       }
-      if(user.id === this.audition.related('user').id) {
+      if(user.id === audition.related('user').id) {
         throw messages.apiError('audition.vote.canNotVoteForYourself', 'The user can not vote for yourself');
       }
-      if(this.audition.get('approved') === 0) {
+      if(audition.get('approved') === 0) {
         throw messages.apiError('audition.vote.auditionNotApproved', 'The user can not vote in audition not approved');
       }
-      var userVote = UserVote.forge({user_id: user.id, audition_id: this.audition.id, voting_power: user.get('voting_power')});
+      var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, voting_power: user.get('voting_power')});
       return userVote.save();
     }).then(function(userVote) {
       resolve(userVote);
@@ -720,16 +706,16 @@ var formatComment = function(message) {
 
 exports.comment = function(user, audition, message) {
   return new Promise(function(resolve, reject) {
-    message = formatComment(message);
-    if(user.get('verified') === 0) {
-      reject(messages.apiError('audition.comment.userNotVerified', 'The user can not comment because he is not verified'));
-      return;
-    }
-    if(message === '') {
-      reject(messages.apiError('audition.comment.empty', 'The comment message can not be empty'));
-      return;
-    }
-    $.loadAudition(audition, []).then(function(audition) {
+    Promise.resolve().then(function() {
+      message = formatComment(message);
+      if(user.get('verified') === 0) {
+        throw messages.apiError('audition.comment.userNotVerified', 'The user can not comment because he is not verified');
+      }
+      if(message === '') {
+        throw messages.apiError('audition.comment.empty', 'The comment message can not be empty');
+      }
+      return Promise.all([message, $.loadAudition(audition, [])]);
+    }).spread(function(message, audition) {
       if(audition.get('approved') === 0) {
         throw messages.apiError('audition.comment.auditionNotApproved', 'The user can not comment in audition not approved');
       }
@@ -752,12 +738,13 @@ exports.comment = function(user, audition, message) {
 
 exports.replyComment = function(user, commentId, message) {
   return new Promise(function(resolve, reject) {
-    message = formatComment(message);
-    if(message === '') {
-      reject(messages.apiError('audition.comment.empty', 'The comment message can not be empty'));
-      return;
-    }
-    $.getComment(commentId).then(function(comment) {
+    Promise.resolve().then(function() {
+      message = formatComment(message);
+      if(message === '') {
+        throw messages.apiError('audition.comment.empty', 'The comment message can not be empty');
+      }      
+      return $.getComment(commentId);
+    }).then(function(comment) {
       var reply = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});
       return reply.save();
     }).then(function(reply) {

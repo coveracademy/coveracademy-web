@@ -16,6 +16,7 @@ var knex = require('knex')({
 
 var Bookshelf = require('bookshelf')(knex);
 Bookshelf.plugin('virtuals');
+Bookshelf.plugin(require('bookshelf-filteration').plugin);
 
 var User = Bookshelf.Model.extend({
   idAttribute: 'id',
@@ -25,6 +26,10 @@ var User = Bookshelf.Model.extend({
   },
   fans: function() {
     return this.hasMany(User).through(UserFan, 'fan_id');
+  },
+  filters: {
+    creation: ['name', 'email', 'username', 'gender', 'profile_picture', 'verified', 'permission'],
+    edition: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'verified']
   }
 });
 
@@ -54,6 +59,9 @@ var Music = Bookshelf.Model.extend({
   tableName: 'music',
   artist: function() {
     return this.belongsTo(Artist, 'artist_id');
+  },
+  filters: {
+    edition: ['title', 'artist_id', 'small_thumbnail', 'medium_thumbnail', 'large_thumbnail']
   }
 });
 

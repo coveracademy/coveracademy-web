@@ -8,10 +8,10 @@ var coverService    = require('../apis/coverService'),
     logger          = require('../configs/logger'),
     math            = require('../utils/math'),
     authorization   = require('../utils/authorization'),
+    Promise         = require('bluebird'),
     isAdmin         = authorization.isAdmin,
     isAuthenticated = authorization.isAuthenticated,
-    isTemporaryUser = authorization.isTemporaryUser,
-    Promise         = require('bluebird');
+    isTemporaryUser = authorization.isTemporaryUser;
 
 module.exports = function(router, app) {
 
