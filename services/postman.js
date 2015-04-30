@@ -322,7 +322,7 @@ server.post('/contest/start', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestStartTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+      renderPromise(contestStartTemplate, {contest: contest.toJSON()}).then(function(email) {
         return batchSend(nonContestants, 'A competição começou, apoie os competidores com o seu voto.', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest start" email to non contestant users.', err);
@@ -353,7 +353,7 @@ server.post('/contest/incentiveVote', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestIncentiveVoteTemplate, {contest: this.contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
+      renderPromise(contestIncentiveVoteTemplate, {contest: contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
         return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
@@ -384,7 +384,7 @@ server.post('/contest/draw', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestDrawTemplate, {contest: this.contest.toJSON()}).then(function(email) {
+      renderPromise(contestDrawTemplate, {contest: contest.toJSON()}).then(function(email) {
         return batchSend(nonContestants, 'A competição está empatada, os competidores precisam do seu apoio!', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest draw" email to non contestant users.', err);
@@ -419,7 +419,7 @@ server.post('/contest/finish', function(req, res, next) {
     });
 
     if(!nonWinners.isEmpty()) {
-      renderPromise(contestFinishTemplate, {contest: this.contest.toJSON(), isContestant: false}).then(function(email) {
+      renderPromise(contestFinishTemplate, {contest: contest.toJSON(), isContestant: false}).then(function(email) {
         return batchSend(nonWinners, 'A competição terminou, confira o resultado.', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest finish" email to non contestant users.', err);
