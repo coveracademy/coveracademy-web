@@ -1,7 +1,7 @@
 'use strict'
 
-var models         = require('../models'),
-    settings       = require('../configs/settings'),
+var models         = require('../../models'),
+    settings       = require('../../configs/settings'),
     constants      = require('./constants'),
     Mailgun        = require('mailgun-js'),
     Promise        = require('bluebird'),

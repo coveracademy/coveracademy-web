@@ -28,7 +28,7 @@ var User = Bookshelf.Model.extend({
     return this.hasMany(User).through(UserFan, 'fan_id');
   },
   filters: {
-    creation: ['name', 'email', 'username', 'gender', 'profile_picture', 'verified', 'permission'],
+    creation: ['name', 'email', 'username', 'gender', 'profile_picture', 'verified'],
     edition: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'verified']
   }
 });

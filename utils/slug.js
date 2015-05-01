@@ -26,8 +26,8 @@ exports.slugify = function(str) {
     slugified = slug(str).toLowerCase();
   }
   return slugified;
-}
+};
 
 exports.isValidUsername = function(username) {
   return username && usernameRegexp.test(username);
-}
+};

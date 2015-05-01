@@ -1,0 +1,43 @@
+{
+  "authenticate": {
+    "user": [
+      {"id": 1, "first_name": "Sandro", "last_name": "Simas", "phone": "+55 71 9999-9999", "email": "sandro@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"}
+    ]
+  },
+  "oneUser": {
+    "user": [
+      {"id": 1, "first_name": "Sandro", "last_name": "Simas", "phone": "+55 71 9999-9999", "email": "sandro@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"}
+    ]
+  },
+  "fourUsersAndCircleWithOneUserAndOneInvite": {
+    "user": [
+      {"id": 1, "first_name": "Sandro", "last_name": "Simas", "phone": "+55 71 9999-9991", "email": "sandro@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 2, "first_name": "Wesley", "last_name": "Mascarenhas", "phone": "+55 71 9999-9992", "email": "wesley@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 3, "first_name": "Maria", "last_name": "Silva", "phone": "+55 71 9999-9993", "email": "maria@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 4, "first_name": "Joana", "last_name": "Silva", "phone": "+55 71 9999-9994", "email": "joana@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"}
+    ],
+    "circle": [
+      {"id": 1, "creator_id": 1, "name": "Family1", "location_mode": "anytime"}
+    ],
+    "circle_user": [
+      {"id": 1, "user_id": 1, "circle_id": 1, "location_mode": "anytime", "permission": "owner"}
+    ],
+    "user_invite": [
+      {"id": 1, "circle_id": 1, "user_id": 1, "email": "wesley@gmail.com", "invited_id": 2, "registration_date": "2015-04-01 04:52:59"}
+    ]
+  },
+  "fourUsersAndAssociations": {
+    "user": [
+      {"id": 1, "first_name": "Sandro", "last_name": "Simas", "phone": "+55 71 9999-9991", "email": "sandro@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 2, "first_name": "Wesley", "last_name": "Mascarenhas", "phone": "+55 71 9999-9992", "email": "wesley@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 3, "first_name": "Maria", "last_name": "Silva", "phone": "+55 71 9999-9993", "email": "maria@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"},
+      {"id": 4, "first_name": "Joana", "last_name": "Silva", "phone": "+55 71 9999-9994", "email": "joana@email.com", "password": "$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq"}
+    ],
+    "user_association": [
+      {"user_id": 1, "related_id": 2, "registration_date": "2015-04-09 10:12:12"},
+      {"user_id": 2, "related_id": 1, "registration_date": "2015-04-09 10:12:14"},
+      {"user_id": 1, "related_id": 3, "registration_date": "2015-04-09 10:12:16"},
+      {"user_id": 3, "related_id": 1, "registration_date": "2015-04-09 10:12:18"}
+    ]
+  }
+}

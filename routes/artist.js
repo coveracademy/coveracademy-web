@@ -1,8 +1,8 @@
 'use strict'
 
 var coverService = require('../apis/coverService'),
-    constants    = require('../apis/constants'),
-    messages     = require('../apis/messages'),
+    constants    = require('../apis/internal/constants'),
+    messages     = require('../apis/internal/messages'),
     isAdmin      = require('../utils/authorization').isAdmin,
     Artist       = require('../models').Artist;
 

@@ -1,6 +1,6 @@
 'use strict'
 
-var settings = require('../configs/settings'),
+var settings = require('../../configs/settings'),
     util     = require('util');
 
 function APIError(statusCode, errorKey, errorMessage, cause) {
