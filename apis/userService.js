@@ -6,6 +6,7 @@ var models            = require('../models'),
     logger            = require('../configs/logger'),
     mailService       = require('./internal/mailService'),
     messages          = require('./internal/messages'),
+    ValidationError   = require('bookshelf-filteration').ValidationError,
     uuid              = require('node-uuid'),
     moment            = require('moment'),
     Promise           = require('bluebird'),
@@ -47,87 +48,69 @@ exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPictu
 
 exports.connectNetwork = function(user, network, account, picture, url) {
   return new Promise(function(resolve, reject) {
-    if(!_.contains(networksToConnect, network)) {
-      reject(messages.apiError('user.auth.unsupportedNetworkAssociation', 'Association with network ' + network + ' is not supported'));
-      return;
-    }
     Bookshelf.transaction(function(transaction) {
       var accountAttribute = getAccountAttribute(network);
+      if(!accountAttribute) {
+        throw messages.apiError('user.connectNetwork.unsupportedNetwork', 'Connection with network ' + network + ' is not supported');
+      }
+      var updatedAttributes = {};
       user.set(accountAttribute, account);
+      updatedAttributes[accountAttribute] = user.get(accountAttribute);
       var pictureAttribute = getPictureAttribute(network);
       if(pictureAttribute) {
         user.set(pictureAttribute, picture);
+        updatedAttributes[pictureAttribute] = user.get(pictureAttribute);
       }
-
-      var userPromise;
-      if(user.isNew()) {
-        userPromise = user.save(null, {transacting: transaction});
-      } else {
-        var updatedAttributes = {};
-        updatedAttributes[accountAttribute] = user.get(accountAttribute);
-        if(pictureAttribute) {
-          updatedAttributes[pictureAttribute] = user.get(pictureAttribute);
-        }
-        userPromise = user.save(updatedAttributes, {patch: true, transacting: transaction});
-      }
-
-      return userPromise.then(function(user) {
+      return user.save(updatedAttributes, {patch: true, transacting: transaction}).then(function(user) {
         var socialAccount = SocialAccount.forge({user_id: user.id, network: network, url: url, show_link: 0});
         return socialAccount.save(null, {transacting: transaction});
       });
     }).then(function(socialAccount) {
       user.related('socialAccounts').add(socialAccount);
       resolve(user);
-    }).catch(function(err) {
+    }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(function(err) {
+      reject(messages.apiError('user.connectNetwork.error', 'Error connecting user with network ' + network, err));
     });
   });
 };
 
 exports.disconnectNetwork = function(user, network) {
   return new Promise(function(resolve, reject) {
-    if(!_.contains(networksToDisconnect, network)) {
-      reject(messages.apiError('user.auth.unsupportedNetworkDisassociation', 'Disassociation with network ' + network + ' is not supported'));
-    }
-
-    var updatedAttributes = {}
-
-    var accountAttribute = getAccountAttribute(network);
-    user.set(accountAttribute, null);
-    updatedAttributes[accountAttribute] = null;
-
-    var pictureAttribute = getPictureAttribute(network);
-    if(pictureAttribute) {
-      user.set(pictureAttribute, null);
-      updatedAttributes[pictureAttribute] = null;
-    }
-
-    if(user.get('profile_picture') === network) {
-      user.set('profile_picture', 'facebook');
-      updatedAttributes['profile_picture'] = user.get('profile_picture');
-    }
-
     Bookshelf.transaction(function(transaction) {
+      if(!_.contains(networksToDisconnect, network)) {
+        throw messages.apiError('user.disconnect.unsupportedNetwork', 'Disconnection with network ' + network + ' is not supported');
+      }
+      var accountAttribute = getAccountAttribute(network);
+      var updatedAttributes = {}
+      user.set(accountAttribute, null);
+      updatedAttributes[accountAttribute] = null;
+      var pictureAttribute = getPictureAttribute(network);
+      if(pictureAttribute) {
+        user.set(pictureAttribute, null);
+        updatedAttributes[pictureAttribute] = null;
+      }
+      if(user.get('profile_picture') === network) {
+        user.set('profile_picture', 'facebook');
+        updatedAttributes['profile_picture'] = user.get('profile_picture');
+      }
       return user.save(updatedAttributes, {patch: true, transacting: transaction}).then(function(user) {
         return SocialAccount.where({user_id: user.id, network: network}).destroy({transacting: transaction});
       });
     }).then(function() {
       resolve(user);
-    }).catch(function(err) {
+    }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(function(err) {
+      reject(messages.apiError('user.disconnectNetwork.error', 'Error disconnecting user with network ' + network, err));
     });
   });
 };
 
 exports.showNetwork = function(user, network, showLink) {
-  return new Promise(function(resolve, reject) {
-    SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
-      return socialAccount.save({show_link: showLink === true ? 1 : 0}, {patch: true});
-    }).then(function(socialAccount) {
-      resolve();
-    }).catch(function(err) {
-      reject(err);
-    });
+  return SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
+    return socialAccount.save({show_link: showLink === true ? 1 : 0}, {patch: true});
   });
 };
 
@@ -161,6 +144,8 @@ exports.create = function(data) {
       resolve(user);
     }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(ValidationError, function(err) {
+      reject(messages.validationError('user.new', err));
     }).catch(function(err) {
       reject(messages.apiError('user.new.error', 'Unexpected error creating account', err));
     });
@@ -173,19 +158,22 @@ exports.save = function(user, attributes) {
 
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve().then(function() {
-      if(user.id !== edited.id && user.permission !== 'admin') {
-        throw messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission');
+    Promise.all([$.findById(user.id), $.findById(edited.id)]).spread(function(userFetched, editedFetched) {
+      if(!userFetched || !editedFetched) {
+        throw messages.apiError('user.update.notFound', 'User does not exists');
       }
-      return User.forge({id: edited.id}).fetch();
-    }).then(function(userFetched) {
-      if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
-        throw messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore');
+      if(userFetched.id !== editedFetched.id && userFetched.get('permission') !== 'admin') {
+        throw messages.apiError('user.update.noPermission', 'The user information cannot be updated because user has no permission');
       }
+      return editedFetched;
+    }).then(function(editedFetched) {
       if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
-        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');
+        throw messages.apiError('user.update.invalidUsername', 'The username is invalid');
       }
-      if(userFetched.get('email') !== edited.get('email')) {
+      if(editedFetched.get('username') && editedFetched.get('username') !== edited.get('username')) {
+        throw messages.apiError('user.update.cannotEditUsernameAnymore', 'The user can not update username anymore');
+      }
+      if(edited.get('email') && edited.get('email') !== editedFetched.get('email')) {
         edited.set('verified', 0);
       }
       return edited.save(null, {scenario: 'edition'});
@@ -198,8 +186,10 @@ exports.update = function(user, edited) {
       resolve(userEdited);
     }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(ValidationError, function(err) {
+      reject(messages.validationError('user.update', err));
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error editing user', err));
+      reject(messages.apiError('user.update.error', 'Error updating user information', err));
     });
   });
 };

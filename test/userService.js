@@ -72,6 +72,117 @@ describe('userService', function() {
     });
   });
 
+  describe('#update', function() {
+    it('should update the user information and change to not verified since change its email', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});
+        var edited = models.User.forge({id: 1, name: 'vesGuIM', email: 'sandro.csimas@gmail.com', username: 'sandro.csimas', gender: 'male', biography: 'Cover Academy founder!', city: 'Salvador', state: 'Bahia', profile_picture: 'facebook', verified: 1, twitter_account: 'my_twitter_account'});
+        return userService.update(user, edited);
+      }).then(function(edited) {
+        return models.User.forge({id: edited.id}).fetch();
+      }).then(function(edited) {
+        assert.strictEqual(edited.get('name'), 'vesGuIM');
+        assert.strictEqual(edited.get('email'), 'sandro.csimas@gmail.com');
+        assert.strictEqual(edited.get('gender'), 'male');
+        assert.strictEqual(edited.get('biography'), 'Cover Academy founder!');
+        assert.strictEqual(edited.get('city'), 'Salvador');
+        assert.strictEqual(edited.get('state'), 'Bahia');
+        assert.strictEqual(edited.get('profile_picture'), 'facebook');
+        assert.strictEqual(edited.get('verified'), 0);
+        assert.isNull(edited.get('twitter_account'));
+      });
+    });
+
+    it('should update another user when user has admin permission', function() {
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
+        var user = models.User.forge({id: 1});
+        var edited = models.User.forge({id: 2, email: 'pedroforbrig@gmail.com'});
+        return userService.update(user, edited);
+      }).then(function(edited) {
+        return models.User.forge({id: edited.id}).fetch();
+      }).then(function(edited) {
+        assert.strictEqual(edited.get('email'), 'pedroforbrig@gmail.com');
+      });
+    });
+
+    it('should not update an user when is not the same user editing', function() {
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
+        var user = models.User.forge({id: 2});
+        var edited = models.User.forge({id: 3, name: 'Leirson'});
+        return userService.update(user, edited);
+      }).then(function(user) {
+        throw new Error('It should not update an user when is not the same user editing');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.update.noPermission');
+      });
+    });
+
+    it('should not update the user when he tries to change username more then once', function() {
+      var user = models.User.forge({id: 1});
+      var edited = models.User.forge({id: 1, username: 'sandro.csimas'});
+      return datasets.load(userFixtures.oneUser).then(function() {
+        return userService.update(user, edited);
+      }).then(function(edited) {
+        edited.set('username', 'sandrocsimas');
+        return userService.update(user, edited);
+      }).then(function(edited) {
+        throw new Error('It should not update the user when he tries to change email more then once');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.update.cannotEditUsernameAnymore');
+      });
+    });
+
+    it('should not update an user when username is invalid', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});
+        var edited = models.User.forge({id: 1, username: 'sandro|csimas'});
+        return userService.update(user, edited);
+      }).then(function(user) {
+        throw new Error('It should not update an user when username is invalid');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.update.invalidUsername');
+      });
+    });
+
+    it('should not update an user when attribute is not elegible for update', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});
+        var edited = models.User.forge({id: 1, twitter_account: 'my_twitter_account'});
+        return userService.update(user, edited);
+      }).then(function() {
+        throw new Error('It should not update an user when attribute is not elegible for update');
+      }).catch(messages.APIError, function(err) {
+        console.log(err)
+        assert.strictEqual(err.errorKey, 'user.update.nothingToSave');
+      });
+    });
+
+    it('should not update an unexistent user', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});
+        var edited = models.User.forge({id: 4000, name: 'vesGuIM'});
+        return userService.update(user, edited);
+      }).then(function() {
+        throw new Error('It should not update an unexistent user');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.update.notFound');
+      });
+    });
+
+    it('should not update an user with an unexistent user', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 4000});
+        var edited = models.User.forge({id: 1, name: 'vesGuIM'});
+        return userService.update(user, edited);
+      }).then(function() {
+        throw new Error('It should not update an user with an unexistent user');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.update.notFound');
+      });
+    });
+  });
+
+
   // describe('#authenticate', function() {
   //   it('should authenticate user', function() {
   //     return datasets.load(require('./datasets/userService').authenticate).then(function() {
@@ -130,54 +241,6 @@ describe('userService', function() {
   //   });
   // });
 
-  // describe('#update', function() {
-  //   it('should update the user last name', function() {
-  //     var newLastname = 'Costa Simas';
-  //     return datasets.load(userFixtures.oneUser).then(function() {
-  //       return userService.update(models.User.forge({id: 1, last_name: newLastname}));
-  //     }).then(function(user) {
-  //       return models.User.forge({id: 1}).fetch();
-  //     }).then(function(user) {
-  //       assert.strictEqual(user.get('first_name'), 'Sandro');
-  //       assert.strictEqual(user.get('last_name'), newLastname);
-  //       assert.strictEqual(user.get('phone'), '+55 71 9999-9999');
-  //       assert.strictEqual(user.get('email'), 'sandro@email.com');
-  //     });
-  //   });
-
-  //   it('should not update an user when a required information is null', function() {
-  //     return datasets.load(userFixtures.oneUser).then(function() {
-  //       return userService.update(models.User.forge({id: 1, first_name: null, last_name: 'Costa Simas'}));
-  //     }).then(function(user) {
-  //       return models.User.forge({id: 1}).fetch();
-  //     }).then(function(user) {
-  //       throw new Error('It should not update an user when a required information is null');
-  //     }).catch(messages.APIError, function(err) {
-  //       assert.strictEqual(err.errorKey, 'user.update.first_name.invalid');
-  //     });
-  //   });
-
-  //   it('should not update an user when attribute is not elegible', function() {
-  //     return datasets.load(userFixtures.oneUser).then(function() {
-  //       return userService.update(models.User.forge({id: 1, verified: 1}));
-  //     }).then(function() {
-  //       return models.User.forge({id: 1}).fetch();
-  //     }).then(function(user) {
-  //       throw new Error('It should not update an user when attribute is not elegible');
-  //     }).catch(messages.APIError, function(err) {
-  //       assert.strictEqual(err.errorKey, 'user.update.nothingToSave');
-  //     });
-  //   });
-
-  //   it('should update the user first name from an unexistent user', function() {
-  //     var newFirstname = 'Sandro';
-  //     return userService.update(models.User.forge({id: 4000, last_name: newFirstname})).then(function() {
-  //       throw new Error('It is not permited to update an unexistent user');
-  //     }).catch(messages.APIError, function(err) {
-  //       assert.strictEqual(err.errorKey, 'user.update.userNotFound');
-  //     });
-  //   });
-  // });
 
   // describe('#searchAssociatedUsers', function() {
   //   it('should return all users associated', function() {
