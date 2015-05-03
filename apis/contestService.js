@@ -360,7 +360,7 @@ exports.disapproveAudition = function(audition, reason) {
   });
 };
 
-exports.getWinnerAuditions = function(obj) {
+exports.listWinnerAuditions = function(obj) {
   if(entities.isCollection(obj)) {
     return Bookshelf.knex('audition')
     .whereIn('contest_id', entities.getIds(obj))
@@ -388,6 +388,14 @@ exports.getWinnerAuditions = function(obj) {
       qb.orderBy('place', 'asc');
     }).fetch(auditionRelated);
   }
+};
+
+exports.latestWinnerAuditions = function() {
+  return Contest.forge({progress: 'finished'}).query(function(qb) {
+    qb.orderBy('end_date', 'desc');
+  }).fecth().then(function(contest) {
+    return $.listWinnerAuditions(contest);
+  });
 };
 
 exports.getAudition = function(id, related) {
