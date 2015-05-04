@@ -1,9 +1,9 @@
 'use strict'
 
 var contestService  = require('../apis/contestService'),
-    mailService     = require('../apis/mailService'),
-    constants       = require('../apis/constants'),
-    messages        = require('../apis/messages'),
+    mailService     = require('../apis/internal/mailService'),
+    constants       = require('../apis/internal/constants'),
+    messages        = require('../apis/internal/messages'),
     logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     isAdmin         = require('../utils/authorization').isAdmin,

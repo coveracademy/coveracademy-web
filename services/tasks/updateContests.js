@@ -1,7 +1,7 @@
 'use strict'
 
 var contestService = require('../../apis/contestService'),
-    messages       = require('../../apis/messages'),
+    messages       = require('../../apis/internal/messages'),
     logger         = require('../../configs/logger'),
     later          = require('later');
 

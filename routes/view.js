@@ -3,8 +3,8 @@
 var coverService    = require('../apis/coverService'),
     contestService  = require('../apis/contestService'),
     userService     = require('../apis/userService'),
-    constants       = require('../apis/constants'),
-    messages        = require('../apis/messages'),
+    constants       = require('../apis/internal/constants'),
+    messages        = require('../apis/internal/messages'),
     logger          = require('../configs/logger'),
     math            = require('../utils/math'),
     authorization   = require('../utils/authorization'),
@@ -62,28 +62,16 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    if(!req.user) {
-      Promise.all([contestService.listUnfinishedContests(), contestService.getCurrentSponsors()]).spread(function(contests, sponsors) {
-        res.json({
-          contests: contests,
-          sponsors: sponsors
-        });
-      }).catch(function(err) {
-        logger.error(err);
-        messages.respondWithError(err, res);
+    Promise.all([contestService.listRunningContests(), contestService.listWaitingContests(), contestService.latestWinnerAuditions()]).spread(function(runningContests, waitingContests, latestWinnerAuditions) {
+      res.json({
+        runningContests: runningContests,
+        waitingContests: waitingContests,
+        latestWinnerAuditions: latestWinnerAuditions
       });
-    } else {
-      contestService.listUnfinishedContests().then(function(contests) {
-        if(contests.length > 0) {
-          messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
-        } else {
-          messages.respondWithRedirection('contests', {}, res);
-        }
-      }).catch(function(err) {
-        logger.error(err);
-        messages.respondWithError(err, res);
-      });
-    }
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
   });
 
   router.get('/cover/:id/:slug', function(req, res, next) {
@@ -349,7 +337,7 @@ module.exports = function(router, app) {
           auditionsPromise = contestService.randomAuditions(contest);
         }
 
-        var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
+        var winnersPromise = contest.get('progress') === 'finished' ? contestService.listWinnerAuditions(contest) : null;
         return Promise.all([
           auditionsPromise,
           contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest),
@@ -411,7 +399,7 @@ module.exports = function(router, app) {
 
   router.get('/contests', function(req, res, next) {
     contestService.latestContests(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTS_IN_PAGE).then(function(contests) {
-      return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.getWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
+      return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.listWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
         res.json({
           contests: contests,
           totalVotes: totalVotes,

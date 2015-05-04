@@ -1,7 +1,8 @@
 'use strict'
 
-var settings = require('../configs/settings'),
-    util     = require('util');
+var settings        = require('../../configs/settings'),
+    util            = require('util'),
+    ValidationError = require('bookshelf-filteration').ValidationError;
 
 function APIError(statusCode, errorKey, errorMessage, cause) {
   if (APIError.super_.captureStackTrace) {
@@ -25,7 +26,7 @@ function APIError(statusCode, errorKey, errorMessage, cause) {
   this.toString = function() {
     return this.message;
   };
-};
+}
 util.inherits(APIError, Error);
 
 function getErrorKey(err) {
@@ -56,6 +57,23 @@ function internalError(errorMessage, cause) {
   return apiErrorWithCode(500, 'internalError', errorMessage, cause);
 }
 
+function validationError(prefix, err) {
+  if(err instanceof ValidationError) {
+    var error = null;
+    var firstError = err.errors[0];
+    if(firstError.type === 'scenario.notfound') {
+      error = internalError(firstError.messages[0], err);
+    } else if(firstError.type === 'nothingToSave') {
+      error = apiError(prefix + '.' + firstError.type, firstError.messages[0], err);
+    } else {
+      error = apiError(prefix + '.' + firstError.attribute + '.' + firstError.type, firstError.messages[0], err);
+    }
+    return error;
+  } else {
+    return unexpectedError('', err);
+  }
+}
+
 function respondWithError(err, res) {
   if(err instanceof APIError) {
     res.json(err.statusCode, err.json());
@@ -84,6 +102,7 @@ module.exports = {
   apiErrorWithCode: apiErrorWithCode,
   unexpectedError: unexpectedError,
   internalError: internalError,
+  validationError: validationError,
   respondWithError: respondWithError,
   respondWithNotFound: respondWithNotFound,
   respondWithMovedPermanently: respondWithMovedPermanently,

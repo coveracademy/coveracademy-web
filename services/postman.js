@@ -178,7 +178,7 @@ server.post('/user/verification', function(req, res, next) {
   if(req.body.registration === true) {
     userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
-      return renderPromise(userRegistrationTemplate, {user: user.toJSON(), token: req.body.token, verify: true});
+      return renderPromise(userRegistrationTemplate, {user: user.toJSON(), verify: true});
     }).then(function(email) {
       return send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
     }).then(function(emailResponse) {
@@ -190,7 +190,7 @@ server.post('/user/verification', function(req, res, next) {
   } else {
     userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
-      return renderPromise(userVerificationTemplate, {user: user.toJSON(), token: req.body.token});
+      return renderPromise(userVerificationTemplate, {user: user.toJSON()});
     }).then(function(email) {
       return send(this.user.get('email'), 'Confirme o seu email para participar do Cover Academy.', email);
     }).then(function(mailResponse) {

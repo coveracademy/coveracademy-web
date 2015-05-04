@@ -5,10 +5,10 @@ var models      = require('../models'),
     logger      = require('../configs/logger'),
     slug        = require('../utils/slug'),
     entities    = require('../utils/entities'),
-    mailService = require('./mailService'),
-    messages    = require('./messages'),
+    mailService = require('./internal/mailService'),
+    messages    = require('./internal/messages'),
+    constants   = require('./internal/constants'),
     youtube     = require('./third/youtube'),
-    constants   = require('./constants'),
     Promise     = require('bluebird'),
     moment      = require('moment'),
     _           = require('underscore'),
@@ -360,7 +360,7 @@ exports.disapproveAudition = function(audition, reason) {
   });
 };
 
-exports.getWinnerAuditions = function(obj) {
+exports.listWinnerAuditions = function(obj) {
   if(entities.isCollection(obj)) {
     return Bookshelf.knex('audition')
     .whereIn('contest_id', entities.getIds(obj))
@@ -388,6 +388,14 @@ exports.getWinnerAuditions = function(obj) {
       qb.orderBy('place', 'asc');
     }).fetch(auditionRelated);
   }
+};
+
+exports.latestWinnerAuditions = function() {
+  return Contest.forge({progress: 'finished'}).query(function(qb) {
+    qb.orderBy('end_date', 'desc');
+  }).fecth().then(function(contest) {
+    return $.listWinnerAuditions(contest);
+  });
 };
 
 exports.getAudition = function(id, related) {
@@ -636,8 +644,8 @@ exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
     Promise.resolve().then(function() {
       if(user.get('verified') === 0) {
-        throw messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified');      
-      }      
+        throw messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified');
+      }
       return audition.fetch(auditionWithContestAndUserRelated);
     }).then(function(audition) {
       var contest = audition.related('contest');
@@ -742,7 +750,7 @@ exports.replyComment = function(user, commentId, message) {
       message = formatComment(message);
       if(message === '') {
         throw messages.apiError('audition.comment.empty', 'The comment message can not be empty');
-      }      
+      }
       return $.getComment(commentId);
     }).then(function(comment) {
       var reply = UserComment.forge({user_id: user.id, audition_id: comment.related('audition').id, comment_id: comment.id, message: message});

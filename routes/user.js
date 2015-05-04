@@ -1,11 +1,12 @@
 'use strict'
 
 var userService     = require('../apis/userService'),
-    mailService     = require('../apis/mailService'),
-    messages        = require('../apis/messages'),
-    constants       = require('../apis/constants'),
+    mailService     = require('../apis/internal/mailService'),
+    messages        = require('../apis/internal/messages'),
+    constants       = require('../apis/internal/constants'),
     logger          = require('../configs/logger'),
     authorization   = require('../utils/authorization'),
+    User            = require('../models').User,
     isAuthenticated = authorization.isAuthenticated,
     isTemporaryUser = authorization.isTemporaryUser;
 
@@ -61,7 +62,7 @@ module.exports = function(router, app) {
 
   router.put('/', isAuthenticated, function(req, res, next) {
     var user = req.param('user');
-    userService.update(req.user, userService.forge(user)).then(function(userSaved) {
+    userService.update(req.user, User.forge(user)).then(function(userSaved) {
       res.json(userSaved);
     }).catch(function(err) {
       logger.error(err);
@@ -85,7 +86,7 @@ module.exports = function(router, app) {
   });
 
   router.post('/verification', isAuthenticated, function(req, res, next) {
-    var user = userService.forge({id: req.param('user')});
+    var user = User.forge({id: req.param('user')});
     userService.resendVerificationEmail(user).then(function() {
       res.json({});
     }).catch(function(err) {
@@ -116,7 +117,7 @@ module.exports = function(router, app) {
   });
 
   router.post('/fan', isAuthenticated, function(req, res, next) {
-    var user = userService.forge({id: req.param('user')});
+    var user = User.forge({id: req.param('user')});
     userService.fan(req.user, user).then(function() {
       res.json({});
     }).catch(function(err) {
@@ -126,7 +127,7 @@ module.exports = function(router, app) {
   });
 
   router.delete('/fan', isAuthenticated, function(req, res, next) {
-    var user = userService.forge({id: req.param('user')});
+    var user = User.forge({id: req.param('user')});
     userService.unfan(req.user, user).then(function() {
       res.json({});
     }).catch(function(err) {
@@ -136,7 +137,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/isFan', isAuthenticated, function(req, res, next) {
-    var user = userService.forge({id: req.param('user')});
+    var user = User.forge({id: req.param('user')});
     userService.isFan(req.user, user).then(function(fan) {
       res.json(fan);
     }).catch(function(err) {
@@ -146,7 +147,7 @@ module.exports = function(router, app) {
   });
 
   router.get('/fans/latest', function(req, res, next) {
-    var user = userService.forge({id: req.param('user')});
+    var user = User.forge({id: req.param('user')});
     var page = req.param('page') || constants.FIRST_PAGE;
     userService.latestFans(user, page, constants.NUMBER_OF_FANS_IN_PAGE).then(function(fans) {
       res.json(fans);

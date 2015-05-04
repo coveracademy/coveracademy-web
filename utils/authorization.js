@@ -8,7 +8,7 @@ exports.isAdmin = function(req, res, next) {
   } else {
     res.send(401);
   }
-}
+};
 
 exports.isUser = function(req, res, next) {
   if(req.isAuthenticated() && req.user.get('permission') === 'user') {
@@ -16,7 +16,7 @@ exports.isUser = function(req, res, next) {
   } else {
     res.send(401);
   }
-}
+};
 
 exports.isAuthenticated = function(req, res, next) {
   if(req.isAuthenticated()) {
@@ -24,7 +24,7 @@ exports.isAuthenticated = function(req, res, next) {
   } else {
     res.send(401);
   }
-}
+};
 
 exports.isAnonymous = function(req, res, next) {
   if(!req.isAuthenticated()) {
@@ -32,7 +32,7 @@ exports.isAnonymous = function(req, res, next) {
   } else {
     res.send(401);
   }
-}
+};
 
 exports.isTemporaryUser = function(req, res, next) {
   if(req.session.temporaryUser) {
@@ -40,11 +40,11 @@ exports.isTemporaryUser = function(req, res, next) {
   } else {
     res.send(401);
   }
-}
+};
 
 exports.setTemporaryUser = function(req, user) {
   req.session.temporaryUser = user;
-}
+};
 
 exports.getTemporaryUser = function(req) {
   return req.session.temporaryUser;

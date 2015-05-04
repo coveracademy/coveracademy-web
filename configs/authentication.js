@@ -1,8 +1,8 @@
 'use strict'
 
 var userService        = require('../apis/userService'),
-    mailService        = require('../apis/mailService'),
-    messages           = require('../apis/messages'),
+    mailService        = require('../apis/internal/mailService'),
+    messages           = require('../apis/internal/messages'),
     settings           = require('./settings'),
     logger             = require('./logger'),
     YoutubeStrategy    = require('passport-youtube-v3').Strategy,

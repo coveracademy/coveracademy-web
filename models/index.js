@@ -27,8 +27,19 @@ var User = Bookshelf.Model.extend({
   fans: function() {
     return this.hasMany(User).through(UserFan, 'fan_id');
   },
+  validations: {
+    email: {presence: true, email: true},
+    username: {presence: true, format: /^[a-z0-9.]{5,20}$/}
+  },
   filters: {
-    creation: ['name', 'email', 'username', 'gender', 'profile_picture', 'verified', 'permission'],
+    creation: [
+      {name: 'name', required: true}, 
+      {name: 'email', required: true}, 
+      {name: 'verified', required: true},
+      {name: 'permission', required: true},
+      'username', 
+      'gender',
+    ],
     edition: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'verified']
   }
 });
@@ -149,14 +160,6 @@ var UserFan = Bookshelf.Model.extend({
   }
 });
 
-var VerificationToken = Bookshelf.Model.extend({
-  idAttribute: 'token',
-  tableName: 'verification_token',
-  user: function() {
-    return this.belongsTo(User, 'user_id');
-  }
-});
-
 var Prize = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'prize',
@@ -190,7 +193,6 @@ var ScheduledEmail = Bookshelf.Model.extend({
 });
 
 module.exports = {
-  VerificationToken: VerificationToken,
   Artist: Artist,
   Audition: Audition,
   Bookshelf: Bookshelf,

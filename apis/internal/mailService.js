@@ -1,7 +1,7 @@
 'use strict'
 
-var models         = require('../models'),
-    settings       = require('../configs/settings'),
+var models         = require('../../models'),
+    settings       = require('../../configs/settings'),
     constants      = require('./constants'),
     Mailgun        = require('mailgun-js'),
     Promise        = require('bluebird'),
@@ -48,9 +48,9 @@ exports.userRegistration = function(user) {
   });
 };
 
-exports.userVerification = function(user, verificationToken, registration) {
+exports.userVerification = function(user, registration) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/user/verification', {user: user.id, token: verificationToken.get('token'), registration: registration}, function(err, req, res, obj) {
+    mailClient.post('/user/verification', {user: user.id, registration: registration}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {

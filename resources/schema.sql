@@ -8,7 +8,7 @@ create table user (
   username           varchar(255) default null,
   city               varchar(255) default null,
   state              varchar(255) default null,
-  facebook_account   varchar(255) default null,
+  facebook_account   varchar(255) not null,
   facebook_picture   varchar(255) default null,
   twitter_account    varchar(255) default null,
   twitter_picture    varchar(255) default null,
@@ -16,7 +16,7 @@ create table user (
   google_picture     varchar(255) default null,
   youtube_account    varchar(255) default null,
   soundcloud_account varchar(255) default null,
-  profile_picture    varchar(20) default null,
+  profile_picture    varchar(20) not null,
   voting_power       decimal(6, 3) default 1.000,
   verified           tinyint default 0,
   contestant         tinyint default 0,
@@ -206,15 +206,6 @@ create table user_fan (
   unique key `uq_user_fan_user_id_fan_id` (`user_id`, `fan_id`),
   constraint `fk_user_fan_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_user_fan_fan_id` foreign key (`fan_id`) references `user` (`id`)
-) engine = innodb default charset = utf8;
-
-create table verification_token (
-  token             varchar(255) not null,
-  user_id           int not null,
-  expiration_date   timestamp not null,
-  registration_date timestamp not null default current_timestamp,
-  primary key (token),
-  constraint `fk_verification_token_user_id` foreign key (`user_id`) references `user` (`id`)
 ) engine = innodb default charset = utf8;
 
 create table sponsor (

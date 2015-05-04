@@ -1,0 +1,14 @@
+{
+  "oneUser": {
+    "user": [
+      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook"}
+    ]
+  },
+  "twoUsersAndOneAdmin": {
+    "user": [
+      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook", "permission": "admin"},
+      {"id": 2, "name": "Pedro Forbrig", "email": "pedro@email.com", "facebook_account": "718788641524584", "profile_picture": "facebook", "permission": "user"},
+      {"id": 3, "name": "Leirson Barretos", "email": "leirson@email.com", "facebook_account": "718788641524585", "profile_picture": "facebook", "permission": "user"}
+    ]
+  }
+}
