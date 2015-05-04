@@ -10,7 +10,7 @@
     "bluebird": "~2.3.11",
     "body-parser": "~1.0.0",
     "bookshelf": "~0.7.9",
-    "bookshelf-filteration": "~0.1.4",
+    "bookshelf-filteration": "~0.1.6",
     "connect-flash": "~0.1.1",
     "connect-multiparty": "~1.2.5",
     "connect-redis": "~2.1.0",
