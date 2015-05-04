@@ -360,6 +360,18 @@ angular
         }
       }
     })
+    .state('app.disableEmails', {
+      url: '/emails/disable?token',
+      templateUrl: '/app/partials/disable-emails.html',
+      controller: 'disableEmailsController',
+      accessLevel: accessLevel.PUBLIC,
+      resolve: {
+        viewService: 'viewService',
+        backendResponse: function($stateParams, viewService) {
+          return viewService.disableEmailsView($stateParams.token);
+        }
+      }
+    })
     .state('app.contestGuideline', {
       url: '/contest/guideline',
       templateUrl: '/app/partials/contest-guideline.html',

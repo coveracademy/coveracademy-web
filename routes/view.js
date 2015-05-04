@@ -541,6 +541,26 @@ module.exports = function(router, app) {
     }
   });
 
+  router.get('/emails/disable', function(req, res, next) {
+    var token = req.param('token');
+    if(!token) {
+      messages.respondWithMovedPermanently('index', {}, res);
+    } else {
+      userService.disableEmails(token).then(function(user) {
+        if(!user) {
+          messages.respondWithMovedPermanently('index', {}, res);
+        } else {
+          res.json({
+            user: user
+          });
+        }
+      }).catch(function(err) {
+        logger.error(err);
+        messages.respondWithMovedPermanently('index', {}, res);
+      });
+    }
+  });
+
   app.use('/view', router);
 
 }

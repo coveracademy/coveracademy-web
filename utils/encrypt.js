@@ -1,7 +1,10 @@
 'use strict'
 
-var Promise = require('bluebird'),
-    bcrypt  = require('bcrypt');
+var settings  = require('../configs/settings'),
+    Promise   = require('bluebird'),
+    bcrypt    = require('bcrypt'),
+    crypto    = require('crypto'),
+    algorithm = 'aes-256-ctr';
 
 exports.hashPassword = function(password) {
   return new Promise(function(resolve, reject) {
@@ -13,7 +16,7 @@ exports.hashPassword = function(password) {
       }
     });
   });
-}
+};
 
 exports.comparePassword = function(password, hash) {
   return new Promise(function(resolve, reject) {
@@ -25,4 +28,18 @@ exports.comparePassword = function(password, hash) {
       }
     });
   });
-}
+};
+
+exports.encrypt = function(text) {
+  var cipher = crypto.createCipher(algorithm, settings.domain);
+  var crypted = cipher.update(text, 'utf8', 'hex');
+  crypted += cipher.final('hex');
+  return crypted;
+};
+
+exports.decrypt = function(text) {
+  var decipher = crypto.createDecipher(algorithm, settings.domain);
+  var decrypted = decipher.update(text, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+};

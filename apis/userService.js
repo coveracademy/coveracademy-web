@@ -3,6 +3,7 @@
 var models            = require('../models'),
     entities          = require('../utils/entities'),
     slug              = require('../utils/slug'),
+    encrypt           = require('../utils/encrypt'),
     logger            = require('../configs/logger'),
     mailService       = require('./mailService'),
     messages          = require('./messages'),
@@ -33,6 +34,13 @@ var getPictureAttribute = function(network) {
   }
   return network + '_picture';
 };
+var findUserOptions = function(relations) {
+  var options = {}; // TODO: add option {require: true}
+  if(relations === true) {
+    options = _.extend(options, userWithSocialAccountsRelated);
+  }
+  return options;
+};
 
 exports.forge = function(userData) {
   return User.forge(userData);
@@ -47,7 +55,7 @@ exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPictu
     facebook_picture: facebookPicture
   });
   return temporary;
-}
+};
 
 exports.connectNetwork = function(user, network, account, picture, url) {
   return new Promise(function(resolve, reject) {
@@ -86,7 +94,7 @@ exports.connectNetwork = function(user, network, account, picture, url) {
       reject(err);
     });
   });
-}
+};
 
 exports.disconnectNetwork = function(user, network) {
   return new Promise(function(resolve, reject) {
@@ -121,7 +129,7 @@ exports.disconnectNetwork = function(user, network) {
       reject(err);
     });
   });
-}
+};
 
 exports.showNetwork = function(user, network, showLink) {
   return new Promise(function(resolve, reject) {
@@ -133,18 +141,18 @@ exports.showNetwork = function(user, network, showLink) {
       reject(err);
     });
   });
-}
+};
 
 exports.create = function(userData) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve().then(function() {      
+    Promise.resolve().then(function() {
       if(!userData.email || userData.email.trim().length === 0) {
-        throw messages.apiError('user.auth.emailRequired', 'The email is required');        
+        throw messages.apiError('user.auth.emailRequired', 'The email is required');
       }
       if(userData.username && !slug.isValidUsername(userData.username)) {
-        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');        
+        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');
       }
-      var user = $.forge(userData));
+      var user = $.forge(userData);
       user.set('permission', 'user');
       user.set('verified', 1);
       if(userData.verifyEmail === true) {
@@ -170,25 +178,25 @@ exports.create = function(userData) {
       reject(messages.apiError('user.auth.errorCreatingAccount', 'Unexpected error creating account', err));
     });
   });
-}
+};
 
 exports.save = function(user, attributes) {
   return attributes ? user.save(user.pick(attributes), {patch: true}) : user.save();
-}
+};
 
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve().then(function() {      
+    Promise.resolve().then(function() {
       if(user.id !== edited.id && user.permission !== 'admin') {
-        throw messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission');        
+        throw messages.apiError('user.edit.noPermission', 'The user informations cannot be edited because user has no permission');
       }
       return $.forge({id: edited.id}).fetch();
     }).then(function(userFetched) {
       if(userFetched.get('username') && userFetched.get('username') !== edited.get('username')) {
-        throw messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore');      
+        throw messages.apiError('user.edit.cannotEditUsernameAnymore', 'The user can not edit username anymore');
       }
       if(edited.get('username') && !slug.isValidUsername(edited.get('username'))) {
-        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');      
+        throw messages.apiError('user.edit.invalidUsername', 'The username is invalid');
       }
       if(userFetched.get('email') !== edited.get('email')) {
         edited.set('verified', 0);
@@ -207,19 +215,20 @@ exports.update = function(user, edited) {
       reject(messages.unexpectedError('Error editing user', err));
     });
   });
-}
+};
+
 
 exports.findById = function(id, relations) {
-  return $.forge({id: id}).fetch(relations === true ? userWithSocialAccountsRelated: null);
-}
+  return $.forge({id: id}).fetch(findUserOptions(relations));
+};
 
 exports.findByEmail = function(email, relations) {
-  return $.forge({email: email}).fetch(relations === true ? userWithSocialAccountsRelated: null);
-}
+  return $.forge({email: email}).fetch(findUserOptions(relations));
+};
 
 exports.findByUsername = function(username, relations) {
-  return $.forge({username: username}).fetch(relations === true ? userWithSocialAccountsRelated: null);
-}
+  return $.forge({username: username}).fetch(findUserOptions(relations));
+};
 
 exports.findBySocialAccount = function(network, account, relations) {
   if(!_.contains(networksToConnect, network)) {
@@ -229,7 +238,7 @@ exports.findBySocialAccount = function(network, account, relations) {
   if(accountAttribute) {
     var search = {};
     search[accountAttribute] = account;
-    return $.forge(search).fetch(relations === true ? userWithSocialAccountsRelated: null);
+    return $.forge(search).fetch(findUserOptions(relations));
   } else {
     return Promise.resolve();
   }
@@ -253,7 +262,7 @@ exports.verifyEmail = function(token) {
       reject(err);
     });
   });
-}
+};
 
 exports.sendVerificationEmail = function(user, registration) {
   return VerificationToken.forge({user_id: user.id, token: uuid.v1(), expiration_date: moment().add(7, 'days').toDate()}).save(null, {method: 'insert'}).then(function(token) {
@@ -261,7 +270,7 @@ exports.sendVerificationEmail = function(user, registration) {
       throw messages.apiError('user.verification.errorSendingVerificationEmail', 'Error sending verification email to ' + user.get('email'));
     });
   });
-}
+};
 
 exports.resendVerificationEmail = function(user) {
   return user.fetch().then(function(userFetched) {
@@ -270,11 +279,24 @@ exports.resendVerificationEmail = function(user) {
     }
     return $.sendVerificationEmail(userFetched);
   });
-}
+};
+
+exports.disableEmails = function(token) {
+  return new Promise(function(resolve, reject) {
+    var email = encrypt.decrypt(token);
+    $.findByEmail(email).then(function(user) {
+      return user.save({emails_enabled: 0}, {patch: true});
+    }).then(function(user) {
+      resolve(user);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+};
 
 exports.listAllUsers = function() {
   return User.collection().fetch();
-}
+};
 
 exports.totalFans = function(user) {
   return new Promise(function(resolve, reject) {
@@ -287,7 +309,7 @@ exports.totalFans = function(user) {
       reject(err);
     });
   });
-}
+};
 
 exports.isFan = function(fan, user) {
   if(!fan || !user) {
@@ -301,7 +323,7 @@ exports.isFan = function(fan, user) {
 
 exports.fan = function(userFan, user) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve().bind({}).then(function() {      
+    Promise.resolve().bind({}).then(function() {
       if(userFan.id === user.id) {
         throw messages.apiError('user.fan.canNotFanYourSelf', 'You can not fan yourself.');
       }
@@ -320,13 +342,13 @@ exports.fan = function(userFan, user) {
       }
     });
   });
-}
+};
 
 exports.unfan = function(fan, user) {
   return UserFan.forge({user_id: user.id, fan_id: fan.id}).fetch().then(function(fan) {
-    return !fan ? Promise.resolve() : fan.destroy();   
+    return !fan ? Promise.resolve() : fan.destroy();
   });
-}
+};
 
 exports.latestFans = function(user, page, pageSize) {
   return User.collection().query(function(qb) {
@@ -338,4 +360,4 @@ exports.latestFans = function(user, page, pageSize) {
       qb.limit(pageSize);
     }
   }).fetch();
-}
+};

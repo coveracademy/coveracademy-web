@@ -34,4 +34,16 @@
       </tr>
     </tbody>
   </table>
+  {% if permitDisableEmails %}
+  <table border="0" width="700" cellpadding="0" cellspacing="0" align="center" style="border-spacing: 0px; padding-top: 20px">
+    <tbody>
+      <tr>
+        <td valign="middle" style="padding-top: 0px; padding-bottom: 10px; padding-right: 0px; padding-left: 0px; text-align: center; border-collapse: collapse;">
+          Se não deseja mais receber emails periódicos do Cover Academy, basta clicar
+          <a href="{{ siteUrl }}/pt-br/emails/disable?token=%recipient.encryptedEmail%" target="_blank">aqui</a>.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
 </div>

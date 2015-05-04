@@ -20,6 +20,7 @@ create table user (
   voting_power       decimal(6, 3) default 1.000,
   verified           tinyint default 0,
   contestant         tinyint default 0,
+  emails_enabled     tinyint default 1,
   registration_date  timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_username` (`username`),

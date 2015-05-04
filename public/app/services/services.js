@@ -539,6 +539,9 @@ angular
   this.verifyView = function(token) {
     return $http.get('/view/verify', {params: {token: token}});
   };
+  this.disableEmailsView = function(token) {
+    return $http.get('/view/emails/disable', {params: {token: token}});
+  };
   this.settingsView = function() {
     return $http.get('/view/settings');
   };

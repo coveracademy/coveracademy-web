@@ -6,6 +6,7 @@ var settings       = require('../configs/settings'),
     userService    = require('../apis/userService'),
     contestService = require('../apis/contestService'),
     entities       = require('../utils/entities'),
+    encrypt        = require('../utils/encrypt'),
     PromiseWrapper = require('../utils/promises').PromiseWrapper,
     restify        = require('restify'),
     nunjucks       = require('nunjucks'),
@@ -36,6 +37,9 @@ env.addFilter('auditionLink', function(audition) {
 });
 env.addFilter('contestLink', function(contest) {
   return settings.siteUrl + '/pt-br/contest/' + contest.id + '/' + contest.slug;
+});
+env.addFilter('encryptEmail', function(user) {
+  return encrypt.encrypt(user.get('email'));
 });
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
@@ -111,12 +115,15 @@ var batchSend = function(users, subject, text, variables) {
       var emails = [];
       var recipientVariables = {};
       partition.forEach(function(user) {
-        emails.push(user.get('email'));
-        recipientVariables[user.get('email')] = {};
-        if(variables) {
-          variables.forEach(function(variable) {
-            recipientVariables[user.get('email')][variable] = user.get(variable);
-          });
+        if(user.get('emails_enabled') === 1) {
+          emails.push(user.get('email'));
+          recipientVariables[user.get('email')] = {};
+          if(variables) {
+            variables.forEach(function(variable) {
+              recipientVariables[user.get('email')][variable] = user.get(variable);
+            });
+            recipientVariables[user.get('email')]['encryptedEmail'] = encrypt.encrypt(user.get('email'));
+          }
         }
       });
       promises.push(new Promise(function(resolve, reject) {
@@ -282,7 +289,7 @@ server.post('/audition/replyComment', function(req, res, next) {
 
 server.post('/contest/inscription', function(req, res, next) {
   Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
-    return renderPromise(contestInscriptionTemplate, {contest: contest.toJSON()}).then(function(email) {
+    return renderPromise(contestInscriptionTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
       return batchSend(users, 'Você já pode se inscrever na competição do Cover Academy.', email, ['name']);
     });
   }).then(function() {
@@ -295,7 +302,7 @@ server.post('/contest/inscription', function(req, res, next) {
 
 server.post('/contest/next', function(req, res, next) {
   Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
-    return renderPromise(contestNextTemplate, {contest: contest.toJSON()}).then(function(email) {
+    return renderPromise(contestNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
       return batchSend(users, 'A competição vai começar em breve!', email, ['name']);
     });
   }).then(function() {
@@ -322,7 +329,7 @@ server.post('/contest/start', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestStartTemplate, {contest: contest.toJSON()}).then(function(email) {
+      renderPromise(contestStartTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
         return batchSend(nonContestants, 'A competição começou, apoie os competidores com o seu voto.', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest start" email to non contestant users.', err);
@@ -353,7 +360,7 @@ server.post('/contest/incentiveVote', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestIncentiveVoteTemplate, {contest: contest.toJSON(), remainingTime: remainingTime}).then(function(email) {
+      renderPromise(contestIncentiveVoteTemplate, {contest: contest.toJSON(), remainingTime: remainingTime, permitDisableEmails: true}).then(function(email) {
         return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
@@ -384,7 +391,7 @@ server.post('/contest/draw', function(req, res, next) {
     });
 
     if(!nonContestants.isEmpty()) {
-      renderPromise(contestDrawTemplate, {contest: contest.toJSON()}).then(function(email) {
+      renderPromise(contestDrawTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
         return batchSend(nonContestants, 'A competição está empatada, os competidores precisam do seu apoio!', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest draw" email to non contestant users.', err);
@@ -419,7 +426,7 @@ server.post('/contest/finish', function(req, res, next) {
     });
 
     if(!nonWinners.isEmpty()) {
-      renderPromise(contestFinishTemplate, {contest: contest.toJSON(), isContestant: false}).then(function(email) {
+      renderPromise(contestFinishTemplate, {contest: contest.toJSON(), isContestant: false, permitDisableEmails: true}).then(function(email) {
         return batchSend(nonWinners, 'A competição terminou, confira o resultado.', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest finish" email to non contestant users.', err);
@@ -441,7 +448,7 @@ server.post('/contest/join/contestantFans', function(req, res, next) {
     contest = audition.related('contest');
 
     if(!fans.isEmpty()) {
-      renderPromise(contestJoinContestantFansTemplate, {contestant: contestant.toJSON(), audition: audition.toJSON(), contest: contest.toJSON()}).then(function(email) {
+      renderPromise(contestJoinContestantFansTemplate, {contestant: contestant.toJSON(), audition: audition.toJSON(), contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
         return batchSend(fans, contestant.get('name') + ' se inscreveu na competição, mostre o seu apoio!', email, ['name']);
       }).catch(function(err) {
         logger.error('Error sending "contest join contestant fans" email to contestant %d fans.', contestant.id, err);
