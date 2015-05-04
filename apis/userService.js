@@ -157,7 +157,7 @@ exports.disconnectNetwork = function(user, network) {
   return new Promise(function(resolve, reject) {
     Bookshelf.transaction(function(transaction) {
       if(!_.contains(networksToDisconnect, network)) {
-        throw messages.apiError('user.disconnect.unsupportedNetwork', 'Disconnection with this network is not supported');
+        throw messages.apiError('user.disconnectNetwork.unsupportedNetwork', 'Disconnection with this network is not supported');
       }
       var accountAttribute = getAccountAttribute(network);
       var updatedAttributes = {}

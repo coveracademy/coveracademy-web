@@ -2,6 +2,21 @@
   "oneUser": {
     "user": [
       {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook"}
+    ],
+    "social_account": [
+      {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0}
+    ]
+  },
+  "oneUserConnectedToAllNetworks": {
+    "user": [
+      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook"}
+    ],
+    "social_account": [
+      {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0},
+      {"id": 2, "user_id": 1, "network": "twitter", "url": "sandrocsimas", "show_link": 0},
+      {"id": 3, "user_id": 1, "network": "google", "show_link": 0},
+      {"id": 4, "user_id": 1, "network": "youtube", "show_link": 0},
+      {"id": 5, "user_id": 1, "network": "soundcloud", "url": "sandro-csimas", "show_link": 0}
     ]
   },
   "twoUsersAndOneAdmin": {
@@ -9,6 +24,11 @@
       {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook", "permission": "admin"},
       {"id": 2, "name": "Pedro Forbrig", "email": "pedro@email.com", "facebook_account": "718788641524584", "profile_picture": "facebook", "permission": "user"},
       {"id": 3, "name": "Leirson Barretos", "email": "leirson@email.com", "facebook_account": "718788641524585", "profile_picture": "facebook", "permission": "user"}
+    ],
+    "social_account": [
+      {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0},
+      {"id": 2, "user_id": 2, "network": "facebook", "show_link": 0},
+      {"id": 3, "user_id": 3, "network": "facebook", "show_link": 0}
     ]
   }
 }

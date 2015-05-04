@@ -168,6 +168,167 @@ describe('userService', function() {
     });
   });
 
+  describe('#connectNetwork', function() {
+    it('should connect with twitter account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.connectNetwork(user, 'twitter', '259214308', 'https://pbs.twimg.com/profile_images/535969471265927168/G5wz_LgV.jpeg', 'sandrocsimas');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {
+        assert.strictEqual(user.get('twitter_account'), '259214308');
+        assert.strictEqual(user.get('twitter_picture'), 'https://pbs.twimg.com/profile_images/535969471265927168/G5wz_LgV.jpeg');
+        var socialAccounts = user.related('socialAccounts');
+        var twitterAccount = socialAccounts.at(1);
+        assert.strictEqual(twitterAccount.get('user_id'), 1);
+        assert.strictEqual(twitterAccount.get('network'), 'twitter');
+        assert.strictEqual(twitterAccount.get('url'), 'sandrocsimas');
+        assert.strictEqual(twitterAccount.get('show_link'), 0);
+      });
+    });
+
+    it('should connect with google account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.connectNetwork(user, 'google', '110366065118342779578', 'https://lh3.googleusercontent.com/-TAFHnODv8Cw/AAAAAAAAAAI/AAAAAAAAArA/-pg0mR1ruIk/photo.jpg');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {
+        assert.strictEqual(user.get('google_account'), '110366065118342779578');
+        assert.strictEqual(user.get('google_picture'), 'https://lh3.googleusercontent.com/-TAFHnODv8Cw/AAAAAAAAAAI/AAAAAAAAArA/-pg0mR1ruIk/photo.jpg');
+        var socialAccounts = user.related('socialAccounts');
+        var googleAccount = socialAccounts.at(1);
+        assert.strictEqual(googleAccount.get('user_id'), 1);
+        assert.strictEqual(googleAccount.get('network'), 'google');
+        assert.isNull(googleAccount.get('url'));
+        assert.strictEqual(googleAccount.get('show_link'), 0);
+      });
+    });
+
+    it('should connect with youtube account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.connectNetwork(user, 'youtube', 'UC3a55JatyJ6T2j8oQQ0kWhw');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {
+        assert.strictEqual(user.get('youtube_account'), 'UC3a55JatyJ6T2j8oQQ0kWhw');
+        var socialAccounts = user.related('socialAccounts');
+        var youtubeAccount = socialAccounts.at(1);
+        assert.strictEqual(youtubeAccount.get('user_id'), 1);
+        assert.strictEqual(youtubeAccount.get('network'), 'youtube');
+        assert.isNull(youtubeAccount.get('url'));
+        assert.strictEqual(youtubeAccount.get('show_link'), 0);
+      });
+    });
+
+    it('should connect with soundcloud account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.connectNetwork(user, 'soundcloud', '7959294', null, 'sandro-csimas');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {
+        assert.strictEqual(user.get('soundcloud_account'), '7959294');
+        var socialAccounts = user.related('socialAccounts');
+        var soundcloudAccount = socialAccounts.at(1);
+        assert.strictEqual(soundcloudAccount.get('user_id'), 1);
+        assert.strictEqual(soundcloudAccount.get('network'), 'soundcloud');
+        assert.strictEqual(soundcloudAccount.get('url'), 'sandro-csimas');
+        assert.strictEqual(soundcloudAccount.get('show_link'), 0);
+      });
+    });
+
+    it('should not connect with unknown networks', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.connectNetwork(user, 'twoo', '88462312', null, 'sandro-csimas');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.connectNetwork.unsupportedNetwork');
+      });
+    });
+  });
+
+  describe('#disconnectNetwork', function() {
+    it('should disconnect from twitter account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'twitter');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {       
+        assert.isNull(user.get('twitter_account'));
+        assert.isNull(user.get('twitter_picture'));
+        var socialAccounts = user.related('socialAccounts');
+        socialAccounts.forEach(function(socialAccount) {
+          assert.notStrictEqual(socialAccount.get('network'), 'twitter');
+        });         
+      });
+    });
+
+    it('should connect from google account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'google');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {                
+        assert.isNull(user.get('google_account'));
+        assert.isNull(user.get('google_picture'));
+        var socialAccounts = user.related('socialAccounts');
+        socialAccounts.forEach(function(socialAccount) {
+          assert.notStrictEqual(socialAccount.get('network'), 'google');
+        });
+      });
+    });
+
+    it('should connect from youtube account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'youtube');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {        
+        var socialAccounts = user.related('socialAccounts');
+        socialAccounts.forEach(function(socialAccount) {
+          assert.notStrictEqual(socialAccount.get('network'), 'youtube');
+        });
+      });
+    });
+
+    it('should connect from soundcloud account', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'soundcloud');
+      }).then(function(user) {
+        return user.fetch({withRelated: ['socialAccounts']});
+      }).then(function(user) {        
+        var socialAccounts = user.related('socialAccounts');
+        socialAccounts.forEach(function(socialAccount) {
+          assert.notStrictEqual(socialAccount.get('network'), 'soundcloud');
+        });
+      });
+    });
+
+    it('should not disconnect from unknown networks', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'twoo');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
+      });
+    });
+
+    it('should not disconnect from facebook', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});  
+        return userService.disconnectNetwork(user, 'facebook');
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
+      });
+    });
+  });
+
 
   // describe('#authenticate', function() {
   //   it('should authenticate user', function() {
