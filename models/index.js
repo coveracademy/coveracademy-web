@@ -40,7 +40,17 @@ var User = Bookshelf.Model.extend({
       'username', 
       'gender',
     ],
-    edition: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'verified']
+    edition: [
+      'name',
+      'email',
+      'username',
+      'gender',
+      'biography',
+      'city',
+      'state',
+      'profile_picture',
+      'verified'
+    ]
   }
 });
 
