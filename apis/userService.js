@@ -138,7 +138,7 @@ exports.create = function(data) {
       return $.connectNetwork(user, 'facebook', data.facebook_account, data.facebook_picture);
     }).then(function(user) {
       if(user.get('verified') === 0) {
-        $.sendVerificationEmail(user, true).catch(function(err) {
+        mailService.userVerification(user, true).catch(function(err) {
           logger.error('Error sending "user verification" email to user %d.', user.id, err);
         });
       } else {
@@ -178,7 +178,7 @@ exports.update = function(user, edited) {
       return edited.save(null, {scenario: 'edition'});
     }).then(function(userEdited) {
       if(userEdited.get('verified') === 0) {
-        $.sendVerificationEmail(userEdited).catch(function(err) {
+        mailService.userVerification(user, false).catch(function(err) {
           logger.error('Error sending "user verification" email to user %d.', userEdited.id, err);
         });
       }
@@ -247,18 +247,14 @@ exports.verifyEmail = function(token) {
   });
 };
 
-exports.sendVerificationEmail = function(user, registration) {
-  return mailService.userVerification(user, registration).catch(function(err) {
-    throw messages.apiError('user.verification.errorSendingEmail', 'Error sending verification email.');
-  });
-};
-
 exports.resendVerificationEmail = function(user) {
-  return user.fetch().then(function(userFetched) {
-    if(userFetched.get('verified') === 1) {
+  return user.fetch().then(function(user) {
+    if(user.get('verified') === 1) {
       throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
     }
-    return $.sendVerificationEmail(userFetched);
+    return mailService.userVerification(user, false).catch(function(err) {
+      throw messages.apiError('user.verification.errorSendingEmail', 'Error sending verification email.', err);
+    });
   });
 };
 
