@@ -39,7 +39,7 @@ describe('userService', function() {
         return user.fetch();
       }).then(function(user) {
         assert.strictEqual(user.get('verified'), 0);
-      });        
+      });
     });
 
     it('should not create an user when email are not provided', function() {
@@ -151,7 +151,7 @@ describe('userService', function() {
       }).then(function() {
         throw new Error('It should not update an unexistent user');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.userNotFound');
+        assert.strictEqual(err.errorKey, 'user.notFound');
       });
     });
 
@@ -163,7 +163,7 @@ describe('userService', function() {
       }).then(function() {
         throw new Error('It should not update an user with an unexistent user');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.userNotFound');
+        assert.strictEqual(err.errorKey, 'user.notFound');
       });
     });
   });
@@ -171,7 +171,7 @@ describe('userService', function() {
   describe('#connectNetwork', function() {
     it('should connect with twitter account', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+        var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'twitter', '259214308', 'https://pbs.twimg.com/profile_images/535969471265927168/G5wz_LgV.jpeg', 'sandrocsimas');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
@@ -189,7 +189,7 @@ describe('userService', function() {
 
     it('should connect with google account', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+        var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'google', '110366065118342779578', 'https://lh3.googleusercontent.com/-TAFHnODv8Cw/AAAAAAAAAAI/AAAAAAAAArA/-pg0mR1ruIk/photo.jpg');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
@@ -207,7 +207,7 @@ describe('userService', function() {
 
     it('should connect with youtube account', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+        var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'youtube', 'UC3a55JatyJ6T2j8oQQ0kWhw');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
@@ -224,7 +224,7 @@ describe('userService', function() {
 
     it('should connect with soundcloud account', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+        var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'soundcloud', '7959294', null, 'sandro-csimas');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
@@ -241,7 +241,7 @@ describe('userService', function() {
 
     it('should not connect with unknown networks', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+        var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'twoo', '88462312', null, 'sandro-csimas');
       }).catch(messages.APIError, function(err) {
         assert.strictEqual(err.errorKey, 'user.connectNetwork.unsupportedNetwork');
@@ -251,28 +251,28 @@ describe('userService', function() {
 
   describe('#disconnectNetwork', function() {
     it('should disconnect from twitter account', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'twitter');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
-      }).then(function(user) {       
+      }).then(function(user) {
         assert.isNull(user.get('twitter_account'));
         assert.isNull(user.get('twitter_picture'));
         var socialAccounts = user.related('socialAccounts');
         socialAccounts.forEach(function(socialAccount) {
           assert.notStrictEqual(socialAccount.get('network'), 'twitter');
-        });         
+        });
       });
     });
 
     it('should connect from google account', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'google');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
-      }).then(function(user) {                
+      }).then(function(user) {
         assert.isNull(user.get('google_account'));
         assert.isNull(user.get('google_picture'));
         var socialAccounts = user.related('socialAccounts');
@@ -283,12 +283,12 @@ describe('userService', function() {
     });
 
     it('should connect from youtube account', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'youtube');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
-      }).then(function(user) {        
+      }).then(function(user) {
         var socialAccounts = user.related('socialAccounts');
         socialAccounts.forEach(function(socialAccount) {
           assert.notStrictEqual(socialAccount.get('network'), 'youtube');
@@ -297,12 +297,12 @@ describe('userService', function() {
     });
 
     it('should connect from soundcloud account', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'soundcloud');
       }).then(function(user) {
         return user.fetch({withRelated: ['socialAccounts']});
-      }).then(function(user) {        
+      }).then(function(user) {
         var socialAccounts = user.related('socialAccounts');
         socialAccounts.forEach(function(socialAccount) {
           assert.notStrictEqual(socialAccount.get('network'), 'soundcloud');
@@ -311,8 +311,8 @@ describe('userService', function() {
     });
 
     it('should not disconnect from unknown networks', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'twoo');
       }).catch(messages.APIError, function(err) {
         assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
@@ -320,8 +320,8 @@ describe('userService', function() {
     });
 
     it('should not disconnect from facebook', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {
-        var user = models.User.forge({id: 1});  
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'facebook');
       }).catch(messages.APIError, function(err) {
         assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
@@ -329,135 +329,42 @@ describe('userService', function() {
     });
   });
 
+  describe('#showNetwork', function() {
+    it('should change flag to show or not facebook network link', function() {
+      var user = models.User.forge({id: 1});
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        return userService.showNetwork(user, 'facebook', true);
+      }).then(function(socialAccount) {
+        return socialAccount.fetch();
+      }).then(function(socialAccount) {
+        assert.strictEqual(socialAccount.get('network'), 'facebook');
+        assert.strictEqual(socialAccount.get('show_link'), 1);
+        return userService.showNetwork(user, 'facebook', false);
+      }).then(function(socialAccount) {
+        return socialAccount.fetch();
+      }).then(function(socialAccount) {
+        assert.strictEqual(socialAccount.get('network'), 'facebook');
+        assert.strictEqual(socialAccount.get('show_link'), 0);
+      });
+    });
 
-  // describe('#authenticate', function() {
-  //   it('should authenticate user', function() {
-  //     return datasets.load(require('./datasets/userService').authenticate).then(function() {
-  //       return userService.authenticate('sandro@email.com', '123456');
-  //     }).then(function(user) {
-  //       assert.strictEqual(user.get('first_name'), 'Sandro');
-  //       assert.strictEqual(user.get('last_name'), 'Simas');
-  //       assert.strictEqual(user.get('phone'), '+55 71 9999-9999');
-  //       assert.strictEqual(user.get('email'), 'sandro@email.com');
-  //       assert.strictEqual(user.get('password'), '$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq');
-  //     });
-  //   });
+    it('should fail when tries to show user link of a non connected network', function() {
+      var user = models.User.forge({id: 1});
+      return datasets.load(userFixtures.oneUser).then(function() {
+        return userService.showNetwork(user, 'twitter', true);
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.showNetwork.userNotConnected');
+      });
+    });
 
-  //   it('should not authenticate user when email does not exists', function() {
-  //     return datasets.load(require('./datasets/userService').authenticate).then(function() {
-  //       return userService.authenticate('sandrooooooooooo@email.com', '123456');
-  //     }).then(function(user) {
-  //       throw new Error('It should not authenticate user when email does not exists');
-  //     }).catch(messages.APIError, function(err) {
-  //       assert.strictEqual(err.errorKey, 'user.auth.emailNotFound');
-  //     });
-  //   });
-  // });
+    it('should fail when tries to show user link of an unsupported network', function() {
+      var user = models.User.forge({id: 1});
+      return datasets.load(userFixtures.oneUser).then(function() {
+        return userService.showNetwork(user, 'twoo', true);
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.showNetwork.unsupportedNetwork');
+      });
+    });
+  });
 
-  // describe('#findById', function() {
-  //   it('should load an user by id without relateds', function() {
-  //     return datasets.load(circleFixtures.circleWithOneUser).then(function() {
-  //       return userService.findById(1);
-  //     }).then(function(user) {
-  //       assert.strictEqual(user.get('first_name'), 'Sandro');
-  //       assert.strictEqual(user.get('last_name'), 'Simas');
-  //       assert.strictEqual(user.get('phone'), '+55 71 9999-9999');
-  //       assert.strictEqual(user.get('email'), 'sandro@email.com');
-  //       assert.strictEqual(user.get('password'), '$2a$10$e7kTlnUSZAXsNlwKOans3.3CEdFgZkkPB8uChMe3iWK1lYusWbwtq');
-  //       assert.strictEqual(user.get('verified'), 0);
-  //       assert.strictEqual(user.related('circlesAssociation').length, 0);
-  //       assert.strictEqual(user.related('circles').length, 0);
-  //     });
-  //   });
-
-  //   it('should load an user by id with circles and circlesAssociation', function() {
-  //     return datasets.load(circleFixtures.circleWithOneUser).then(function() {
-  //       return userService.findById(1, ['circles', 'circlesAssociation']);
-  //     }).then(function(user){
-  //       var circles = user.related('circles');
-  //       assert.strictEqual(circles.length, 1);
-  //       var circle = circles.at(0);
-  //       assert.strictEqual(circle.get('creator_id'), user.id);
-  //       assert.strictEqual(circle.get('location_mode'), 'anytime');
-  //       var circlesAssociation = user.related('circlesAssociation');
-  //       assert.strictEqual(circlesAssociation.length, 1);
-  //       var circleAssociation = circlesAssociation.at(0);
-  //       assert.strictEqual(circleAssociation.get('circle_id'), circle.id);
-  //       assert.strictEqual(circleAssociation.get('user_id'), user.id);
-  //     });
-  //   });
-  // });
-
-
-  // describe('#searchAssociatedUsers', function() {
-  //   it('should return all users associated', function() {
-  //     return datasets.load(userFixtures.fourUsersAndAssociations).bind({}).then(function() {
-  //       return userService.searchAssociatedUsers(models.User.forge({id: 1}), null, 1, 2);
-  //     }).then(function(users) {
-  //       assert.isNotNull(users);
-  //       assert.strictEqual(users.length, 2);
-  //       assert.strictEqual(users.at(0).id, 3);
-  //       assert.strictEqual(users.at(0).get('first_name'), 'Maria');
-  //       assert.strictEqual(users.at(1).id, 2);
-  //       assert.strictEqual(users.at(1).get('first_name'), 'Wesley');
-  //     });
-  //   });
-
-  //   it('should return all users associated that contains \'Mas\'', function() {
-  //     return datasets.load(userFixtures.fourUsersAndAssociations).bind({}).then(function() {
-  //       return userService.searchAssociatedUsers(models.User.forge({id: 1}), 'Mas', 1, 2);
-  //     }).then(function(users) {
-  //       assert.isNotNull(users);
-  //       assert.strictEqual(users.length, 1);
-  //       assert.strictEqual(users.at(0).id, 2);
-  //     });
-  //   });
-  // });
-
-  // describe('#associateUsers', function() {
-  //   it('should update registration_date when association already exists', function() {
-  //     return datasets.load(userFixtures.fourUsersAndAssociations).then(function() {
-  //       var user = models.User.forge({id: 1});
-  //       var relatedUser = models.User.forge({id: 2});
-  //       return userService.associateUsers(user, relatedUser);
-  //     }).then(function() {
-  //       var firstAssociation = models.UserAssociation.forge({user_id: 1, related_id: 2});
-  //       var secondAssociation = models.UserAssociation.forge({user_id: 2, related_id: 1});
-  //       return Promise.all([firstAssociation.fetch(), secondAssociation.fetch()]);
-  //     }).spread(function(firstAssociation, secondAssociation) {
-  //       var date = new Date(2015, 3, 9, 10, 12, 20, 0);
-  //       assert.isAbove(firstAssociation.get('registration_date').getTime(), date.getTime());
-  //       assert.isAbove(secondAssociation.get('registration_date').getTime(), date.getTime());
-  //     });
-  //   });
-
-  //   it('should associate users successfully', function() {
-  //     return datasets.load(userFixtures.fourUsersAndAssociations).then(function() {
-  //       var user = models.User.forge({id: 1});
-  //       var relatedUser = models.User.forge({id: 4});
-  //       return userService.associateUsers(user, relatedUser);
-  //     }).then(function() {
-  //       var firstAssociation = models.UserAssociation.forge({user_id: 1, related_id: 4});
-  //       var secondAssociation = models.UserAssociation.forge({user_id: 4, related_id: 1});
-  //       return Promise.all([firstAssociation.fetch(), secondAssociation.fetch()]);
-  //     }).spread(function(firstAssociation, secondAssociation) {
-  //       assert.isNotNull(firstAssociation);
-  //       assert.isNotNull(secondAssociation);
-  //     });
-  //   });
-
-  //   it('should not associate an unexistent user', function() {
-  //     return datasets.load(userFixtures.fourUsersAndAssociations).then(function() {
-  //       var user = models.User.forge({id: 1});
-  //       var relatedUser = models.User.forge({id: 4000});
-  //       return userService.associateUsers(user, relatedUser);
-  //     }).then(function() {
-  //       throw new Error('It is not correct associate an unexistent user');
-  //     }).catch(messages.APIError, function(err) {
-  //       assert.strictEqual(err.statusCode, 400);
-  //       assert.strictEqual(err.cause.code, 'ER_NO_REFERENCED_ROW_');
-  //       assert.strictEqual(err.errorKey, 'user.association.errorAssociating');
-  //     });
-  //   });
-  // });
 });

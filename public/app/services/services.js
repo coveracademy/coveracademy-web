@@ -310,7 +310,6 @@ angular
     'user.verification.emailAlreadyVerified': 'errors.user_verification_email_already_verified',
     'user.verification.errorSendingEmail': 'errors.user_verification_error_sending_verification_email',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
-    'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
     'status.400': 'errors.unexpected_error',
     'status.401': 'errors.authentication_required',
@@ -323,7 +322,7 @@ angular
       if(isError) {
         translationKey = errorKeys['status.' + err.status];
       } else {
-        translationKey = errorKeys['internalError'];
+        translationKey = errorKeys['unexpectedError'];
       }
     }
     var deferred = $q.defer();

@@ -1,14 +1,13 @@
 'use strict'
 
-var settings        = require('../../configs/settings'),
-    util            = require('util'),
-    ValidationError = require('bookshelf-filteration').ValidationError;
+var settings    = require('../../configs/settings'),
+    util        = require('util'),
+    Filteration = require('bookshelf-filteration');
 
 function APIError(statusCode, errorKey, errorMessage, cause) {
   if (APIError.super_.captureStackTrace) {
     APIError.super_.captureStackTrace(this, this.constructor);
   }
-
   this.name = this.constructor.name;
   this.statusCode = statusCode;
   this.errorKey = errorKey;
@@ -29,11 +28,16 @@ function APIError(statusCode, errorKey, errorMessage, cause) {
 }
 util.inherits(APIError, Error);
 
+function NotFoundError(errorKey, errorMessage, cause) {
+  NotFoundError.super_.call(this, 404, errorKey, errorMessage, cause);
+}
+util.inherits(NotFoundError, APIError);
+
 function getErrorKey(err) {
   if(err instanceof APIError) {
     return err.errorKey;
   } else {
-    return 'internalError';
+    return 'unexpectedError';
   }
 }
 
@@ -45,32 +49,26 @@ function apiError(errorKey, errorMessage, cause) {
   return new APIError(400, errorKey, errorMessage, cause);
 }
 
-function apiErrorWithCode(statusCode, errorKey, errorMessage, cause) {
-  return new APIError(statusCode, errorKey, errorMessage, cause);
+function unexpectedError(errorKey, errorMessage, cause) {
+  return apiError(500, errorMessage, cause);
 }
 
-function unexpectedError(errorMessage, cause) {
-  return apiError('unexpectedError', errorMessage, cause);
-}
-
-function internalError(errorMessage, cause) {
-  return apiErrorWithCode(500, 'internalError', errorMessage, cause);
+function notFoundError(errorKey, errorMessage, cause) {
+  return new NotFoundError(errorKey, errorMessage, cause);
 }
 
 function validationError(prefix, err) {
-  if(err instanceof ValidationError) {
+  if(err instanceof Filteration.ValidationError) {
     var error = null;
     var firstError = err.errors[0];
-    if(firstError.type === 'scenario.notfound') {
-      error = internalError(firstError.messages[0], err);
-    } else if(firstError.type === 'nothingToSave') {
+    if(firstError.type === 'scenario.notfound' || firstError.type === 'nothingToSave') {
       error = apiError(prefix + '.' + firstError.type, firstError.messages[0], err);
     } else {
       error = apiError(prefix + '.' + firstError.attribute + '.' + firstError.type, firstError.messages[0], err);
     }
     return error;
   } else {
-    return unexpectedError('', err);
+    return apiError(prefix + '.validationError', null, err);
   }
 }
 
@@ -99,13 +97,13 @@ module.exports = {
   getErrorKey: getErrorKey,
   isErrorKey: isErrorKey,
   apiError: apiError,
-  apiErrorWithCode: apiErrorWithCode,
   unexpectedError: unexpectedError,
-  internalError: internalError,
   validationError: validationError,
+  notFoundError: notFoundError,
   respondWithError: respondWithError,
   respondWithNotFound: respondWithNotFound,
   respondWithMovedPermanently: respondWithMovedPermanently,
   respondWithRedirection: respondWithRedirection,
-  APIError: APIError
+  APIError: APIError,
+  NotFoundError: NotFoundError
 }

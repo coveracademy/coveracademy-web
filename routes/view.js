@@ -6,9 +6,9 @@ var coverService    = require('../apis/coverService'),
     constants       = require('../apis/internal/constants'),
     messages        = require('../apis/internal/messages'),
     logger          = require('../configs/logger'),
-    math            = require('../utils/math'),
     authorization   = require('../utils/authorization'),
     Promise         = require('bluebird'),
+    _               = require('underscore'),
     isAdmin         = authorization.isAdmin,
     isAuthenticated = authorization.isAuthenticated,
     isTemporaryUser = authorization.isTemporaryUser;
@@ -112,7 +112,7 @@ module.exports = function(router, app) {
       this.bestCovers = bestCovers;
       this.latestCovers = latestCovers;
       this.musicGenres = musicGenres;
-      var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
+      var musicGenre = musicGenres.at(_.random(0, musicGenres.size() - 1));
       return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
     }).then(function(bestArtistsOfMusicGenre) {
       res.json({

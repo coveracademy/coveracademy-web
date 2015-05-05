@@ -80,19 +80,19 @@ exports.create = function(data) {
     }).catch(ValidationError, function(err) {
       reject(messages.validationError('user.new', err));
     }).catch(function(err) {
-      reject(messages.apiError('user.new.error', 'Error creating user account.', err));
+      reject(messages.unexpectedError('user.new.error', 'Error creating user account.', err));
     });
   });
 };
 
 exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
-    Promise.all([$.findById(user.id), $.findById(edited.id)]).spread(function(userFetched, editedFetched) {      
+    Promise.all([$.findById(user.id), $.findById(edited.id)]).spread(function(userFetched, editedFetched) {
       if(userFetched.id !== editedFetched.id && userFetched.get('permission') !== 'admin') {
         throw messages.apiError('user.update.noPermission', 'The user account cannot be updated because user has no permission.');
       }
       return editedFetched;
-    }).then(function(editedFetched) {      
+    }).then(function(editedFetched) {
       if(editedFetched.get('username') && editedFetched.get('username') !== edited.get('username')) {
         throw messages.apiError('user.update.username.cannotEditAnymore', 'The user can not update username anymore.');
       }
@@ -111,10 +111,8 @@ exports.update = function(user, edited) {
       reject(err);
     }).catch(ValidationError, function(err) {
       reject(messages.validationError('user.update', err));
-    }).catch(NotFoundError, function(err) {
-      reject(messages.apiError('user.update.userNotFound', 'User not found', err));      
     }).catch(function(err) {
-      reject(messages.apiError('user.update.error', 'Error updating user account,', err));
+      reject(messages.unexpectedError('user.update.error', 'Error updating user account,', err));
     });
   });
 };
@@ -148,7 +146,7 @@ exports.connectNetwork = function(user, network, account, picture, url) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.apiError('user.connectNetwork.error', 'Error connecting user with network.', err));
+      reject(messages.unexpectedError('user.connectNetwork.error', 'Error connecting user with network.', err));
     });
   });
 };
@@ -180,42 +178,58 @@ exports.disconnectNetwork = function(user, network) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.apiError('user.disconnectNetwork.error', 'Error disconnecting user of network.', err));
+      reject(messages.unexpectedError('user.disconnectNetwork.error', 'Error disconnecting user of network.', err));
     });
   });
 };
 
 exports.showNetwork = function(user, network, show) {
-  return SocialAccount.forge({user_id: user.id, network: network}).fetch().then(function(socialAccount) {
-    if(socialAccount) {
-      return socialAccount.save({show_link: show === true ? 1 : 0}, {patch: true});      
-    } else {
+  return new Promise(function(resolve, reject) {
+    if(!_.contains(networksToConnect, network)) {
+      reject(messages.apiError('user.showNetwork.unsupportedNetwork', 'This network is not supported.'));
       return;
     }
+    SocialAccount.forge({user_id: user.id, network: network}).fetch({require: true}).then(function(socialAccount) {
+      return socialAccount.save({show_link: show === true ? 1 : 0}, {patch: true});
+    }).then(function(socialAccount) {
+      resolve(socialAccount);
+    }).catch(NotFoundError, function(err) {
+      reject(messages.notFoundError('user.showNetwork.userNotConnected', 'The user is not connected to this network', err));
+    }).catch(function(err) {
+      reject(messages.unexpectedError('user.showNetwork.error', 'Error setting network to show user link.', err));
+    });
   });
 };
 
 exports.findById = function(id, relations) {
-  return User.forge({id: id}).fetch(getFindUserOptions(relations));
+  return User.forge({id: id}).fetch(getFindUserOptions(relations)).catch(NotFoundError, function(err) {
+    throw messages.notFoundError('user.notFound', 'User not found', err);
+  });
 };
 
 exports.findByEmail = function(email, relations) {
-  return User.forge({email: email}).fetch(getFindUserOptions(relations));
+  return User.forge({email: email}).fetch(getFindUserOptions(relations)).catch(NotFoundError, function(err) {
+    throw messages.notFoundError('user.notFound', 'User not found', err);
+  });
 };
 
 exports.findByUsername = function(username, relations) {
-  return User.forge({username: username}).fetch(getFindUserOptions(relations));
+  return User.forge({username: username}).fetch(getFindUserOptions(relations)).catch(NotFoundError, function(err) {
+    throw messages.notFoundError('user.notFound', 'User not found', err);
+  });
 };
 
 exports.findBySocialAccount = function(network, account, relations) {
   if(!_.contains(networksToConnect, network)) {
-    reject(messages.apiError('user.find.unsupportedNetwork', 'Network is not supported.'));
+    reject(messages.apiError('user.find.unsupportedNetwork', 'This network is not supported.'));
   }
   var accountAttribute = getAccountAttribute(network);
   if(accountAttribute) {
     var search = {};
     search[accountAttribute] = account;
-    return User.forge(search).fetch(getFindUserOptions(relations));
+    return User.forge(search).fetch(getFindUserOptions(relations)).catch(NotFoundError, function(err) {
+      throw messages.notFoundError('user.notFound', 'User not found', err);
+    });
   } else {
     return Promise.resolve();
   }
@@ -253,7 +267,7 @@ exports.resendVerificationEmail = function(user) {
       throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
     }
     return mailService.userVerification(user, false).catch(function(err) {
-      throw messages.apiError('user.verification.errorSendingEmail', 'Error sending verification email.', err);
+      throw messages.unexpectedError('user.verification.errorSendingEmail', 'Error sending verification email.', err);
     });
   });
 };
@@ -302,7 +316,7 @@ exports.fan = function(userFan, user) {
       if(err.code === 'ERR_DUP_ENTRY') {
         resolve(this.fan);
       } else {
-        reject(messages.apiError('user.fan.error', 'Error adding user as a fan.', err));
+        reject(messages.unexpectedError('user.fan.error', 'Error adding user as a fan.', err));
       }
     });
   });

@@ -91,7 +91,7 @@ exports.listRunningContests = function() {
   }).fetch();
 };
 
-var getPotentialWinners = function(contest) {
+var listPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
     var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');
     var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).groupBy('audition_id');
@@ -111,7 +111,6 @@ var getPotentialWinners = function(contest) {
         potentialWinner.set('place', place);
         previousWinner = potentialWinner;
       });
-
       resolve(potentialWinners);
     }).catch(function(err) {
       reject(err)
@@ -120,7 +119,7 @@ var getPotentialWinners = function(contest) {
 };
 
 var chooseWinners = function(contest, transaction) {
-  return getPotentialWinners(contest).then(function(potentialWinners) {
+  return listPotentialWinners(contest).then(function(potentialWinners) {
     var savePromises = [];
     potentialWinners.forEach(function(winner) {
       winner.unset('score')
@@ -155,7 +154,7 @@ exports.finishContest = function(contest) {
     if(new Date() < contest.get('end_date')) {
       throw messages.apiError('contest.notReadyToFinish', 'The contest is not ready to finish');
     }
-    return getPotentialWinners(contest).then(function(potentialWinners) {
+    return listPotentialWinners(contest).then(function(potentialWinners) {
       if(hasDraw(potentialWinners)) {
         contest.set('end_date', moment(contest.get('end_date')).add(constants.HOURS_TO_ADD_WHEN_CONTEST_DRAW, 'hours').toDate());
         contest.set('draw', 1);
@@ -186,6 +185,56 @@ exports.finishContest = function(contest) {
   });
 };
 
+var startContestNow = function(contest) {
+  return new Promise(function(resolve, reject) {
+    contest.set('progress', 'running');
+    contest.save({progress: contest.get('progress')}, {patch: true}).then(function(contestSaved) {
+      mailService.contestStart(contest).catch(function(err) {
+        logger.error('Error sending "contest start" email.', err);
+      });
+      mailService.scheduleIncentiveVote(contest).catch(function(err) {
+        logger.error('Error scheduling "contest incentive vote" emails.', err);
+      });
+      mailService.scheduleContestJoinFans(contest).catch(function(err) {
+        logger.error('Error scheduling "contest join fans" emails.', err);
+      });
+      resolve(contest);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+};
+
+var prepareContest = function(contest) {
+  return new Promise(function(resolve, reject) {
+    var now = new Date();
+    var momentToStart = moment(now);
+    var foundTimeToStart = constants.TIMES_TO_START_THE_CONTEST.some(function(hourToStart) {
+      if(momentToStart.hour() < hourToStart) {
+        momentToStart.hour(hourToStart);
+        return true;
+      } else {
+        return false;
+      }
+    });
+    if(foundTimeToStart === false) {
+      momentToStart.add(1, 'days').hour(constants.TIMES_TO_START_THE_CONTEST[0]);
+    }
+    contest.set('start_date', momentToStart.minute(0).second(0).millisecond(0).toDate());
+    contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hour(constants.TIME_TO_FINISH_THE_CONTEST).minute(0).second(0).millisecond(0).toDate());
+    contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
+      if(now < contest.get('start_date')) {
+        mailService.contestNext(contest).catch(function(err) {
+          logger.error('Error sending "contest next" email.', err);
+        });
+      }
+      resolve(contest);
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+};
+
 exports.startContest = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.get('progress') === 'waiting') {
@@ -195,57 +244,22 @@ exports.startContest = function(contest) {
         var now = new Date();
         if(totalAuditions >= contest.get('minimum_contestants')) {
           if(start && end && now >= start) {
-            contest.set('progress', 'running');
-            contest.save({progress: contest.get('progress')}, {patch: true}).then(function(contestSaved) {
-              mailService.contestStart(contest).catch(function(err) {
-                logger.error('Error sending "contest start" email.', err);
-              });
-              mailService.scheduleIncentiveVote(contest).catch(function(err) {
-                logger.error('Error scheduling "contest incentive vote" emails.', err);
-              });
-              mailService.scheduleContestJoinFans(contest).catch(function(err) {
-                logger.error('Error scheduling "contest join fans" emails.', err);
-              });
-              resolve(contest);
-            }).catch(function(err) {
-              reject(messages.unexpectedError('Error starting the contest', err));
-            });
+            return startContestNow(contest);
           } else if(!start || now >= start) {
-            var momentToStart = moment(now);
-            var foundTimeToStart = constants.TIMES_TO_START_THE_CONTEST.some(function(hourToStart) {
-              if(momentToStart.hour() < hourToStart) {
-                momentToStart.hour(hourToStart);
-                return true;
-              } else {
-                return false;
-              }
-            });
-            if(foundTimeToStart === false) {
-              momentToStart.add(1, 'days').hour(constants.TIMES_TO_START_THE_CONTEST[0]);
-            }
-            contest.set('start_date', momentToStart.minute(0).second(0).millisecond(0).toDate());
-            contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hour(constants.TIME_TO_FINISH_THE_CONTEST).minute(0).second(0).millisecond(0).toDate());
-            contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
-              resolve(contest);
-              if(now < contest.get('start_date')) {
-                mailService.contestNext(contest).catch(function(err) {
-                  logger.error('Error sending "contest next" email.', err);
-                });
-              }
-            }).catch(function(err) {
-              reject(messages.unexpectedError('Error starting the contest', err));
-            });
+            return prepareContest(contest);
           }
         } else {
-          reject(messages.apiError('contest.notReady', 'The contest is not ready to start'));
+          throw messages.apiError('contest.start.notReady', 'The contest is not ready to start.');
         }
+      }).then(function(contest) {
+        resolve(contest);
       }).catch(function(err) {
-        reject(messages.unexpectedError('Error starting the contest', err));
+        reject(messages.unexpectedError('contest.start.error', 'Error starting the contest.', err));
       });
     } else if(contest.get('progress') === 'running') {
-      reject(messages.apiError('contest.alreadyStarted', 'The contest was already started'));
+      reject(messages.apiError('contest.start.alreadyStarted', 'The contest was already started.'));
     } else {
-      reject(messages.apiError('contest.alreadyFinished', 'The contest was already finished'));
+      reject(messages.apiError('contest.start.alreadyFinished', 'The contest was already finished.'));
     }
   });
 };
@@ -292,11 +306,30 @@ exports.submitAudition = function(user, contest, auditionData) {
       if(err.code === 'ER_DUP_ENTRY') {
         reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
       } else {
-        reject(messages.unexpectedError('Error submitting audition', err));
+        reject(messages.unexpectedError('contest.join.error', 'Error submitting audition', err));
       }
     });
   });
 };
+
+var afterAuditionApproval = function(audition) {
+  return $.getContestFromAudition(audition).then(function(contest) {
+    if(contest.get('progress') === 'waiting') {
+      // When an audition is approved, we try to start the contest
+      return $.startContest(contest);
+    } else if(contest.get('progress') === 'running') {
+      // If the contest is already running, we send emails to user fans
+      var contestant = audition.related('user');
+      mailService.contestJoinContestantFans(contestant, contest).catch(function(err) {
+        logger.error('Error sending "contest join contestant fans" emails to contestant %d fans.', contestant.id, err);
+      });
+      return null;
+    } else {
+      // Nothing to do
+      return null;
+    }
+  });
+}
 
 exports.approveAudition = function(audition) {
   return new Promise(function(resolve, reject) {
@@ -311,30 +344,16 @@ exports.approveAudition = function(audition) {
         return this.audition;
       });
     }).then(function(audition) {
-      resolve(audition);
       // When an audition is approved, an email is sent to audition's owner
       mailService.auditionApproved(audition).catch(function(err) {
         logger.error('Error sending "audition approved" email to audition %d owner.', audition.id, err);
       });
-      $.getContestFromAudition(audition).then(function(contest) {
-        if(contest.get('progress') === 'waiting') {
-          // When an audition is approved, we try to start the contest
-          return $.startContest(contest);
-        } else {
-          // When the contest is running, we send emails to user fans
-          if(contest.get('progress') === 'running') {
-            var contestant = audition.related('user');
-            mailService.contestJoinContestantFans(contestant, contest).catch(function(err) {
-              logger.error('Error sending "contest join contestant fans" emails to contestant %d fans.', contestant.id, err);
-            });
-          }
-          return null;
-        }
-      }).catch(function(err) {
+      afterAuditionApproval(audition).catch(function(err) {
         // Ignore
       });
+      resolve(audition);
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error approving audition', err));
+      reject(messages.unexpectedError('audition.approve.error', 'Error approving audition', err));
     });
   });
 };
@@ -355,7 +374,7 @@ exports.disapproveAudition = function(audition, reason) {
       });
       resolve();
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error disapproving audition', err));
+      reject(messages.unexpectedError('audition.disapprove.error', 'Error disapproving audition', err));
     });
   });
 };
@@ -673,7 +692,7 @@ exports.vote = function(user, audition) {
       if(err.code === 'ER_DUP_ENTRY') {
         reject(messages.apiError('audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
       } else {
-        reject(messages.unexpectedError('Error voting in audition', err));
+        reject(messages.unexpectedError('audition.vote.error', 'Error voting in audition', err));
       }
     });
   });
@@ -683,7 +702,7 @@ exports.removeVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
     UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch(userVoteWithAuditionAndContestRelated).then(function(userVote) {
       if(!userVote) {
-        throw messages.apiError('audition.vote.userHasNotVoted', 'The user has not voted');
+        throw messages.apiError('audition.removeVote.userHasNotVoted', 'The user has not voted');
       }
       if(userVote.related('audition').related('contest').get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
@@ -697,7 +716,7 @@ exports.removeVote = function(user, audition) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error removing vote in audition', err));
+      reject(messages.unexpectedError('audition.removeVote.error', 'Error removing vote from audition', err));
     });
   });
 };
@@ -725,7 +744,7 @@ exports.comment = function(user, audition, message) {
       return Promise.all([message, $.loadAudition(audition, [])]);
     }).spread(function(message, audition) {
       if(audition.get('approved') === 0) {
-        throw messages.apiError('audition.comment.auditionNotApproved', 'The user can not comment in audition not approved');
+        throw messages.apiError('audition.comment.auditionNotApproved', 'The user can not comment in audition not approved.');
       }
       var comment = UserComment.forge({user_id: user.id, audition_id: audition.id, message: message});
       return comment.save();
@@ -739,7 +758,7 @@ exports.comment = function(user, audition, message) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error commenting in audition', err));
+      reject(messages.unexpectedError('audition.comment.error', 'Error commenting in audition.', err));
     });
   });
 };
@@ -749,7 +768,7 @@ exports.replyComment = function(user, commentId, message) {
     Promise.resolve().then(function() {
       message = formatComment(message);
       if(message === '') {
-        throw messages.apiError('audition.comment.empty', 'The comment message can not be empty');
+        throw messages.apiError('audition.comment.empty', 'The comment message can not be empty.');
       }
       return $.getComment(commentId);
     }).then(function(comment) {
@@ -765,7 +784,7 @@ exports.replyComment = function(user, commentId, message) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('Error replying comment in audition', err));
+      reject(messages.unexpectedError('audition.comment.error', 'Error replying comment in audition', err));
     });
   });
 };
