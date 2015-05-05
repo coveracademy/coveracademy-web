@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var coverService    = require('../apis/coverService'),
     contestService  = require('../apis/contestService'),

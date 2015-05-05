@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var userService        = require('../apis/userService'),
     mailService        = require('../apis/internal/mailService'),

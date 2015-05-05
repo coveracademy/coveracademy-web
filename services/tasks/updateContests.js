@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var contestService = require('../../apis/contestService'),
     messages       = require('../../apis/internal/messages'),
