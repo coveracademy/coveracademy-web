@@ -303,7 +303,7 @@ exports.submitAudition = function(user, contest, auditionData) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      if(err.code === 'ER_DUP_ENTRY') {
+      if(messages.isDupEntryError(err) === true) {
         reject(messages.apiError('contest.join.userAlreadyInContest', 'The user is already in contest', err));
       } else {
         reject(messages.unexpectedError('contest.join.error', 'Error submitting audition', err));
@@ -689,7 +689,7 @@ exports.vote = function(user, audition) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      if(err.code === 'ER_DUP_ENTRY') {
+      if(messages.isDupEntryError(err) === true) {
         reject(messages.apiError('audition.vote.userAlreadyVoted', 'The user already voted in audition', err));
       } else {
         reject(messages.unexpectedError('audition.vote.error', 'Error voting in audition', err));

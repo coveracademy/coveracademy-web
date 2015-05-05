@@ -527,4 +527,78 @@ describe('userService', function() {
       });
     });
   });
+
+  describe('#disableEmails', function() {
+    it('should set emails_enabled to false', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {        
+        return userService.disableEmails('27e77df78e9459c4a918ca3a40961ba3');
+      }).then(function(user) {
+        assert.strictEqual(user.get('emails_enabled'), 0);
+      });
+    });
+
+    it('should fail when user was not found', function() {
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        return userService.disableEmails('27e77df78e9459e12h31nk3j12');
+      }).catch(messages.NotFoundError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.notFound');
+      });
+    });
+  });
+
+  describe('#listUsers', function() {
+    it('should return all users in database', function() {
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {        
+        return userService.listUsers();
+      }).then(function(users) {
+        assert.strictEqual(users.size(), 3);
+        assert.strictEqual(users.at(0).get('name'), 'Sandro Simas');
+        assert.strictEqual(users.at(1).get('name'), 'Pedro Forbrig');
+        assert.strictEqual(users.at(2).get('name'), 'Leirson Barretos');
+      });
+    });
+  });
+
+  describe('#fan', function() {
+    it('should turn an user into a fan', function() {
+      var now = moment().millisecond(0).toDate();
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
+        var user = models.User.forge({id: 1});
+        var fan = models.User.forge({id: 2});
+        return userService.fan(fan, user);
+      }).then(function(userFan) {
+        return userFan.fetch();
+        assert.strictEqual(userFan.get('user_id'), 1);
+        assert.strictEqual(userFan.get('fan_id'), 2);
+        assert.isTrue(userFan.get('registration_date').getTime() === now.getTime() || userFan.get('registration_date').getTime() > now.getTime());
+      });
+    });
+
+    it('should ignore error when tries to fan the same user twice', function() {
+      var now = moment().millisecond(0).toDate();
+      var user = models.User.forge({id: 1});
+      var fan = models.User.forge({id: 2});
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
+        return userService.fan(fan, user);
+      }).then(function(userFan) {
+        return userService.fan(fan, user);
+      }).then(function(userFan) {
+        return userFan.fetch();
+        assert.strictEqual(userFan.get('user_id'), 1);
+        assert.strictEqual(userFan.get('fan_id'), 2);
+        assert.isTrue(userFan.get('registration_date').getTime() === now.getTime() || userFan.get('registration_date').getTime() > now.getTime());
+      });
+    });
+
+    it('should fail when tries to fan yourself', function() {
+      var now = moment().millisecond(0).toDate();
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
+        var user = models.User.forge({id: 1});
+        var fan = models.User.forge({id: 1});
+        return userService.fan(fan, user);
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.fan.canNotFanYourself');
+      });
+    });
+  });
 });

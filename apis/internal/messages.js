@@ -45,12 +45,16 @@ function isErrorKey(err, key) {
   return key === getErrorKey(err);
 }
 
+function isDupEntryError(err) {
+  return err.code === 'ER_DUP_ENTRY';
+}
+
 function apiError(errorKey, errorMessage, cause) {
   return new APIError(400, errorKey, errorMessage, cause);
 }
 
 function unexpectedError(errorKey, errorMessage, cause) {
-  return apiError(500, errorMessage, cause);
+  return new APIError(500, errorKey, errorMessage, cause);
 }
 
 function notFoundError(errorKey, errorMessage, cause) {
@@ -96,6 +100,7 @@ function respondWithRedirection(toView, toParams, res) {
 module.exports = {
   getErrorKey: getErrorKey,
   isErrorKey: isErrorKey,
+  isDupEntryError: isDupEntryError,
   apiError: apiError,
   unexpectedError: unexpectedError,
   validationError: validationError,

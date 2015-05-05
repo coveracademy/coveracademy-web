@@ -276,7 +276,7 @@ exports.resendVerificationEmail = function(user) {
   });
 };
 
-exports.listAllUsers = function() {
+exports.listUsers = function() {
   return User.collection().fetch();
 };
 
@@ -303,22 +303,22 @@ exports.isFan = function(fan, user) {
   }
 };
 
-exports.fan = function(userFan, user) {
+exports.fan = function(fan, user) {
   return new Promise(function(resolve, reject) {
     Promise.resolve().bind({}).then(function() {
-      if(userFan.id === user.id) {
+      if(fan.id === user.id) {
         throw messages.apiError('user.fan.canNotFanYourself', 'You can not fan yourself.');
       }
-      var fan = UserFan.forge({user_id: user.id, fan_id: userFan.id});
-      this.fan = fan;
-      return fan.save();
-    }).then(function(fan) {
-      resolve(fan);
+      var userFan = UserFan.forge({user_id: user.id, fan_id: fan.id});
+      this.userFan = userFan;
+      return userFan.save();
+    }).then(function(userFan) {
+      resolve(userFan);
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      if(err.code === 'ERR_DUP_ENTRY') {
-        resolve(this.fan);
+      if(messages.isDupEntryError(err) === true) {
+        resolve(this.userFan);
       } else {
         reject(messages.unexpectedError('user.fan.error', 'Error adding user as a fan.', err));
       }
