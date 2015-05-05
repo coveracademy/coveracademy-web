@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 angular
 .module('coverAcademy.providers', [])
@@ -148,7 +148,6 @@ angular
         congratulations_now_you_are_in_the_contest: 'Congratulations, now you are in the contest. Good luck!',
         email_verified: 'Your email was verified successfully, now you can vote and enter the contest.',
         emails_disabled: 'You disable peridic emails from Cover Academy.',
-        emails_disabled: 'You disable peridic emails from Cover Academy.',
         login_failed: 'Error authenticating, please try again.',
         login_success: 'You are authenticated now.',
         no_i_want_to_use_another_email: 'No, i want to use another email!',
@@ -249,7 +248,7 @@ angular
         social_networks: 'Social networks',
         sponsor: 'Sponsor',
         support: 'Support',
-        terms_of_use: 'Terms of use',
+        terms_of_use: 'Terms of use'
       },
       music_genre: {
         acoustic: 'Acoustic',
@@ -546,7 +545,7 @@ angular
         social_networks: 'Redes sociais',
         sponsor: 'Patrocínio',
         support: 'Suporte',
-        terms_of_use: 'Termos de uso',
+        terms_of_use: 'Termos de uso'
       },
       music_genre: {
         acoustic: 'Acústico',

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var properties = require('./properties'),
     logger     = require('./logger'),
