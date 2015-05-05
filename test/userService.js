@@ -6,8 +6,11 @@ var userService    = require('../apis/userService'),
     userFixtures   = require('./datasets/userService'),
     Promise        = require('bluebird'),
     moment         = require('moment'),
+    nock           = require('nock'),
     assert         = require('chai').assert,
     Bookshelf      = models.Bookshelf;
+
+var postmanUrl = 'http://localhost:5000';
 
 describe('userService', function() {
   beforeEach(function() {
@@ -372,12 +375,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findById(1);
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.id, 1);
         assert.deepEqual(user.relations, {});
       });
     });
@@ -386,12 +384,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findById(1, true);
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.id, 1);
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -410,12 +403,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByEmail('sandro@email.com');
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('email'), 'sandro@email.com');        
         assert.deepEqual(user.relations, {});
       });
     });
@@ -424,12 +412,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByEmail('sandro@email.com', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('email'), 'sandro@email.com');        
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -448,12 +431,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByUsername('sandro.csimas');
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('username'), 'sandro.csimas');        
         assert.deepEqual(user.relations, {});
       });
     });
@@ -462,12 +440,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByUsername('sandro.csimas', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '718788641524583');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('username'), 'sandro.csimas');        
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -486,12 +459,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findBySocialAccount('twitter', '259214308');
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('twitter_account'), '259214308');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('twitter_account'), '259214308');        
         assert.deepEqual(user.relations, {});
       });
     });
@@ -500,12 +468,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findBySocialAccount('twitter', '259214308', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('name'), 'Sandro Simas');
-        assert.strictEqual(user.get('username'), 'sandro.csimas');
-        assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('twitter_account'), '259214308');
-        assert.strictEqual(user.get('profile_picture'), 'facebook');
-        assert.strictEqual(user.get('verified'), 0);
+        assert.strictEqual(user.get('twitter_account'), '259214308');        
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -515,6 +478,52 @@ describe('userService', function() {
         return userService.findBySocialAccount('twitter', '25921450000000', true);
       }).catch(messages.NotFoundError, function(err) {
         assert.strictEqual(err.errorKey, 'user.notFound');
+      });
+    });
+  });
+
+  describe('#verifyEmail', function() {
+    it('should set verified to true', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {        
+        return userService.verifyEmail('27e77df78e9459c4a918ca3a40961ba3');
+      }).then(function(user) {
+        assert.strictEqual(user.get('verified'), 1);
+      });
+    });
+
+    it('should fail when user was not found', function() {
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        return userService.verifyEmail('27e77df78e9459e12h31nk3j12');
+      }).catch(messages.NotFoundError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.notFound');
+      });
+    });
+  });
+
+  describe('#resendVerificationEmail', function() {
+    it('should resend verification email when user is not verified', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 1});
+        nock(postmanUrl).post('/user/verification', {user: 1, registration: false}).reply(200);
+        return userService.resendVerificationEmail(user);
+      });
+    });
+
+    it('should fail tries to resend verification email to an unexistent user', function() {
+      return datasets.load(userFixtures.oneUser).then(function() {
+        var user = models.User.forge({id: 2});
+        return userService.resendVerificationEmail(user);
+      }).catch(messages.NotFoundError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.notFound');
+      });
+    });
+
+    it('should fail tries to resend verification email to an already verified user', function() {
+      return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
+        var user = models.User.forge({id: 1});
+        return userService.resendVerificationEmail(user);
+      }).catch(messages.APIError, function(err) {
+        assert.strictEqual(err.errorKey, 'user.verification.emailAlreadyVerified');
       });
     });
   });

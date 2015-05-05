@@ -125,16 +125,13 @@ exports.connectNetwork = function(user, network, account, picture, url) {
         throw messages.apiError('user.connectNetwork.unsupportedNetwork', 'Connection with this network is not supported.');
       }
       var updatedAttributes = {};
-      user.set(accountAttribute, account);
-      updatedAttributes[accountAttribute] = user.get(accountAttribute);
+      updatedAttributes[accountAttribute] = account;
       var pictureAttribute = getPictureAttribute(network);
       if(pictureAttribute) {
-        user.set(pictureAttribute, picture);
-        updatedAttributes[pictureAttribute] = user.get(pictureAttribute);
+        updatedAttributes[pictureAttribute] = picture
       }
       if(!user.get('profile_picture')) {
-        user.set('profile_picture', 'facebook');
-        updatedAttributes['profile_picture'] = user.get('profile_picture');
+        updatedAttributes['profile_picture'] = 'facebook'
       }
       return user.save(updatedAttributes, {patch: true, transacting: transaction}).then(function(user) {
         var socialAccount = SocialAccount.forge({user_id: user.id, network: network, url: url, show_link: 0});
@@ -157,18 +154,15 @@ exports.disconnectNetwork = function(user, network) {
       if(!_.contains(networksToDisconnect, network)) {
         throw messages.apiError('user.disconnectNetwork.unsupportedNetwork', 'Disconnection with this network is not supported');
       }
-      var accountAttribute = getAccountAttribute(network);
       var updatedAttributes = {}
-      user.set(accountAttribute, null);
+      var accountAttribute = getAccountAttribute(network);
       updatedAttributes[accountAttribute] = null;
       var pictureAttribute = getPictureAttribute(network);
       if(pictureAttribute) {
-        user.set(pictureAttribute, null);
         updatedAttributes[pictureAttribute] = null;
       }
       if(user.get('profile_picture') === network) {
-        user.set('profile_picture', 'facebook');
-        updatedAttributes['profile_picture'] = user.get('profile_picture');
+        updatedAttributes['profile_picture'] = 'facebook';
       }
       return user.save(updatedAttributes, {patch: true, transacting: transaction}).then(function(user) {
         return SocialAccount.where({user_id: user.id, network: network}).destroy({transacting: transaction});
@@ -242,8 +236,10 @@ exports.disableEmails = function(token) {
       return user.save({emails_enabled: 0}, {patch: true});
     }).then(function(user) {
       resolve(user);
-    }).catch(function(err) {
+    }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(function(err) {
+      reject(messages.unexpectedError('user.disableEmails.error', 'Error disabling periodic emails.', err));
     });
   });
 };
@@ -255,19 +251,27 @@ exports.verifyEmail = function(token) {
       return user.save({verified: 1}, {patch: true});
     }).then(function(user) {
       resolve(user);
-    }).catch(function(err) {
+    }).catch(messages.APIError, function(err) {
       reject(err);
+    }).catch(function(err) {
+      reject(messages.unexpectedError('user.verifyEmail.error', 'Error verifying email.', err));
     });
   });
 };
 
 exports.resendVerificationEmail = function(user) {
-  return user.fetch().then(function(user) {
-    if(user.get('verified') === 1) {
-      throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
-    }
-    return mailService.userVerification(user, false).catch(function(err) {
-      throw messages.unexpectedError('user.verification.errorSendingEmail', 'Error sending verification email.', err);
+  return new Promise(function(resolve, reject) {
+    $.findById(user.id).then(function(user) {
+      if(user.get('verified') === 1) {
+        throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
+      }
+      return mailService.userVerification(user, false);
+    }).then(function() {
+      resolve();      
+    }).catch(messages.APIError, function(err) {
+      reject(err);
+    }).catch(function(err) {
+      reject(messages.unexpectedError('user.verification.errorSendingEmail', 'Error sending verification email.', err));
     });
   });
 };

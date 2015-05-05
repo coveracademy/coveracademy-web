@@ -9,7 +9,7 @@
   },
   "oneUserConnectedToAllNetworks": {
     "user": [
-      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "username": "sandro.csimas", "facebook_account": "718788641524583", "twitter_account": "259214308", "twitter_picture": "https://pbs.twimg.com/profile_images/535969471265927168/G5wz_LgV.jpeg", "google_account": "110366065118342779578", "google_picture": "https://lh3.googleusercontent.com/-TAFHnODv8Cw/AAAAAAAAAAI/AAAAAAAAArA/-pg0mR1ruIk/photo.jpg", "youtube_account": "UC3a55JatyJ6T2j8oQQ0kWhw", "soundcloud_account": "7959294", "profile_picture": "facebook"}
+      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "username": "sandro.csimas", "facebook_account": "718788641524583", "twitter_account": "259214308", "twitter_picture": "https://pbs.twimg.com/profile_images/535969471265927168/G5wz_LgV.jpeg", "google_account": "110366065118342779578", "google_picture": "https://lh3.googleusercontent.com/-TAFHnODv8Cw/AAAAAAAAAAI/AAAAAAAAArA/-pg0mR1ruIk/photo.jpg", "youtube_account": "UC3a55JatyJ6T2j8oQQ0kWhw", "soundcloud_account": "7959294", "profile_picture": "facebook", "verified": 1}
     ],
     "social_account": [
       {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0},
