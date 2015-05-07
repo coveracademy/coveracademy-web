@@ -62,11 +62,13 @@ module.exports = function(router, app) {
 
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
-    Promise.all([contestService.listRunningContests(), contestService.listWaitingContests(), contestService.latestWinnerAuditions()]).spread(function(runningContests, waitingContests, latestWinnerAuditions) {
+    Promise.all([contestService.listRunningContests(), contestService.listWaitingContests(), contestService.latestWinnerAuditions(), coverService.bestCovers(7, 1, 8), coverService.latestCovers(7, 1, 8)]).spread(function(runningContests, waitingContests, latestWinnerAuditions, bestCovers, latestCovers) {
       res.json({
         runningContests: runningContests,
         waitingContests: waitingContests,
-        latestWinnerAuditions: latestWinnerAuditions
+        latestWinnerAuditions: latestWinnerAuditions,
+        bestCovers: bestCovers,
+        latestCovers: latestCovers
       });
     }).catch(function(err) {
       logger.error(err);
