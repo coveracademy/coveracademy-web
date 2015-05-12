@@ -80,7 +80,7 @@ angular
       contestService.latestContestants(nextPage).then(function(response) {
         nextPage++;
         var contestants = response.data;
-        if(contestants.length < 60) {
+        if(contestants.length < 40) {
           $scope.loadMoreContestants = false;
         }
         $scope.contestants = $scope.contestants.concat(contestants);

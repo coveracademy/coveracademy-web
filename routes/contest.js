@@ -209,7 +209,7 @@ module.exports = function(router, app) {
     });
   });
 
-  router.get('/latest', function(req, res, next) {
+  router.get('/contestants/latest', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
     contestService.latestContestants(page, constants.NUMBER_OF_CONTESTANTS_IN_PAGE).then(function(contestants) {
       res.json(contestants);
