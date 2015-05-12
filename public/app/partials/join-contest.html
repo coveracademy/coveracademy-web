@@ -6,7 +6,7 @@
           <div class="join">
             <div ng-if="isContestProgress('running')">
               <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
-              <h2 class="margin10 bolder-text">
+              <h2 class="margin bolder-text">
                 <span ng-if="remainingOneDay(contest.end_date)">
                   <timer interval="60000" end-time="contest.end_date">
                     {{ hours }}
@@ -26,7 +26,7 @@
               </h2>
             </div>
             <a ng-if="isContestProgress('running')" ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-lg btn-block">
-              {{ 'see_the_guideline' | translate }}
+              {{ 'read_the_rules' | translate }}
             </a>
           </div>
         </div>
@@ -67,7 +67,7 @@
           <div class="contestant" ng-if="isContestant()">
             <p>
               <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
-                <i class="glyphicon glyphicon-ok margin10" title="{{ 'watch_your_audition' | translate }}"></i>
+                <i class="glyphicon glyphicon-ok margin" title="{{ 'watch_your_audition' | translate }}"></i>
               </a>
             </p>
           </div>
@@ -80,10 +80,10 @@
   <div ng-if="!isAuthenticated()">
     <h1 class="align-center">{{ 'join_contest_signin_account' | translate }}</h1>
     <hr/>
-    <div class="row margin10">
+    <div class="row margin">
       <div class="col-md-6 col-md-offset-3">
         <a ng-click="login('facebook')" class="btn btn-lg btn-block btn-social btn-facebook">
-          <i class="fa fa-facebook"></i> Facebook
+          <i class="fa fa-facebook"></i> {{ 'signin_with' | translate }} Facebook
         </a>
       </div>
     </div>
@@ -91,7 +91,7 @@
   <div ng-if="isAuthenticated() && !userAuthenticated().youtube_account">
     <h1 class="align-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
     <h2 class="align-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
-    <div class="row padding">
+    <div class="row with-padding">
       <div class="col-md-6 col-md-offset-3">
         <a ng-click="login('youtube')" class="btn btn-lg btn-block btn-social btn-youtube">
           <i class="fa fa-youtube"></i> Youtube
@@ -140,7 +140,7 @@
   </form>
 </div>
 <div ng-if="isContestProgress('finished') || isContestant()" class="container">
-  <div class="jumbotron margin10">
+  <div class="jumbotron margin">
     <div ng-if="isContestProgress('finished')" class="align-center">
       <h1 class="no-margin">
         {{ 'this_contest_was_finished' | translate }}

@@ -9,7 +9,7 @@
           <div class="join">
             <div ng-if="isContestProgress('running')">
               <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
-              <h2 class="margin10 bolder-text">
+              <h2 class="margin bolder-text">
                 <span ng-if="remainingOneDay(contest.end_date)">
                   <timer interval="60000" end-time="contest.end_date">
                     {{ hours }}
@@ -32,7 +32,7 @@
               {{ 'join_now' | translate }}
             </a>
             <a ng-if="isContestProgress('running')" ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-lg btn-block">
-              {{ 'see_the_guideline' | translate }}
+              {{ 'read_the_rules' | translate }}
             </a>
           </div>
         </div>
@@ -73,7 +73,7 @@
           <div class="contestant" ng-if="isContestant()">
             <p>
               <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})">
-                <i class="glyphicon glyphicon-ok margin10" title="{{ 'watch_your_audition' | translate }}"></i>
+                <i class="glyphicon glyphicon-ok margin" title="{{ 'watch_your_audition' | translate }}"></i>
               </a>
             </p>
           </div>
@@ -94,7 +94,7 @@
       <div id="prizes">
         <div class="row" ng-repeat="row in contest.prizes | partition: 3">
           <div class="col-md-4 prize align-center" ng-repeat="prize in row">
-            <div class="card with-padding">
+            <div class="card">
               <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">{{ 'first_place' | translate }}</h3>
               <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">{{ 'second_place' | translate }}</h3>
               <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">{{ 'third_place' | translate }}</h3>
@@ -129,7 +129,7 @@
 </div>
 <div id="auditions">
   <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time')" class="container">
-    <div class="jumbotron white margin10 align-center">
+    <div class="jumbotron white margin align-center">
       <div ng-if="!hasAuditions() && !isContestant()">
         <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
         <div class="padding-top">
@@ -137,7 +137,7 @@
             {{ 'join_now' | translate }}
           </a>
           <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-            {{ 'see_the_guideline' | translate }}
+            {{ 'read_the_rules' | translate }}
           </a>
         </div>
       </div>
@@ -174,7 +174,7 @@
             {{ 'join_now' | translate }}
           </a>
           <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-            {{ 'see_the_guideline' | translate }}
+            {{ 'read_the_rules' | translate }}
           </a>
         </div>
         <div ng-if="isContestant()" class="padding-top">
@@ -221,7 +221,7 @@
     </div>
   </div>
   <div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
-    <div class="jumbotron white margin10 align-center">
+    <div class="jumbotron white margin align-center">
       <div ng-if="!isContestant()">
         <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
         <div class="padding-top">
@@ -229,7 +229,7 @@
             {{ 'join_now' | translate }}
           </a>
           <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-            {{ 'see_the_guideline' | translate }}
+            {{ 'read_the_rules' | translate }}
           </a>
         </div>
       </div>
@@ -263,11 +263,11 @@
   <div ng-if="isContestProgress('finished')" class="container margin-top">
     <div ng-if="hasWinners()">
       <h1 class="align-center">{{ 'winners' | translate }}</h1>
-      <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row padding">
+      <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row with-padding">
         <div ng-repeat="audition in row" class="col-md-4">
           <audition ng-model="audition" locale="{{ locale() }}" score-by-audition="getScoreByAudition(audition)">
           </audition>
-          <div class="row padding">
+          <div class="row with-padding">
             <div class="col-md-3">
               <div class="winner-author">
                 <a ui-sref="{{ userState(audition.user) }}">
@@ -375,7 +375,7 @@
         </div>
       </div>
     </div>
-    <div class="row padding" ng-repeat="row in auditions | partition: 3">
+    <div class="row with-padding" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale() }}" show-score="true" score-by-audition="getScoreByAudition(audition)">
         </audition>

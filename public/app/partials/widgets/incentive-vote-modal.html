@@ -8,7 +8,7 @@
   <div id="incentive">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="align-center no-margin">
+        <h3 class="align-center no-margin">d
           {{ 'you_can_still_vote_for_other_contestants' | translate: {remainingVotes: remainingVotes} }}
         </h3>
         <div class="alert alert-info margin-top">
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="row padding" ng-repeat="row in randomAuditions | partition: 3">
+    <div class="row with-padding" ng-repeat="row in randomAuditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale }}" thumb-size="small" audition-click="close()">
         </audition>

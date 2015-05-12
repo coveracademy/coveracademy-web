@@ -80,7 +80,7 @@ function respondWithError(err, res) {
   if(err instanceof APIError) {
     res.json(err.statusCode, err.json());
   } else {
-    var internal = internalError(err.message, err);
+    var internal = unexpectedError('unexpected_error', err.message, err);
     res.json(internal.statusCode, internal.json());
   }
 }

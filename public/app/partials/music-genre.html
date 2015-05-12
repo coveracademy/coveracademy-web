@@ -18,7 +18,7 @@
   <img class="background" ng-src="/img/genres/{{ musicGenre.image }}">
 </div>
 <div class="container">
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
 
@@ -40,7 +40,7 @@
       <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
     </div>
   </div>
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">
@@ -60,7 +60,7 @@
     </div>
   </div>
   <cover-songs ng-model="bestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">

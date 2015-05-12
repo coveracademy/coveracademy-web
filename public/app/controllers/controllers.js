@@ -4,7 +4,7 @@ angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
 
 angular
 .module('coverAcademy.controllers', [])
-.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
+.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', '$underscore', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, $underscore, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
   $scope.locale = $translate.use;
 
   // SEO
@@ -60,11 +60,8 @@ angular
       return 'app.userId({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
     }
   };
-  $scope.showHeader = function() {
-    return $state.current.name !== 'app.index';
-  };
-  $scope.withFooterMargin = function() {
-    return $state.current.name !== 'app.index' && $state.current.name !== 'app.contest';
+  $scope.isState = function(states) {
+    return $underscore.contains(states, $state.current.name);
   };
   $scope.isRedirectionStatusCode = function() {
     return $scope.statusCode === 301;

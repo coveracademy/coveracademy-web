@@ -13,3 +13,7 @@ exports.getIds = function(collection) {
 exports.isCollection = function(obj) {
   return obj instanceof Bookshelf.Collection;
 };
+
+exports.isModel = function(obj) {
+  return obj instanceof Bookshelf.Model;
+};

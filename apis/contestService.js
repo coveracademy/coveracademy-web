@@ -412,8 +412,10 @@ exports.listWinnerAuditions = function(obj) {
 exports.latestWinnerAuditions = function() {
   return Contest.forge({progress: 'finished'}).query(function(qb) {
     qb.orderBy('end_date', 'desc');
-  }).fecth().then(function(contest) {
+  }).fetch({require: true}).then(function(contest) {
     return $.listWinnerAuditions(contest);
+  }).catch(Bookshelf.NotFoundError, function(err) {
+    return Audition.collection();
   });
 };
 
@@ -452,8 +454,6 @@ exports.listAuditionsToReview = function() {
 };
 
 var listAuditions = function(rankType, contest, page, pageSize) {
-  page = parseInt(page);
-  pageSize = parseInt(pageSize);
   return Audition.collection().query(function(qb) {
     qb.where('contest_id', contest.id);
     qb.where('approved', 1);
@@ -489,6 +489,29 @@ exports.randomAuditions = function(contest, size) {
       randomAuditions.add(auditions.at(index - 1));
     });
     return randomAuditions;
+  });
+};
+
+exports.latestContestsAuditions = function(contests, maxAuditions) {
+  return new Promise(function(resolve, reject) {
+    var listAuditionsPromises = [];
+    contests.forEach(function(contest) {
+      listAuditionsPromises.push(listAuditions('latest', contest, 1, maxAuditions));
+    });
+    Promise.all(listAuditionsPromises).then(function(latestAuditionsByContest) {
+      var auditionsByContest = {};
+      latestAuditionsByContest.forEach(function(auditions) {
+        auditions.forEach(function(audition) {
+          if(!auditionsByContest[audition.get('contest_id')]) {
+            auditionsByContest[audition.get('contest_id')] = Audition.collection();
+          }
+          auditionsByContest[audition.get('contest_id')].push(audition);
+        });
+      });
+      resolve(auditionsByContest);
+    }).catch(function(err) {
+      reject(err);
+    });
   });
 };
 

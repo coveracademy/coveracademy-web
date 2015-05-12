@@ -34,7 +34,7 @@ header.navbar-default .navbar-nav > li > a:hover {
 header.navbar-default .navbar-form input {
   width: 280px !important;
 }
-main.with-header {
+main {
   padding-top: 64px;
 }
 footer {
@@ -99,6 +99,27 @@ img.small-brand {
 a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
   text-decoration: none;
 }
+.gray {
+  background-color: #f1f1f1;
+}
+.card {
+  margin: 10px 0;
+  padding: 15px;
+  border: 0;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.card .btn-success, .card .btn-primary {
+  text-shadow: 2px 2px 5px #000000;
+}
+.card a:hover, .card a:active, .card a:focus {
+  text-decoration: none;
+}
+.margin-auto {
+  margin: 0 auto;
+}
 .promo-video {
   margin-top: 35px;
   margin-bottom: 35px;
@@ -108,37 +129,6 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 }
 .jumbotron.white {
   background-color: #fff;
-}
-.land-section {
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
-.land-section h2 {
-  margin-top: 0px;
-  margin-bottom: 40px;
-}
-.land-section i {
-  font-size: 70px;
-}
-#land-header {
-  background-color: #333;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/img/backgrounds/land-header.jpg');
-  background-repeat:; no-repeat;
-  background-position: center;
-  background-size: cover;
-  color: #fff;
-  padding: 80px 100px 80px 100px;
-}
-#land-header .btn-lg {
-  font-size: 25px;
-}
-#land-steps-section {
-  background-color: #363b3f;
-  color: #fff;
-}
-#land-community-section {
-  background-color: #3a5795;
-  color: #fff;
 }
 #incentive-vote {
   padding: 0;
@@ -156,6 +146,9 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 }
 .thumbnail {
   line-height: 1.5;
+}
+.thumbnail.thin {
+  padding: 1px;
 }
 #primary-pictures .thumbnail {
   width: 240px;
@@ -190,16 +183,9 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
   height: 80px;
   width: 80px;
 }
-.card {
-  margin: 10px 0;
-  border: 0;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,.1);
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.card.with-padding {
-  padding: 15px;
+.profile-picture.medium {
+  height: 120px;
+  width: 120px;
 }
 a:hover {
   cursor: pointer;
@@ -213,7 +199,7 @@ a:hover {
   line-height: 1.33;
   border-radius: 3px;
 }
-.row.padding {
+.row.with-padding {
   padding-top: 10px;
 }
 .navbar-logo {
@@ -237,11 +223,14 @@ a:hover {
 .line-height-1-5 {
   line-height: 1.5;
 }
-.padding10 {
+.padding {
   padding: 10px;
 }
 .padding-top {
   padding-top: 10px;
+}
+.padding-top20 {
+  padding-top: 20px;
 }
 .padding-left {
   padding-left: 10px;
@@ -252,7 +241,7 @@ a:hover {
 .nopadding-left {
   padding-left: 0px;
 }
-.margin10 {
+.margin {
   margin: 10px;
 }
 .margin-top {
@@ -260,6 +249,9 @@ a:hover {
 }
 .margin-top20 {
   margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 10px;
 }
 .no-margin {
   margin: 0px;
@@ -434,6 +426,9 @@ a:hover {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.votes-number {
+  font-size: 35px;
+}
 .votes, .votes .vote {
   display: inline-block;
 }
@@ -472,11 +467,11 @@ input.big {
   top: 0;
   left: 0;
 }
-.page-title {
+.section-title {
   border-bottom: 1px solid #eee;
   margin-bottom: 20px;
 }
-.page-title .title {
+.section-title .title {
   font-size: 28px;
 }
 .box {
@@ -496,9 +491,6 @@ input.big {
   left: 3px;
   padding: 2px 5px 2px 5px;
   position: absolute;
-}
-.winner .audition {
-  margin-bottom: 0px;
 }
 .winner .medal.label {
   position: absolute;
@@ -530,6 +522,7 @@ input.big {
 .cover .caption {
   position: absolute;
   bottom: 0px;
+  padding: 0px 5px 10px 5px;
   width: 100%;
   color: #fff;
   font-weight: bold;
@@ -771,7 +764,6 @@ form.compacted .form-group {
 .audition {
   background-color: #fff;
   color: #000;
-  margin-bottom: 20px
 }
 .audition .cover {
   font-size: 15px;
@@ -789,7 +781,7 @@ form.compacted .form-group {
   font-size: 34px;
 }
 .audition.small .cover {
-  font-size: 13px;
+  font-size: 12px;
 }
 .audition.small .cover .legend {
   font-size: 20px;
@@ -834,6 +826,11 @@ form.compacted .form-group {
   text-transform: uppercase;
   font-size: 24px;
 }
+.contest-counter {
+  background-color: #717171;
+  color: #fff;
+  padding-right: 0px;
+}
 .contest-cover {
   background-position: center top;
   background-size: cover;
@@ -841,7 +838,7 @@ form.compacted .form-group {
   margin-bottom: 20px;
   text-shadow: 2px 2px 5px #000000;
   color: #fff;
-  padding: 40px;
+  padding: 20px;
 }
 .contest-cover a {
   color: #fff;

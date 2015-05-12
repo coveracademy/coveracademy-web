@@ -19,7 +19,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 align-center">
-      <div class="page-title">
+      <div class="section-title">
         <h1 class="title">
           {{ audition.title }}
         </h1>
@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <div class="row padding">
+        <div class="row with-padding">
           <div class="col-md-12">
             <div class="media">
               <div class="media-left">
@@ -75,10 +75,9 @@
         <div>
           <div class="align-center">
             <img ng-if="isWinner()" class="medium-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
-            <h1 class="no-margin">
-              {{ score }} {{ 'points' | translate }}
-            </h1>
-            <h2 class="no-margin"><small>({{ votes }} {{ 'votes' | translate }})</small></h2>
+            <div class="votes-number">
+              {{ votes }} {{ 'votes' | translate }}
+            </div>
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
                 <h2 class="no-margin">{{ 'vote_now' | translate }}</h2>
@@ -166,7 +165,7 @@
         </div>
       </div>
     </div>
-    <div class="row padding">
+    <div class="row with-padding">
       <div class="col-md-8 col-md-offset-2">
         <div class="media">
           <div class="media-left">
@@ -189,11 +188,11 @@
       </div>
     </div>
   </div>
-  <div ng-if="isAuditionApproved()" class="row padding">
+  <div ng-if="isAuditionApproved()" class="row with-padding">
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-12">
-          <div class="page-title">
+          <div class="section-title">
             <h3>
               {{ 'what_did_you_think_of_user_performance' | translate: {user: audition.user.name} }}
             </h3>
@@ -320,12 +319,12 @@
   <div ng-if="(isContestProgress('running') || isContestProgress('waiting') || isContestProgress('waiting_time')) && hasAuditions(latestAuditions)">
     <div class="row">
       <div class="col-md-12">
-        <div class="page-title">
+        <div class="section-title">
           <h3>
             {{ 'latest_auditions' | translate }}
           </h3>
         </div>
-        <div class="row" ng-repeat="row in latestAuditions | partition: 4">
+        <div class="row margin-bottom" ng-repeat="row in latestAuditions | partition: 4">
           <div ng-repeat="audition in row" class="col-md-3">
             <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
             </audition>
@@ -337,12 +336,12 @@
   <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions(bestAuditions)">
     <div class="row">
       <div class="col-md-12">
-        <div class="page-title">
+        <div class="section-title">
           <h3>
             {{ 'top_rated_auditions' | translate }}
           </h3>
         </div>
-        <div class="row" ng-repeat="row in bestAuditions | partition: 4">
+        <div class="row margin-bottom" ng-repeat="row in bestAuditions | partition: 4">
           <div ng-repeat="audition in row" class="col-md-3">
             <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
             </audition>

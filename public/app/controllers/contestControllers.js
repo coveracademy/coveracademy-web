@@ -2,26 +2,36 @@
 
 angular
 .module('coverAcademy.controllers')
-.controller('indexController', ['$scope', '$state', '$filter', '$translate', '$underscore', 'backendResponse', 'seoService', function($scope, $state, $filter, $translate, $underscore, backendResponse, seoService) {
-  $scope.contests = backendResponse.data.contests;
-  $scope.sponsors = backendResponse.data.sponsors;
+.controller('indexController', ['$scope', '$translate', 'backendResponse', 'seoService', function($scope, $translate, backendResponse, seoService) {
+  $scope.runningContests = backendResponse.data.runningContests;
+  $scope.waitingContests = backendResponse.data.waitingContests;
+  $scope.latestContestsAuditions = backendResponse.data.latestContestsAuditions;
+  $scope.totalRunningContestsAuditions = backendResponse.data.totalRunningContestsAuditions;
+  $scope.totalWaitingContestsAuditions = backendResponse.data.totalWaitingContestsAuditions;
+  $scope.bestCovers = backendResponse.data.bestCovers;
+  $scope.latestCovers = backendResponse.data.latestCovers;
+  $scope.latestWinnerAuditions = backendResponse.data.latestWinnerAuditions;
   $translate(['seo.title.index', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.index']);
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
-
-  $scope.hasSponsors = function() {
-    return $scope.sponsors.length !== 0;
+  $scope.latestAuditions = function(contest) {
+    return $scope.latestContestsAuditions[contest.id];
   };
-  $scope.hasUnfinishedContests = function() {
-    return $scope.contests.length > 0;
+  $scope.totalRunningAuditions = function(contest) {
+    return $scope.totalRunningContestsAuditions[contest.id];
   };
-  $scope.getLatestUnfinishedContest = function() {
-    if($scope.hasUnfinishedContests()) {
-      return $scope.contests[0];
+  $scope.totalWaitingAuditions = function(contest) {
+    return $scope.totalWaitingContestsAuditions[contest.id];
+  };
+  $scope.contestantsRemaining = function(contest) {
+    var totalAuditions = $scope.totalWaitingAuditions(contest);
+    var minimumContestants = contest.minimum_contestants;
+    if(totalAuditions < minimumContestants) {
+      return minimumContestants - totalAuditions;
     } else {
-      return null;
+      return 0;
     }
   };
 }])

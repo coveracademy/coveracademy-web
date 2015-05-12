@@ -81,7 +81,7 @@
         </tab>
         <tab ng-if="hasFans()" heading="{{ 'menus.fans' | translate | uppercase }}">
           <div infinite-scroll="loadFans()" infinite-scroll-disabled="!loadMoreFans" infinite-scroll-distance="1">
-            <div ng-repeat="row in fans | partition: 6" class="row padding profile-overview">
+            <div ng-repeat="row in fans | partition: 6" class="row with-padding profile-overview">
               <div ng-repeat="fan in row" class="col-md-2">
                 <a ui-sref="{{ userState(fan) }}">
                   <figure>

@@ -1,15 +1,13 @@
 <div class="row" ng-repeat="row in covers | partition: coversPerRow">
   <div ng-repeat="cover in row" class="col-md-{{ columnSize }}">
-    <div class="thumbnail">
+    <div class="margin-bottom">
       <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})">
-        <div ng-if="isThumbSize('medium')">
+        <div ng-if="isThumbSize('medium') || isThumbSize('large')">
           <div class="cover">
             <div class="darken"></div>
             <img ng-src="{{ cover.medium_thumbnail }}">
             <div class="caption {{ fontSizeCss }}">
-              <!-- <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})"> -->
-                {{ cover.artist.name }} - {{ cover.music.title }}
-              <!-- </a> -->
+              {{ cover.artist.name }} - {{ cover.music.title }}
               <div>
                 {{ 'by' | translate }} {{ cover.author }}
               </div>

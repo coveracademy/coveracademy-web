@@ -11,7 +11,6 @@ angular
       locale: '@',
       showScore: '@',
       thumbSize: '@',
-      border: '@',
       audition: '=ngModel',
       scoreByAudition: '&',
       auditionClick: '&'
@@ -23,7 +22,6 @@ angular
     }],
     link: function(scope, element, attrs, ctrl) {
       scope.showScoreFinal = scope.showScore === 'true' ? true : false;
-      scope.noBorderFinal = scope.border === 'false' ? true : false;
       scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
     }
   };
@@ -50,6 +48,10 @@ angular
         scope.columnSize = 12/scope.coversPerRow;
       } else if(scope.thumbSizeFinal === 'small') {
         scope.coversPerRow = 6;
+        scope.columnSize = 12/scope.coversPerRow;
+        scope.fontSizeCss = 'font-small';
+      } else if(scope.thumbSizeFinal === 'large') {
+        scope.coversPerRow = 3;
         scope.columnSize = 12/scope.coversPerRow;
         scope.fontSizeCss = 'font-small';
       }
