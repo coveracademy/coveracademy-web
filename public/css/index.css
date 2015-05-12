@@ -117,6 +117,9 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 .card a:hover, .card a:active, .card a:focus {
   text-decoration: none;
 }
+.card .row.with-separator {
+  border-bottom: 1px solid #eee;
+}
 .margin-auto {
   margin: 0 auto;
 }

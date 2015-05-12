@@ -138,7 +138,7 @@ module.exports = function(router, app) {
         return coverService.artistsOfCovers(result.coversRank);
       }).then(function(artistsOfCovers) {
         this.result.artistsOfCovers = artistsOfCovers;
-        res.json(result);
+        res.json(this.result);
       }).catch(function(err) {
         logger.error(err);
         messages.respondWithError(err, res);
