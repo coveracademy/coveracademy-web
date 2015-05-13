@@ -314,9 +314,13 @@ a:hover {
 .bg-warning {
   background-color: #ffd699;
 }
+.user-label {
+ margin-bottom: 5px;
+}
 .label {
   padding: 7px;
   font-weight: normal;
+  display: inline-block;
 }
 .label-success {
   background-color: #4caf50;
@@ -329,6 +333,9 @@ a:hover {
 }
 .label-info {
   background-color: #9c27b0;
+}
+.label-primary {
+  background-color: #2196f3;
 }
 .alert {
   border: none;
@@ -875,9 +882,6 @@ form.compacted .form-group {
 #artists .box {
   margin-bottom: 10px;
 }
-.user-label {
-  margin-right: 10px;
-}
 #settings .social-account .network-name {
   display: inline-block;
   margin-left: 10px;
@@ -1020,9 +1024,6 @@ form.compacted .form-group {
   color: #666666;
   background-color: #f0f0f0;
   border-color: #eeeeee;
-}
-.label-primary {
-  background-color: #2196f3;
 }
 /* Bootstrap custom buttons and labels */
 
