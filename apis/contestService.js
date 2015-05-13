@@ -77,18 +77,18 @@ exports.listUnfinishedContests = function() {
   }).fetch();
 };
 
-exports.listWaitingContests = function() {
+exports.listWaitingContests = function(related) {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'waiting');
     qb.orderBy('registration_date', 'desc');
-  }).fetch();
+  }).fetch(related ? {withRelated: related} : null);
 };
 
-exports.listRunningContests = function() {
+exports.listRunningContests = function(related) {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'running');
     qb.orderBy('registration_date', 'desc');
-  }).fetch();
+  }).fetch(related ? {withRelated: related} : null);
 };
 
 var listPotentialWinners = function(contest) {

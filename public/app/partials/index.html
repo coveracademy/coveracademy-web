@@ -24,6 +24,10 @@
             <span class="label label-default" title="{{ 'contestants' | translate }}">
               <i class="glyphicon glyphicon-user"></i> {{ totalRunningAuditions(contest) }}
             </span>
+            <span class="label label-default" title="{{ 'contestants' | translate }}">
+              <i class="glyphicon glyphicon-usd"></i> 
+              <span ng-repeat="prize in contest.prizes">{{ prize.name }} / </span>
+            </span>
           </div>
         </div>
         <div class="row margin-bottom">
@@ -115,8 +119,10 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="container">
       <div class="row">
         <div class="col-md-9">
           <h2>{{ 'best_covers' | translate }}</h2>

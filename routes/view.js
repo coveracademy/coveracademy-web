@@ -61,8 +61,8 @@ module.exports = function(router, app) {
   // PUBLIC ROUTES
   router.get('/index', function(req, res, next) {
     Promise.props({
-      runningContests: contestService.listRunningContests(),
-      waitingContests: contestService.listWaitingContests(),
+      runningContests: contestService.listRunningContests(['prizes']),
+      waitingContests: contestService.listWaitingContests(['prizes']),
       latestWinnerAuditions: contestService.latestWinnerAuditions(),
       bestCovers: coverService.bestCovers(300, 1, 6),
       latestCovers: coverService.latestCovers(300, 1, 6)
