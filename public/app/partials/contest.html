@@ -94,7 +94,7 @@
       <div id="prizes">
         <div class="row" ng-repeat="row in contest.prizes | partition: 3">
           <div class="col-md-4 prize align-center" ng-repeat="prize in row">
-            <div class="card">
+            <div class="card with-padding">
               <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">{{ 'first_place' | translate }}</h3>
               <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">{{ 'second_place' | translate }}</h3>
               <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">{{ 'third_place' | translate }}</h3>

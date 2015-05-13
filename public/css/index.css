@@ -104,12 +104,14 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 }
 .card {
   margin: 10px 0;
-  padding: 15px;
   border: 0;
   background: #fff;
   box-shadow: 0 1px 2px rgba(0,0,0,.1);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+.card.with-padding {
+  padding: 15px;
 }
 .card .btn-success, .card .btn-primary {
   text-shadow: 2px 2px 5px #000000;
@@ -119,6 +121,9 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 }
 .card .row.with-separator {
   border-bottom: 1px solid #eee;
+}
+.card img {
+  max-width: 100%;
 }
 .margin-auto {
   margin: 0 auto;

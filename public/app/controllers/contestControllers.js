@@ -2,7 +2,7 @@
 
 angular
 .module('coverAcademy.controllers')
-.controller('indexController', ['$scope', '$translate', 'backendResponse', 'seoService', function($scope, $translate, backendResponse, seoService) {
+.controller('indexController', ['$scope', '$translate', 'backendResponse', 'modalService', 'seoService', function($scope, $translate, backendResponse, modalService, seoService) {
   $scope.runningContests = backendResponse.data.runningContests;
   $scope.waitingContests = backendResponse.data.waitingContests;
   $scope.latestContestsAuditions = backendResponse.data.latestContestsAuditions;
@@ -16,6 +16,19 @@ angular
     seoService.setDescription(translations['seo.description.contest']);
     seoService.setKeywords(translations['seo.keywords.contest']);
   });
+
+  var videoModalOptions = {
+    size: 'lg',
+    templateUrl: '/app/partials/widgets/video-modal.html',
+    resolve: {
+      url: function() {
+        return 'https://www.youtube.com/embed/UyHqY7i_BEQ?autoplay=1';
+      }
+    },
+    controller: function($scope, $modalInstance, url) {
+      $scope.url = url;
+    }
+  };
   $scope.latestAuditions = function(contest) {
     return $scope.latestContestsAuditions[contest.id];
   };
@@ -33,6 +46,10 @@ angular
     } else {
       return 0;
     }
+  };
+  $scope.openVideo = function() {
+    modalService.show(videoModalOptions).then(function(reason) {
+    });
   };
 }])
 .controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
@@ -373,7 +390,7 @@ angular
     return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
   };
   $scope.videoUrlPasted = function(event) {
-    var url = event.clipboardData.getData("text/plain");
+    var url = event.clipboardData.getData('text/plain');
     contestService.getAuditionVideoInfos(url).then(function(response) {
       $scope.audition.url = url;
       $scope.audition.title = response.data.title;
