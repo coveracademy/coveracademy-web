@@ -3,7 +3,7 @@
 	<div ng-repeat="contest in contests">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ contest.image }}');">
+				<div class="contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
 					<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
 						<h1 class="align-center no-margin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
 					</a>

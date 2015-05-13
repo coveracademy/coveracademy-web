@@ -53,7 +53,7 @@ angular
       } else if(scope.thumbSizeFinal === 'large') {
         scope.coversPerRow = 3;
         scope.columnSize = 12/scope.coversPerRow;
-        scope.fontSizeCss = 'font-small';
+        scope.fontSizeCss = 'font-large';
       }
     }
   };
