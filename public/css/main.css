@@ -171,25 +171,22 @@ img.brand {
   color: #fff;
 }
 .section h2 {
-  text-transform: uppercase;
   font-size: 35px;
   margin-top: 0px;
   margin-bottom: 40px;
 }
 .section h3 {  
-  text-transform: uppercase;
   font-size: 25px;
 }
 #running-contests {
-  background-color: #C34C39;
-  background-image: url("../images/event-bg.jpg");
-  background-position: center bottom;
-  background-size: contain;
+  background-color: #33888F;
+  background-image: url("../images/performar-bg.jpg");
+  background-position: center;
+  background-size: cover;
   background-repeat: no-repeat;
   position: relative;
 }
 #running-contests h2 {
-  text-transform: uppercase;
   font-size: 28px;
   margin: 0px;
 }
@@ -226,28 +223,18 @@ img.brand {
   width: 70px;
   height: 40px;
   line-height: 40px;
-  border-right: 1px solid #9e3e2e;
-  border-bottom: 1px solid #9e3e2e;
 }
 .countdown li .days {
   background-color: #45b29d;
-  border-top: 1px solid #6ac1b1;
-  border-left: 1px solid #6ac1b1;
 }
 .countdown li .hours {
   background-color: #efc94c;
-  border-top: 1px solid #f2d470;
-  border-left: 1px solid #f2d470;
 }
 .countdown li .minutes {
   background-color: #e27a3f;
-  border-top: 1px solid #e89565;
-  border-left: 1px solid #e89565;
 }
 .countdown li .seconds {
   background-color: #df5a49;
-  border-top: 1px solid #e57b6d;
-  border-left: 1px solid #e57b6d;
 }
 .countdown li p {
   font-size: 14px;
