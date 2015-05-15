@@ -58,6 +58,9 @@ angular
   $scope.hasContests = function(contests) {
     return contests.length > 0;
   }
+  $scope.isPrizePlace = function(prize, place) {
+    return prize.place === place;
+  };
 }])
 .controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
   $scope.contests = backendResponse.data.contests;

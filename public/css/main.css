@@ -87,9 +87,9 @@ a {
   transition: 300ms;  
 }
 a:focus, a:hover {
-  text-decoration: none;
-  outline: none;
-  color: #33333C;
+  text-decoration: none !important;
+  outline: none !important;
+  color: #33333C !important;
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
@@ -179,7 +179,6 @@ img.brand {
 .section h3 {  
   text-transform: uppercase;
   font-size: 25px;
-  margin: 0px;
 }
 #running-contests {
   background-color: #C34C39;
@@ -276,9 +275,6 @@ img.brand {
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
-}
-#past-winners h3 {
-  margin: 20px 0px 0px 0px;
 }
 #covers {
   background-color: #f7ab24;
