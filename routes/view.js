@@ -65,7 +65,8 @@ module.exports = function(router, app) {
       waitingContests: contestService.listWaitingContests(['prizes']),
       latestWinnerAuditions: contestService.latestWinnerAuditions(),
       bestCovers: coverService.bestCovers(300, 1, 6),
-      latestCovers: coverService.latestCovers(300, 1, 6)
+      latestCovers: coverService.latestCovers(300, 1, 6),
+      sponsors: contestService.listCurrentSponsors()
     }).bind({}).then(function(result) {
       this.result = result;
       return Promise.props({

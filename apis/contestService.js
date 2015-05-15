@@ -884,7 +884,7 @@ exports.listNonContestants = function(contest) {
   });
 };
 
-exports.getCurrentSponsors = function() {
+exports.listCurrentSponsors = function() {
   return Sponsor.collection().query(function(qb) {
     var now = new Date();
     qb.where('beginning_of_sponsorship', '<=', now);

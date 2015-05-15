@@ -1,95 +1,10 @@
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
-}
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  font-family: 'Ubuntu', 'sans-serif';
-  /* Margin bottom by footer height */
-  margin-bottom: 500px;
-  line-height: 1.5;
-}
-body.footer-margin {
-  margin-bottom: 540px;
-}
-header.navbar-default {
-  background-color: #363b3f;
-  border-color: #363b3f;
-}
-header.navbar-default .navbar-brand {
-  font-weight: bold;
-  color: #fff;
-}
-header.navbar-default .navbar-brand:hover {
-  color: #999;
-}
-header.navbar-default .navbar-nav > li > a {
-  color: #fff;
-}
-header.navbar-default .navbar-nav > li > a:hover {
-  color: #999;
-}
-header.navbar-default .navbar-form input {
-  width: 280px !important;
-}
-main {
-  padding-top: 64px;
-}
-footer {
-  background-color: #363b3f;
-  bottom: 0;
-  height: 500px;
-  position: absolute;
-  width: 100%;
-}
-footer a, footer a:hover {
-  color: #aaa;
-  text-decoration: none;
-}
-footer .extra {
-  padding: 20px 0px 20px 0px;
-  background-color: #2a3034;
-}
-footer .info {
-  padding-top: 50px;
-}
-footer .info ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-footer .info ul li {
-  padding-bottom: 5px;
-}
-footer .social li {
-  color: #aaa;
-}
-footer .social .fa {
-  font-size: 30px;
-}
-footer .copyright {
-  border-top: 2px solid #aaa;
-  color: #aaa;
-  margin-top: 50px;
-  padding-top: 20px;
-}
-footer h1, footer h2, footer h3, footer h4, footer h5 {
-  color: #fff;
-}
 h1, h2, h3, h4, h5 {
   line-height: 1.5;
 }
 p, li {
   line-height: 1.8;
 }
-img.brand {
-  max-height: 250px;
-  max-width: 300px;
-  margin: 20px;
-  border-radius: 5px;
-}
+
 img.small-brand {
   max-height: 100px;
   max-width: 120px;
@@ -125,9 +40,7 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
 .card img {
   max-width: 100%;
 }
-.margin-auto {
-  margin: 0 auto;
-}
+
 .promo-video {
   margin-top: 35px;
   margin-bottom: 35px;
@@ -173,39 +86,11 @@ a.no-decoration, a:hover.no-decoration, a:focus.no-decoration {
   height: 100px;
   width: 100px;
 }
-.profile-picture {
-  display: block;
-  background-color: transparent;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  text-decoration: none;
-  height: 160px;
-  width: 160px;
-  position: relative;
-}
-.profile-picture.small {
-  height: 80px;
-  width: 80px;
-}
-.profile-picture.medium {
-  height: 120px;
-  width: 120px;
-}
 a:hover {
   cursor: pointer;
 }
 .jumbotron.white {
   background-color: #fff;
-}
-.btn-largest {
-  padding: 20px 32px;
-  font-size: 36px;
-  line-height: 1.33;
-  border-radius: 3px;
 }
 .row.with-padding {
   padding-top: 10px;
@@ -260,6 +145,9 @@ a:hover {
 }
 .margin-bottom {
   margin-bottom: 10px;
+}
+.margin-bottom20 {
+  margin-bottom: 20px;
 }
 .no-margin {
   margin: 0px;
@@ -320,26 +208,7 @@ a:hover {
 .user-label {
  margin-bottom: 5px;
 }
-.label {
-  padding: 7px;
-  font-weight: normal;
-  display: inline-block;
-}
-.label-success {
-  background-color: #4caf50;
-}
-.label-warning {
-  background-color: #ff9800;
-}
-.label-danger {
-  background-color: #e51c23;
-}
-.label-info {
-  background-color: #9c27b0;
-}
-.label-primary {
-  background-color: #2196f3;
-}
+
 .alert {
   border: none;
   color: #fff;
@@ -521,38 +390,6 @@ input.big {
 .medium-medal {
   height: 155px;
 }
-.cover {
-  position: relative;
-}
-.cover .legend {
-  font-size: 16px;
-  position: absolute;
-  bottom: 6px;
-  left: 4px;
-}
-.cover .darken {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  opacity: 0.5;
-}
-.cover .caption {
-  position: absolute;
-  bottom: 0px;
-  padding: 0px 5px 10px 5px;
-  width: 100%;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  text-shadow: 2px 2px 5px #000000;
-  background-repeat: repeat-x;
-  background-position: center bottom;
-}
-.cover img {
-  width: 100%;
-  max-height: 197px;
-}
 #guideline p, #guideline li {
   font-size: 16px;
   text-align: justify;
@@ -698,10 +535,6 @@ form.compacted .form-group {
 #user.pretty-header > img.background {
   opacity: 0.2;
 }
-#user .profile-picture {
-  height: 210px;
-  width: 210px;
-}
 #user .actions {
   margin-top: 20px;
 }
@@ -724,12 +557,6 @@ form.compacted .form-group {
 }
 #auditions {
   padding-bottom: 60px;
-}
-#sponsors {
-  text-align: center;
-  padding-top: 40px;
-  padding-bottom: 60px;
-  background-color: #f1f4f4;
 }
 #brands {
   padding: 20px;
@@ -779,34 +606,6 @@ form.compacted .form-group {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.audition {
-  background-color: #fff;
-  color: #000;
-}
-.audition .cover {
-  font-size: 15px;
-}
-.audition .cover .legend {
-  font-size: 25px;
-}
-.audition .cover .caption {
-  padding: 0px 5px 10px 5px;
-}
-.audition.large .cover {
-  font-size: 26px;
-}
-.audition.large .cover .legend {
-  font-size: 34px;
-}
-.audition.small .cover {
-  font-size: 12px;
-}
-.audition.small .cover .legend {
-  font-size: 20px;
-}
-.audition.medium .label {
-  font-size: 25px;
-}
 .profile-overview figure:hover figcaption {
   opacity: 1;
 }
@@ -849,24 +648,6 @@ form.compacted .form-group {
   color: #fff;
   padding-right: 0px;
 }
-.contest-cover {
-  background-position: center top;
-  background-size: cover;
-  min-height: 200px;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 5px #000000;
-  color: #fff;
-  padding: 20px;
-}
-.contest-cover a {
-  color: #fff;
-  text-decoration: none;
-}
-.contest-cover .contest-infos {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: #aaa;
-}
 .callout {
   padding: 20px;
   border: 1px solid #eee;
@@ -903,24 +684,6 @@ form.compacted .form-group {
 #user-menu li {
   min-width: 200px;
   text-align: center
-}
-/* Social buttons */
-.btn-youtube {
-  color: #fff;
-  background-color: #444;
-  border-color: rgba(0,0,0,0.2);
-}
-.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
-  color: #fff;
-  background-color: #222;
-  border-color: rgba(0,0,0,0.2);
-}
-.btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
-  background-image: none;
-}
-.btn-youtube.disabled, .btn-youtube[disabled], fieldset[disabled] .btn-youtube, .btn-youtube.disabled:hover, .btn-youtube[disabled]:hover, fieldset[disabled] .btn-youtube:hover, .btn-youtube.disabled:focus, .btn-youtube[disabled]:focus, fieldset[disabled] .btn-youtube:focus, .btn-youtube.disabled:active, .btn-youtube[disabled]:active, fieldset[disabled] .btn-youtube:active, .btn-youtube.disabled.active, .btn-youtube[disabled].active, fieldset[disabled] .btn-youtube.active {
-  background-color: #dd4b39;
-  border-color: rgba(0,0,0,0.2);
 }
 /* Social buttons */
 
@@ -963,72 +726,6 @@ form.compacted .form-group {
 }
 /* Tabs panel */
 
-/* Bootstrap custom buttons and labels */
-.btn {
-  border: 1px solid transparent;
-  border-radius: 3px;
-}
-.btn-primary {
-  color: #fff;
-  background-color: #2196f3;
-  border-color: transparent;
-}
-.btn-primary:hover {
-  color: #fff;
-  background-color: #0d87e9;
-  border-color: transparent;
-}
-.btn-success {
-  color: #fff;
-  background-color: #4caf50;
-  border-color: transparent;
-}
-.btn-success:hover {
-  color: #fff;
-  background-color: #439a46;
-  border-color: transparent;
-}
-.btn-warning {
-  color: #fff;
-  background-color: #ff9800;
-  border-color: transparent;
-}
-.btn-warning:hover {
-  color: #fff;
-  background-color: #e08600;
-  border-color: transparent;
-}
-.btn-danger {
-  color: #fff;
-  background-color: #e51c23;
-  border-color: transparent;
-}
-.btn-danger:hover {
-  color: #fff;
-  background-color: #cb171e;
-  border-color: transparent;
-}
-.btn-info {
-  color: #fff;
-  background-color: #9c27b0;
-  border-color: transparent;
-}
-.btn-info:hover {
-  color: #fff;
-  background-color: #862197;
-  border-color: transparent;
-}
-.btn-default {
-  color: #666666;
-  background-color: #ffffff;
-  border-color: #eeeeee;
-}
-.btn-default:hover {
-  color: #666666;
-  background-color: #f0f0f0;
-  border-color: #eeeeee;
-}
-/* Bootstrap custom buttons and labels */
 
 /* Custom loading bar */
 #loading-bar .bar {

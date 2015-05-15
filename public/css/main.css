@@ -1,0 +1,436 @@
+@import url(http://fonts.googleapis.com/css?family=Dosis:400,200,300,500,600,700,800);
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300,200,700);
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+header.navbar-default {
+  background-color: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-brand {
+  font-weight: bold;
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-brand:hover {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-nav > li > a {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-nav > li > a:hover {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-form input {
+  width: 280px !important;
+}
+body {
+  font-family: 'Dosis', 'sans-serif';
+  font-size: 17px;
+  margin-bottom: 500px;
+}
+body.footer-margin {
+  margin-bottom: 540px;
+}
+main {
+  padding-top: 55px;
+}
+footer {
+  background-color: #363b3f;
+  bottom: 0;
+  height: 500px;
+  position: absolute;
+  width: 100%;
+}
+footer a, footer a:hover {
+  color: #aaa;
+  text-decoration: none;
+}
+footer .extra {
+  padding: 20px 0px 20px 0px;
+  background-color: #2a3034;
+}
+footer .info {
+  padding-top: 50px;
+}
+footer .info ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+footer .info ul li {
+  padding-bottom: 5px;
+}
+footer .social li {
+  color: #aaa;
+}
+footer .social .fa {
+  font-size: 30px;
+}
+footer .copyright {
+  border-top: 2px solid #aaa;
+  color: #aaa;
+  margin-top: 50px;
+  padding-top: 20px;
+}
+footer h1, footer h2, footer h3, footer h4, footer h5 {
+  color: #fff;
+}
+a {
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -o-transition: 300ms;
+  transition: 300ms;
+  color: #fff;
+}
+a:focus, a:hover {
+  text-decoration: none;
+  outline: none;
+  color: #23527c;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+img.brand {
+  max-height: 250px;
+  max-width: 300px;
+  margin: 20px;
+  border-radius: 5px;
+}
+.btn {
+  border-radius: 0px;
+  padding: 9px 23px;
+}
+.color-white {
+  color: #fff;
+}
+.home-section {
+  padding: 60px;
+}
+.home-section h2 {
+  text-transform: uppercase;
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+.home-section h3 {
+  text-transform: uppercase;
+  font-size: 30px;
+  margin: 0px;
+}
+#running-contests {
+  background-color: #C34C39;
+  background-image: url("../images/event-bg.jpg");
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  padding: 80px;
+}
+#running-contests h2 {
+  text-transform: uppercase;
+  font-size: 34px;
+  margin: 0px;
+}
+#running-contests .contest {
+  margin-bottom: 40px;
+}
+#running-contests .btn.btn-success {
+  background-color: #45b29d;
+}
+#running-contests .btn.btn-primary {
+  background-color: #1f9fc3;
+}
+.watch {
+  position: absolute;
+  left: -40px;
+  top: 7%;
+}
+.countdown {
+  display: block;
+  overflow: hidden;
+  padding: 0px;
+  text-align: right;
+}
+.countdown li {
+  list-style: none;
+  display:inline-block;
+  margin-right: 4 0px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  position: relative;
+}
+.countdown li:last-child {
+  margin-right: 0
+}
+.countdown li span {
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  width: 70px;
+  height: 40px;
+  line-height: 40px;
+  border-right: 1px solid #9e3e2e;
+  border-bottom: 1px solid #9e3e2e;
+}
+.countdown li .days {
+  background-color: #45b29d;
+  border-top: 1px solid #6ac1b1;
+  border-left: 1px solid #6ac1b1;
+}
+.countdown li .hours {
+  background-color: #efc94c;
+  border-top: 1px solid #f2d470;
+  border-left: 1px solid #f2d470;
+}
+.countdown li .minutes {
+  background-color: #e27a3f;
+  border-top: 1px solid #e89565;
+  border-left: 1px solid #e89565;
+}
+.countdown li .seconds {
+  background-color: #df5a49;
+  border-top: 1px solid #e57b6d;
+  border-left: 1px solid #e57b6d;
+}
+.countdown li p {
+  font-size: 14px;
+}
+#next-contests {
+  color: #ccc;
+}
+#next-contests.home-section {
+  padding: 0px;
+}
+#next-contests h2.contest-name {
+  font-weight: 500;
+  margin: 20px 0px 20px 0px;
+}
+#next-contests .actions {
+  margin-top: 20px;
+}
+.next-contest {
+  padding: 60px;
+}
+#past-winners {
+  background-color: #33888F;
+  background-image: url("../images/performar-bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+#covers {
+  background-color: #f7ab24;
+  background-image: url("../images/contact-bg.jpg");
+  background-position: center;
+  background-size: contain;
+  background-repeat:no-repeat;
+  position: relative;
+}
+#sponsors {
+  background-color: #1881a2;
+  background-image: url("../images/sponsor-bg.jpg");
+  background-position:50% 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+/****************************************/
+/****************************************/
+/****************************************/
+/****************************************/
+.block-center {
+  margin: 0 auto;
+}
+.contest-cover {
+  background-position: center;
+  background-size: cover;
+  min-height: 200px;
+  text-shadow: 2px 2px 5px #000000;
+}
+.contest-cover .contest-infos {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #aaa;
+}
+.cover {
+  position: relative;
+}
+.cover img {
+  width: 100%;
+}
+.cover .darken {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.3;
+}
+.cover .caption {
+  position: absolute;
+  bottom: 0px;
+  padding: 10px;
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  background-size: cover;
+}
+.cover .legend {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+.cover.small .caption {
+  font-size: 12px;
+}
+.cover.small .caption .legend {
+  font-size: 20px;
+}
+.cover.large .caption {
+  font-size: 18px;
+}
+.cover.large .caption .legend {
+  font-size: 26px;
+}
+.profile-picture {
+  display: block;
+  background-color: transparent;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-decoration: none;
+  height: 160px;
+  width: 160px;
+  position: relative;
+}
+.profile-picture.small {
+  height: 80px;
+  width: 80px;
+}
+.profile-picture.medium {
+  height: 120px;
+  width: 120px;
+}
+.profile-picture.large {
+  height: 210px;
+  width: 210px;
+}
+.label {
+  padding: 7px;
+  font-weight: 700;
+  display: inline-block;
+}
+.label-success {
+  background-color: #4caf50;
+}
+.label-warning {
+  background-color: #ff9800;
+}
+.label-danger {
+  background-color: #e51c23;
+}
+.label-info {
+  background-color: #9c27b0;
+}
+.label-primary {
+  background-color: #2196f3;
+}
+/* Extension of social buttons */
+.btn-youtube {
+  color: #fff;
+  background-color: #444;
+  border-color: rgba(0,0,0,0.2);
+}
+.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
+  color: #fff;
+  background-color: #222;
+  border-color: rgba(0,0,0,0.2);
+}
+.btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
+  background-image: none;
+}
+.btn-youtube.disabled, .btn-youtube[disabled], fieldset[disabled] .btn-youtube, .btn-youtube.disabled:hover, .btn-youtube[disabled]:hover, fieldset[disabled] .btn-youtube:hover, .btn-youtube.disabled:focus, .btn-youtube[disabled]:focus, fieldset[disabled] .btn-youtube:focus, .btn-youtube.disabled:active, .btn-youtube[disabled]:active, fieldset[disabled] .btn-youtube:active, .btn-youtube.disabled.active, .btn-youtube[disabled].active, fieldset[disabled] .btn-youtube.active {
+  background-color: #dd4b39;
+  border-color: rgba(0,0,0,0.2);
+}
+/* Extension of social buttons */
+
+/* Bootstrap custom buttons and labels */
+.btn {
+  border: 1px solid transparent;
+  border-radius: 0px;
+}
+.btn-largest {
+  font-size: 30px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #2196f3;
+  border-color: transparent;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #0d87e9;
+  border-color: transparent;
+}
+.btn-success {
+  color: #fff;
+  background-color: #4caf50;
+  border-color: transparent;
+}
+.btn-success:hover {
+  color: #fff;
+  background-color: #439a46;
+  border-color: transparent;
+}
+.btn-warning {
+  color: #fff;
+  background-color: #ff9800;
+  border-color: transparent;
+}
+.btn-warning:hover {
+  color: #fff;
+  background-color: #e08600;
+  border-color: transparent;
+}
+.btn-danger {
+  color: #fff;
+  background-color: #e51c23;
+  border-color: transparent;
+}
+.btn-danger:hover {
+  color: #fff;
+  background-color: #cb171e;
+  border-color: transparent;
+}
+.btn-info {
+  color: #fff;
+  background-color: #9c27b0;
+  border-color: transparent;
+}
+.btn-info:hover {
+  color: #fff;
+  background-color: #862197;
+  border-color: transparent;
+}
+.btn-default {
+  color: #666666;
+  background-color: #ffffff;
+  border-color: #eeeeee;
+}
+.btn-default:hover {
+  color: #666666;
+  background-color: #f0f0f0;
+  border-color: #eeeeee;
+}
+/* Bootstrap custom buttons and labels */

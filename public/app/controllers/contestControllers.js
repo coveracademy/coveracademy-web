@@ -11,6 +11,7 @@ angular
   $scope.bestCovers = backendResponse.data.bestCovers;
   $scope.latestCovers = backendResponse.data.latestCovers;
   $scope.latestWinnerAuditions = backendResponse.data.latestWinnerAuditions;
+  $scope.sponsors = backendResponse.data.sponsors;
   $translate(['seo.title.index', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.index']);
     seoService.setDescription(translations['seo.description.contest']);
@@ -50,6 +51,9 @@ angular
   $scope.openVideo = function() {
     modalService.show(videoModalOptions).then(function(reason) {
     });
+  };
+  $scope.hasSponsors = function() {
+    return $scope.sponsors.length > 0;
   };
 }])
 .controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {

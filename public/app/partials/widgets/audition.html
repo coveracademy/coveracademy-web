@@ -1,6 +1,6 @@
-<div class="audition {{ thumbSizeFinal }}">
+<div class="audition">
   <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})" ng-click="auditionClick()">
-    <div class="cover">
+    <div class="cover {{ fontSize }}">
       <div class="darken"></div>
       <img ng-src="{{ audition.medium_thumbnail }}">
       <div class="caption">
