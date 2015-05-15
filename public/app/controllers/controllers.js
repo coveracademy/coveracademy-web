@@ -23,10 +23,10 @@ angular
 
   // Events
   $scope.$on(authEvents.NOT_AUTHORIZED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
+    $state.go('app.home', {locale: $scope.locale()});
   });
   $scope.$on(authEvents.NOT_AUTHENTICATED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
+    $state.go('app.home', {locale: $scope.locale()});
   });
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
     authenticationService.login();

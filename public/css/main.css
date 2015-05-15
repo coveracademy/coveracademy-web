@@ -1,5 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Dosis:400,200,300,500,600,700,800);
-@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300,200,700);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700,900,100);
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
@@ -30,8 +29,8 @@ header.navbar-default .navbar-form input {
   width: 280px !important;
 }
 body {
-  font-family: 'Dosis', 'sans-serif';
-  font-size: 17px;
+  font-family: 'Ubuntu', 'sans-serif';
+  font-size: 14px;
   margin-bottom: 500px;
 }
 body.footer-margin {
@@ -91,7 +90,7 @@ a {
 a:focus, a:hover {
   text-decoration: none;
   outline: none;
-  color: #23527c;
+  color: #131156;
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
@@ -101,6 +100,66 @@ img.brand {
   max-width: 300px;
   margin: 20px;
   border-radius: 5px;
+}
+.padding {
+  padding: 10px;
+}
+.padding-top {
+  padding-top: 10px;
+}
+.padding-top20 {
+  padding-top: 20px;
+}
+.padding-left {
+  padding-left: 10px;
+}
+.no-padding {
+  padding: 0px;
+}
+.no-padding-left {
+  padding-left: 0px;
+}
+.margin {
+  margin: 10px;
+}
+.margin-top {
+  margin-top: 10px;
+}
+.margin-top20 {
+  margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+.margin-bottom20 {
+  margin-bottom: 20px;
+}
+.no-margin {
+  margin: 0px;
+}
+.no-border {
+  border: none;
+}
+.no-radius {
+  border-radius: 0px;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.align-left {
+  text-align: left;
+}
+.align-right {
+  text-align: right;
+}
+.align-center {
+  text-align: center;
+}
+.align-justify {
+  text-align: justify;
+}
+.bolder-text {
+  font-weight: bolder;
 }
 .btn {
   border-radius: 0px;
@@ -134,17 +193,11 @@ img.brand {
 }
 #running-contests h2 {
   text-transform: uppercase;
-  font-size: 34px;
+  font-size: 28px;
   margin: 0px;
 }
 #running-contests .contest {
   margin-bottom: 40px;
-}
-#running-contests .btn.btn-success {
-  background-color: #45b29d;
-}
-#running-contests .btn.btn-primary {
-  background-color: #1f9fc3;
 }
 .watch {
   position: absolute;
@@ -225,6 +278,9 @@ img.brand {
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+}
+#past-winners h3 {
+  margin: 20px 0px 0px 0px;
 }
 #covers {
   background-color: #f7ab24;
@@ -327,7 +383,6 @@ img.brand {
 }
 .label {
   padding: 7px;
-  font-weight: 700;
   display: inline-block;
 }
 .label-success {

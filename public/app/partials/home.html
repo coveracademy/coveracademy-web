@@ -1,5 +1,5 @@
 <div class="color-white">
-  <section id="running-contests">
+  <section id="running-contests" ng-if="hasContests(runningContests)">
   	<div class="container">
   		<div class="watch">
   			<img class="img-responsive" src="/images/watch.png" alt="">
@@ -7,7 +7,11 @@
   		<div ng-repeat="contest in runningContests" class="contest">
   			<div class="row margin-bottom">
   				<div class="col-md-8">
-  					<h2>{{ contest.name }}</h2>
+  					<h2>
+              <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+                {{ contest.name }}
+              </a>
+            </h2>
             <span class="label label-default">
               {{ totalRunningAuditions(contest) }} {{ 'contestants' | translate }}
             </span>
@@ -63,7 +67,7 @@
   	</div>
   </section>
 
-  <section id="next-contests" class="home-section">
+  <section id="next-contests" class="home-section" ng-if="hasContests(waitingContests)">
   	<div class="next-contest contest-cover" ng-repeat="contest in waitingContests" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ contest.image }}');">
   		<div class="container">
   			<h2> {{ 'next_contests' | translate }}</h2>

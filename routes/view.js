@@ -59,7 +59,7 @@ module.exports = function(router, app) {
   });
 
   // PUBLIC ROUTES
-  router.get('/index', function(req, res, next) {
+  router.get('/home', function(req, res, next) {
     Promise.props({
       runningContests: contestService.listRunningContests(['prizes']),
       waitingContests: contestService.listWaitingContests(['prizes']),
@@ -466,13 +466,13 @@ module.exports = function(router, app) {
   router.get('/verify', function(req, res, next) {
     var token = req.param('token');
     if(!token) {
-      messages.respondWithMovedPermanently('index', {}, res);
+      messages.respondWithMovedPermanently('home', {}, res);
     } else {
       userService.verifyEmail(token).then(function(user) {
         res.json({user: user});
       }).catch(function(err) {
         logger.error(err);
-        messages.respondWithMovedPermanently('index', {}, res);
+        messages.respondWithMovedPermanently('home', {}, res);
       });
     }
   });
@@ -480,13 +480,13 @@ module.exports = function(router, app) {
   router.get('/emails/disable', function(req, res, next) {
     var token = req.param('token');
     if(!token) {
-      messages.respondWithMovedPermanently('index', {}, res);
+      messages.respondWithMovedPermanently('home', {}, res);
     } else {
       userService.disableEmails(token).then(function(user) {
         res.json({user: user});
       }).catch(function(err) {
         logger.error(err);
-        messages.respondWithMovedPermanently('index', {}, res);
+        messages.respondWithMovedPermanently('home', {}, res);
       });
     }
   });

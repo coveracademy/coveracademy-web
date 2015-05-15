@@ -2,7 +2,7 @@
 
 angular
 .module('coverAcademy.controllers')
-.controller('indexController', ['$scope', '$translate', 'backendResponse', 'modalService', 'seoService', function($scope, $translate, backendResponse, modalService, seoService) {
+.controller('homeController', ['$scope', '$translate', 'backendResponse', 'modalService', 'seoService', function($scope, $translate, backendResponse, modalService, seoService) {
   $scope.runningContests = backendResponse.data.runningContests;
   $scope.waitingContests = backendResponse.data.waitingContests;
   $scope.latestContestsAuditions = backendResponse.data.latestContestsAuditions;
@@ -55,6 +55,9 @@ angular
   $scope.hasSponsors = function() {
     return $scope.sponsors.length > 0;
   };
+  $scope.hasContests = function(contests) {
+    return contests.length > 0;
+  }
 }])
 .controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
   $scope.contests = backendResponse.data.contests;

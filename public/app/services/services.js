@@ -476,8 +476,8 @@ angular
   };
 }])
 .service('viewService', ['$http', function($http) {
-  this.indexView = function() {
-    return $http.get('/view/index');
+  this.homeView = function() {
+    return $http.get('/view/home');
   };
   this.coversAdminView = function() {
     return $http.get('/view/covers/admin');

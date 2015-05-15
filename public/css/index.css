@@ -116,66 +116,7 @@ a:hover {
 .line-height-1-5 {
   line-height: 1.5;
 }
-.padding {
-  padding: 10px;
-}
-.padding-top {
-  padding-top: 10px;
-}
-.padding-top20 {
-  padding-top: 20px;
-}
-.padding-left {
-  padding-left: 10px;
-}
-.nopadding {
-  padding: 0px;
-}
-.nopadding-left {
-  padding-left: 0px;
-}
-.margin {
-  margin: 10px;
-}
-.margin-top {
-  margin-top: 10px;
-}
-.margin-top20 {
-  margin-top: 20px;
-}
-.margin-bottom {
-  margin-bottom: 10px;
-}
-.margin-bottom20 {
-  margin-bottom: 20px;
-}
-.no-margin {
-  margin: 0px;
-}
-.no-border {
-  border: none;
-}
-.no-radius {
-  border-radius: 0px;
-}
-.overflow-hidden {
-  overflow: hidden;
-}
-.align-left {
-  text-align: left;
-}
-.align-right {
-  text-align: right;
-}
-.align-center {
-  text-align: center;
-}
-.align-justify {
-  text-align: justify;
-}
-.bolder-text {
-  font-weight: bolder;
-}
+
 .font-small {
   font-size: 12px !important;
 }
