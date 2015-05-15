@@ -84,8 +84,7 @@ a {
   -webkit-transition: 300ms;
   -moz-transition: 300ms;
   -o-transition: 300ms;
-  transition: 300ms;
-  color: #fff;
+  transition: 300ms;  
 }
 a:focus, a:hover {
   text-decoration: none;
@@ -167,6 +166,9 @@ img.brand {
 .section {
   color: #fff;
   padding: 60px 0px 60px 0px;
+}
+.section a {
+  color: #fff;
 }
 .section h2 {
   text-transform: uppercase;
@@ -378,25 +380,6 @@ img.brand {
   height: 210px;
   width: 210px;
 }
-.label {
-  padding: 7px;
-  display: inline-block;
-}
-.label-success {
-  background-color: #4caf50;
-}
-.label-warning {
-  background-color: #ff9800;
-}
-.label-danger {
-  background-color: #e51c23;
-}
-.label-info {
-  background-color: #9c27b0;
-}
-.label-primary {
-  background-color: #2196f3;
-}
 /* Extension of social buttons */
 .btn-youtube {
   color: #fff;
@@ -417,7 +400,7 @@ img.brand {
 }
 /* Extension of social buttons */
 
-/* Bootstrap custom buttons and labels */
+/* Bootstrap custom inputs, buttons and labels */
 .btn {
   border: 1px solid transparent;
   border-radius: 0px;
@@ -485,5 +468,24 @@ img.brand {
   color: #666666;
   background-color: #f0f0f0;
   border-color: #eeeeee;
+}
+.label {
+  padding: 7px;
+  display: inline-block;
+}
+.label-success {
+  background-color: #4caf50;
+}
+.label-warning {
+  background-color: #ff9800;
+}
+.label-danger {
+  background-color: #e51c23;
+}
+.label-info {
+  background-color: #9c27b0;
+}
+.label-primary {
+  background-color: #2196f3;
 }
 /* Bootstrap custom buttons and labels */

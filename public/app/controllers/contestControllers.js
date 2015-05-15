@@ -396,17 +396,21 @@ angular
     var end = new Date(date);
     return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
   };
-  $scope.videoUrlPasted = function(event) {
-    var url = event.clipboardData.getData('text/plain');
-    contestService.getAuditionVideoInfos(url).then(function(response) {
-      $scope.audition.url = url;
-      $scope.audition.title = response.data.title;
-      $scope.audition.description = response.data.description;
-    }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
-        alertService.alert('warning', translation);
+  $scope.showVideo = function(url) {
+    if(url) {
+      contestService.getAuditionVideoInfos(url).then(function(response) {
+        $scope.audition.url = url;
+        $scope.audition.title = response.data.title;
+        $scope.audition.description = response.data.description;
+      }).catch(function(err) {
+        translationService.translateError(err).then(function(translation) {
+          alertService.alert('warning', translation);
+        });
       });
-    });
+    }
+  };
+  $scope.videoUrlPasted = function(event) {
+    $scope.showVideo(event.clipboardData.getData('text/plain'));    
   };
   $scope.joinContest = function() {
     contestService.submitAudition($scope.audition, $scope.contest).then(function(response) {

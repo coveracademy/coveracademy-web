@@ -276,10 +276,6 @@ a:hover {
 .label-black {
   background-color: #000;
 }
-input.big {
-  height: 50px;
-  font-size: 22px;
-}
 .embed-container {
   height: 0;
   /*width: 100%;*/

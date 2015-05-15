@@ -99,7 +99,7 @@
       </div>
     </div>
   </div>
-  <form ng-if="isAuthenticated() && userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal">
+  <form ng-if="isAuthenticated() && userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal" novalidate>
     <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
     <div class="row">
       <div class="col-md-12 align-center">
@@ -116,7 +116,14 @@
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
         <div class="form-group" ng-class="{'has-error': auditionForm.url.$invalid && !auditionForm.url.$pristine}">
-          <input ng-paste="videoUrlPasted($event)" type="url" name="url" class="form-control big" placeholder="{{ 'paste_here_the_video_url' | translate}}" required/>
+          <div class="input-group">
+            <input ng-paste="videoUrlPasted($event)" ng-model="url" type="url" name="url" class="form-control input-lg" placeholder="{{ 'paste_here_the_video_url' | translate }}" required/>
+            <span class="input-group-btn">
+              <button ng-click="showVideo(url)" class="btn btn-primary btn-lg" type="submit">
+                <i class="glyphicon glyphicon-ok"></i>
+              </button>
+            </span>
+          </div>
         </div>
         <div ng-if="audition.url">
           <div class="form-group embed-container">
