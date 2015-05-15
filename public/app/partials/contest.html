@@ -383,18 +383,24 @@
     </div>
   </div>
 </div>
-<div id="sponsors">
-  <div ng-if="hasSponsors()" class="container">
-    <h2>{{ 'companies_that_made_this_contest_happen' | translate }}</h2>
-    <div id="brands">
-      <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
-       <img class="brand" ng-src="{{ sponsorInContest.sponsor.logo }}">
-      </a>
+<section id="sponsors" class="section">
+    <div class="container">
+      <div ng-if="hasSponsors()">
+        <h2>{{ 'companies_that_are_supporting_contests' | translate }}</h2>
+        <div class="align-center">
+          <a ng-repeat="sponsorInContest in contest.sponsorsInContest" ng-href="{{ sponsorInContest.sponsor.website }}" title="{{ sponsorInContest.sponsor.name }}" target="_blank" rel="nofollow">
+           <img class="brand" ng-src="{{ sponsorInContest.sponsor.logo }}">
+          </a>
+        </div>
+        <h3 class="align-center">
+          <a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a>
+        </h3>
+      </div>
+      <div ng-if="!hasSponsors()">
+        <h2>{{ 'would_you_like_to_support_this_project' | translate }}</h2>
+        <h2 class="align-center">
+          <a ui-sref="app.contact()">{{ 'become_a_sponsor_and_show_your_brand_here' | translate }}</a>
+        </h2>
+      </div>
     </div>
-    <h3><a ui-sref="app.contact()">{{ 'want_to_become_a_sponsor' | translate }}</a></h3>
-  </div>
-  <div ng-if="!hasSponsors()" class="container">
-    <h2>{{ 'would_you_like_to_support_this_project' | translate }}</h2>
-    <h2><a ui-sref="app.contact()">{{ 'become_a_sponsor_and_show_your_brand_here' | translate }}</a></h2>
-  </div>
-</div>
+  </section>

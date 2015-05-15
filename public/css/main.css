@@ -37,7 +37,7 @@ body.footer-margin {
   margin-bottom: 540px;
 }
 main {
-  padding-top: 55px;
+  padding-top: 51px;
 }
 footer {
   background-color: #363b3f;
@@ -90,7 +90,7 @@ a {
 a:focus, a:hover {
   text-decoration: none;
   outline: none;
-  color: #131156;
+  color: #33333C;
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
@@ -163,23 +163,20 @@ img.brand {
 }
 .btn {
   border-radius: 0px;
-  padding: 9px 23px;
 }
-.color-white {
+.section {
   color: #fff;
+  padding: 60px 0px 60px 0px;
 }
-.home-section {
-  padding: 60px;
-}
-.home-section h2 {
+.section h2 {
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 35px;
   margin-top: 0px;
   margin-bottom: 40px;
 }
-.home-section h3 {
+.section h3 {  
   text-transform: uppercase;
-  font-size: 30px;
+  font-size: 25px;
   margin: 0px;
 }
 #running-contests {
@@ -189,7 +186,6 @@ img.brand {
   background-size: contain;
   background-repeat: no-repeat;
   position: relative;
-  padding: 80px;
 }
 #running-contests h2 {
   text-transform: uppercase;
@@ -258,7 +254,7 @@ img.brand {
 #next-contests {
   color: #ccc;
 }
-#next-contests.home-section {
+#next-contests.section {
   padding: 0px;
 }
 #next-contests h2.contest-name {
@@ -337,6 +333,7 @@ img.brand {
   color: #fff;
   text-align: left;
   background-size: cover;
+  text-shadow: 2px 2px 5px #000000;
 }
 .cover .legend {
   position: absolute;
@@ -346,13 +343,13 @@ img.brand {
 .cover.small .caption {
   font-size: 12px;
 }
-.cover.small .caption .legend {
+.cover.small .legend {
   font-size: 20px;
 }
 .cover.large .caption {
   font-size: 18px;
 }
-.cover.large .caption .legend {
+.cover.large .legend {
   font-size: 26px;
 }
 .profile-picture {
@@ -427,6 +424,7 @@ img.brand {
 }
 .btn-largest {
   font-size: 30px;
+  padding: 20px;
 }
 .btn-primary {
   color: #fff;
