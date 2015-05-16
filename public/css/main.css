@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700,900,100);
+@import url(http://fonts.googleapis.com/css?family=Dosis:400,200,300,500,600,700,800);
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
@@ -29,8 +29,8 @@ header.navbar-default .navbar-form input {
   width: 280px !important;
 }
 body {
-  font-family: 'Ubuntu', 'sans-serif';
-  font-size: 14px;
+  font-family: 'Dosis', 'sans-serif';
+  font-size: 17px;
   margin-bottom: 500px;
 }
 body.footer-margin {
@@ -84,12 +84,12 @@ a {
   -webkit-transition: 300ms;
   -moz-transition: 300ms;
   -o-transition: 300ms;
-  transition: 300ms;  
+  transition: 300ms;
 }
 a:focus, a:hover {
-  text-decoration: none !important;
-  outline: none !important;
-  color: #33333C !important;
+  text-decoration: none;
+  outline: none;
+  color: #33333C;
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
@@ -160,9 +160,7 @@ img.brand {
 .bolder-text {
   font-weight: bolder;
 }
-.btn {
-  border-radius: 0px;
-}
+/* Page sections */
 .section {
   color: #fff;
   padding: 60px 0px 60px 0px;
@@ -171,118 +169,94 @@ img.brand {
   color: #fff;
 }
 .section h2 {
-  font-size: 35px;
+  font-size: 36px;
   margin-top: 0px;
   margin-bottom: 40px;
 }
-.section h3 {  
+.section h2.title {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.section h3 {
   font-size: 25px;
 }
 #running-contests {
-  background-color: #33888F;
-  background-image: url("../images/performar-bg.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
+  background-color: #33888f;
 }
-#running-contests h2 {
-  font-size: 28px;
-  margin: 0px;
+#running-contests.section {
+  padding: 30px 0px 60px 0px;
+}
+#running-contests.section h2 {
+  margin-bottom: 15px;
 }
 #running-contests .contest {
-  margin-bottom: 40px;
+  color: #555;
+  background-color: #fff;
+  border: 6px solid #1f737a;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
-.watch {
-  position: absolute;
-  left: -40px;
-  top: 7%;
+#running-contests .contest h2 {
+  font-size: 30px;
+  margin: 0px;
 }
-.countdown {
-  display: block;
-  overflow: hidden;
-  padding: 0px;
-  text-align: right;
+#running-contests .contest h2 a {
+  color: #555;
 }
-.countdown li {
-  list-style: none;
-  display:inline-block;
-  margin-right: 4 0px;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 18px;
-  position: relative;
+#running-contests .label {
+  background-color: #33888f;
+  font-size: 16px;
+  font-weight: 500;
 }
-.countdown li:last-child {
-  margin-right: 0
-}
-.countdown li span {
-  display: block;
+#running-contests .more-auditions {
+  color: #555;
   font-size: 25px;
-  font-weight: 700;
-  width: 70px;
-  height: 40px;
-  line-height: 40px;
+  margin-top: 15px;
 }
-.countdown li .days {
-  background-color: #45b29d;
-}
-.countdown li .hours {
-  background-color: #efc94c;
-}
-.countdown li .minutes {
-  background-color: #e27a3f;
-}
-.countdown li .seconds {
-  background-color: #df5a49;
-}
-.countdown li p {
-  font-size: 14px;
+#running-contests .btn {
+  font-size: 20px;
+  width: 130px;
 }
 #next-contests {
-  color: #ccc;
+  background-image: url('/images/slider/bg3.jpg');
+  background-position: center;
+  background-size: cover;
 }
-#next-contests.section {
-  padding: 0px;
+#next-contests .contest {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 2px 2px 5px #000000;
 }
-#next-contests h2.contest-name {
-  font-weight: 500;
-  margin: 20px 0px 20px 0px;
+#next-contests .contest h2 {
+  font-size: 30px;
+  margin: 0px;
 }
-#next-contests .actions {
-  margin-top: 20px;
+#next-contests .btn {
+  font-size: 20px;
+  width: 180px;
 }
-.next-contest {
-  padding: 60px;
+#next-contests .prizes {
+  display: inline-block;
+  margin: 0 auto;
+}
+#next-contests .prize {
+  float: left;
+  width: 220px;
 }
 #past-winners {
   background-color: #33888F;
-  background-image: url("../images/performar-bg.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
 }
 #covers {
   background-color: #f7ab24;
-  background-image: url("../images/contact-bg.jpg");
-  background-position: center;
-  background-size: contain;
-  background-repeat:no-repeat;
-  position: relative;
 }
 #sponsors {
   background-color: #1881a2;
-  background-image: url("../images/sponsor-bg.jpg");
-  background-position:50% 0;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
 }
-/****************************************/
-/****************************************/
-/****************************************/
-/****************************************/
+/* Page sections */
 .block-center {
   margin: 0 auto;
 }
@@ -385,6 +359,7 @@ img.brand {
 
 /* Bootstrap custom inputs, buttons and labels */
 .btn {
+  color: #fff;
   border: 1px solid transparent;
   border-radius: 0px;
 }
@@ -393,53 +368,43 @@ img.brand {
   padding: 20px;
 }
 .btn-primary {
-  color: #fff;
-  background-color: #2196f3;
+  background-color: #2e87ce;
   border-color: transparent;
 }
 .btn-primary:hover {
-  color: #fff;
-  background-color: #0d87e9;
+  background-color: #2e87ce;
   border-color: transparent;
 }
 .btn-success {
-  color: #fff;
-  background-color: #4caf50;
+  background-color: #45b29d;
   border-color: transparent;
 }
 .btn-success:hover {
-  color: #fff;
-  background-color: #439a46;
+  background-color: #45b29d;
   border-color: transparent;
 }
 .btn-warning {
-  color: #fff;
-  background-color: #ff9800;
+  background-color: #efc94c;
   border-color: transparent;
 }
 .btn-warning:hover {
-  color: #fff;
-  background-color: #e08600;
+  background-color: #efc94c;
   border-color: transparent;
 }
 .btn-danger {
-  color: #fff;
-  background-color: #e51c23;
+  background-color: #df5a49;
   border-color: transparent;
 }
 .btn-danger:hover {
-  color: #fff;
-  background-color: #cb171e;
+  background-color: #df5a49;
   border-color: transparent;
 }
 .btn-info {
-  color: #fff;
-  background-color: #9c27b0;
+  background-color: #e27a3f;
   border-color: transparent;
 }
 .btn-info:hover {
-  color: #fff;
-  background-color: #862197;
+  background-color: #e27a3f;
   border-color: transparent;
 }
 .btn-default {
@@ -472,3 +437,53 @@ img.brand {
   background-color: #2196f3;
 }
 /* Bootstrap custom buttons and labels */
+
+/* Contest components */
+.watch {
+  position: absolute;
+  left: -40px;
+  top: 7%;
+}
+.countdown {
+  display: block;
+  overflow: hidden;
+  padding: 0px;
+  text-align: right;
+}
+.countdown li {
+  list-style: none;
+  display:inline-block;
+  margin-right: 4 0px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  position: relative;
+}
+.countdown li:last-child {
+  margin-right: 0
+}
+.countdown li span {
+  color: #fff;
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  width: 70px;
+  height: 40px;
+  line-height: 40px;
+}
+.countdown li .days {
+  background-color: #45b29d;
+}
+.countdown li .hours {
+  background-color: #efc94c;
+}
+.countdown li .minutes {
+  background-color: #e27a3f;
+}
+.countdown li .seconds {
+  background-color: #df5a49;
+}
+.countdown li p {
+  font-size: 14px;
+}
+/* Contest components * /

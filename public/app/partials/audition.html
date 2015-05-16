@@ -80,7 +80,7 @@
             </div>
             <div ng-if="isContestProgress('running')">
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
-                <h2 class="no-margin">{{ 'vote_now' | translate }}</h2>
+                <h2 class="no-margin">{{ 'vote' | translate }}</h2>
                 <h5 ng-if="userAuthenticated()" class="no-margin">
                   {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
                 </h5>

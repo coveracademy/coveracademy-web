@@ -34,18 +34,18 @@
         </div>
         <div>
           <a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg">
-            {{ 'vote_now' | translate }}
+            {{ 'vote' | translate }}
           </a>
           <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">
             {{ 'join_now' | translate }}
           </a>
           <a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="pull-right btn btn-default btn-lg">
-            {{ 'more_contestants' | translate }}
+            {{ 'more_auditions' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </div>
       </div>
-      <h2>{{ 'next_contests' | translate }}</h2>
+      <h2>{{ 'next_contestss' | translate }}</h2>
       <div ng-repeat="contest in waitingContests">
         <div class="row">
           <div class="col-md-12">
