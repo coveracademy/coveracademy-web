@@ -115,8 +115,10 @@
       </div>
       <div class="col-md-4 align-right">
         <h2>
-          {{ 'see_more' | translate }}
-          <span class="glyphicon glyphicon-chevron-right"></span>
+          <a ui-sref="app.contests()">
+            {{ 'see_more' | translate }}
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
         </h2>
       </div>
     </div>
@@ -145,7 +147,7 @@
 	    </div>
 	    <div class="col-md-6 align-right">
 	      <h2>
-          <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})" autoscroll="false">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})">
             {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
@@ -159,7 +161,7 @@
 	    </div>
 	    <div class="col-md-6 align-right">
 	      <h2>
-          <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})" autoscroll="false">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})">
             {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
