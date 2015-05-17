@@ -501,44 +501,44 @@ form.compacted .form-group {
   width: 66px;
   height: 66px;
 }
-.prizes {
+#prizes {
   padding-top: 20px;
 }
-.prize .card {
+#prizes .prize .card {
   background-color: #363b3f;
   border-radius: 4px;
   box-shadow: 5px 5px 2px rgba(0,0,0,.1);
 }
-.prize .text-muted {
+#prizes .prize .text-muted {
   color: #999;
 }
-.prize .well {
+#prizes .prize .well {
   text-shadow: none;
 }
-.prize .prize-image {
+#prizes .prize .prize-image {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.prize a {
+#prizes .prize a {
   text-decoration: underline !important;
 }
-.prize .well {
+#prizes .prize .well {
   margin-top: 10px;
   margin-bottom: 0px;
 }
-.prize .well a {
+#prizes .prize .well a {
   color: black;
 }
-.prize .well p {
+#prizes .prize .well p {
   color: black;
 }
-.prize .well h4 {
+#prizes .prize .well h4 {
   color: black;
 }
-.prize .prize-image {
+#prizes .prize .prize-image {
   width: 100%;
 }
-.prize hr {
+#prizes .prize hr {
   margin-top: 5px;
   margin-bottom: 5px;
 }

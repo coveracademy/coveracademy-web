@@ -16,7 +16,7 @@ angular
       auditionClick: '&'
     },
     link: function(scope, element, attrs, ctrl) {
-      scope.showScoreFinal = scope.showScore === 'true' ? true : false;
+      scope.showScore = scope.scoreByAudition ? true : false;
       scope.fontSize = scope.thumbSize ? scope.thumbSize : 'medium';
     }
   };

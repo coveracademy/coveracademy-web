@@ -412,8 +412,11 @@ exports.listWinnerAuditions = function(obj) {
 exports.latestWinnerAuditions = function() {
   return Contest.forge({progress: 'finished'}).query(function(qb) {
     qb.orderBy('end_date', 'desc');
-  }).fetch({require: true}).then(function(contest) {
+  }).fetch({require: true}).bind({}).then(function(contest) {
+    this.contest = contest;
     return $.listWinnerAuditions(contest);
+  }).then(function(auditions) {
+    return {contest: this.contest, auditions: auditions};
   }).catch(Bookshelf.NotFoundError, function(err) {
     return Audition.collection();
   });

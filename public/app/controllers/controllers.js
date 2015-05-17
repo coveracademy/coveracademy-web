@@ -75,7 +75,7 @@ angular
   $scope.languages = $languages.all;
   $scope.sectionActive = '';
   $scope.sections = {
-    contact: ['app.contact'],
+    contests: ['app.contests'],
     contestants: ['app.contestants'],
     covers: ['app.cover', 'app.covers', 'app.coversRank', 'app.artist', 'app.artists', 'app.music', 'app.musicGenre', 'app.musicGenreRank', 'app.search']
   };

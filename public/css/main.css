@@ -177,6 +177,11 @@ img.brand {
   text-transform: uppercase;
   font-weight: 500;
 }
+.section p.subtitle {
+  text-transform: none;
+  font-size: 28px;
+  font-weight: 300;
+}
 .section h3 {
   font-size: 25px;
 }
@@ -225,10 +230,9 @@ img.brand {
 }
 #next-contests .contest {
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 5px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 40px;
   margin-bottom: 20px;
-  text-align: center;
   text-shadow: 2px 2px 5px #000000;
 }
 #next-contests .contest h2 {
@@ -245,7 +249,10 @@ img.brand {
 }
 #next-contests .prize {
   float: left;
-  width: 220px;
+  width: 250px;
+}
+#next-contests .prize h3 {
+  font-weight: 700;
 }
 #past-winners {
   background-color: #33888F;

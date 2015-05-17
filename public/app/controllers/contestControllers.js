@@ -10,7 +10,8 @@ angular
   $scope.totalWaitingContestsAuditions = backendResponse.data.totalWaitingContestsAuditions;
   $scope.bestCovers = backendResponse.data.bestCovers;
   $scope.latestCovers = backendResponse.data.latestCovers;
-  $scope.latestWinnerAuditions = backendResponse.data.latestWinnerAuditions;
+  $scope.latestContest = backendResponse.data.latestWinnerAuditions.contest;
+  $scope.latestWinnerAuditions = backendResponse.data.latestWinnerAuditions.auditions;
   $scope.sponsors = backendResponse.data.sponsors;
   $translate(['seo.title.index', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.index']);
@@ -413,7 +414,7 @@ angular
     }
   };
   $scope.videoUrlPasted = function(event) {
-    $scope.showVideo(event.clipboardData.getData('text/plain'));    
+    $scope.showVideo(event.clipboardData.getData('text/plain'));
   };
   $scope.joinContest = function() {
     contestService.submitAudition($scope.audition, $scope.contest).then(function(response) {

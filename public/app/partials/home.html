@@ -69,7 +69,7 @@
 <section id="next-contests" class="section" ng-if="hasContests(waitingContests)">
   <div class="container">
     <h2 class="title">{{ 'next_contests' | translate }}</h2>
-    <div class="contest align-center" ng-repeat="contest in waitingContests">
+    <div class="contest" ng-repeat="contest in waitingContests">
       <h2 class="title">
       	<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
           {{ contest.name }}
@@ -83,8 +83,10 @@
           </h3>
         </div>
       </div>
-      <h3>{{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining(contest)} }}</h3>
-      <div class="row">
+      <h3>
+        {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining(contest)} }}
+      </h3>
+      <div class="row with-padding">
         <div class="col-md-12">
           <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">
             {{ 'join_now' | translate }}
@@ -100,11 +102,28 @@
 
 <section id="past-winners" class="section">
 	<div class="container">
-		<h2 class="title">{{ 'past_winners' | translate }}</h2>
-		<div class="row align-center">
+    <div class="row">
+      <div class="col-md-8">
+    		<h2 class="title">
+          {{ 'past_winners' | translate }}
+          <p class="subtitle">
+            <a ui-sref="app.contest({id: latestContest.id, slug: latestContest.slug})">
+              {{ latestContest.name }}
+            </a>
+          </p>
+        </h2>
+      </div>
+      <div class="col-md-4 align-right">
+        <h2>
+          {{ 'see_more' | translate }}
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </h2>
+      </div>
+    </div>
+		<div class="row">
       <div class="col-md-4" ng-repeat="winnerAudition in latestWinnerAuditions">
         <a ui-sref="{{ userState(winnerAudition.user) }}">
-          <div profile-picture="winnerAudition.user" class="profile-picture large img-circle block-center">
+          <div profile-picture="winnerAudition.user" class="profile-picture img-circle large">
           </div>
         </a>
         <h3>
