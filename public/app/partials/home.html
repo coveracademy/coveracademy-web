@@ -125,10 +125,10 @@
 		<div class="row">
       <div class="col-md-4" ng-repeat="winnerAudition in latestWinnerAuditions">
         <a ui-sref="{{ userState(winnerAudition.user) }}">
-          <div profile-picture="winnerAudition.user" class="profile-picture img-circle large">
+          <div profile-picture="winnerAudition.user" class="profile-picture large img-circle block-center">
           </div>
         </a>
-        <h3>
+        <h3 class="align-center">
           {{ winnerAudition.place }}º
           <a ui-sref="{{ userState(winnerAudition.user) }}">
             {{ winnerAudition.user.name }}
