@@ -7,7 +7,7 @@
             <img ng-src="{{ music.medium_thumbnail }}">
           </div>
           <div>
-            <h1 class="bolder-text">
+            <h1 class="text-bold">
               {{ music.title }} {{ 'by_lowercase' | translate }}
               <a ui-sref="app.artist({locale: locale(), artist: music.artist.slug})">
                 {{ music.artist.name }}
@@ -39,11 +39,11 @@
     </div>
   </div>
   <div class="page-section20">
-    <div class="align-center">
+    <div class="text-center">
       <pagination total-items="totalCoversOfMusic" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>
     <cover-songs ng-model="coversOfMusic" locale="{{ locale() }}"></cover-songs>
-    <div class="align-center">
+    <div class="text-center">
       <pagination total-items="totalCoversOfMusic" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
     </div>
   </div>

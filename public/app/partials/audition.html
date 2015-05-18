@@ -1,7 +1,7 @@
 <div id="contest" class="pretty-header small background-style" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">>
   <div class="content">
     <div class="container">
-      <div class="title align-center">
+      <div class="title text-center">
         <h1>
           <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
             {{ contest.name }}
@@ -18,7 +18,7 @@
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-md-12 align-center">
+    <div class="col-md-12 text-center">
       <div class="section-title">
         <h1 class="title">
           {{ audition.title }}
@@ -73,7 +73,7 @@
       </div>
       <div class="col-md-3">
         <div>
-          <div class="align-center">
+          <div class="text-center">
             <img ng-if="isWinner()" class="medium-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
             <div class="votes-number">
               {{ votes }} {{ 'votes' | translate }}
@@ -114,7 +114,7 @@
       <div class="col-md-12">
         <alert ng-if="isAuditionApproved()" type="warning">
           <div class="font-biggest">
-            <p class="no-margin align-center">
+            <p class="no-margin text-center">
               {{ 'this_contest_is_not_happening_yet' | translate }}
             </p>
             <p class="no-margin" ng-if="isContestProgress('waiting_time')">
@@ -154,7 +154,7 @@
           </div>
         </alert>
         <alert ng-if="!isAuditionApproved()" type="warning">
-          <h2 class="align-center no-margin">{{ 'this_audition_is_under_review_wait_for_approval' | translate }}</h2>
+          <h2 class="text-center no-margin">{{ 'this_audition_is_under_review_wait_for_approval' | translate }}</h2>
         </alert>
       </div>
     </div>

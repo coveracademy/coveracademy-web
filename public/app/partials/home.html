@@ -1,4 +1,4 @@
-<section id="running-contests" class="section" ng-if="hasContests(runningContests)">
+<section id="running-contests" class="first section" ng-if="hasContests(runningContests)">
   <div class="container">
     <h2 class="title">{{ 'contests_happening' | translate }}</h2>
 		<div ng-repeat="contest in runningContests" class="contest">
@@ -20,30 +20,11 @@
           </div>
 				</div>
 				<div class="col-md-4">
-					<timer end-time="contest.end_date">
-						<ul class="countdown">
-							<li>
-								<span class="days time-font">{{ days }}</span>
-								<p>{{ 'days' | translate }}</p>
-							</li>
-							<li>
-								<span class="hours time-font">{{ hours }}</span>
-								<p>{{ 'hours' | translate }}</p>
-							</li>
-							<li>
-								<span class="minutes time-font">{{ minutes }}</span>
-								<p>{{ 'minutes' | translate }}</p>
-							</li>
-							<li>
-								<span class="seconds time-font">{{ seconds }}</span>
-								<p>{{ 'seconds' | translate }}</p>
-							</li>
-						</ul>
-					</timer>
+          <contest-timer ng-model="contest"></contest-timer>					
 				</div>
 			</div>
 			<div class="row margin-bottom">
-        <div ng-repeat="audition in latestAuditions(contest)" class="col-md-4">
+        <div ng-repeat="audition in latestRunningAuditions(contest)" class="col-md-4">
           <audition ng-model="audition" locale="{{ locale() }}">
           </audition>
         </div>
@@ -70,32 +51,41 @@
   <div class="container">
     <h2 class="title">{{ 'next_contests' | translate }}</h2>
     <div class="contest" ng-repeat="contest in waitingContests">
-      <h2 class="title">
-      	<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
-          {{ contest.name }}
-      	</a>
-      </h2>
-      <div class="prizes">
-        <div class="prize" ng-repeat="prize in contest.prizes">
-          <h3>{{ prize.place }}º {{ 'place' | translate }}</h3>
-          <h3 class="no-margin">
-            {{ prize.name }}
-          </h3>
+      <div class="row">
+        <div class="col-md-8">
+          <h2 class="title">
+          	<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+          	</a>
+          </h2>
         </div>
-      </div>
-      <h3>
-        {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining(contest)} }}
-      </h3>
-      <div class="row with-padding">
-        <div class="col-md-12">
-          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">
+        <div class="col-md-4">
+          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
             {{ 'join_now' | translate }}
           </a>
-          <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-warning btn-lg">
-            {{ 'read_the_rules' | translate }}
-          </a>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4" ng-repeat="prize in contest.prizes">
+              <h3>{{ prize.place }}º {{ 'place' | translate }}</h3>
+              <h3 class="no-margin">
+                {{ prize.name }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+      <h3 class="text-bold">{{ 'see_who_is_already_participating' | translate }}</h3>
+      <div class="row margin-top">
+        <div ng-repeat="audition in latestWaitingAuditions(contest)" class="col-md-4">
+          <audition ng-model="audition" locale="{{ locale() }}">
+          </audition>
+        </div>
+      </div>   
 		</div>
 	</div>
 </section>
@@ -113,7 +103,7 @@
           </p>
         </h2>
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h2>
           <a ui-sref="app.contests()">
             {{ 'see_more' | translate }}
@@ -128,7 +118,7 @@
           <div profile-picture="winnerAudition.user" class="profile-picture large img-circle block-center">
           </div>
         </a>
-        <h3 class="align-center">
+        <h3 class="text-center">
           {{ winnerAudition.place }}º
           <a ui-sref="{{ userState(winnerAudition.user) }}">
             {{ winnerAudition.user.name }}
@@ -145,7 +135,7 @@
 	    <div class="col-md-6">
 	      <h2 class="title">{{ 'best_covers' | translate }}</h2>
 	    </div>
-	    <div class="col-md-6 align-right">
+	    <div class="col-md-6 text-right">
 	      <h2>
           <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})">
             {{ 'more_covers' | translate }}
@@ -159,7 +149,7 @@
 	    <div class="col-md-6">
 	      <h2 class="title">{{ 'latest_covers' | translate }}</h2>
 	    </div>
-	    <div class="col-md-6 align-right">
+	    <div class="col-md-6 text-right">
 	      <h2>
           <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})">
             {{ 'more_covers' | translate }}
@@ -175,7 +165,7 @@
 <section id="sponsors" class="section" ng-if="hasSponsors()">
 	<div class="container">
     <h2 class="title">{{ 'partners' | translate }}</h2>
-    <div class="align-center">
+    <div class="text-center">
       <a ng-repeat="sponsor in sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank" rel="nofollow">
        <img class="brand" ng-src="{{ sponsor.logo }}">
       </a>

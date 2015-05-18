@@ -122,4 +122,17 @@ angular
       }
     }
   }
+}])
+.directive('contestTimer', [function() {
+  return {
+    templateUrl: 'app/partials/widgets/contest-timer.html',
+    restrict: 'E',
+    require: 'ngModel',
+    scope: {
+      fontSize: '@'
+    },
+    link: function(scope, element, attrs, ctrl) {
+      console.log(scope)
+    }
+  }
 }]);

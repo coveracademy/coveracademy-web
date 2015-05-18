@@ -7,7 +7,7 @@
             <img ng-src="/img/genres/{{ musicGenre.image }}">
           </div>
           <div>
-            <h1 class="bolder-text big">
+            <h1 class="text-bold big">
               {{ musicGenre.name }}
             </h1>
           </div>
@@ -23,7 +23,7 @@
       <div class="col-md-8">
 
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
@@ -47,7 +47,7 @@
           {{ 'the_best_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
@@ -67,7 +67,7 @@
           {{ 'the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">

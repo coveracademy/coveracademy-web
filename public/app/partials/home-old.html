@@ -49,9 +49,9 @@
       <div ng-repeat="contest in waitingContests">
         <div class="row">
           <div class="col-md-12">
-            <div class="contest-cover align-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
+            <div class="contest-cover text-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
               <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
-                <h2 class="align-center no-margin">
+                <h2 class="text-center no-margin">
                   {{ contest.name }}
                 </h2>
               </a>
@@ -71,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3 align-center">
+    <div class="col-md-3 text-center">
       <div class="card">
         <div class="row with-padding">
           <div class="col-md-12">
@@ -121,7 +121,7 @@
         <div class="col-md-9">
           <h2>{{ 'best_covers' | translate }}</h2>
         </div>
-        <div class="col-md-3 align-right">
+        <div class="col-md-3 text-right">
           <h2>
             <small>
               <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})" autoscroll="false">
@@ -137,7 +137,7 @@
         <div class="col-md-9">
           <h2>{{ 'latest_covers' | translate }}</h2>
         </div>
-        <div class="col-md-3 align-right">
+        <div class="col-md-3 text-right">
           <h2>
             <small>
               <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})" autoscroll="false">

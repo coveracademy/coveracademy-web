@@ -5,7 +5,7 @@
 			<div class="col-md-12">
 				<div class="contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
 					<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
-						<h1 class="align-center no-margin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
+						<h1 class="text-center no-margin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
 					</a>
 					<div class="contest-infos">
 						<h3 class="no-margin">
@@ -21,7 +21,7 @@
 						</h3>
 					</div>
 					<div ng-if="hasWinnerAuditions(contest)">
-				    <h3 class="align-center">{{ 'winners' | translate }}</h3>
+				    <h3 class="text-center">{{ 'winners' | translate }}</h3>
 				    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row with-padding">
 				      <div ng-repeat="audition in row" class="col-md-4">
 				      	<div class="thumbnail">
@@ -31,7 +31,7 @@
 				      </div>
 				    </div>
 				  </div>
-				  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="align-center">
+				  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="text-center">
 				  	<a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
 	          {{ 'join_now' | translate }}
 	       		</a>

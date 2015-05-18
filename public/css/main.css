@@ -100,6 +100,9 @@ img.brand {
   margin: 20px;
   border-radius: 5px;
 }
+.text-bold {
+  font-weight: 500;
+}
 .padding {
   padding: 10px;
 }
@@ -145,37 +148,30 @@ img.brand {
 .overflow-hidden {
   overflow: hidden;
 }
-.align-left {
-  text-align: left;
-}
-.align-right {
-  text-align: right;
-}
-.align-center {
-  text-align: center;
-}
-.align-justify {
-  text-align: justify;
-}
-.bolder-text {
-  font-weight: bolder;
-}
 /* Page sections */
 .section {
-  color: #fff;
   padding: 60px 0px 60px 0px;
+  color: #fff;
+}
+.section.first {
+  padding: 30px 0px 60px 0px; 
 }
 .section a {
   color: #fff;
 }
-.section h2 {
-  font-size: 36px;
-  margin-top: 0px;
-  margin-bottom: 40px;
-}
-.section h2.title {
+.section .title {
   text-transform: uppercase;
   font-weight: 500;
+}
+.section h2.title {
+  font-size: 36px;
+  margin-top: 0px;
+  margin-bottom: 40px;  
+}
+.section h1.title {
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 40px;  
 }
 .section p.subtitle {
   text-transform: none;
@@ -185,11 +181,8 @@ img.brand {
 .section h3 {
   font-size: 25px;
 }
-#running-contests {
+#running-contests, #contest {
   background-color: #33888f;
-}
-#running-contests.section {
-  padding: 30px 0px 60px 0px;
 }
 #running-contests.section h2 {
   margin-bottom: 15px;
@@ -239,17 +232,12 @@ img.brand {
   font-size: 30px;
   margin: 0px;
 }
-#next-contests .btn {
-  font-size: 20px;
-  width: 180px;
-}
 #next-contests .prizes {
   display: inline-block;
   margin: 0 auto;
 }
 #next-contests .prize {
   float: left;
-  width: 250px;
 }
 #next-contests .prize h3 {
   font-weight: 700;
@@ -451,7 +439,7 @@ img.brand {
   left: -40px;
   top: 7%;
 }
-.countdown {
+.countdown ul {
   display: block;
   overflow: hidden;
   padding: 0px;
@@ -477,6 +465,12 @@ img.brand {
   width: 70px;
   height: 40px;
   line-height: 40px;
+}
+.countdown.large li span {
+  font-size: 40px;
+  width: 77px;
+  height: 52px;
+  line-height: 52px;
 }
 .countdown li .days {
   background-color: #45b29d;

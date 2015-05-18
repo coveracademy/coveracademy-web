@@ -5,7 +5,8 @@ angular
 .controller('homeController', ['$scope', '$translate', 'backendResponse', 'modalService', 'seoService', function($scope, $translate, backendResponse, modalService, seoService) {
   $scope.runningContests = backendResponse.data.runningContests;
   $scope.waitingContests = backendResponse.data.waitingContests;
-  $scope.latestContestsAuditions = backendResponse.data.latestContestsAuditions;
+  $scope.latestRunningContestsAuditions = backendResponse.data.latestRunningContestsAuditions;
+  $scope.latestWaitingContestsAuditions = backendResponse.data.latestWaitingContestsAuditions;
   $scope.totalRunningContestsAuditions = backendResponse.data.totalRunningContestsAuditions;
   $scope.totalWaitingContestsAuditions = backendResponse.data.totalWaitingContestsAuditions;
   $scope.bestCovers = backendResponse.data.bestCovers;
@@ -31,8 +32,11 @@ angular
       $scope.url = url;
     }
   };
-  $scope.latestAuditions = function(contest) {
-    return $scope.latestContestsAuditions[contest.id];
+  $scope.latestRunningAuditions = function(contest) {
+    return $scope.latestRunningContestsAuditions[contest.id];
+  };
+  $scope.latestWaitingAuditions = function(contest) {
+    return $scope.latestWaitingContestsAuditions[contest.id];
   };
   $scope.totalRunningAuditions = function(contest) {
     return $scope.totalRunningContestsAuditions[contest.id];

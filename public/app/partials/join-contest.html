@@ -5,8 +5,8 @@
         <div class="col-md-3">
           <div class="join">
             <div ng-if="isContestProgress('running')">
-              <h4 class="align-left">{{ 'remaining_time' | translate }}:</h4>
-              <h2 class="margin bolder-text">
+              <h4 class="text-left">{{ 'remaining_time' | translate }}:</h4>
+              <h2 class="margin text-bold">
                 <span ng-if="remainingOneDay(contest.end_date)">
                   <timer interval="60000" end-time="contest.end_date">
                     {{ hours }}
@@ -78,7 +78,7 @@
 </div>
 <div ng-if="!isContestProgress('finished') && !isContestant()" class="container">
   <div ng-if="!isAuthenticated()">
-    <h1 class="align-center">{{ 'join_contest_signin_account' | translate }}</h1>
+    <h1 class="text-center">{{ 'join_contest_signin_account' | translate }}</h1>
     <hr/>
     <div class="row margin">
       <div class="col-md-6 col-md-offset-3">
@@ -89,8 +89,8 @@
     </div>
   </div>
   <div ng-if="isAuthenticated() && !userAuthenticated().youtube_account">
-    <h1 class="align-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
-    <h2 class="align-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
+    <h1 class="text-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
+    <h2 class="text-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
     <div class="row with-padding">
       <div class="col-md-6 col-md-offset-3">
         <a ng-click="login('youtube')" class="btn btn-lg btn-block btn-social btn-youtube">
@@ -100,9 +100,9 @@
     </div>
   </div>
   <form ng-if="isAuthenticated() && userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal" novalidate>
-    <h2 class="align-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
+    <h2 class="text-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
     <div class="row">
-      <div class="col-md-12 align-center">
+      <div class="col-md-12 text-center">
         <alert type="info">
           <p class="font-big no-margin">
             {{ 'the_publish_date_must_be_since' | translate }}
@@ -148,7 +148,7 @@
 </div>
 <div ng-if="isContestProgress('finished') || isContestant()" class="container">
   <div class="jumbotron margin">
-    <div ng-if="isContestProgress('finished')" class="align-center">
+    <div ng-if="isContestProgress('finished')" class="text-center">
       <h1 class="no-margin">
         {{ 'this_contest_was_finished' | translate }}
       </h1>
@@ -158,11 +158,11 @@
         </a>
       </h2>
     </div>
-    <div ng-if="isContestant()" class="align-center">
+    <div ng-if="isContestant()" class="text-center">
       <h1 class="no-margin">
         {{ 'you_are_already_in_the_contest' | translate }}
       </h1>
-      <h2 class="align-center">
+      <h2 class="text-center">
         <a ui-sref="app.audition({locale: locale(), id: userAudition.id, slug: userAudition.slug})">
           {{ 'watch_your_audition' | translate }}
         </a>

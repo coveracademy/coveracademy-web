@@ -70,7 +70,8 @@ module.exports = function(router, app) {
     }).bind({}).then(function(result) {
       this.result = result;
       return Promise.props({
-        latestContestsAuditions: contestService.latestContestsAuditions(result.runningContests, 3),
+        latestRunningContestsAuditions: contestService.latestContestsAuditions(result.runningContests, 3),
+        latestWaitingContestsAuditions: contestService.latestContestsAuditions(result.waitingContests, 3),
         totalRunningContestsAuditions: contestService.totalAuditions(result.runningContests),
         totalWaitingContestsAuditions: contestService.totalAuditions(result.waitingContests)
       });
