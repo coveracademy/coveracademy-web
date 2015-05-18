@@ -1,42 +1,43 @@
 <div id="contest-draw" ng-if="isContestDraw()" class="alert alert-warning">
   <h3 class="text-center no-margin">{{ 'the_contest_is_drawn' | translate }}</h3>
 </div>
-<section id="contest" class="first section">
+<section id="contest" class="section">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
         <h1 class="title">
           {{ contest.name }}
         </h1>
-      </div>
-      <div class="col-md-4">
-        <contest-timer ng-model="contest" font-size="large"></contest-timer>
-      </div>
-    </div>
-    <div class="row" ng-if="!isContestProgress('finished')">
-      <div class="col-md-4">
-        <div ng-if="!isContestant()">
-          <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
-            {{ 'join_now' | translate }}
-          </a>
-          <a class="btn btn-info btn-lg" ui-sref="app.contestGuideline({locale: locale()})">
-            {{ 'read_the_rules' | translate }}
-          </a>
+        <div class="row" ng-if="!isContestProgress('finished')">
+          <div class="col-md-6">
+            <div ng-if="!isContestant()">
+              <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
+                {{ 'join_now' | translate }}
+              </a>
+              <a class="btn btn-info btn-lg" ui-sref="app.contestGuideline({locale: locale()})">
+                {{ 'read_the_rules' | translate }}
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3 class="no-margin">
+              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </h3>
+          </div>
         </div>
       </div>
       <div class="col-md-4">
-        {{ 'share_this_contest' | translate }}:
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-          <i class="fa fa-facebook"></i>
-        </a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus" title="{{ 'share_on' | translate }} Google+" target="_blank">
-          <i class="fa fa-google-plus"></i>
-        </a>
+        <contest-timer ng-model="contest"></contest-timer>
       </div>
-    </div>
+    </div>    
     <div id="prizes">
       <div class="row" ng-repeat="row in contest.prizes | partition: 3">
         <div class="col-md-4 prize text-center" ng-repeat="prize in row">
@@ -70,6 +71,13 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+<section id="warnings" class="section no-margin" ng-if="isContestProgress('waiting')">
+  <div class="container">
+    <h2 class="text-center text-bold no-margin">
+      {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
+    </h2>
   </div>
 </section>
 <section id="auditions">
@@ -130,21 +138,7 @@
             </h4>
           </a>
         </div>
-      </div>
-      <h2>
-        {{ 'help_sharing' | translate }}
-      </h2>
-      <div class="padding-top">
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-            <i class="fa fa-facebook"></i>
-          </a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-          <i class="fa fa-google-plus"></i>
-        </a>
-      </div>
+      </div>   
     </div>
   </div>
   <div ng-if="(isContestProgress('waiting') || isContestProgress('waiting_time')) && hasAuditions()" class="container">
@@ -164,47 +158,7 @@
         </audition>
       </div>
     </div>
-  </div>
-  <div ng-if="isContestProgress('running') && !hasAuditions()" class="container">
-    <div class="jumbotron white margin text-center">
-      <div ng-if="!isContestant()">
-        <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
-        <div class="padding-top">
-          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-            {{ 'join_now' | translate }}
-          </a>
-          <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-            {{ 'read_the_rules' | translate }}
-          </a>
-        </div>
-      </div>
-      <div ng-if="isContestant()">
-        <h2>{{ 'this_contest_is_happening_but_we_need_contestants' | translate }}</h2>
-        <div class="padding-top">
-          <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
-            {{ 'you_are_participating' | translate }}
-            <h4 ng-if="!isAuditionApproved()">
-              {{ 'waiting_for_approval' | translate }}
-            </h4>
-          </a>
-        </div>
-      </div>
-      <h2>
-        {{ 'help_sharing' | translate }}
-      </h2>
-      <div>
-        <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-            <i class="fa fa-facebook"></i>
-          </a>
-        <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-          <i class="fa fa-google-plus"></i>
-        </a>
-      </div>
-    </div>
-  </div>
+  </div>  
   <div ng-if="isContestProgress('finished')" class="container margin-top">
     <div ng-if="hasWinners()">
       <h1 class="text-center">{{ 'winners' | translate }}</h1>
@@ -254,7 +208,7 @@
       </div>
     </div>
   </div>
-  <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions()" class="container">
+  <div ng-if="isContestProgress('running') || isContestProgress('finished')" class="container">
     <div ng-if="hasUserVotes()">
       <div class="row">
         <div class="col-md-12">

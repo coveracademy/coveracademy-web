@@ -181,7 +181,23 @@ img.brand {
 .section h3 {
   font-size: 25px;
 }
-#running-contests, #contest {
+#contest {
+  background-color: #33888f;  
+}
+#contest.section {
+  padding: 30px 0px 30px 0px; 
+}
+#contest h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+#warnings {
+  background-color: #f7ab24;
+}
+#warnings.section {
+  padding: 10px;
+}
+#running-contests {
   background-color: #33888f;
 }
 #running-contests.section h2 {
@@ -190,7 +206,7 @@ img.brand {
 #running-contests .contest {
   color: #555;
   background-color: #fff;
-  border: 6px solid #1f737a;
+  border: 3px solid #1f737a;
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
@@ -205,7 +221,7 @@ img.brand {
 #running-contests .label {
   background-color: #33888f;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
 }
 #running-contests .more-auditions {
   color: #555;
