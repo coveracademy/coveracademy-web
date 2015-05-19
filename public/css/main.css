@@ -7,6 +7,9 @@ html {
   position: relative;
   min-height: 100%;
 }
+header {
+  height: 51px;
+}
 header.navbar-default {
   background-color: #fff;
   border-bottom: 1px solid #e6e6e6;
@@ -42,7 +45,7 @@ main {
 footer {
   background-color: #363b3f;
   bottom: 0;
-  height: 514px;
+  min-height: 514px;
   width: 100%;
   position: absolute;
 }
@@ -93,9 +96,6 @@ a:focus, a:hover {
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
-}
-img {
-  width: 100%;
 }
 img.brand {
   max-height: 185px;
@@ -153,11 +153,8 @@ img.brand {
 }
 /* Page sections */
 .section {
-  padding: 60px 0px 60px 0px;
+  padding: 30px 0px 30px 0px;
   color: #fff;
-}
-.section.first {
-  padding: 30px 0px 60px 0px;
 }
 .section a {
   color: #fff;
@@ -169,7 +166,7 @@ img.brand {
 .section h2.title {
   font-size: 36px;
   margin-top: 0px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 .section h1.title {
   font-size: 40px;
@@ -186,9 +183,6 @@ img.brand {
 }
 #contest {
   background-color: #33888f;
-}
-#contest.section {
-  padding: 30px 0px 30px 0px;
 }
 #contest h1 {
   font-size: 32px;
@@ -247,9 +241,16 @@ img.brand {
 }
 #intro h1 {
   font-size: 30px;
+  font-weight: 200;
 }
 #intro h2 {
   font-size: 25px;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+#intro img {
+  width: 100%;
 }
 #running-contests {
   background-color: #33888f;
@@ -293,8 +294,8 @@ img.brand {
 }
 #next-contests .contest {
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 10px;
-  padding: 40px;
+  border-radius: 3px;
+  padding: 20px;
   margin-bottom: 20px;
   text-shadow: 2px 2px 5px #000000;
 }

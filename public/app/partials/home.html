@@ -1,11 +1,11 @@
 <section id="intro" class="section" ng-if="!isAuthenticated()">
   <div class="container">
     <div class="row">
-      <div class="col-md-8">
-        <h1>Cover Academy é o primeiro website do Brasil a promover competições online de música.</h1>
+      <div class="col-md-9">
+        <h1 class="text-justify no-margin">Cover Academy é o primeiro website do Brasil a promover competições online de música.</h1>
         <h2>Aqui você é o jurado. Ajude-nos a descobrir novos talentos! </h2>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <a href="#" ng-click="openVideo()">
           <img src="https://i.ytimg.com/vi/UyHqY7i_BEQ/maxresdefault.jpg"/>
         </a>
@@ -14,7 +14,7 @@
   </div>
 </section>
 
-<section id="running-contests" class="first section" ng-if="hasContests(runningContests)">
+<section id="running-contests" class="section" ng-if="hasContests(runningContests)">
   <div class="container">
     <h2 class="title">{{ 'contests_happening' | translate }}</h2>
 		<div ng-repeat="contest in runningContests" class="contest">
@@ -124,7 +124,7 @@
         </h2>
       </div>
       <div class="col-md-4 text-right">
-        <h2>
+        <h2 class="no-margin">
           <a ui-sref="app.contests()">
             {{ 'see_more' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
@@ -156,7 +156,7 @@
 	      <h2 class="title">{{ 'best_covers' | translate }}</h2>
 	    </div>
 	    <div class="col-md-6 text-right">
-	      <h2>
+	      <h2 class="no-margin">
           <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})">
             {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
@@ -170,7 +170,7 @@
 	      <h2 class="title">{{ 'latest_covers' | translate }}</h2>
 	    </div>
 	    <div class="col-md-6 text-right">
-	      <h2>
+	      <h2 class="no-margin">
           <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})">
             {{ 'more_covers' | translate }}
             <span class="glyphicon glyphicon-chevron-right"></span>
