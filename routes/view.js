@@ -303,8 +303,6 @@ module.exports = function(router, app) {
       } else {
         if(contest.get('progress') === 'waiting') {
           rankType = 'latest';
-        } else if(contest.get('progress') === 'finished') {
-          rankType = 'best';
         }
         var auditionsPromise;
         if(rankType === 'best') {

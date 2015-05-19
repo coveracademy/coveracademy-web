@@ -20,7 +20,7 @@
           </div>
 				</div>
 				<div class="col-md-4">
-          <contest-timer ng-model="contest"></contest-timer>					
+          <contest-timer ng-model="contest"></contest-timer>
 				</div>
 			</div>
 			<div class="row margin-bottom">
@@ -79,13 +79,17 @@
         <div class="col-md-4">
         </div>
       </div>
-      <h3 class="text-bold">{{ 'see_who_is_already_participating' | translate }}</h3>
-      <div class="row margin-top">
-        <div ng-repeat="audition in latestWaitingAuditions(contest)" class="col-md-4">
-          <audition ng-model="audition" locale="{{ locale() }}">
-          </audition>
+      <div class="row" ng-if="hasAuditions(contest)">
+        <div class="col-md-12">
+          <h3 class="text-bold">{{ 'see_who_is_already_participating' | translate }}</h3>
+          <div class="row padding-top20">
+            <div ng-repeat="audition in latestWaitingAuditions(contest)" class="col-md-4">
+              <audition ng-model="audition" locale="{{ locale() }}">
+              </audition>
+            </div>
+          </div>
         </div>
-      </div>   
+      </div>
 		</div>
 	</div>
 </section>

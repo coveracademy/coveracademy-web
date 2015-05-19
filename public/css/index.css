@@ -501,47 +501,6 @@ form.compacted .form-group {
   width: 66px;
   height: 66px;
 }
-#prizes {
-  padding-top: 20px;
-}
-#prizes .prize .card {
-  background-color: #363b3f;
-  border-radius: 4px;
-  box-shadow: 5px 5px 2px rgba(0,0,0,.1);
-}
-#prizes .prize .text-muted {
-  color: #999;
-}
-#prizes .prize .well {
-  text-shadow: none;
-}
-#prizes .prize .prize-image {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-#prizes .prize a {
-  text-decoration: underline !important;
-}
-#prizes .prize .well {
-  margin-top: 10px;
-  margin-bottom: 0px;
-}
-#prizes .prize .well a {
-  color: black;
-}
-#prizes .prize .well p {
-  color: black;
-}
-#prizes .prize .well h4 {
-  color: black;
-}
-#prizes .prize .prize-image {
-  width: 100%;
-}
-#prizes .prize hr {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 .profile-overview figure:hover figcaption {
   opacity: 1;
 }

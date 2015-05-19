@@ -62,7 +62,11 @@ angular
   };
   $scope.hasContests = function(contests) {
     return contests.length > 0;
-  }
+  };
+  $scope.hasAuditions = function(contest) {
+    var auditions = $scope.latestWaitingContestsAuditions[contest.id];
+    return auditions && auditions.length > 0;
+  };
   $scope.isPrizePlace = function(prize, place) {
     return prize.place === place;
   };
