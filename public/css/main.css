@@ -94,6 +94,9 @@ a:focus, a:hover {
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
 }
+img {
+  width: 100%;
+}
 img.brand {
   max-height: 185px;
   max-width: 222px;
@@ -238,6 +241,16 @@ img.brand {
 #infos.section {
   padding: 10px;
 }
+#intro {
+  padding: 20px 0px 20px 0px;
+  background-color: #333;
+}
+#intro h1 {
+  font-size: 30px;
+}
+#intro h2 {
+  font-size: 25px;
+}
 #running-contests {
   background-color: #33888f;
 }
@@ -328,9 +341,6 @@ img.brand {
 }
 .cover {
   position: relative;
-}
-.cover img {
-  width: 100%;
 }
 .cover .darken {
   position: absolute;

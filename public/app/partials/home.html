@@ -1,3 +1,19 @@
+<section id="intro" class="section" ng-if="!isAuthenticated()">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Cover Academy é o primeiro website do Brasil a promover competições online de música.</h1>
+        <h2>Aqui você é o jurado. Ajude-nos a descobrir novos talentos! </h2>
+      </div>
+      <div class="col-md-4">
+        <a href="#" ng-click="openVideo()">
+          <img src="https://i.ytimg.com/vi/UyHqY7i_BEQ/maxresdefault.jpg"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="running-contests" class="first section" ng-if="hasContests(runningContests)">
   <div class="container">
     <h2 class="title">{{ 'contests_happening' | translate }}</h2>
