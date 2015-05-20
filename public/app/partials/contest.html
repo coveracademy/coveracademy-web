@@ -23,7 +23,7 @@
             <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
               {{ 'sign_up_my_video' | translate }}
             </a>
-          </div>          
+          </div>
         </div>
       </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
@@ -161,7 +161,7 @@
       <h1 class="text-center text-bold">{{ 'your_audition' | translate }}</h1>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" score-by-audition="getScoreByAudition(audition)">
+          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
           </audition>
         </div>
       </div>
@@ -235,7 +235,7 @@
     </div>
     <div class="row with-padding" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
-        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" score-by-audition="getScoreByAudition(audition)">
+        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
         </audition>
       </div>
     </div>

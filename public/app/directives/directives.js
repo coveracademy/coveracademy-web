@@ -129,10 +129,8 @@ angular
     restrict: 'E',
     require: 'ngModel',
     scope: {
+      contest: '=ngModel',
       fontSize: '@'
-    },
-    link: function(scope, element, attrs, ctrl) {
-      console.log(scope)
     }
   }
 }]);
