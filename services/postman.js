@@ -303,7 +303,7 @@ server.post('/contest/inscription', function(req, res, next) {
 server.post('/contest/next', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
     return Promise.all([contest, contestService.listContestants(contest)]);
-  }).spread(function(contest, contestants)) {
+  }).spread(function(contest, contestants) {
     return renderPromise(contestIsNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
       return batchSend(contestants, 'A competição vai começar em breve!', email, ['name']);
     });
