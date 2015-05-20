@@ -33,7 +33,7 @@
 				  </div>
 				  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="text-center">
 				  	<a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-	          {{ 'join_now' | translate }}
+	          {{ 'sign_up_my_video' | translate }}
 	       		</a>
 		        <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
 		          {{ 'read_the_rules' | translate }}

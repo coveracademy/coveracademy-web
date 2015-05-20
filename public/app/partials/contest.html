@@ -19,9 +19,9 @@
               </a>
             </h3>
           </div>
-          <div class="col-md-6" ng-if="!isContestant()">
+          <div class="col-md-6 text-center" ng-if="!isContestant()">
             <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
-              {{ 'join_now' | translate }}
+              {{ 'sign_up_my_video' | translate }}
             </a>
           </div>          
         </div>
@@ -115,7 +115,7 @@
       <h2>{{ 'be_the_first_to_join_the_contest' | translate }}</h2>
       <div class="padding-top">
         <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-          {{ 'join_now' | translate }}
+          {{ 'sign_up_my_video' | translate }}
         </a>
         <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-info btn-largest">
           {{ 'read_the_rules' | translate }}
