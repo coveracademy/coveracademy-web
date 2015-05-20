@@ -144,7 +144,7 @@ exports.contestStart = function(contest) {
   });
 };
 
-exports.contestNext = function(contest) {
+exports.contestIsNext = function(contest) {
   return new Promise(function(resolve, reject) {
     mailClient.post('/contest/next', {contest: contest.id}, function(err, req, res, obj) {
       if(err) {

@@ -224,7 +224,7 @@ var prepareContest = function(contest) {
     contest.set('end_date', moment(contest.get('start_date')).add(contest.get('duration'), 'days').hour(constants.TIME_TO_FINISH_THE_CONTEST).minute(0).second(0).millisecond(0).toDate());
     contest.save({start_date: contest.get('start_date'), end_date: contest.get('end_date')}, {patch: true}).then(function(contest) {
       if(now < contest.get('start_date')) {
-        mailService.contestNext(contest).catch(function(err) {
+        mailService.contestIsNext(contest).catch(function(err) {
           logger.error('Error sending "contest next" email.', err);
         });
       }

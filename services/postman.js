@@ -50,7 +50,7 @@ var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var auditionCommentTemplate = env.getTemplate('audition_comment.tpl');
 var auditionReplyCommentTemplate = env.getTemplate('audition_reply_comment.tpl');
 var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
-var contestNextTemplate = env.getTemplate('contest_next.tpl');
+var contestIsNextTemplate = env.getTemplate('contest_next.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
@@ -301,9 +301,11 @@ server.post('/contest/inscription', function(req, res, next) {
 });
 
 server.post('/contest/next', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listUsers()]).spread(function(contest, users) {
-    return renderPromise(contestNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
-      return batchSend(users, 'A competição vai começar em breve!', email, ['name']);
+  contestService.getContest(req.body.contest).then(function(contest) {
+    return Promise.all([contest, contestService.listContestants(contest)]);
+  }).spread(function(contest, contestants)) {
+    return renderPromise(contestIsNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
+      return batchSend(contestants, 'A competição vai começar em breve!', email, ['name']);
     });
   }).then(function() {
     res.send(200);
