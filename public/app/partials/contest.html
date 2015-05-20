@@ -1,4 +1,4 @@
-<section id="contest" class="section">
+<section id="contest" class="white section" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ contest.image }}');">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
@@ -6,14 +6,6 @@
           {{ contest.name }}
         </h1>
         <div class="row" ng-if="!isContestProgress('finished')">
-          <div class="col-md-6" ng-if="!isContestant()">
-            <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
-              {{ 'join_now' | translate }}
-            </a>
-            <a class="btn btn-info btn-lg" ui-sref="app.contestGuideline({locale: locale()})">
-              {{ 'read_the_rules' | translate }}
-            </a>
-          </div>
           <div class="col-md-6">
             <h3 class="no-margin">
               <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
@@ -27,18 +19,29 @@
               </a>
             </h3>
           </div>
+          <div class="col-md-6" ng-if="!isContestant()">
+            <a class="btn btn-primary btn-lg" ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})">
+              {{ 'join_now' | translate }}
+            </a>
+          </div>          
         </div>
       </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
       </div>
     </div>
-    <div class="row margin-top20" ng-repeat="row in contest.prizes | partition: 3">
+    <div class="row margin-top" ng-repeat="row in contest.prizes | partition: 3" ng-if="isShowPrizes()">
       <div class="col-md-4 prize text-center" ng-repeat="prize in row">
         <div class="card with-padding">
-          <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">{{ 'first_place' | translate }}</h3>
-          <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">{{ 'second_place' | translate }}</h3>
-          <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">{{ 'third_place' | translate }}</h3>
+          <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">
+            {{ 'first_place' | translate }}
+          </h3>
+          <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">
+            {{ 'second_place' | translate }}
+          </h3>
+          <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">
+            {{ 'third_place' | translate }}
+          </h3>
           <h2 class="no-margin">
             {{ prize.name }}
             <small ng-if="hasPrizeDetails(prize)">
@@ -60,20 +63,20 @@
             <a ng-href="{{ prize.sponsor.website }}" target="_blank" rel="nofollow">
               {{ prize.sponsor.name }}
             </a>
-          </4>
+          </h4>
         </div>
       </div>
     </div>
   </div>
 </section>
-<section id="infos" class="warning section no-margin" ng-if="isContestProgress('waiting')">
+<section id="infos" class="warning white section no-margin" ng-if="isContestProgress('waiting')">
   <div class="container">
     <h2 class="text-center no-margin">
       {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
     </h2>
   </div>
 </section>
-<section id="infos" class="warning section no-margin" ng-if="isContestProgress('waiting_time')">
+<section id="infos" class="warning white section no-margin" ng-if="isContestProgress('waiting_time')">
   <div class="container">
     <h2 class="text-center no-margin">
       {{ 'voting_will_begin_at' | translate }}
@@ -81,7 +84,7 @@
     </h2>
   </div>
 </section>
-<section id="infos" class="warning section no-margin" ng-if="isContestDraw()">
+<section id="infos" class="warning white section no-margin" ng-if="isContestDraw()">
   <div class="container">
     <h2 class="no-margin">
       {{ 'the_contest_is_drawn_first_part' | translate }}
@@ -91,7 +94,7 @@
     </h2>
   </div>
 </section>
-<section id="infos" class="section no-margin" ng-if="isContestProgress('finished')">
+<section id="infos" class="white section no-margin" ng-if="isContestProgress('finished')">
   <div class="container">
     <h2 class="text-center no-margin">
       {{ 'contest_finished' | translate }}
@@ -238,7 +241,7 @@
     </div>
   </div>
 </section>
-<section id="sponsors" class="section" ng-if="hasSponsors()">
+<section id="sponsors" class="white section" ng-if="hasSponsors()">
   <div class="container">
     <h2 class="title">{{ 'partners' | translate }}</h2>
     <div class="text-center">

@@ -238,6 +238,11 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 35;
   $scope.prizeDetailsToShow = {};
+  
+  $scope.hidePrizes = true;
+  if($scope.contest.progress === 'waiting') {
+    $scope.hidePrizes = false;
+  }
 
   $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setDescription(translations['seo.description.contest']);
@@ -258,6 +263,15 @@ angular
     $scope.audition = null;
     $scope.userVotes = null;
   });
+  $scope.isContestProgress = function(expectedProgress) {
+    var progress;
+    if($scope.contest.progress === 'waiting' && $scope.contest.start_date && new Date() < new Date($scope.contest.start_date)) {
+      progress = 'waiting_time';
+    } else {
+      progress = $scope.contest.progress;
+    }
+    return progress === expectedProgress;
+  };
   $scope.isAuditionApproved = function() {
     return $scope.isContestant() && $scope.audition.approved === 1;
   };
@@ -289,6 +303,12 @@ angular
       delete $scope.prizeDetailsToShow[prize.id];
     }
   };
+  $scope.showPrizes = function() {
+    $scope.hidePrizes = !$scope.hidePrizes;
+  };
+  $scope.isShowPrizes = function() {
+    return !$scope.hidePrizes;
+  }
   $scope.isShowPrizeDetails = function(prize) {
     return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];
   };
@@ -317,15 +337,6 @@ angular
       medal = 'bronze';
     }
     return medal;
-  };
-  $scope.isContestProgress = function(expectedProgress) {
-    var progress;
-    if($scope.contest.progress === 'waiting' && $scope.contest.start_date && new Date() < new Date($scope.contest.start_date)) {
-      progress = 'waiting_time';
-    } else {
-      progress = $scope.contest.progress;
-    }
-    return progress === expectedProgress;
   };
   $scope.remainingOneDay = function(date) {
     var now = new Date();
@@ -403,10 +414,8 @@ angular
     }
     return progress === expectedProgress;
   };
-  $scope.remainingOneDay = function(date) {
-    var now = new Date();
-    var end = new Date(date);
-    return end.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
+  $scope.isPrizePlace = function(prize, place) {
+    return prize.place === place;
   };
   $scope.showVideo = function(url) {
     if(url) {
