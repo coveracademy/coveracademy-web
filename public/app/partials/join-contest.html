@@ -7,7 +7,22 @@
             {{ contest.name }}
           </a>
         </h1>
-      </div>        
+        <div class="row" ng-if="!isContestProgress('finished')">
+          <div class="col-md-12">
+            <h3 class="no-margin">
+              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </h3>
+          </div>
+        </div>
+      </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
       </div>
@@ -31,7 +46,7 @@
                 <i class="glyphicon glyphicon-question-sign"></i>
               </a>
             </small>
-          </h2>        
+          </h2>
           <h4 ng-if="prize.sponsor.id">
             {{ 'offered_by' | translate }}
             <a ng-href="{{ prize.sponsor.website }}" target="_blank" rel="nofollow">
