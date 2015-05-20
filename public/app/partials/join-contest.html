@@ -45,7 +45,7 @@
 </section>
 <section class="section" ng-if="!isContestProgress('finished') && !isContestant()">
   <div class="container">
-    <div>
+    <div ng-if="!isAuthenticated()">
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h2>1º - Leia o regulamento antes de fazer sua inscrição</h2>
@@ -58,8 +58,6 @@
           </a>
         </div>
       </div>
-    </div>
-    <div ng-if="!isAuthenticated()">
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h2>2º - {{ 'join_contest_signin_account' | translate }}</h2>
