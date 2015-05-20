@@ -39,7 +39,7 @@ env.addFilter('contestLink', function(contest) {
   return settings.siteUrl + '/pt-br/contest/' + contest.id + '/' + contest.slug;
 });
 env.addFilter('encryptEmail', function(user) {
-  return encrypt.encrypt(user.get('email'));
+  return encrypt.encrypt(user.email);
 });
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
