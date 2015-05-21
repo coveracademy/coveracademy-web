@@ -190,8 +190,8 @@ img.brand {
   background-repeat: no-repeat;
   text-shadow: 2px 2px 5px #000000;
 }
-#contest #show-prizes {
-  background-color: rgba(0, 0, 0, 0.5);
+#contest.section {
+  padding: 30px 0px 0px 0px;
 }
 #contest .btn-primary {
   border: 2px solid #fff;
@@ -200,40 +200,26 @@ img.brand {
   font-size: 32px;
   margin-bottom: 10px;
 }
+#contest #prizes {
+  margin: 20px 0px 20px 0px;
+}
 #contest .prize .card {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 4px;
-  box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.5);
-}
-#contest .prize .well {
-  text-shadow: none;
 }
 #contest .prize .prize-image {
   margin-top: 10px;
   margin-bottom: 10px;
+  width: 100%;
 }
 #contest .prize a {
   text-decoration: underline !important;
 }
-#contest .prize .well {
-  margin-top: 10px;
-  margin-bottom: 0px;
-}
-#contest .prize .well a {
-  color: black;
-}
-#contest .prize .well p {
-  color: black;
-}
-#contest .prize .well h4 {
-  color: black;
-}
-#contest .prize .prize-image {
-  width: 100%;
-}
-#contest .prize hr {
-  margin-top: 5px;
-  margin-bottom: 5px;
+#contest #show-prizes {
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  padding: 5px;
+  margin-top: 20px;
 }
 #infos {
   background-color: #e27a3f;

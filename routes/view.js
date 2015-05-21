@@ -294,7 +294,7 @@ module.exports = function(router, app) {
   router.get('/contest/:id/:slug', function(req, res, next) {
     var id = req.param('id');
     var slug = req.param('slug');
-    var rankType = req.param('rank') || 'random';
+    var rankType = req.param('rank');
     contestService.getContest(id).then(function(contest) {
       if(!contest) {
         messages.respondWithNotFound(res);
@@ -303,6 +303,13 @@ module.exports = function(router, app) {
       } else {
         if(contest.get('progress') === 'waiting') {
           rankType = 'latest';
+        }
+        if(!rankType) {
+          if(contest.get('progress') == 'finished') {
+            rankType = 'best';
+          } else {
+            rankType = 'random';
+          }
         }
         var auditionsPromise;
         if(rankType === 'best') {

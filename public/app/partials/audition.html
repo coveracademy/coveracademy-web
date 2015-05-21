@@ -1,15 +1,21 @@
 <section id="contest" class="white section" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ contest.image }}');">
-  <div class="container text-center">
-    <h1 class="title">
-      <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
-        {{ contest.name }}
-      </a>
-    </h1>
-    <h2 ng-if="isContestProgress('finished')" class="no-margin">
-      <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
-        ({{ 'contest_finished' | translate }})
-      </a>
-    </h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1 class="title">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+            {{ contest.name }}
+          </a>
+        </h1>
+      </div>
+      <div class="col-md-4">
+        <contest-timer ng-model="contest" ng-if="isContestProgress('running')"></contest-timer>
+        <h2 ng-if="isContestProgress('finished')" class="no-margin">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+            ({{ 'contest_finished' | translate }})
+          </a>
+        </h2>
+      </div>
     </div>
   </div>
 </section>
