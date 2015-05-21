@@ -26,10 +26,10 @@
             </a>
           </h2>
           <div class="padding-top">
-            <span class="label">
+            <span class="label label-success">
               {{ totalRunningAuditions(contest) }} {{ 'contestants' | translate }}
             </span>
-            <span class="label">
+            <span class="label label-success">
               {{ 'prizes' | translate }}:
               <span ng-repeat="prize in contest.prizes">{{ prize.name }} / </span>
             </span>
@@ -92,13 +92,13 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">          
+        <div class="col-md-4">
         </div>
       </div>
       <div class="row" ng-if="hasAuditions(contest)">
         <div class="col-md-12">
           <h3 class="text-bold">
-            {{ 'see_who_is_already_participating' | translate }}            
+            {{ 'see_who_is_already_participating' | translate }}
           </h3>
           <div class="row">
             <div ng-repeat="audition in latestWaitingAuditions(contest)" class="col-md-4">

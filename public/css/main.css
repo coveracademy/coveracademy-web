@@ -184,7 +184,7 @@ img.brand {
   font-size: 25px;
 }
 #contest {
-  background-color: #33888f;
+  background-color: #18967e;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -248,7 +248,7 @@ img.brand {
   width: 100%;
 }
 #running-contests {
-  background-color: #33888f;
+  background-color: #18967e;
 }
 #running-contests.section h2 {
   margin-bottom: 15px;
@@ -269,7 +269,6 @@ img.brand {
   color: #555;
 }
 #running-contests .label {
-  background-color: #33888f;
   font-size: 14px;
   font-weight: 400;
 }
@@ -318,7 +317,7 @@ img.brand {
   background-color: #f7ab24;
 }
 #sponsors {
-  background-color: #1881a2;
+  background-color: #1495e7;
 }
 /* Page sections */
 .block-center {
@@ -431,20 +430,38 @@ img.brand {
   font-size: 30px;
   padding: 20px;
 }
+.btn-default {
+  color: #666666;
+  background-color: #ffffff;
+  border-color: #eeeeee;
+}
+.btn-default:hover {
+  color: #666666;
+  background-color: #f0f0f0;
+  border-color: #eeeeee;
+}
 .btn-primary {
-  background-color: #55acee;
+  background-color: #1495e7;
   border-color: transparent;
 }
 .btn-primary:hover {
-  background-color: #55acee;
+  background-color: #1495e7;
+  border-color: transparent;
+}
+.btn-info {
+  background-color: #e27a3f;
+  border-color: transparent;
+}
+.btn-info:hover {
+  background-color: #e27a3f;
   border-color: transparent;
 }
 .btn-success {
-  background-color: #45b29d;
+  background-color: #18967e;
   border-color: transparent;
 }
 .btn-success:hover {
-  background-color: #45b29d;
+  background-color: #18967e;
   border-color: transparent;
 }
 .btn-warning {
@@ -463,42 +480,24 @@ img.brand {
   background-color: #df5a49;
   border-color: transparent;
 }
-.btn-info {
-  background-color: #e27a3f;
-  border-color: transparent;
-}
-.btn-info:hover {
-  background-color: #e27a3f;
-  border-color: transparent;
-}
-.btn-default {
-  color: #666666;
-  background-color: #ffffff;
-  border-color: #eeeeee;
-}
-.btn-default:hover {
-  color: #666666;
-  background-color: #f0f0f0;
-  border-color: #eeeeee;
-}
 .label {
   padding: 7px;
   display: inline-block;
 }
-.label-success {
-  background-color: #4caf50;
-}
-.label-warning {
-  background-color: #ff9800;
-}
-.label-danger {
-  background-color: #e51c23;
+.label-primary {
+  background-color: #1495e7;
 }
 .label-info {
   background-color: #9c27b0;
 }
-.label-primary {
-  background-color: #2196f3;
+.label-success {
+  background-color: #18967e;
+}
+.label-warning {
+  background-color: #efc94c;
+}
+.label-danger {
+  background-color: #df5a49;
 }
 /* Bootstrap custom buttons and labels */
 
@@ -553,7 +552,7 @@ img.brand {
   line-height: 52px;
 }
 .countdown li .days {
-  background-color: #45b29d;
+  background-color: #18967e;
 }
 .countdown li .hours {
   background-color: #efc94c;
