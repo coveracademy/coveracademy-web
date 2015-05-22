@@ -91,6 +91,14 @@ exports.listRunningContests = function(related) {
   }).fetch(related ? {withRelated: related} : null);
 };
 
+exports.listOtherRunningContests = function(contest, related) {
+  return Contest.collection().query(function(qb) {
+    qb.whereNot('id', contest.id);
+    qb.where('progress', 'running');
+    qb.orderBy('registration_date', 'desc');
+  }).fetch(related ? {withRelated: related} : null);
+};
+
 var listPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
     var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');

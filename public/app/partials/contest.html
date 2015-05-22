@@ -253,6 +253,24 @@
     </div>
   </div>
 </section>
+<section id="other-contests" class="white section" ng-if="hasRunningContests()">
+  <div class="contest" ng-repeat="contest in runningContests" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2 class="title">
+            <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+            </a>
+          </h2>
+        </div>
+        <div class="col-md-4 text-right">
+          <contest-timer ng-model="contest"></contest-timer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="sponsors" class="white section" ng-if="hasSponsors()">
   <div class="container">
     <h2 class="title">{{ 'partners' | translate }}</h2>

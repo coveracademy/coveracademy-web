@@ -327,6 +327,7 @@ module.exports = function(router, app) {
           winnerAuditions: winnersPromise,
           userVotes: contestService.getUserVotes(req.user, contest),
           totalUserVotes: contestService.countUserVotes(req.user, contest),
+          runningContests: contestService.listOtherRunningContests(contest)
         }).bind({}).then(function(result) {
           this.result = result;
           return Promise.all([contestService.getScoreByAudition(result.auditions), contestService.getVotesByAudition(result.auditions)]);

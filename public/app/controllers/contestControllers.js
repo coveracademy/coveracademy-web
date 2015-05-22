@@ -223,6 +223,7 @@ angular
   $scope.siteUrl = constants.SITE_URL;
   $scope.rankType = backendResponse.data.rankType;
   $scope.contest = backendResponse.data.contest;
+  $scope.runningContests = backendResponse.data.runningContests;
   $scope.audition = backendResponse.data.audition;
   $scope.auditions = backendResponse.data.auditions;
   $scope.userVotes = backendResponse.data.userVotes;
@@ -379,6 +380,9 @@ angular
       score = 0;
     }
     return score;
+  };
+  $scope.hasRunningContests = function() {
+    return $scope.runningContests.length > 0;
   };
 }])
 .controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', 'userService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService, userService) {

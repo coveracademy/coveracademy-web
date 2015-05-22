@@ -230,6 +230,23 @@ img.brand {
 #infos.section {
   padding: 10px;
 }
+#other-contests {
+  background-color: #18967e;
+}
+#other-contests.section {
+  padding: 0px 0px 0px 0px;
+}
+#other-contests .contest {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-shadow: 2px 2px 5px #000000;
+  padding: 20px;
+}
+#other-contests .contest h2 {  
+  font-size: 30px;
+  margin: 0px;
+}
 #intro {
   padding: 20px 0px 20px 0px;
   background-color: #333;
@@ -522,6 +539,7 @@ img.brand {
   display: block;
   overflow: hidden;
   padding: 0px;
+  margin: 0px;
   text-align: right;
 }
 .countdown li {
@@ -565,5 +583,6 @@ img.brand {
 }
 .countdown li p {
   font-size: 14px;
+  margin: 0px;
 }
 /* Contest components * /
