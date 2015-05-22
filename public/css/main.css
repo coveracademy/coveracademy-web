@@ -516,6 +516,26 @@ img.brand {
 .label-danger {
   background-color: #df5a49;
 }
+.btn-default {
+  color: #666666;
+  background-color: #ffffff;
+  border-color: #eeeeee;
+}
+.bg-primary {
+  background-color: #1495e7;  
+}
+.bg-info {
+  background-color: #e27a3f;  
+}
+.bg-success {
+  background-color: #18967e;  
+}
+.bg-warning {
+  background-color: #efc94c;  
+}
+.bg-danger {
+  background-color: #df5a49;  
+}
 /* Bootstrap custom buttons and labels */
 
 /* Contest components */
