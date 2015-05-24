@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div id="prizes" ng-if="isShowPrizes()">
+    <div id="prizes" ng-show="isShowPrizes()">
       <div class="row" ng-repeat="row in contest.prizes | partition: 3">
         <div class="col-md-4 prize text-center" ng-repeat="prize in row">
           <div class="card padding">
@@ -58,7 +58,7 @@
                 </a>
               </small>
             </h2>
-            <div ng-if="isShowPrizeDetails(prize)">
+            <div ng-show="isShowPrizeDetails(prize)">
               <img ng-if="prize.image" ng-src="{{ prize.image }}" class="prize-image">
               <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
               <p ng-if="prize.description" class="text-justify">{{ prize.description }}</p>
