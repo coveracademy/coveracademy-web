@@ -115,6 +115,12 @@ img.brand {
 .padding-top20 {
   padding-top: 20px;
 }
+.padding-bottom20 {
+  padding-bottom: 20px;
+}
+.padding-bottom40 {
+  padding-bottom: 40px;
+}
 .padding-left {
   padding-left: 10px;
 }

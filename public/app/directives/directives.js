@@ -21,6 +21,16 @@ angular
     }
   };
 })
+.directive('adsense', function() {
+  return {
+    templateUrl: 'app/partials/widgets/adsense.html',
+    restrict: 'E',
+    require: 'ngModel',
+    scope: {
+      locale: '@'
+    }
+  };
+})
 .directive('coverSongs', function() {
   return {
     templateUrl: 'app/partials/widgets/cover-songs.html',

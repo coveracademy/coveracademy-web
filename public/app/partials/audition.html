@@ -20,22 +20,11 @@
   </div>
 </section>
 <section>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <div class="section-title">
-          <h1 class="title">
-            {{ audition.title }}
-          </h1>
-          <p class="font-biggest">
-            {{ 'published' | translate }}
-            <span am-time-ago="audition.registration_date"></span>
-            {{ 'by_user' | translate }}
-            <a ui-sref="{{ userState(audition.user) }}" class="no-decoration">{{ audition.user.name }}</a>
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="container padding-top20">
+    
+  <adsense ng-model="adsense" locale="top">
+  </adsense>
+
     <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && isAuditionApproved()">
       <div class="row">
         <div class="col-md-9">
@@ -45,6 +34,36 @@
                 <embed-video ng-href="{{ audition.url }}"></embed-video>
               </div>
             </div>
+          </div>
+          <div class="row">
+
+
+            <div class="col-md-9 text-center">
+              <div class="section-title">
+                <h1 class="title">
+                  {{ audition.title }}
+                </h1>
+                <p class="font-biggest">
+                  {{ 'published' | translate }}
+                  <span am-time-ago="audition.registration_date"></span>
+                </p>
+              </div>
+            </div>
+
+            <div ng-if="isContestProgress('running')" class="col-md-3">
+
+                  <h4>{{ 'help_sharing' | translate }}</h4>
+                  <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                  </a>
+                  <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+                    <i class="fa fa-google-plus"></i>
+                  </a>
+            </div>
+
           </div>
           <div class="row with-padding">
             <div class="col-md-12">
@@ -72,6 +91,137 @@
                   <h4 class="no-margin">{{ audition.description }}</h4>
                 </div>
               </div>
+
+            <!--Start comments here -->
+            <div ng-if="isAuditionApproved()" class="row with-padding">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="section-title">
+                          <h3>
+                            {{ 'what_did_you_think_of_user_performance' | translate: {user: audition.user.name} }}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-9">
+                        <div class="comments">
+                          <div ng-if="userAuthenticated()" class="media comments-comment">
+                            <div class="media-left">
+                              <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
+                              </div>
+                            </div>
+                            <div class="media-body">
+                              <form name="commentForm" class="form-horizontal">
+                                <div class="form-group">
+                                  <div class="col-md-9">
+                                    <div text-angular name="comment" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_comment' | translate }}" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <button ng-disabled="commentForm.comment.$pristine || commentForm.comment.$invalid" ng-click="comment(message); message = '';" type="button" class="btn btn-info btn-block">
+                                      {{ 'comment' | translate }}
+                                    </button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div ng-if="!userAuthenticated()">
+                            <button ng-click="login()" type="button" class="btn btn-info">
+                              {{ 'login_to_post_a_comment' | translate }}
+                            </button>
+                          </div>
+                          <div class="comments-box">
+                            <div class="media" ng-repeat="comment in comments">
+                              <div class="media-left">
+                                <a ui-sref="{{ userState(comment.user) }}">
+                                  <div profile-picture="comment.user" class="media-object profile-picture comment-user img-circle">
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="media-body">
+                                <a class="comment-user no-decoration" ui-sref="{{ userState(comment.user) }}">
+                                  {{ comment.user.name }}
+                                </a>
+                                ·
+                                <span class="comment-date" am-time-ago="comment.registration_date"></span>
+                                <div ta-bind ng-model="comment.message" class="comment-text"></div>
+                                <div class="comment-actions">
+                                  <span>
+                                    <a ng-click="openReplyCommentForm(comment)">
+                                      {{ 'reply' | translate }}
+                                    </a>
+                                  </span>
+                                  <span ng-if="canRemoveComment(comment)">
+                                    ·
+                                    <a ng-click="removeComment(comment)">
+                                      {{ 'delete' | translate }}
+                                    </a>
+                                  </span>
+                                </div>
+                                <div class="comment-replies">
+                                  <div class="media" ng-repeat="reply in comment.replies">
+                                    <div class="media-left">
+                                      <a ui-sref="{{ userState(reply.user) }}">
+                                        <div profile-picture="reply.user" class="media-object profile-picture comment-user img-circle">
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div class="media-body">
+                                      <a class="comment-user no-decoration" ui-sref="{{ userState(reply.user) }}">
+                                        {{ reply.user.name }}
+                                      </a>
+                                      ·
+                                      <span class="comment-date" am-time-ago="reply.registration_date"></span>
+                                      <div ta-bind ng-model="reply.message" class="comment-text"></div>
+                                      <div class="comment-actions">
+                                        <span>
+                                          <a ng-click="openReplyCommentForm(comment)">
+                                            {{ 'reply' | translate }}
+                                          </a>
+                                        </span>
+                                        <span ng-if="canRemoveComment(reply)">
+                                          ·
+                                          <a ng-click="removeComment(reply, comment)">
+                                            {{ 'delete' | translate }}
+                                          </a>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div ng-if="userAuthenticated() && isReplyCommentFormOpened(comment)" class="media comments-comment">
+                                    <div class="media-left">
+                                      <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
+                                      </div>
+                                    </div>
+                                    <div class="media-body">
+                                      <form name="commentForm" class="form-horizontal">
+                                        <div class="form-group">
+                                          <div class="col-md-9">
+                                            <div text-angular name="reply" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_reply' | translate }}" required>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-3">
+                                            <button ng-disabled="commentForm.reply.$pristine || commentForm.reply.$invalid" ng-click="replyComment(comment, message); message = '';" type="button" class="btn btn-info btn-block">
+                                              {{ 'reply_button' | translate }}
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--End comments -->
             </div>
           </div>
         </div>
@@ -97,17 +247,25 @@
                 </button>
               </div>
             </div>
-            <div ng-if="isContestProgress('running')">
-              <h3>{{ 'help_sharing' | translate }}</h3>
-              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-                <i class="fa fa-facebook"></i>
-              </a>
-              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-                <i class="fa fa-twitter"></i>
-              </a>
-              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/audition/{{ audition.id }}/{{ audition.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-                <i class="fa fa-google-plus"></i>
-              </a>
+            
+          </div>
+          <div class="row">
+            <div ng-if="(isContestProgress('running') || isContestProgress('waiting') || isContestProgress('waiting_time')) && hasAuditions(latestAuditions)">
+             <div class="section-title">
+                    <h3>
+                      {{ 'latest_auditions' | translate }}
+                    </h3>
+             </div>
+              
+                  
+                  <div class="row margin-bottom" ng-repeat="row in latestAuditions | partition: 1">
+                    <div ng-repeat="audition in row" class="col-md-12">
+                      <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
+                      </audition>
+                    </div>
+                  </div>
+                
+              
             </div>
           </div>
         </div>
@@ -192,151 +350,8 @@
         </div>
       </div>
     </div>
-    <div ng-if="isAuditionApproved()" class="row with-padding">
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-title">
-              <h3>
-                {{ 'what_did_you_think_of_user_performance' | translate: {user: audition.user.name} }}
-              </h3>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-9">
-            <div class="comments">
-              <div ng-if="userAuthenticated()" class="media comments-comment">
-                <div class="media-left">
-                  <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
-                  </div>
-                </div>
-                <div class="media-body">
-                  <form name="commentForm" class="form-horizontal">
-                    <div class="form-group">
-                      <div class="col-md-9">
-                        <div text-angular name="comment" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_comment' | translate }}" required>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <button ng-disabled="commentForm.comment.$pristine || commentForm.comment.$invalid" ng-click="comment(message); message = '';" type="button" class="btn btn-info btn-block">
-                          {{ 'comment' | translate }}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div ng-if="!userAuthenticated()">
-                <button ng-click="login()" type="button" class="btn btn-info">
-                  {{ 'login_to_post_a_comment' | translate }}
-                </button>
-              </div>
-              <div class="comments-box">
-                <div class="media" ng-repeat="comment in comments">
-                  <div class="media-left">
-                    <a ui-sref="{{ userState(comment.user) }}">
-                      <div profile-picture="comment.user" class="media-object profile-picture comment-user img-circle">
-                      </div>
-                    </a>
-                  </div>
-                  <div class="media-body">
-                    <a class="comment-user no-decoration" ui-sref="{{ userState(comment.user) }}">
-                      {{ comment.user.name }}
-                    </a>
-                    ·
-                    <span class="comment-date" am-time-ago="comment.registration_date"></span>
-                    <div ta-bind ng-model="comment.message" class="comment-text"></div>
-                    <div class="comment-actions">
-                      <span>
-                        <a ng-click="openReplyCommentForm(comment)">
-                          {{ 'reply' | translate }}
-                        </a>
-                      </span>
-                      <span ng-if="canRemoveComment(comment)">
-                        ·
-                        <a ng-click="removeComment(comment)">
-                          {{ 'delete' | translate }}
-                        </a>
-                      </span>
-                    </div>
-                    <div class="comment-replies">
-                      <div class="media" ng-repeat="reply in comment.replies">
-                        <div class="media-left">
-                          <a ui-sref="{{ userState(reply.user) }}">
-                            <div profile-picture="reply.user" class="media-object profile-picture comment-user img-circle">
-                            </div>
-                          </a>
-                        </div>
-                        <div class="media-body">
-                          <a class="comment-user no-decoration" ui-sref="{{ userState(reply.user) }}">
-                            {{ reply.user.name }}
-                          </a>
-                          ·
-                          <span class="comment-date" am-time-ago="reply.registration_date"></span>
-                          <div ta-bind ng-model="reply.message" class="comment-text"></div>
-                          <div class="comment-actions">
-                            <span>
-                              <a ng-click="openReplyCommentForm(comment)">
-                                {{ 'reply' | translate }}
-                              </a>
-                            </span>
-                            <span ng-if="canRemoveComment(reply)">
-                              ·
-                              <a ng-click="removeComment(reply, comment)">
-                                {{ 'delete' | translate }}
-                              </a>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div ng-if="userAuthenticated() && isReplyCommentFormOpened(comment)" class="media comments-comment">
-                        <div class="media-left">
-                          <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
-                          </div>
-                        </div>
-                        <div class="media-body">
-                          <form name="commentForm" class="form-horizontal">
-                            <div class="form-group">
-                              <div class="col-md-9">
-                                <div text-angular name="reply" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_reply' | translate }}" required>
-                                </div>
-                              </div>
-                              <div class="col-md-3">
-                                <button ng-disabled="commentForm.reply.$pristine || commentForm.reply.$invalid" ng-click="replyComment(comment, message); message = '';" type="button" class="btn btn-info btn-block">
-                                  {{ 'reply_button' | translate }}
-                                </button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div ng-if="(isContestProgress('running') || isContestProgress('waiting') || isContestProgress('waiting_time')) && hasAuditions(latestAuditions)">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="section-title">
-            <h3>
-              {{ 'latest_auditions' | translate }}
-            </h3>
-          </div>
-          <div class="row margin-bottom" ng-repeat="row in latestAuditions | partition: 4">
-            <div ng-repeat="audition in row" class="col-md-3">
-              <audition ng-model="audition" locale="{{ locale() }}" show-score="false" thumb-size="small">
-              </audition>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
+    
     <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && hasAuditions(bestAuditions)">
       <div class="row">
         <div class="col-md-12">
