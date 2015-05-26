@@ -1,6 +1,6 @@
 <section id="contest" class="white section" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ contest.image }}');">
   <div class="container">
-    <div class="row">
+    <div class="row margin-bottom">
       <div class="col-md-8">
         <h1 class="title">
           <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
@@ -8,13 +8,17 @@
           </a>
         </h1>
       </div>
-      <div class="col-md-4">
-        <contest-timer ng-model="contest" ng-if="isContestProgress('running')"></contest-timer>
-        <h2 ng-if="isContestProgress('finished')" class="no-margin">
-          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
-            ({{ 'contest_finished' | translate }})
-          </a>
-        </h2>
+      <div class="col-md-4" ng-if="isContestProgress('running')">
+        <contest-timer ng-model="contest" ></contest-timer>
+      </div>
+      <div class="col-md-4" ng-if="isContestProgress('finished')">
+        <div class="bg-success">
+          <h2 class="text-center text-uppercase no-margin">
+            <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
+              {{ 'contest_finished' | translate }}
+            </a>
+          </h2>
+        </div>
       </div>
     </div>
   </div>
@@ -31,7 +35,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="embed-container">
-                <embed-video ng-href="{{ audition.url }}"></embed-video>
+                <embed-video ng-href="{{ audition.embed_url }}"></embed-video>
               </div>
             </div>
           </div>

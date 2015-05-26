@@ -29,8 +29,15 @@
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
       </div>
+      <div class="col-md-4" ng-if="isContestProgress('finished')">
+        <div class="bg-success">
+          <h2 class="text-center text-uppercase no-margin">
+            {{ 'contest_finished' | translate }}
+          </h2>
+        </div>
+      </div>
     </div>
-    <div id="prizes" ng-if="isShowPrizes()">
+    <div id="prizes" ng-show="isShowPrizes()">
       <div class="row" ng-repeat="row in contest.prizes | partition: 3">
         <div class="col-md-4 prize text-center" ng-repeat="prize in row">
           <div class="card padding">
@@ -51,7 +58,7 @@
                 </a>
               </small>
             </h2>
-            <div ng-if="isShowPrizeDetails(prize)">
+            <div ng-show="isShowPrizeDetails(prize)">
               <img ng-if="prize.image" ng-src="{{ prize.image }}" class="prize-image">
               <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
               <p ng-if="prize.description" class="text-justify">{{ prize.description }}</p>
@@ -106,13 +113,6 @@
     </h2>
   </div>
 </section>
-<section id="infos" class="white section no-margin" ng-if="isContestProgress('finished')">
-  <div class="container">
-    <h2 class="text-center no-margin">
-      {{ 'contest_finished' | translate }}
-    </h2>
-  </div>
-</section>
 <section id="auditions">
   <div class="margin text-center" ng-if="isContestant() && !isAuditionApproved()">
     <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
@@ -161,6 +161,12 @@
           <a ui-sref="{{ userState(audition.user) }}">
             <div profile-picture="audition.user" class="profile-picture large img-circle block-center"></div>
           </a>
+          <h3 class="text-center text-bold">
+            {{ audition.place }}º
+            <a ui-sref="{{ userState(audition.user) }}">
+              {{ audition.user.name }}
+            </a>
+          </h3>
         </div>
       </div>
     </div>
@@ -249,6 +255,24 @@
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
         </audition>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="other-contests" class="white section" ng-if="hasRunningContests()">
+  <div class="contest" ng-repeat="contest in runningContests" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h2 class="title">
+            <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+            </a>
+          </h2>
+        </div>
+        <div class="col-md-4 text-right">
+          <contest-timer ng-model="contest"></contest-timer>
+        </div>
       </div>
     </div>
   </div>
