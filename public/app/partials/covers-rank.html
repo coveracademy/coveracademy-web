@@ -38,7 +38,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div ng-repeat="row in artistsOfCovers | partition: 6" class="row with-padding">
+      <div ng-repeat="row in artistsOfCovers | partition: 6" class="row padding-top">
         <div ng-repeat="artist in row" class="col-md-2">
           <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
         </div>

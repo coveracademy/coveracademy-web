@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="row with-padding" ng-repeat="row in randomAuditions | partition: 3">
+    <div class="row padding-top" ng-repeat="row in randomAuditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale }}" thumb-size="small" audition-click="close()">
         </audition>

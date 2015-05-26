@@ -202,7 +202,7 @@ img.brand {
 #contest .btn-primary {
   border: 2px solid #fff;
 }
-#contest h1 {
+#contest .title {
   font-size: 32px;
   margin-bottom: 10px;
 }
@@ -397,6 +397,13 @@ img.brand {
 .cover img {
   width: 100%;
 }
+.section-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+.section-title .title {
+  font-size: 28px;
+}
 .profile-picture {
   display: block;
   background-color: transparent;
@@ -422,6 +429,10 @@ img.brand {
 .profile-picture.large {
   height: 210px;
   width: 210px;
+}
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1;
 }
 /* Extension of social buttons */
 .btn-youtube {
@@ -540,11 +551,6 @@ img.brand {
 /* Bootstrap custom buttons and labels */
 
 /* Contest components */
-.watch {
-  position: absolute;
-  left: -40px;
-  top: 7%;
-}
 .counter {
   color: #fff;
   display: block;
@@ -607,3 +613,126 @@ img.brand {
   margin: 0px;
 }
 /* Contest components * /
+
+/* Custom loading bar */
+#loading-bar .bar {
+  height: 5px;
+  background: #2196f3;
+}
+#loading-bar-spinner .spinner-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 30px;
+}
+#loading-bar-spinner {
+  top: 13px;
+  left: 10px;
+}
+/* Custom loading bar */
+
+/* Comment box */
+.comments-comment .ta-scroll-window > .ta-bind, .comments-comment .ta-editor.ta-html, .ta-scroll-window.form-control {
+  min-height: 53px;
+}
+.comments-box {
+  margin-top: 20px;
+}
+.comment-user.profile-picture {
+  width: 45px;
+  height: 45px;
+}
+.comment-text p {
+  margin: 0;
+}
+.comment-date {
+  color: #888;
+}
+.comment-actions a {
+  color: #888;
+}
+.comment-input p {
+  margin: 0;
+  line-height: 1.5;
+}
+.comment-replies {
+  border-left: 5px solid #ddd;
+  padding-left: 10px;
+}
+.comment-replies .media:first-child {
+  margin-top: 15px;
+}
+/* Comments box */
+
+/* Tabs panel */
+.tabbable-panel {
+  border: none;
+}
+.tabbable-line .nav-tabs {
+  border: none;
+}
+.tabbable-line .nav-tabs > li {
+  margin-right: 2px;
+}
+.tabbable-line .nav-tabs > li > a {
+  background-color: #fff;
+  border: none;
+  color: #737373;
+  padding: 10px 20px 10px 20px;
+  font-size: 16px;
+}
+.tabbable-line .nav-tabs > li:hover > a {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #333333;
+  border-bottom: 4px solid #2196f3;
+}
+.tabbable-line .nav-tabs > li.active > a {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #333333;
+  border-bottom: 4px solid #2196f3;
+}
+.tabbable-line .nav-tabs > li:hover .dropdown-menu {
+  margin-top: 0px;
+}
+.tabbable-line .tab-content {
+  padding: 40px 0;
+  font-size: 16px;
+}
+/* Tabs panel */
+
+/* User settings */
+#user-menu .profile-picture {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .blur {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .text {
+  width: 160px;
+  height: 160px;
+  top: 20px;
+}
+#user-menu ul {
+  padding-top: 20px;
+}
+#user-menu li {
+  min-width: 200px;
+  text-align: center
+}
+#settings .social-account .network-name {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 22px;
+}
+#settings .social-account .network-show {
+  display: inline-block;
+  margin-top: 10px;
+}
+#settings .social-account {
+  padding: 20px;
+}
+/* User settings */

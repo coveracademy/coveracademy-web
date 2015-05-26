@@ -456,8 +456,7 @@ angular
   $scope.contest = backendResponse.data.contest;
   $scope.audition = backendResponse.data.audition;
   $scope.userVote = backendResponse.data.userVote;
-  $scope.bestAuditions = backendResponse.data.bestAuditions;
-  $scope.latestAuditions = backendResponse.data.latestAuditions;
+  $scope.otherAuditions = backendResponse.data.otherAuditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.totalUserVotes = backendResponse.data.totalUserVotes;
   $scope.voteLimit = backendResponse.data.voteLimit;

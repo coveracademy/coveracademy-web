@@ -146,7 +146,7 @@
         </h1>
       </div>
     </div>
-    <div class="row with-padding" ng-repeat="row in auditions | partition: 3">
+    <div class="row padding-top" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large">
         </audition>
@@ -156,7 +156,7 @@
   <div ng-if="isContestProgress('finished')" class="container margin-top">
     <div ng-if="hasWinners()">
       <h1 class="text-center">{{ 'winners' | translate }}</h1>
-      <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row with-padding">
+      <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row padding-top">
         <div ng-repeat="audition in row" class="col-md-4 block-center">
           <a ui-sref="{{ userState(audition.user) }}">
             <div profile-picture="audition.user" class="profile-picture large img-circle block-center"></div>
@@ -251,7 +251,7 @@
         </div>
       </div>
     </div>
-    <div class="row with-padding" ng-repeat="row in auditions | partition: 3">
+    <div class="row padding-top" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
         </audition>

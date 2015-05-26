@@ -24,11 +24,15 @@ angular
 .directive('adsense', function() {
   return {
     templateUrl: 'app/partials/widgets/adsense.html',
-    restrict: 'E',
-    require: 'ngModel',
+    restrict: 'E',    
     scope: {
-      locale: '@'
-    }
+      type: '@'
+    },
+    controller: ['$scope', function($scope) {
+      $scope.isType = function(type) {
+        return $scope.type === type;
+      };
+    }]
   };
 })
 .directive('coverSongs', function() {

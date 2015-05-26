@@ -22,7 +22,7 @@
 					</div>
 					<div ng-if="hasWinnerAuditions(contest)">
 				    <h3 class="text-center">{{ 'winners' | translate }}</h3>
-				    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row with-padding">
+				    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding-top">
 				      <div ng-repeat="audition in row" class="col-md-4">
 				      	<div class="thumbnail">
 					        <audition ng-model="audition" locale="{{ locale() }}" border="false">

@@ -410,8 +410,7 @@ module.exports = function(router, app) {
           userVote: contestService.getUserVote(req.user, audition),
           votes: contestService.getAuditionVotes(audition),
           score: contestService.getAuditionScore(audition),
-          bestAuditions: contestService.bestAuditions(contest, 1, 8),
-          latestAuditions: contestService.latestAuditions(contest, 1, 8),
+          otherAuditions: contestService.randomAuditions(contest, 10),
           totalAuditions: contestService.totalAuditions(contest),
           comments: contestService.listComments(audition),
           fan: userService.isFan(req.user, audition.related('user'))
