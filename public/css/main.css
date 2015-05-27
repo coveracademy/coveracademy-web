@@ -273,6 +273,9 @@ img.brand {
 #running-contests {
   background-color: #18967e;
 }
+#running-contests.section {
+  padding: 0px 0px 30px 0px;
+}
 #running-contests.section h2 {
   margin-bottom: 15px;
 }
