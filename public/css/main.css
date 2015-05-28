@@ -103,6 +103,11 @@ img.brand {
   margin: 10px;
   border-radius: 5px;
 }
+.adsense {
+  padding-top: 20px;
+  padding-bottom: 10px;
+  text-align: center;
+}
 .text-bold {
   font-weight: 500;
 }

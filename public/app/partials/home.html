@@ -1,4 +1,4 @@
-<section id="intro" class="white section" ng-if="!isAuthenticated()">
+<section id="intro" class="white section" ng-if="!isAuthenticated()">  
   <div class="container">
     <div class="row">
       <div class="col-md-9">
@@ -16,7 +16,7 @@
 
 <section id="running-contests" class="white section" ng-if="hasContests(runningContests)">
   <div class="container">
-    <adsense type="top"></adsense>
+    <adsense></adsense>
     <h2 class="title">{{ 'contests_happening' | translate }}</h2>
 		<div ng-repeat="contest in runningContests" class="contest">
 			<div class="row margin-bottom">
