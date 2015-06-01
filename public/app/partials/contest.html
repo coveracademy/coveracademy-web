@@ -114,6 +114,7 @@
   </div>
 </section>
 <section id="auditions">
+  <adsense></adsense>
   <div class="margin text-center" ng-if="isContestant() && !isAuditionApproved()">
     <a ui-sref="app.audition({locale: locale(), id: audition.id, slug: audition.slug})" class="btn btn-info btn-largest">
       {{ 'you_are_participating' | translate }}
@@ -189,7 +190,7 @@
     <div ng-if="hasUserVotes()">
       <div class="row">
         <div class="col-md-12">
-          <h2>
+          <h2 class="no-margin-top">
             {{ 'your_votes' | translate }}
             <small ng-if="hasRemainingVotes()">
               • {{ 'you_can_still_vote_for_other_contestants' | translate: {remainingVotes: remainingVotes()} }}

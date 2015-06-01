@@ -103,6 +103,11 @@ img.brand {
   margin: 10px;
   border-radius: 5px;
 }
+.adsense {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
 .text-bold {
   font-weight: 500;
 }
@@ -147,6 +152,9 @@ img.brand {
 }
 .no-margin {
   margin: 0px;
+}
+.no-margin-top {
+  margin-top: 0px;
 }
 .no-border {
   border: none;
@@ -272,6 +280,9 @@ img.brand {
 }
 #running-contests {
   background-color: #18967e;
+}
+#running-contests.section {
+  padding: 0px 0px 30px 0px;
 }
 #running-contests.section h2 {
   margin-bottom: 15px;
