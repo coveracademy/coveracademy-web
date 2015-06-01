@@ -70,6 +70,9 @@ angular
   $scope.isPrizePlace = function(prize, place) {
     return prize.place === place;
   };
+  $scope.nextContestsBackground = function() {
+    return $scope.waitingContests[0].image;
+  };
 }])
 .controller('contestsController', ['$scope', '$stateParams', '$translate', 'authEvents', 'constants', 'backendResponse', 'seoService', function($scope, $stateParams, $translate, authEvents, constants, backendResponse, seoService) {
   $scope.contests = backendResponse.data.contests;
@@ -239,7 +242,7 @@ angular
   $scope.currentPage = 1;
   $scope.auditionsPerPage = 35;
   $scope.prizeDetailsToShow = {};
-  
+
   $scope.hidePrizes = true;
   if($scope.contest.progress === 'waiting') {
     $scope.hidePrizes = false;

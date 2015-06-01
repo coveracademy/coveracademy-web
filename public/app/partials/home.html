@@ -63,7 +63,7 @@
 	</div>
 </section>
 
-<section id="next-contests" class="white section" ng-if="hasContests(waitingContests)">
+<section id="next-contests" class="white section" ng-if="hasContests(waitingContests)" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ nextContestsBackground() }}');">
   <div class="container">
     <h2 class="title">{{ 'next_contests' | translate }}</h2>
     <div class="contest" ng-repeat="contest in waitingContests">
