@@ -1,4 +1,4 @@
-<section id="intro" class="white section" ng-if="!isAuthenticated()">  
+<section id="intro" class="white section" ng-if="!isAuthenticated()">
   <div class="container">
     <div class="row">
       <div class="col-md-9">
@@ -77,7 +77,7 @@
           </h2>
         </div>
         <div class="col-md-4">
-          <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
             {{ 'sign_up_my_video' | translate }}
           </a>
         </div>
