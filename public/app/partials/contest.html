@@ -37,53 +37,64 @@
         </div>
       </div>
     </div>
-    <div id="prizes" ng-show="isShowPrizes()">
-      <div class="row" ng-repeat="row in contest.prizes | partition: 3">
-        <div class="col-md-4 prize text-center" ng-repeat="prize in row">
-          <div class="card padding">
-            <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">
-              {{ 'first_place' | translate }}
-            </h3>
-            <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">
-              {{ 'second_place' | translate }}
-            </h3>
-            <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">
-              {{ 'third_place' | translate }}
-            </h3>
-            <h2 class="no-margin">
-              {{ prize.name }}
-              <small ng-if="hasPrizeDetails(prize)">
-                <a ng-click="showPrizeDetails(prize)">
-                  <i class="glyphicon glyphicon-question-sign"></i>
+    <div ng-show="isShowDetails()">
+      <div id="prizes">
+        <div class="row" ng-repeat="row in contest.prizes | partition: 3">
+          <div class="col-md-4 prize text-center" ng-repeat="prize in row">
+            <div class="card padding">
+              <h3 ng-if="isPrizePlace(prize, 1)" class="prize-place no-margin">
+                {{ 'first_place' | translate }}
+              </h3>
+              <h3 ng-if="isPrizePlace(prize, 2)" class="prize-place no-margin">
+                {{ 'second_place' | translate }}
+              </h3>
+              <h3 ng-if="isPrizePlace(prize, 3)" class="prize-place no-margin">
+                {{ 'third_place' | translate }}
+              </h3>
+              <h2 class="no-margin">
+                {{ prize.name }}
+                <small ng-if="hasPrizeDetails(prize)">
+                  <a ng-click="showPrizeDetails(prize)">
+                    <i class="glyphicon glyphicon-question-sign"></i>
+                  </a>
+                </small>
+              </h2>
+              <img ng-if="prize.image" ng-src="{{ prize.image }}">
+              <div ng-show="isShowPrizeDetails(prize)">
+                <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
+                <p ng-if="prize.description" class="text-justify">{{ prize.description }}</p>
+                <p ng-if="prize.link">
+                  <a ng-href="{{ prize.link }}" target="_blank" rel="nofollow">{{ 'see_on_sponsors_website' | translate }}</a>
+                </p>
+              </div>
+              <h4 ng-if="prize.sponsor.id">
+                {{ 'offered_by' | translate }}
+                <a ng-href="{{ prize.sponsor.website }}" target="_blank" rel="nofollow">
+                  {{ prize.sponsor.name }}
                 </a>
-              </small>
-            </h2>
-            <div ng-show="isShowPrizeDetails(prize)">
-              <img ng-if="prize.image" ng-src="{{ prize.image }}" class="prize-image">
-              <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
-              <p ng-if="prize.description" class="text-justify">{{ prize.description }}</p>
-              <p ng-if="prize.link">
-                <a ng-href="{{ prize.link }}" target="_blank" rel="nofollow">{{ 'see_on_sponsors_website' | translate }}</a>
-              </p>
+              </h4>
             </div>
-            <h4 ng-if="prize.sponsor.id">
-              {{ 'offered_by' | translate }}
-              <a ng-href="{{ prize.sponsor.website }}" target="_blank" rel="nofollow">
-                {{ prize.sponsor.name }}
-              </a>
-            </h4>
+          </div>
+        </div>
+      </div>
+      <div id="description" ng-if="contest.description">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card padding">
+              <h3 class="no-margin">{{ contest.description }}</h3>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div id="show-prizes">
-    <a ng-click="showPrizes()">
-      <span ng-show="hidePrizes">
-        <span class="glyphicon glyphicon-plus"></span> {{ 'show_prizes' | translate }}
+  <div id="show-details">
+    <a ng-click="showDetails()">
+      <span ng-show="hideDetails">
+        <span class="glyphicon glyphicon-plus"></span> {{ 'show_details' | translate }}
       </span>
-      <span ng-show="!hidePrizes">
-        <span class="glyphicon glyphicon-minus"></span> {{ 'hide_prizes' | translate }}
+      <span ng-show="!hideDetails">
+        <span class="glyphicon glyphicon-minus"></span> {{ 'hide_details' | translate }}
       </span>
     </a>
   </div>

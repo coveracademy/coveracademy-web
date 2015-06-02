@@ -243,9 +243,9 @@ angular
   $scope.auditionsPerPage = 35;
   $scope.prizeDetailsToShow = {};
 
-  $scope.hidePrizes = true;
+  $scope.hideDetails = true;
   if($scope.contest.progress === 'waiting') {
-    $scope.hidePrizes = false;
+    $scope.hideDetails = false;
   }
 
   $translate(['seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
@@ -307,11 +307,11 @@ angular
       delete $scope.prizeDetailsToShow[prize.id];
     }
   };
-  $scope.showPrizes = function() {
-    $scope.hidePrizes = !$scope.hidePrizes;
+  $scope.showDetails = function() {
+    $scope.hideDetails = !$scope.hideDetails;
   };
-  $scope.isShowPrizes = function() {
-    return !$scope.hidePrizes;
+  $scope.isShowDetails = function() {
+    return !$scope.hideDetails;
   }
   $scope.isShowPrizeDetails = function(prize) {
     return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];

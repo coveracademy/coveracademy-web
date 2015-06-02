@@ -214,23 +214,31 @@ img.brand {
   font-size: 32px;
   margin-bottom: 10px;
 }
-#contest #prizes {
-  margin: 20px 0px 0px 0px;
+#contest #description {
+  margin-top: 20px;
+  text-align: justify;
 }
-#contest .prize .card {
-  background-color: rgba(0, 0, 0, 0.5);
+#contest #description .card {
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 4px;
 }
-#contest .prize .prize-image {
+#contest #prizes {
+  margin-top: 20px;
+}
+#contest .prize .card {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+#contest .prize img {
   margin-top: 10px;
   margin-bottom: 10px;
-  width: 100%;
+  max-width: 100%;
 }
 #contest .prize a {
   text-decoration: underline !important;
 }
-#contest #show-prizes {
-  background-color: rgba(0, 0, 0, 0.3);
+#contest #show-details {
+  background-color: rgba(0, 0, 0, 0.5);
   text-align: center;
   padding: 5px;
   margin-top: 20px;

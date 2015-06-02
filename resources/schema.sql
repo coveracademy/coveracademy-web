@@ -133,6 +133,7 @@ create table potential_cover (
 create table contest (
   id                  int not null auto_increment,
   name                varchar(255) not null,
+  description         text default null,
   slug                varchar(255) not null,
   image               varchar(255) not null,
   minimum_contestants tinyint not null,
