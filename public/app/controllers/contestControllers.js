@@ -307,15 +307,15 @@ angular
       delete $scope.prizeDetailsToShow[prize.id];
     }
   };
+  $scope.isShowPrizeDetails = function(prize) {
+    return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];
+  };
   $scope.showDetails = function() {
     $scope.hideDetails = !$scope.hideDetails;
   };
   $scope.isShowDetails = function() {
     return !$scope.hideDetails;
   }
-  $scope.isShowPrizeDetails = function(prize) {
-    return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];
-  };
   $scope.hasWinners = function() {
     return $scope.winnerAuditions.length > 0;
   };
@@ -393,6 +393,7 @@ angular
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
   $scope.userAudition = backendResponse.data.audition;
+  $scope.prizeDetailsToShow = {};
 
   $translate(['seo.title.join_contest', 'seo.description.contest', 'seo.keywords.contest']).then(function(translations) {
     seoService.setTitle(translations['seo.title.join_contest']);
@@ -409,6 +410,19 @@ angular
   $scope.$on(authEvents.LOGOUT_SUCCESS, function() {
     $scope.userAudition = null;
   });
+  $scope.hasPrizeDetails = function(prize) {
+    return prize.image || prize.full_name || prize.description || prize.link;
+  };
+  $scope.showPrizeDetails = function(prize) {
+    if(!$scope.prizeDetailsToShow[prize.id]) {
+      $scope.prizeDetailsToShow[prize.id] = true;
+    } else {
+      delete $scope.prizeDetailsToShow[prize.id];
+    }
+  };
+  $scope.isShowPrizeDetails = function(prize) {
+    return $scope.prizeDetailsToShow && $scope.prizeDetailsToShow[prize.id];
+  };
   $scope.isContestant = function() {
     return Boolean($scope.userAudition && $scope.userAudition.id);
   };

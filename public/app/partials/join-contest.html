@@ -3,29 +3,36 @@
     <div class="row">
       <div class="col-md-8">
         <h1 class="title">
-          <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
             {{ contest.name }}
           </a>
-        </h1>
-        <div class="row" ng-if="!isContestProgress('finished')">
-          <div class="col-md-12">
-            <h3 class="no-margin">
-              <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
-                <i class="fa fa-facebook"></i>
-              </a>
-              <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
-                <i class="fa fa-twitter"></i>
-              </a>
-              <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
-                <i class="fa fa-google-plus"></i>
-              </a>
-            </h3>
-          </div>
-        </div>
+        </h1>        
       </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
       </div>
+      <div class="col-md-4" ng-if="isContestProgress('finished')">
+        <div class="bg-success">
+          <h2 class="text-center text-uppercase no-margin">
+            {{ 'contest_finished' | translate }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-if="!isContestProgress('finished')">
+      <div class="col-md-4">
+        <h3 class="no-margin">
+          <a ng-href="http://www.facebook.com/sharer/sharer.php?u={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-facebook btn-lg" title="{{ 'share_on' | translate }} Facebook" target="_blank">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a ng-href="http://twitter.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-twitter btn-lg" title="{{ 'share_on' | translate }} Twitter" target="_blank">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a ng-href="https://plus.google.com/share?url={{ siteUrl }}/{{ locale() }}/contest/{{ contest.id }}/{{ contest.slug }}" class="btn btn-social-icon btn-google-plus btn-lg" title="{{ 'share_on' | translate }} Google+" target="_blank">
+            <i class="fa fa-google-plus"></i>
+          </a>
+        </h3>
+      </div>      
     </div>
     <div id="prizes">
       <div class="row margin-bottom20" ng-repeat="row in contest.prizes | partition: 3">
@@ -47,9 +54,9 @@
                   <i class="glyphicon glyphicon-question-sign"></i>
                 </a>
               </small>
-            </h2>
+            </h2>            
             <div ng-show="isShowPrizeDetails(prize)">
-              <img ng-if="prize.image" ng-src="{{ prize.image }}" class="prize-image">
+              <img ng-if="prize.image" ng-src="{{ prize.image }}">
               <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
               <p ng-if="prize.description" class="text-justify">{{ prize.description }}</p>
               <p ng-if="prize.link">
