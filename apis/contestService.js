@@ -62,6 +62,7 @@ exports.getPrizeForPlace = function(contest, place) {
 
 exports.latestContests = function(page, pageSize) {
   return Contest.collection().query(function(qb) {
+    qb.where('active', 1);
     qb.orderBy('registration_date', 'desc');
     if(page && pageSize) {
       qb.offset((page - 1) * pageSize);
@@ -73,6 +74,7 @@ exports.latestContests = function(page, pageSize) {
 exports.listUnfinishedContests = function() {
   return Contest.collection().query(function(qb) {
     qb.where('progress', '!=', 'finished');
+    qb.where('active', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch();
 };
@@ -80,6 +82,7 @@ exports.listUnfinishedContests = function() {
 exports.listWaitingContests = function(related) {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'waiting');
+    qb.where('active', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch(related ? {withRelated: related} : null);
 };
@@ -87,6 +90,7 @@ exports.listWaitingContests = function(related) {
 exports.listRunningContests = function(related) {
   return Contest.collection().query(function(qb) {
     qb.where('progress', 'running');
+    qb.where('active', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch(related ? {withRelated: related} : null);
 };
@@ -95,6 +99,7 @@ exports.listOtherRunningContests = function(contest, related) {
   return Contest.collection().query(function(qb) {
     qb.whereNot('id', contest.id);
     qb.where('progress', 'running');
+    qb.where('active', 1);
     qb.orderBy('registration_date', 'desc');
   }).fetch(related ? {withRelated: related} : null);
 };

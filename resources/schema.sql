@@ -142,6 +142,7 @@ create table contest (
   registration_date   timestamp not null default current_timestamp,
   duration            tinyint not null,
   draw                tinyint default 0,
+  active              tinyint default 1,
   progress            varchar(50) default 'waiting',
   primary key (id),
   unique key `uq_contest_slug` (`slug`)
