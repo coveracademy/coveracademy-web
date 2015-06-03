@@ -336,18 +336,8 @@ img.brand {
   font-size: 30px;
   margin: 0px;
 }
-#next-contests .prizes {
-  display: inline-block;
-  margin: 0 auto;
-}
-#next-contests .prize {
-  float: left;
-}
-#next-contests .prize h3 {
-  font-weight: 700;
-}
-#next-contests .audition {
-  border: 3px solid #fff;
+#next-contests .card {
+  background-color: rgba(24, 150, 126, 0.8);
 }
 #past-winners {
   background-color: #485bc5;
