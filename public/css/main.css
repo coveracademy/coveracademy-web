@@ -220,14 +220,12 @@ img.brand {
 }
 #contest #description .card {
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 4px;
 }
 #contest #prizes {
   margin-top: 20px;
 }
 #contest .prize .card {
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 #contest .prize img {
   margin-top: 10px;

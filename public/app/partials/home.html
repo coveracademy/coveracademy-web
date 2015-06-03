@@ -83,10 +83,18 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
           <div class="row">
-            <div class="col-md-4" ng-repeat="prize in contest.prizes">
-              <h3>{{ prize.place }}º {{ 'place' | translate }}</h3>
+            <div class="col-md-4 text-center" ng-repeat="prize in contest.prizes">
+              <h3 ng-if="isPrizePlace(prize, 1)" class="no-margin">
+                {{ 'first_place' | translate }}
+              </h3>
+              <h3 ng-if="isPrizePlace(prize, 2)" class="no-margin">
+                {{ 'second_place' | translate }}
+              </h3>
+              <h3 ng-if="isPrizePlace(prize, 3)" class="no-margin">
+                {{ 'third_place' | translate }}
+              </h3>
               <h3 class="no-margin">
                 {{ prize.name }}
               </h3>
