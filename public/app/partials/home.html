@@ -84,15 +84,15 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <div class="row">
+          <div class="row margin-top20">
             <div class="col-md-4 text-center" ng-repeat="prize in contest.prizes">
-              <h3 ng-if="isPrizePlace(prize, 1)" class="no-margin">
+              <h3 ng-if="isPrizePlace(prize, 1)" class="text-uppercase text-bold no-margin">
                 {{ 'first_place' | translate }}
               </h3>
-              <h3 ng-if="isPrizePlace(prize, 2)" class="no-margin">
+              <h3 ng-if="isPrizePlace(prize, 2)" class="text-uppercase text-bold no-margin">
                 {{ 'second_place' | translate }}
               </h3>
-              <h3 ng-if="isPrizePlace(prize, 3)" class="no-margin">
+              <h3 ng-if="isPrizePlace(prize, 3)" class="text-uppercase text-bold no-margin">
                 {{ 'third_place' | translate }}
               </h3>
               <h3 class="no-margin">
