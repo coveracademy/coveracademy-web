@@ -13,6 +13,12 @@
                 <div class="caption">
                   <form class="form-horizontal compacted">
                     <div class="form-group">
+                      <label for="title-{{ auditionToReview.id }}" class="col-md-2 control-label">Contest</label>
+                      <div class="col-md-10">
+                        <span class="text-uppercase">{{ auditionToReview.contest.name}}</span>.
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <label for="title-{{ auditionToReview.id }}" class="col-md-2 control-label">Title</label>
                       <div class="col-md-10">
                         <input ng-model="auditionToReview.title" type="text" id="title-{{ auditionToReview.id }}" class="form-control" placeholder="The audition title" required>
