@@ -35,7 +35,8 @@ module.exports = function(router, app) {
   router.get('/contests/admin', isAdmin, function(req, res, next) {
     Promise.props({
       contests: contestService.listUnfinishedContests(),
-      auditionsToReview: contestService.listAuditionsToReview()
+      auditionsToReview: contestService.listAuditionsToReview(),
+      contestModalities: contestService.listContestModalities()
     }).then(function(result) {
       res.json(result);
     }).catch(function(err) {
