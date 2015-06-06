@@ -122,7 +122,15 @@ var Contest = Bookshelf.Model.extend({
   },
   sponsorsInContest: function() {
     return this.hasMany(SponsorInContest, 'contest_id');
+  },
+  modality: function(){
+    return this.belongsTo(ContestModality, 'contest_modality_id');
   }
+});
+
+var ContestModality = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'contest_modality'
 });
 
 var Audition = Bookshelf.Model.extend({
@@ -221,6 +229,7 @@ module.exports = {
   Audition: Audition,
   Bookshelf: Bookshelf,
   Contest: Contest,
+  ContestModality: ContestModality,
   Cover: Cover,
   Music: Music,
   MusicGenre: MusicGenre,
