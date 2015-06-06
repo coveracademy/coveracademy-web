@@ -13,6 +13,7 @@ var models      = require('../models'),
     moment      = require('moment'),
     _           = require('underscore'),
     Contest     = models.Contest,
+    ContestModality = models.ContestModality,
     Audition    = models.Audition,
     Sponsor     = models.Sponsor,
     UserVote    = models.UserVote,
@@ -467,6 +468,11 @@ exports.listAuditionsToReview = function() {
     qb.where('approved', 0);
     qb.where('contest.progress', '!=', 'finished');
   }).fetch(auditionWithContestRelated);
+};
+
+exports.listContestModalities = function() {
+  return ContestModality.collection().fetch();
+  //return Contest.collection();
 };
 
 var listAuditions = function(rankType, contest, page, pageSize) {
