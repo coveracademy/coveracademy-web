@@ -52,7 +52,7 @@
         </tab>
         <tab heading="Contests">
           <div ng-if="!creatingContest">
-            <button class="btn btn-primary btn-lg" ng-click="createNewContest()">
+            <button class="btn btn-primary btn-lg" ng-click="createContest()">
               New contest
             </button>
           </div>
@@ -64,49 +64,45 @@
                   <div class="margin-top20">
                     <form name="createContestForm" class="form-horizontal">
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Name</label>
+                        <label for="name" class="col-md-4 control-label">Name</label>
                         <div class="col-md-8">
                           <input type="text" name="name" ng-model="newContest.name" class="form-control" placeholder="Name" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Image</label>
+                        <label for="image" class="col-md-4 control-label">Image</label>
                         <div class="col-md-8">
                           <input type="text" name="image" ng-model="newContest.image" class="form-control" placeholder="Image" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Minimum contestants</label>
+                        <label for="minimum_contestants" class="col-md-4 control-label">Minimum contestants</label>
                         <div class="col-md-8">
                           <input type="text" name="minimum_contestants" ng-model="newContest.minimum_contestants" class="form-control" placeholder="Minimum contestants" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Acceptance date</label>
+                        <label for="acceptance_date" class="col-md-4 control-label">Acceptance date</label>
                         <div class="col-md-8">
                           <input type="text" name="acceptance_date" ng-model="newContest.acceptance_date" class="form-control" placeholder="Acceptance date" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Start date</label>
+                        <label for="start_date" class="col-md-4 control-label">Start date</label>
                         <div class="col-md-8">
                           <input type="text" name="start_date" ng-model="newContest.start_date" class="form-control" placeholder="Start date">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Duration</label>
+                        <label for="duration" class="col-md-4 control-label">Duration</label>
                         <div class="col-md-8">
                           <input type="text" name="duration" ng-model="newContest.duration" class="form-control" placeholder="Duration" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Modality</label>
+                        <label for="modality" class="col-md-4 control-label">Modality</label>
                         <div class="col-md-8">
-                          <select
-                            name="contest_modality_id"
-                            ng-model="contest.contest_modality_id"
-                            ng-options="modality.id as modality.name for modality in contestModalities"
-                            class="form-control">
+                          <select name="modality" ng-model="contest.modality_id" class="form-control" ng-options="modality.id as modality.name for modality in contestModalities">
                             <option>--</option>
                           </select>
                         </div>
@@ -135,55 +131,51 @@
                   <div class="margin-top20">
                     <form name="updateContestForm" class="form-horizontal">
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Name</label>
+                        <label for="name" class="col-md-4 control-label">Name</label>
                         <div class="col-md-8">
                           <input type="text" name="name" ng-model="contest.name" class="form-control" placeholder="Name" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Image</label>
+                        <label for="image" class="col-md-4 control-label">Image</label>
                         <div class="col-md-8">
                           <input type="text" name="image" ng-model="contest.image" class="form-control" placeholder="Image" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Minimum contestants</label>
+                        <label for="minimum_contestants" class="col-md-4 control-label">Minimum contestants</label>
                         <div class="col-md-8">
                           <input type="text" name="minimum_contestants" ng-model="contest.minimum_contestants" class="form-control" placeholder="Minimum contestants" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Acceptance date</label>
+                        <label for="acceptance_date" class="col-md-4 control-label">Acceptance date</label>
                         <div class="col-md-8">
                           <input type="text" name="acceptance_date" ng-model="contest.acceptance_date" class="form-control" placeholder="Acceptance date" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Start date</label>
+                        <label for="start_date" class="col-md-4 control-label">Start date</label>
                         <div class="col-md-8">
                           <input type="text" name="start_date" ng-model="contest.start_date" class="form-control" placeholder="Start date">
                         </div>
                       </div>
                       <div ng-if="isContestProgress(contest, 'running')" class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">End date</label>
+                        <label for="end_date" class="col-md-4 control-label">End date</label>
                         <div class="col-md-8">
                           <input type="text" name="end_date" ng-model="contest.end_date" class="form-control" placeholder="End date">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Duration</label>
+                        <label for="duration" class="col-md-4 control-label">Duration</label>
                         <div class="col-md-8">
                           <input type="text" name="duration" ng-model="contest.duration" class="form-control" placeholder="Duration" required>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputEmail3" class="col-md-4 control-label">Modality</label>
+                        <label for="modality" class="col-md-4 control-label">Modality</label>
                         <div class="col-md-8">
-                          <select
-                            name="contest_modality_id"
-                            ng-model="contest.contest_modality_id"
-                            ng-options="modality.id as modality.name for modality in contestModalities"
-                            class="form-control">
+                          <select name="modality" ng-model="contest.modality_id" class="form-control" ng-options="modality.id as modality.name for modality in contestModalities">
                             <option>--</option>
                           </select>
                         </div>
@@ -206,10 +198,10 @@
             </div>
           </div>
         </tab>
-        <!-- Begin Tab Modalities -->
+        <!-- Begin modalities tab -->
         <tab heading="Modalities">
           <div ng-if="!creatingContestModality" class="margin-bottom">
-            <button class="btn btn-primary btn-lg" ng-click="createNewContestModality()">
+            <button class="btn btn-primary btn-lg" ng-click="createContestModality()">
               New modality
             </button>
           </div>
@@ -233,7 +225,6 @@
                           </textarea>
                         </div>
                       </div>
-                   
                       <div class="form-group text-right">
                         <div class="col-md-12">
                           <button class="btn btn-primary btn-lg" ng-click="createContestModality()" ng-disabled="createContestModalityForm.$invalid">
@@ -250,11 +241,10 @@
               </div>
             </div>
           </div>
-          <!--Begin list modalities -->
+          <!--Begin modalities list -->
           <div ng-repeat="row in partitionContestModalities()" class="row">
             <div ng-repeat="modality in row" class="col-md-6">
               <div class="thumbnail">
-               
                 <div class="caption">
                   <form class="form-horizontal compacted" name="updateContestModalityForm-{{ modality.id }}">
                     <div class="form-group">
@@ -283,9 +273,9 @@
               </div>
             </div>
           </div>
-          <!-- End list modalities -->
-        <tab>
-        <!-- End Tab Modalities -->
+          <!-- End modalities list -->
+        </tab>
+        <!-- End modalities tab -->
       </tabset>
     </div>
   </div>

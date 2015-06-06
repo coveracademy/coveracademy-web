@@ -35,11 +35,11 @@ var User = Bookshelf.Model.extend({
   },
   filters: {
     creation: [
-      {name: 'name', required: true}, 
-      {name: 'email', required: true}, 
+      {name: 'name', required: true},
+      {name: 'email', required: true},
       'verified',
       'permission',
-      'username', 
+      'username',
       'gender',
     ],
     edition: [
@@ -123,8 +123,8 @@ var Contest = Bookshelf.Model.extend({
   sponsorsInContest: function() {
     return this.hasMany(SponsorInContest, 'contest_id');
   },
-  modality: function(){
-    return this.belongsTo(ContestModality, 'contest_modality_id');
+  modality: function() {
+    return this.belongsTo(ContestModality, 'modality_id');
   }
 });
 

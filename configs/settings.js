@@ -62,7 +62,7 @@ try {
         host: properties.getValue('database.host', 'localhost'),
         port: properties.getValue('database.port', 3306),
         user: properties.getValue('database.user', 'root'),
-        password: properties.getValue('database.password', 'r123456'),
+        password: properties.getValue('database.password'),
         schema: properties.getValue('database.schema', 'cover_academy'),
         charset: properties.getValue('database.charset', 'utf8'),
         debug: properties.getValue('database.debug', false),

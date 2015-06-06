@@ -1,26 +1,26 @@
 'use strict';
 
-var models      = require('../models'),
-    settings    = require('../configs/settings'),
-    logger      = require('../configs/logger'),
-    slug        = require('../utils/slug'),
-    entities    = require('../utils/entities'),
-    mailService = require('./internal/mailService'),
-    messages    = require('./internal/messages'),
-    constants   = require('./internal/constants'),
-    youtube     = require('./third/youtube'),
-    Promise     = require('bluebird'),
-    moment      = require('moment'),
-    _           = require('underscore'),
-    Contest     = models.Contest,
+var models          = require('../models'),
+    settings        = require('../configs/settings'),
+    logger          = require('../configs/logger'),
+    slug            = require('../utils/slug'),
+    entities        = require('../utils/entities'),
+    mailService     = require('./internal/mailService'),
+    messages        = require('./internal/messages'),
+    constants       = require('./internal/constants'),
+    youtube         = require('./third/youtube'),
+    Promise         = require('bluebird'),
+    moment          = require('moment'),
+    _               = require('underscore'),
+    Contest         = models.Contest,
     ContestModality = models.ContestModality,
-    Audition    = models.Audition,
-    Sponsor     = models.Sponsor,
-    UserVote    = models.UserVote,
-    UserComment = models.UserComment,
-    User        = models.User,
-    Bookshelf   = models.Bookshelf,
-    $           = this;
+    Audition        = models.Audition,
+    Sponsor         = models.Sponsor,
+    UserVote        = models.UserVote,
+    UserComment     = models.UserComment,
+    User            = models.User,
+    Bookshelf       = models.Bookshelf,
+    $               = this;
 
 _.str = require('underscore.string');
 
@@ -472,7 +472,6 @@ exports.listAuditionsToReview = function() {
 
 exports.listContestModalities = function() {
   return ContestModality.collection().fetch();
-  //return Contest.collection();
 };
 
 var listAuditions = function(rankType, contest, page, pageSize) {

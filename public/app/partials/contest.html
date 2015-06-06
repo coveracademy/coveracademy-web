@@ -200,30 +200,28 @@
     </div>
   </div>
   <div ng-if="isContestProgress('running') || isContestProgress('finished')" class="container">
-    <div ng-if="hasUserVotes()">
-      <div class="row">
-        <div class="col-md-12">
-          <h2 class="no-margin-top">
-            {{ 'your_votes' | translate }}
-            <small ng-if="hasRemainingVotes()">
-              • {{ 'you_can_still_vote_for_other_contestants' | translate: {remainingVotes: remainingVotes()} }}
-            </small>
-            <small ng-if="!hasRemainingVotes()">
-              • {{ 'you_have_already_voted_on_five_contestants' | translate }}
-            </small>
-          </h2>
-          <div ng-repeat="userVote in userVotes" class="pull-left">
-            <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
-              <div profile-picture="userVote.audition.user" class="profile-picture small">
-              </div>
-            </a>
-          </div>
+    <div ng-if="hasUserVotes()" class="row margin-bottom">
+      <div class="col-md-12">
+        <h2 class="no-margin-top">
+          {{ 'your_votes' | translate }}
+          <small ng-if="hasRemainingVotes()">
+            • {{ 'you_can_still_vote_for_other_contestants' | translate: {remainingVotes: remainingVotes()} }}
+          </small>
+          <small ng-if="!hasRemainingVotes()">
+            • {{ 'you_have_already_voted_on_five_contestants' | translate }}
+          </small>
+        </h2>
+        <div ng-repeat="userVote in userVotes" class="pull-left">
+          <a ui-sref="app.audition({id: userVote.audition.id, slug: userVote.audition.slug})">
+            <div profile-picture="userVote.audition.user" class="profile-picture small">
+            </div>
+          </a>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-8">
-        <h2>
+        <h2 class="no-margin-top">
           <span ng-if="isRanked('best')">
             {{ 'top_rated_auditions' | translate }}
           </span>
@@ -238,7 +236,7 @@
           </small>
         </h2>
       </div>
-      <div class="col-md-4 text-right" style="padding-top: 27px;">
+      <div class="col-md-4 text-right">
         <div ng-if="isRanked('best')" class="btn-group">
           <a class="btn btn-default font-big" ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug, rank: 'latest'})">
             {{ 'see_the_latest_auditions' | translate }}
@@ -265,7 +263,7 @@
         </div>
       </div>
     </div>
-    <div class="row padding-top" ng-repeat="row in auditions | partition: 3">
+    <div class="row padding-bottom" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
         </audition>

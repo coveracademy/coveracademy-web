@@ -130,6 +130,13 @@ create table potential_cover (
   unique key `uq_potential_cover_url` (`url`)
 ) engine = innodb default charset = utf8;
 
+create table contest_modality (
+  id    int not null auto_increment,
+  name  varchar(255) not null,
+  rules text not null,
+  primary key (id)
+) engine = innodb default charset = utf8;
+
 create table contest (
   id                  int not null auto_increment,
   name                varchar(255) not null,
@@ -145,10 +152,12 @@ create table contest (
   draw                tinyint default 0,
   active              tinyint default 1,
   progress            varchar(50) default 'waiting',
-  contest_modality_id int NULL,
-  rules               TEXT NULL ,
+  modality_id         int default null,
+  rules               text default null,
   primary key (id),
-  unique key `uq_contest_slug` (`slug`)
+  unique key `uq_contest_slug` (`slug`),
+  key `fk_contest_modality_id` (`modality_id`),
+  constraint `fk_contest_modality_id` foreign key (`modality_id`) references `contest_modality` (`id`)
 ) engine = innodb default charset = utf8;
 
 create table audition (
@@ -184,6 +193,8 @@ create table user_vote (
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_vote_user_id_audition_id` (`user_id`, `audition_id`),
+  key `fk_user_vote_user_id` (`user_id`),
+  key `fk_user_vote_audition_id` (`audition_id`),
   constraint `fk_user_vote_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_user_vote_audition_id` foreign key (`audition_id`) references `audition` (`id`)
 ) engine = innodb default charset = utf8;
@@ -196,6 +207,9 @@ create table user_comment (
   message           text not null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
+  key `fk_user_comment_user_id` (`user_id`),
+  key `fk_user_comment_audition_id` (`audition_id`),
+  key `fk_user_comment_comment_id` (`comment_id`),
   constraint `fk_user_comment_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_user_comment_audition_id` foreign key (`audition_id`) references `audition` (`id`),
   constraint `fk_user_comment_comment_id` foreign key (`comment_id`) references `user_comment` (`id`) on delete cascade
@@ -208,6 +222,8 @@ create table user_fan (
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_fan_user_id_fan_id` (`user_id`, `fan_id`),
+  key `fk_user_fan_user_id` (`user_id`),
+  key `fk_user_fan_fan_id` (`fan_id`),
   constraint `fk_user_fan_user_id` foreign key (`user_id`) references `user` (`id`),
   constraint `fk_user_fan_fan_id` foreign key (`fan_id`) references `user` (`id`)
 ) engine = innodb default charset = utf8;
@@ -229,6 +245,8 @@ create table sponsor_contest (
   contest_id        int not null,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
+  key `fk_sponsor_contest_sponsor_id` (`sponsor_id`),
+  key `fk_sponsor_contest_contest_id` (`contest_id`),
   constraint `fk_sponsor_contest_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`),
   constraint `fk_sponsor_contest_contest_id` foreign key (`contest_id`) references `contest` (`id`)
 ) engine = innodb default charset = utf8;
@@ -244,6 +262,8 @@ create table prize (
   image       varchar(255) default null,
   link        varchar(255) default null,
   primary key (id),
+  key `fk_prize_contest_id` (`contest_id`),
+  key `fk_prize_sponsor_id` (`sponsor_id`),
   constraint `fk_prize_contest_id` foreign key (`contest_id`) references `contest` (`id`),
   constraint `fk_prize_sponsor_id` foreign key (`sponsor_id`) references `sponsor` (`id`)
 ) engine = innodb default charset = utf8;
@@ -257,11 +277,3 @@ create table scheduled_email (
   registration_date timestamp not null default current_timestamp,
   primary key (id)
 ) engine = innodb default charset = utf8;
-
-
-CREATE TABLE `cover_academy`.`contest_modality` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NULL,
-  `rules` TEXT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB default charset = utf8;

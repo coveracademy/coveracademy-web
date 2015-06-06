@@ -135,7 +135,7 @@ angular
   $scope.contests = backendResponse.data.contests;
   $scope.auditionsToReview = backendResponse.data.auditionsToReview;
   $scope.contestModalities = backendResponse.data.contestModalities;
-  
+
   $scope.newContest = {};
   $translate('seo.title.admin').then(function(translation) {
     seoService.setTitle(translation);
@@ -156,7 +156,6 @@ angular
   $scope.partitionAuditionsToReview = function() {
     return $filter('partition')($scope.auditionsToReview, 2);
   };
-
   $scope.partitionContestModalities = function() {
     return $filter('partition')($scope.contestModalities, 2);
   };
@@ -202,7 +201,7 @@ angular
       alertService.alert('danger', 'Error updating contest');
     });
   };
-  $scope.createNewContest = function() {
+  $scope.createContest = function() {
     $scope.creatingContest = true;
   };
   $scope.createContest = function() {
@@ -227,15 +226,12 @@ angular
       alertService.alert('danger', 'Error sending inscription email');
     });
   };
-
-  $scope.createNewContestModality = function() {
+  $scope.createContestModality = function() {
     $scope.creatingContestModality = true;
   };
-
   $scope.cancelCreateContestModality = function() {
     $scope.creatingContestModality = false;
   };
-
 }])
 .controller('contestController', ['$scope', '$stateParams', '$translate', '$underscore', 'authEvents', 'constants', 'backendResponse', 'contestService', 'seoService', function($scope, $stateParams, $translate, $underscore, authEvents, constants, backendResponse, contestService, seoService) {
   $scope.siteUrl = constants.SITE_URL;
