@@ -145,6 +145,8 @@ create table contest (
   draw                tinyint default 0,
   active              tinyint default 1,
   progress            varchar(50) default 'waiting',
+  contest_modality_id int NULL,
+  rules               TEXT NULL ,
   primary key (id),
   unique key `uq_contest_slug` (`slug`)
 ) engine = innodb default charset = utf8;
@@ -255,3 +257,11 @@ create table scheduled_email (
   registration_date timestamp not null default current_timestamp,
   primary key (id)
 ) engine = innodb default charset = utf8;
+
+
+CREATE TABLE `cover_academy`.`contest_modality` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NULL,
+  `rules` TEXT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB default charset = utf8;
