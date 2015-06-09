@@ -34,6 +34,7 @@ header.navbar-default .navbar-form input {
 body {
   font-family: 'Dosis', 'sans-serif';
   margin-bottom: 514px;
+  font-size: 17px;
 }
 body.footer-margin {
   margin-bottom: 540px;
@@ -106,6 +107,9 @@ img.brand {
   margin: 10px;
   border-radius: 5px;
 }
+button.break-line {
+  white-space: normal;
+}
 .adsense {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -115,19 +119,19 @@ img.brand {
   font-weight: 500;
 }
 .font-small {
-  font-size: 12px !important;
+  font-size: 15px !important;
 }
 .font-normal {
-  font-size: 14px !important;
+  font-size: 17px !important;
 }
 .font-large {
-  font-size: 16px !important;
+  font-size: 19px !important;
 }
 .font-big {
-  font-size: 18px !important;
+  font-size: 21px !important;
 }
 .font-biggest {
-  font-size: 22px !important;
+  font-size: 23px !important;
 }
 .padding {
   padding: 10px;
@@ -516,6 +520,12 @@ img.medal {
 /* Extension of social buttons */
 
 /* Bootstrap custom components */
+.form-control {
+  font-size: 17px;
+}
+.form-control.input-lg {
+  font-size: 21px;
+}
 .btn {
   color: #fff;
   border: 1px solid transparent;

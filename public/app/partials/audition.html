@@ -102,7 +102,7 @@
                 </h3>
               </div>
               <div class="comments">
-                <div ng-if="userAuthenticated()" class="media comments-comment">
+                <div ng-if="isAuthenticated()" class="media comments-comment">
                   <div class="media-left">
                     <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
                     </div>
@@ -123,7 +123,7 @@
                     </form>
                   </div>
                 </div>
-                <div ng-if="!userAuthenticated()">
+                <div ng-if="!isAuthenticated()">
                   <button ng-click="login()" type="button" class="btn btn-info">
                     {{ 'login_to_post_a_comment' | translate }}
                   </button>
@@ -186,7 +186,7 @@
                             </div>
                           </div>
                         </div>
-                        <div ng-if="userAuthenticated() && isReplyCommentFormOpened(comment)" class="media comments-comment">
+                        <div ng-if="isAuthenticated() && isReplyCommentFormOpened(comment)" class="media comments-comment">
                           <div class="media-left">
                             <div profile-picture="userAuthenticated()" class="media-object profile-picture comment-user img-circle">
                             </div>
@@ -222,16 +222,19 @@
             <div class="votes-number">
               {{ votes }} {{ 'votes' | translate }}
             </div>
-            <div ng-if="isContestProgress('running')">
+            <div ng-if="isContestProgress('running')" class="margin-top">
+              <button ng-if="!isAuthenticated()" class="btn btn-success btn-lg btn-block break-line" ng-click="login()">
+                <h2 class="no-margin">{{ 'login_to_vote' | translate }}</h2>
+              </button>
               <button ng-if="canVote() && !voted()" class="btn btn-success btn-lg btn-block margin-top" ng-click="vote(audition)" ng-disabled="!hasRemainingVotes()">
                 <h2 class="no-margin">{{ 'vote' | translate }}</h2>
-                <h5 ng-if="userAuthenticated()" class="no-margin">
+                <h5 class="no-margin">
                   {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
                 </h5>
               </button>
               <button ng-if="canVote() && voted()" class="btn btn-info btn-lg btn-block margin-top" ng-click="removeVote(audition)">
                 <h2 class="no-margin">{{ 'you_voted' | translate }}</h2>
-                <h5 ng-if="userAuthenticated()" class="no-margin">
+                <h5 class="no-margin">
                   {{ 'remaining_votes' | translate: {remainingVotes: remainingVotes()} }}
                 </h5>
               </button>

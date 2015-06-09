@@ -587,7 +587,7 @@ angular
     }
   };
   $scope.canVote = function() {
-    return !$scope.userAuthenticated() || ($scope.userAuthenticated().id !== $scope.audition.user.id);
+    return $scope.userAuthenticated() && ($scope.userAuthenticated().id !== $scope.audition.user.id);
   };
   $scope.voted = function() {
     return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
