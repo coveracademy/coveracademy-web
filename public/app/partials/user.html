@@ -24,20 +24,20 @@
             </button>
           </h1>
           <h4>
-            <span class="user-label label label-warning">
+            <span class="label label-warning">
               <i class="glyphicon glyphicon-screenshot"></i>
               {{ 'voting_power' | translate }}: {{ user.voting_power }}
             </span>
-            <span ng-if="hasFans()" class="user-label label label-primary">
+            <span ng-if="hasFans()" class="label label-primary">
               <i class="glyphicon glyphicon-star"></i> {{ 'fans' | translate }}: {{ totalFans }}
             </span>
-            <span ng-if="isContestant()" class="user-label label label-primary">
+            <span ng-if="isContestant()" class="label label-primary">
               <i class="glyphicon glyphicon-ok"></i> {{ 'contestant' | translate }}
             </span>
-            <span ng-if="user.city" class="user-label label label-info">
+            <span ng-if="user.city" class="label label-info">
               <i class="glyphicon glyphicon-map-marker"></i> {{ user.city }} <span ng-if="user.state">/ {{ user.state }}</span>
             </span>
-            <span class="user-label label label-info">
+            <span class="label label-info">
               <i class="glyphicon glyphicon-time"></i>
               {{ 'member_since' | translate }} <span am-time-ago="user.registration_date"></span>
             </span>

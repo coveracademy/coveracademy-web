@@ -33,7 +33,6 @@ header.navbar-default .navbar-form input {
 }
 body {
   font-family: 'Dosis', 'sans-serif';
-  font-size: 17px;
   margin-bottom: 514px;
 }
 body.footer-margin {
@@ -96,6 +95,10 @@ a:focus, a:hover {
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
+  line-height: 1.5;
+}
+p, li {
+  line-height: 1.8;
 }
 img.brand {
   max-height: 185px;
@@ -110,6 +113,21 @@ img.brand {
 }
 .text-bold {
   font-weight: 500;
+}
+.font-small {
+  font-size: 12px !important;
+}
+.font-normal {
+  font-size: 14px !important;
+}
+.font-large {
+  font-size: 16px !important;
+}
+.font-big {
+  font-size: 18px !important;
+}
+.font-biggest {
+  font-size: 22px !important;
 }
 .padding {
   padding: 10px;
@@ -167,6 +185,127 @@ img.brand {
 }
 .overflow-hidden {
   overflow: hidden;
+}
+.thumbnail {
+  line-height: 1.5;
+}
+.navbar-logo {
+  float: left;
+  height: 64px;
+  padding: 10px 5px 10px 0px;
+}
+.languages.navbar-nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.languages.navbar-nav > li > a {
+  padding: 10px 5px;
+}
+.label-required {
+  color: #f00;
+}
+.page-header-background {
+  margin-top: -12px;
+  margin-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #f1f4f4;
+}
+.block-center {
+  margin: 0 auto;
+}
+.cover {
+  position: relative;
+}
+.cover .darken {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.3;
+}
+.cover .caption {
+  position: absolute;
+  bottom: 0px;
+  padding: 10px;
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  background-size: cover;
+  text-shadow: 2px 2px 5px #000000;
+}
+.cover .legend {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+.cover.small .caption {
+  font-size: 12px;
+}
+.cover.small .legend {
+  font-size: 20px;
+}
+.cover.large .caption {
+  font-size: 18px;
+}
+.cover.large .legend {
+  font-size: 26px;
+}
+.cover img {
+  width: 100%;
+}
+.section-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+.section-title .title {
+  font-size: 28px;
+}
+.profile-picture {
+  display: block;
+  background-color: transparent;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-decoration: none;
+  height: 160px;
+  width: 160px;
+  position: relative;
+}
+.profile-picture.small {
+  height: 80px;
+  width: 80px;
+}
+.profile-picture.medium {
+  height: 120px;
+  width: 120px;
+}
+.profile-picture.large {
+  height: 210px;
+  width: 210px;
+}
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1;
+}
+.embed-container {
+  height: 0;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  position: relative;
+}
+.embed-container iframe {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+img.medal {
+  height: 155px;
 }
 /* Page sections */
 .section {
@@ -243,6 +382,9 @@ img.brand {
   text-align: center;
   padding: 5px;
   margin-top: 20px;
+}
+#auditions {
+  padding-bottom: 60px;
 }
 #infos {
   background-color: #e27a3f;
@@ -352,109 +494,19 @@ img.brand {
   background-color: #1495e7;
 }
 /* Page sections */
-.block-center {
-  margin: 0 auto;
-}
-.contest-cover {
-  background-position: center;
-  background-size: cover;
-  min-height: 200px;
-  text-shadow: 2px 2px 5px #000000;
-}
-.contest-cover .contest-infos {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: #aaa;
-}
-.cover {
-  position: relative;
-}
-.cover .darken {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  opacity: 0.3;
-}
-.cover .caption {
-  position: absolute;
-  bottom: 0px;
-  padding: 10px;
-  width: 100%;
-  color: #fff;
-  text-align: left;
-  background-size: cover;
-  text-shadow: 2px 2px 5px #000000;
-}
-.cover .legend {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-}
-.cover.small .caption {
-  font-size: 12px;
-}
-.cover.small .legend {
-  font-size: 20px;
-}
-.cover.large .caption {
-  font-size: 18px;
-}
-.cover.large .legend {
-  font-size: 26px;
-}
-.cover img {
-  width: 100%;
-}
-.section-title {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 20px;
-}
-.section-title .title {
-  font-size: 28px;
-}
-.profile-picture {
-  display: block;
-  background-color: transparent;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  text-decoration: none;
-  height: 160px;
-  width: 160px;
-  position: relative;
-}
-.profile-picture.small {
-  height: 80px;
-  width: 80px;
-}
-.profile-picture.medium {
-  height: 120px;
-  width: 120px;
-}
-.profile-picture.large {
-  height: 210px;
-  width: 210px;
-}
-.media, .media-body {
-  overflow: hidden;
-  zoom: 1;
-}
+
 /* Extension of social buttons */
 .btn-youtube {
   color: #fff;
   background-color: #444;
   border-color: rgba(0, 0, 0, 0.2);
 }
-.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
+.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active, .btn-youtube.active {
   color: #fff;
   background-color: #222;
   border-color: rgba(0, 0, 0, 0.2);
 }
-.btn-youtube:active, .btn-youtube.active, .open .dropdown-toggle.btn-youtube {
+.btn-youtube:active, .btn-youtube.active {
   background-image: none;
 }
 .btn-youtube.disabled, .btn-youtube[disabled], fieldset[disabled] .btn-youtube, .btn-youtube.disabled:hover, .btn-youtube[disabled]:hover, fieldset[disabled] .btn-youtube:hover, .btn-youtube.disabled:focus, .btn-youtube[disabled]:focus, fieldset[disabled] .btn-youtube:focus, .btn-youtube.disabled:active, .btn-youtube[disabled]:active, fieldset[disabled] .btn-youtube:active, .btn-youtube.disabled.active, .btn-youtube[disabled].active, fieldset[disabled] .btn-youtube.active {
@@ -463,7 +515,7 @@ img.brand {
 }
 /* Extension of social buttons */
 
-/* Bootstrap custom inputs, buttons and labels */
+/* Bootstrap custom components */
 .btn {
   color: #fff;
   border: 1px solid transparent;
@@ -542,6 +594,9 @@ img.brand {
 .label-danger {
   background-color: #df5a49;
 }
+.label-black {
+  background-color: #000;
+}
 .bg-primary {
   background-color: #1495e7;
 }
@@ -557,7 +612,72 @@ img.brand {
 .bg-danger {
   background-color: #df5a49;
 }
-/* Bootstrap custom buttons and labels */
+.alert {
+  border: none;
+  color: #fff;
+}
+.alert a, .alert a:hover, .alert a:active {
+  color: #fff;
+  text-decoration: underline;
+}
+.alert-success {
+  background-color: #18967e;
+}
+.alert-warning {
+  background-color: #efc94c;
+}
+.alert-danger {
+  background-color: #df5a49;
+}
+.alert-info {
+  background-color: #e27a3f;
+}
+.alert-dismissable, .alert-dismissible {
+  padding-right: 35px;
+}
+.alerts {
+  z-index: 999999;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+}
+.alerts .alert {
+  margin-bottom: 10px;
+  max-width: 500px;
+  position: relative;
+  font-size: 16px;
+}
+.fixed-alerts {
+  z-index: 999999;
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+}
+.fixed-alerts .alert {
+  margin-bottom: 10px;
+  max-width: 800px;
+  position: relative;
+  font-size: 14px;
+}
+#register-form .alert {
+  margin-bottom: 0px;
+}
+.callout {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-left-width: 3px;
+  border-radius: 15px;
+}
+.callout-primary {
+  border-left-color: #2196f3;;
+}
+.callout li {
+  list-style-type: circle;
+}
+.callout ul {
+  padding-left: 20px;
+}
+/* Bootstrap custom components */
 
 /* Contest components */
 .counter {
@@ -744,4 +864,204 @@ img.brand {
 #settings .social-account {
   padding: 20px;
 }
+#primary-pictures .thumbnail {
+  width: 240px;
+  padding: 20px;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 14px;
+}
+#primary-pictures .thumbnail.selected {
+  background-color: #ecf3fa;
+}
+#primary-pictures .profile-picture {
+  margin: 0 auto;
+  height: 100px;
+  width: 100px;
+}
 /* User settings */
+
+/* Incentive vote modal */
+#incentive-vote {
+  padding: 0;
+}
+#incentive-vote #incentive {
+  padding: 0px 30px;
+}
+#incentive-vote #join-community {
+  background-color: #363b3f;
+  padding: 20px 0px 20px 0px;
+  color: #fff;
+}
+#incentive-vote #join-community .row {
+  padding: 0px 30px 0px 30px;
+}
+/* Incentive vote modal */
+
+/* Pretty Header */
+.pretty-header {
+  background-color: #000;
+  height: 250px;
+  margin-top: -13px; /* main element with class with-header has a 64px padding-top and it's needed to positioning pretty-header to 51px*/
+  padding-top: 40px;
+  padding-bottom: 40px;
+  overflow: hidden;
+  position: relative;
+}
+.pretty-header.background-style {
+  background-size: cover;
+  height: auto;
+  overflow: visible;
+  position: static;
+  min-height: 277px;
+}
+.pretty-header.background-style.small {
+  padding-top: 10px;
+  padding-bottom: 30px;
+  min-height: 139px;
+}
+.pretty-header a {
+  color: #fff;
+  text-decoration: underline;
+}
+.pretty-header p, .pretty-header h1, .pretty-header h2, .pretty-header h3, .pretty-header h4, .pretty-header h5, .pretty-header .form-control {
+  color: #fff;
+}
+.pretty-header h1.big {
+  font-size: 60px;
+}
+.pretty-header > .content {
+  position: absolute;
+  text-align: center;
+  text-shadow: 2px 2px 5px #000000;
+  width: 100%;
+  z-index: 500;
+}
+.pretty-header.background-style > .content {
+  position: static;
+}
+.pretty-header > .content .thumbnail {
+  position: absolute;
+  z-index: -1;
+}
+.pretty-header > .content .thumbnail > img {
+  height: 150px;
+}
+.pretty-header > img.background {
+  width: 100%;
+  opacity: 0.5;
+  margin-top: -200px;
+}
+/* Pretty Header */
+
+/* User components */
+.profile-overview figure:hover figcaption {
+  opacity: 1;
+}
+.profile-overview figure .profile-picture {
+  width: 262px;
+  height: 262px;
+  float: left;
+}
+.profile-overview figcaption {
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: all 0.45s ease-in-out;
+  -moz-transition: all 0.45s ease-in-out;
+  -o-transition: all 0.45s ease-in-out;
+  -ms-transition: all 0.45s ease-in-out;
+  transition: all 0.45s ease-in-out;
+}
+.profile-overview figcaption .blur {
+  position: absolute;
+  height: 262px;
+  width: 262px;
+  z-index: 5;
+  background-color: rgba(0,0,0,0.65);
+}
+.profile-overview figcaption .text {
+  position: absolute;
+  width: 262px;
+  height: 262px;
+  z-index: 10;
+  color: #fff;
+  text-align: center;
+  top: 100px;
+}
+.profile-overview figcaption h1 {
+  text-transform: uppercase;
+  font-size: 24px;
+}
+/* User components */
+
+/* User view */
+#user.pretty-header .container {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+#user.pretty-header .content {
+  text-align: left;
+}
+#user.pretty-header > img.background {
+  opacity: 0.2;
+}
+#user .label {
+ margin-bottom: 5px;
+}
+#user .actions {
+  margin-top: 20px;
+}
+/* User view */
+
+/* Audition view */
+#author .profile-picture {
+  width: 126px;
+  height: 126px;
+}
+#audition .votes-number {
+  font-size: 35px;
+}
+/* Audition view */
+
+/* Contest guideline */
+#guideline p, #guideline li {
+  font-size: 16px;
+  text-align: justify;
+}
+#guideline .callout {
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
+#guideline .callout .title {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+#guideline #index {
+  background-color: #f9f9f9;
+  margin-top: 40px;
+}
+/* Contest guideline */
+
+/* Contests view */
+#contests .contest {
+  background-color: #18967e;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-shadow: 2px 2px 5px #000000;
+  padding: 30px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+#contests .contest .contest-infos {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#contests a {
+  color: #fff;
+}
+#contests .btn {
+  font-size: 20px;
+  min-width: 130px;
+}
+/* Contests view */

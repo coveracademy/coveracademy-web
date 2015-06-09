@@ -13,7 +13,7 @@
       </div>
       <div class="col-md-4" ng-if="isContestProgress('finished')">
         <div class="bg-success">
-          <h2 class="text-center text-uppercase no-margin">          
+          <h2 class="text-center text-uppercase no-margin">
             {{ 'contest_finished' | translate }}
           </h2>
         </div>
@@ -47,7 +47,7 @@
           </div>
           <div class="section-title padding-top">
             <div class="row">
-              <div class="col-md-9">              
+              <div class="col-md-9">
                 <h1 class="title no-margin">
                   {{ audition.title }}
                 </h1>
@@ -218,7 +218,7 @@
         </div>
         <div class="col-md-3">
           <div class="text-center">
-            <img ng-if="isWinner()" class="medium-medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
+            <img ng-if="isWinner()" class="medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
             <div class="votes-number">
               {{ votes }} {{ 'votes' | translate }}
             </div>
@@ -255,7 +255,7 @@
     </div>
     <div ng-if="isContestProgress('waiting') || isContestProgress('waiting_time') || !isAuditionApproved()">
       <div class="row" ng-if="!isAuditionApproved()">
-        <div class="col-md-8 col-md-offset-2">          
+        <div class="col-md-8 col-md-offset-2">
           <alert type="warning">
             <h2 class="text-center no-margin">
               {{ 'this_audition_is_under_review_wait_for_approval' | translate }}
@@ -292,6 +292,6 @@
           </div>
         </div>
       </div>
-    </div>    
+    </div>
   </div>
 </section>

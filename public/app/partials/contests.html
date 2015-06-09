@@ -1,45 +1,45 @@
-<div class="container">
-	<h1 class="page-header">{{ 'latest_contests' | translate }}</h1>
-	<div ng-repeat="contest in contests">
+<div class="page-header-background">
+  <div class="container">
+    <h1>{{ 'latest_contests' | translate }}</h1>
+  </div>
+</div>
+<div id="contests" class="container">
+	<div class="contest" ng-repeat="contest in contests" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="contest-cover" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ contest.image }}');">
-					<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
-						<h1 class="text-center no-margin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
-					</a>
-					<div class="contest-infos">
-						<h3 class="no-margin">
-							{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
-							<span ng-if="contest.start_date">
-								·
-								{{ contest.start_date | amCalendar }}
-							</span>
-							<span ng-if="contest.end_date">
-								·
-								{{ contest.end_date | amCalendar }}
-							</span>
-						</h3>
-					</div>
-					<div ng-if="hasWinnerAuditions(contest)">
-				    <h3 class="text-center">{{ 'winners' | translate }}</h3>
-				    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding-top">
-				      <div ng-repeat="audition in row" class="col-md-4">
-				      	<div class="thumbnail">
-					        <audition ng-model="audition" locale="{{ locale() }}" border="false">
-					        </audition>
-					      </div>
-				      </div>
-				    </div>
-				  </div>
-				  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="text-center">
-				  	<a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-largest">
-	          {{ 'sign_up_my_video' | translate }}
-	       		</a>
-		        <a ui-sref="app.contestGuideline({locale: locale()})" class="btn btn-success btn-largest">
-		          {{ 'read_the_rules' | translate }}
-		        </a>
-				  </div>
+				<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+					<h1 class="text-uppercase text-center no-margin">{{ contest.name }} <i class="glyphicon glyphicon-link"></i></h1>
+				</a>
+				<div class="contest-infos">
+					<h3 class="no-margin">
+						{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
+						<span ng-if="contest.start_date">
+							·
+							{{ contest.start_date | amCalendar }}
+						</span>
+						<span ng-if="contest.end_date">
+							·
+							{{ contest.end_date | amCalendar }}
+						</span>
+					</h3>
 				</div>
+				<div ng-if="hasWinnerAuditions(contest)">
+			    <h3 class="text-uppercase text-center">{{ 'winners' | translate }}</h3>
+			    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding-top">
+			      <div ng-repeat="audition in row" class="col-md-4">
+			        <audition ng-model="audition" locale="{{ locale() }}" border="false">
+			        </audition>
+			      </div>
+			    </div>
+			  </div>
+			  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="text-center">
+		  		<a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg">
+	          {{ 'vote' | translate }}
+	        </a>
+	        <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">
+	          {{ 'sign_up_my_video' | translate }}
+	        </a>
+			  </div>
 			</div>
 		</div>
 	</div>

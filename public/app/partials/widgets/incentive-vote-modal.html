@@ -2,7 +2,7 @@
   <button ng-click="close()" type="button" class="close" aria-hidden="true">
     &times;
   </button>
-  <h2 class="text-center">{{ 'incentive_vote_modal_header' | translate }}</h2>
+  <h2 class="no-margin text-center">{{ 'incentive_vote_modal_header' | translate }}</h2>
 </div>
 <div id="incentive-vote" class="modal-body">
   <div id="incentive">
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="row padding-top" ng-repeat="row in randomAuditions | partition: 3">
+    <div class="row margin-bottom" ng-repeat="row in randomAuditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale }}" thumb-size="small" audition-click="close()">
         </audition>
@@ -24,10 +24,10 @@
     </div>
   </div>
   <div id="join-community">
-    <div class="row text-center">
+    <div class="row">
       <div class="col-md-12">
-        <h3>{{ 'lets_create_the_largest_community' | translate }}</h3>
-        <h2>{{ 'like_on_facebook' | translate }}</h2>
+        <h3 class="no-margin">{{ 'lets_create_the_largest_community' | translate }}</h3>
+        <h2 class="no-margin text-center">{{ 'like_on_facebook' | translate }}</h2>
         <fb-like-box link="https://www.facebook.com/coveracademy" width="820" height="190" faces="true" theme="dark">
         </fb-like-box>
       </div>
