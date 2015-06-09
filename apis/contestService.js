@@ -507,7 +507,7 @@ exports.randomAuditions = function(contest, size) {
     }
     var randomAuditions = Audition.collection();
     _.shuffle(_.range(size)).forEach(function(index) {
-      randomAuditions.add(auditions.at(index - 1));
+      randomAuditions.add(auditions.at(index));
     });
     return randomAuditions;
   });
