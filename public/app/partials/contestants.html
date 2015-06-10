@@ -6,7 +6,7 @@
 </div>
 <div class="container">
   <div class="contestants-section" infinite-scroll="loadContestants()" infinite-scroll-disabled="!loadMoreContestants" infinite-scroll-distance="1">
-    <div ng-repeat="row in contestants | partition: 4" class="row padding profile-overview">
+    <div ng-repeat="row in contestants | partition: 4" class="row padding-top profile-overview">
       <div ng-repeat="contestant in row" class="col-md-3">
         <a ui-sref="{{ userState(contestant) }}">
           <figure>

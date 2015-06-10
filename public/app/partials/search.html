@@ -1,12 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h1 class="align-center">{{ totalResults }} {{ 'results_for' | translate }} "{{ searchQuery }}"</h1>
+      <h1 class="text-center">{{ totalResults }} {{ 'results_for' | translate }} "{{ searchQuery }}"</h1>
     </div>
   </div>
   <div class="row" ng-repeat="artist in artists">
     <div class="col-md-12">
-      <div class="page-title">
+      <div class="section-title">
         <h2>
           <img class="small-thumbnail" ng-src="{{ artist.small_thumbnail }}">
           <a ui-sref="app.artist({locale: locale(), artist: artist.slug})">
@@ -19,7 +19,7 @@
   </div>
   <div class="row" ng-repeat="music in musics">
     <div class="col-md-12">
-      <div class="page-title">
+      <div class="section-title">
         <h2>
           <img class="small-thumbnail" ng-src="{{ music.small_thumbnail }}">
           <a ui-sref="app.music({locale: locale(), music: music.slug})">

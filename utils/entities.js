@@ -8,8 +8,12 @@ exports.getIds = function(collection) {
     ids.push(model.id);
   });
   return ids;
-}
+};
 
 exports.isCollection = function(obj) {
   return obj instanceof Bookshelf.Collection;
-}
+};
+
+exports.isModel = function(obj) {
+  return obj instanceof Bookshelf.Model;
+};

@@ -1,8 +1,8 @@
 'use strict';
 
 var userService        = require('../apis/userService'),
-    mailService        = require('../apis/mailService'),
-    messages           = require('../apis/messages'),
+    mailService        = require('../apis/internal/mailService'),
+    messages           = require('../apis/internal/messages'),
     settings           = require('./settings'),
     logger             = require('./logger'),
     YoutubeStrategy    = require('passport-youtube-v3').Strategy,
@@ -42,10 +42,9 @@ exports.configure = function(app, passport) {
       done(null, user);
     } else {
       userService.findById(user).then(function(userFound) {
-        if(userFound) {
-          return userFound;
-        }
-        throw messages.apiError('user.auth.errorDeserializingUserFromSession', 'Error deserializing user with id ' + user.id);
+        return userFound;
+      }).catch(function(err) {
+        throw messages.apiError('user.session.errorDeserializing', 'Error deserializing user from session.', err);
       }).nodeify(done);
     }
   });
@@ -59,17 +58,15 @@ exports.configure = function(app, passport) {
       picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null
     };
     userService.findBySocialAccount('facebook', profileInfos.id).then(function(user) {
-      if(user) {
-        return user;
+      return user;
+    }).catch(messages.NotFoundError, function(err) {
+      if(!profileInfos.email) {
+        return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.picture, profileInfos.name, profileInfos.gender);
       } else {
-        if(profileInfos.email) {
-          return userService.create({facebook_account: profileInfos.id, facebook_picture: null, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'}).then(function(user) {
-            req.flash('newUser', true);
-            return user;
-          });
-        } else {
-          return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.picture, profileInfos.name, profileInfos.gender);
-        }
+        return userService.create({facebook_account: profileInfos.id, facebook_picture: null, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'}).then(function(user) {
+          req.flash('newUser', true);
+          return user;
+        });
       }
     }).nodeify(new CustomDone(done).done);
   }));
@@ -84,9 +81,8 @@ exports.configure = function(app, passport) {
       picture: profile.photos && profile.photos.length > 0 ? profile.photos[0].value.replace('_normal', '') : null
     };
     userService.findBySocialAccount('twitter', profileInfos.id).then(function(user) {
-      if(user) {
-        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Twitter account');
-      }
+      throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Twitter account');
+    }).catch(messages.NotFoundError, function(err) {
       return userService.connectNetwork(req.user, 'twitter', profileInfos.id, profileInfos.picture, profileInfos.url);
     }).nodeify(new CustomDone(done).done);
   }));
@@ -100,9 +96,8 @@ exports.configure = function(app, passport) {
       picture: profile._json.picture
     };
     userService.findBySocialAccount('google', profileInfos.id).then(function(user) {
-      if(user) {
-        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Google account');
-      }
+      throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this Google account');
+    }).catch(messages.NotFoundError, function(err) {
       return userService.connectNetwork(req.user, 'google', profileInfos.id, profileInfos.picture);
     }).nodeify(new CustomDone(done).done);
   }));
@@ -116,9 +111,8 @@ exports.configure = function(app, passport) {
       url: profile._json.permalink
     };
     userService.findBySocialAccount('soundcloud', profileInfos.id).then(function(user) {
-      if(user) {
-        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this SoundCloud account');
-      }
+      throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this SoundCloud account');
+    }).catch(messages.NotFoundError, function(err) {
       return userService.connectNetwork(req.user, 'soundcloud', profileInfos.id, null, profileInfos.url);
     }).nodeify(new CustomDone(done).done);
   }));
@@ -131,9 +125,8 @@ exports.configure = function(app, passport) {
       id: profile._json.items[0].id,
     };
     userService.findBySocialAccount('youtube', profileInfos.id).then(function(user) {
-      if(user) {
-        throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this YouTube account');
-      }
+      throw messages.apiError('user.connect.alreadyConnected', 'Was already exists an user connected with this YouTube account');
+    }).catch(messages.NotFoundError, function(err) {
       return userService.connectNetwork(req.user, 'youtube', profileInfos.id);
     }).nodeify(new CustomDone(done).done);
   }));

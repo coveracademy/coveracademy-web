@@ -7,7 +7,7 @@
             <img ng-src="/img/genres/{{ musicGenre.image }}">
           </div>
           <div>
-            <h1 class="bolder-text big">
+            <h1 class="text-bold big">
               <span ng-if="musicGenre">{{ 'music_genre_artists' | translate: {musicGenre: musicGenre.name} }}</span>
               <span ng-if="!musicGenre">{{ 'all_artists' | translate }}</span>
             </h1>
@@ -19,7 +19,7 @@
   <img class="background" ng-if="musicGenre" ng-src="/img/genres/{{ musicGenre.image }}">
 </div>
 <div class="container">
-  <div class="align-center">
+  <div class="text-center">
     <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
   <div ng-repeat="row in artists | partition: 4" class="row text-center">
@@ -27,7 +27,7 @@
       <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="180"></cover>
     </div>
   </div>
-  <div class="align-center">
+  <div class="text-center">
     <pagination total-items="totalArtists" items-per-page="artistsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
 </div>

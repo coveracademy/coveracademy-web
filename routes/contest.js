@@ -1,9 +1,9 @@
 'use strict';
 
 var contestService  = require('../apis/contestService'),
-    mailService     = require('../apis/mailService'),
-    constants       = require('../apis/constants'),
-    messages        = require('../apis/messages'),
+    mailService     = require('../apis/internal/mailService'),
+    constants       = require('../apis/internal/constants'),
+    messages        = require('../apis/internal/messages'),
     logger          = require('../configs/logger'),
     isAuthenticated = require('../utils/authorization').isAuthenticated,
     isAdmin         = require('../utils/authorization').isAdmin,
@@ -209,7 +209,7 @@ module.exports = function(router, app) {
     });
   });
 
-  router.get('/latest', function(req, res, next) {
+  router.get('/contestants/latest', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
     contestService.latestContestants(page, constants.NUMBER_OF_CONTESTANTS_IN_PAGE).then(function(contestants) {
       res.json(contestants);

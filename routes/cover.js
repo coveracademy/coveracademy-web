@@ -1,7 +1,7 @@
 'use strict';
 
 var coverService   = require('../apis/coverService'),
-    constants      = require('../apis/constants'),
+    constants      = require('../apis/internal/constants'),
     logger         = require('../configs/logger'),
     isAdmin        = require('../utils/authorization').isAdmin,
     models         = require('../models'),

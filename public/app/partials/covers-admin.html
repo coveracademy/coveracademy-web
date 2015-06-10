@@ -2,13 +2,13 @@
   <tabset justified="true" type="pills">
     <tab heading="Potential covers">
       <div class="row">
-        <div class="col-md-12 align-right">
+        <div class="col-md-12 text-right">
           <a class="btn btn-primary btn-lg" ui-sref="app.addCover({locale: locale()})">
             {{ 'add_new_cover_video' | translate }}
           </a>
         </div>
       </div>
-      <div class="row padding">
+      <div class="row padding-top">
         <div class="col-md-12">
           <div ng-repeat="row in potentialCoversTab.potentialCoversPartitioned" class="row">
             <div ng-repeat="potentialCover in row" class="col-md-4">
@@ -36,7 +36,7 @@
                         <input ng-model="potentialCover.author" type="text" id="author-{{ potentialCover.id }}" class="form-control" placeholder="The cover author">
                       </div>
                     </div>
-                    <div class="align-right">
+                    <div class="text-right">
                       <button type="button" ng-click="potentialCoversTab.acceptCover(potentialCover)" class="btn btn-success"><span class="glyphicon glyphicon-ok"/></button>
                       <button type="button" ng-click="potentialCoversTab.refuseCover(potentialCover)" class="btn btn-danger"><span class="glyphicon glyphicon-remove"/></button>
                     </div>

@@ -4,7 +4,7 @@ angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 1000);
 
 angular
 .module('coverAcademy.controllers', [])
-.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
+.controller('applicationController', ['$rootScope', '$scope', '$state', '$stateParams', '$translate', '$underscore', 'authEvents', 'authenticationService', 'alertService', 'translationService', 'seoService', 'stateService', function($rootScope, $scope, $state, $stateParams, $translate, $underscore, authEvents, authenticationService, alertService, translationService, seoService, stateService) {
   $scope.locale = $translate.use;
 
   // SEO
@@ -23,10 +23,10 @@ angular
 
   // Events
   $scope.$on(authEvents.NOT_AUTHORIZED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
+    $state.go('app.home', {locale: $scope.locale()});
   });
   $scope.$on(authEvents.NOT_AUTHENTICATED, function() {
-    $state.go('app.index', {locale: $scope.locale()});
+    $state.go('app.home', {locale: $scope.locale()});
   });
   $scope.$on(authEvents.HTTP_NOT_AUTHENTICATED, function() {
     authenticationService.login();
@@ -60,11 +60,8 @@ angular
       return 'app.userId({locale: "' + $scope.locale() + '", id: "' + user.id + '"})';
     }
   };
-  $scope.showHeader = function() {
-    return $state.current.name !== 'app.index';
-  };
-  $scope.withFooterMargin = function() {
-    return $state.current.name !== 'app.index' && $state.current.name !== 'app.contest';
+  $scope.isState = function(states) {
+    return $underscore.contains(states, $state.current.name);
   };
   $scope.isRedirectionStatusCode = function() {
     return $scope.statusCode === 301;
@@ -78,7 +75,7 @@ angular
   $scope.languages = $languages.all;
   $scope.sectionActive = '';
   $scope.sections = {
-    contact: ['app.contact'],
+    contests: ['app.contests'],
     contestants: ['app.contestants'],
     covers: ['app.cover', 'app.covers', 'app.coversRank', 'app.artist', 'app.artists', 'app.music', 'app.musicGenre', 'app.musicGenreRank', 'app.search']
   };

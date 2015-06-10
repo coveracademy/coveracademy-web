@@ -53,7 +53,7 @@ angular
   contests: 'app.contests',
   cover: 'app.cover',
   covers: 'app.covers',
-  index: 'app.index',
+  home: 'app.home',
   joinContest: 'app.joinContest',
   user: 'app.user'
 })
@@ -138,15 +138,15 @@ angular
       }
     })
     // Public level states
-    .state('app.index', {
+    .state('app.home', {
       url: '/',
-      templateUrl: '/app/partials/index.html',
-      controller: 'indexController',
+      templateUrl: '/app/partials/home.html',
+      controller: 'homeController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
         viewService: 'viewService',
         backendResponse: function(viewService) {
-          return viewService.indexView();
+          return viewService.homeView();
         }
       }
     })
@@ -437,10 +437,10 @@ angular
   });
   // Ui-Router events
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-    // Root view must redirect to index view with locale param
+    // Root view must redirect to home view with locale param
     if(toState.name === 'root') {
       event.preventDefault();
-      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(301).go();
+      stateService.newState('app.home', {locale: $translate.use()}).withStatusCode(301).go();
     // Check if locale param is a supported language
     } else if(!$languages.contains(toParams.locale)) {
       event.preventDefault();
@@ -448,12 +448,12 @@ angular
     // Check if user has permission to access a view
     } else if(!authenticationService.isAuthorized(toState.accessLevel)) {
       event.preventDefault();
-      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(401).go();
+      stateService.newState('app.home', {locale: $translate.use()}).withStatusCode(401).go();
     }
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     if(error.status === 401) {
-      stateService.newState('app.index', {locale: $translate.use()}).withStatusCode(error.status).go();
+      stateService.newState('app.home', {locale: $translate.use()}).withStatusCode(error.status).go();
     } else if(error.status === 404) {
       stateService.newState('app.404', {locale: $translate.use()}, {location: false}).withStatusCode(error.status).go();
     } else if(error.status === 500) {

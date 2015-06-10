@@ -3,12 +3,12 @@
 var coverService    = require('../apis/coverService'),
     contestService  = require('../apis/contestService'),
     userService     = require('../apis/userService'),
-    constants       = require('../apis/constants'),
-    messages        = require('../apis/messages'),
+    constants       = require('../apis/internal/constants'),
+    messages        = require('../apis/internal/messages'),
     logger          = require('../configs/logger'),
-    math            = require('../utils/math'),
     authorization   = require('../utils/authorization'),
     Promise         = require('bluebird'),
+    _               = require('underscore'),
     isAdmin         = authorization.isAdmin,
     isAuthenticated = authorization.isAuthenticated,
     isTemporaryUser = authorization.isTemporaryUser;
@@ -21,11 +21,11 @@ module.exports = function(router, app) {
 
   // ADMIN ROUTES
   router.get('/covers/admin', isAdmin, function(req, res, next) {
-    Promise.all([coverService.musicGenres(), coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE)]).spread(function(musicGenres, potentialCovers) {
-      res.json({
-        musicGenres: musicGenres,
-        potentialCovers: potentialCovers
-      });
+    Promise.props({
+      musicGenres: coverService.musicGenres(),
+      potentialCovers: coverService.potentialCovers(constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE)
+    }).then(function(result) {
+      res.json(result);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -33,11 +33,12 @@ module.exports = function(router, app) {
   });
 
   router.get('/contests/admin', isAdmin, function(req, res, next) {
-    Promise.all([contestService.listUnfinishedContests(), contestService.listAuditionsToReview()]).spread(function(contests, auditionsToReview) {
-      res.json({
-        contests: contests,
-        auditionsToReview: auditionsToReview
-      });
+    Promise.props({
+      contests: contestService.listUnfinishedContests(),
+      auditionsToReview: contestService.listAuditionsToReview(),
+      contestModalities: contestService.listContestModalities()
+    }).then(function(result) {
+      res.json(result);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -46,9 +47,7 @@ module.exports = function(router, app) {
 
   router.get('/addCover', isAdmin, function(req, res, next) {
     coverService.musicGenres().then(function(musicGenres) {
-      res.json({
-        musicGenres: musicGenres
-      });
+      res.json({musicGenres: musicGenres});
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -61,29 +60,28 @@ module.exports = function(router, app) {
   });
 
   // PUBLIC ROUTES
-  router.get('/index', function(req, res, next) {
-    if(!req.user) {
-      Promise.all([contestService.listUnfinishedContests(), contestService.getCurrentSponsors()]).spread(function(contests, sponsors) {
-        res.json({
-          contests: contests,
-          sponsors: sponsors
-        });
-      }).catch(function(err) {
-        logger.error(err);
-        messages.respondWithError(err, res);
+  router.get('/home', function(req, res, next) {
+    Promise.props({
+      runningContests: contestService.listRunningContests(['prizes']),
+      waitingContests: contestService.listWaitingContests(['prizes']),
+      latestWinnerAuditions: contestService.latestWinnerAuditions(),
+      bestCovers: coverService.bestCovers(300, 1, 6),
+      latestCovers: coverService.latestCovers(300, 1, 6),
+      sponsors: contestService.listCurrentSponsors()
+    }).bind({}).then(function(result) {
+      this.result = result;
+      return Promise.props({
+        latestRunningContestsAuditions: contestService.latestContestsAuditions(result.runningContests, 3),
+        latestWaitingContestsAuditions: contestService.latestContestsAuditions(result.waitingContests, 3),
+        totalRunningContestsAuditions: contestService.totalAuditions(result.runningContests),
+        totalWaitingContestsAuditions: contestService.totalAuditions(result.waitingContests)
       });
-    } else {
-      contestService.listUnfinishedContests().then(function(contests) {
-        if(contests.length > 0) {
-          messages.respondWithRedirection('contest', {id: contests.at(0).id, slug: contests.at(0).get('slug')}, res);
-        } else {
-          messages.respondWithRedirection('contests', {}, res);
-        }
-      }).catch(function(err) {
-        logger.error(err);
-        messages.respondWithError(err, res);
-      });
-    }
+    }).then(function(result) {
+      res.json(_.extend(this.result, result));
+    }).catch(function(err) {
+      logger.error(err);
+      messages.respondWithError(err, res);
+    });
   });
 
   router.get('/cover/:id/:slug', function(req, res, next) {
@@ -95,15 +93,12 @@ module.exports = function(router, app) {
       } else if(slug !== cover.get('slug')) {
         messages.respondWithMovedPermanently('cover', {id: cover.id, slug: cover.get('slug')}, res);
       } else {
-        return Promise.all([
-          coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
-          coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)
-        ]).spread(function(bestCoversOfMusic, bestCoversByArtist) {
-          res.json({
-            cover: cover,
-            bestCoversOfMusic: bestCoversOfMusic,
-            bestCoversByArtist: bestCoversByArtist
-          });
+        return Promise.props({
+          bestCoversOfMusic: coverService.bestCoversOfMusic(cover.related('music'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+          bestCoversByArtist: coverService.bestCoversByArtist(cover.related('artist'), constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST)
+        }).then(function(result) {
+          result.cover = cover;
+          res.json(result);
         });
       }
     }).catch(function(err) {
@@ -113,27 +108,18 @@ module.exports = function(router, app) {
   });
 
   router.get('/covers', function(req, res, next) {
-    Promise.all([
-      coverService.topCover(),
-      coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
-      coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
-      coverService.musicGenres()
-    ]).bind({
-    }).spread(function(topCover, bestCovers, latestCovers, musicGenres) {
-      this.topCover = topCover;
-      this.bestCovers = bestCovers;
-      this.latestCovers = latestCovers;
-      this.musicGenres = musicGenres;
-      var musicGenre = musicGenres.at(math.getRandomInt(0, musicGenres.size() - 1));
+    Promise.props({
+      topCover: coverService.topCover(),
+      bestCovers: coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      latestCovers: coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      musicGenres: coverService.musicGenres()
+    }).bind({}).then(function(result) {
+      this.result = result;
+      var musicGenre = result.musicGenres.at(_.random(0, result.musicGenres.size() - 1));
       return coverService.bestArtistsOfMusicGenre(musicGenre, constants.FIRST_PAGE, constants.NUMBER_OF_ARTISTS_IN_INDEX_VIEW);
     }).then(function(bestArtistsOfMusicGenre) {
-      res.json({
-        topCover: this.topCover,
-        bestCovers: this.bestCovers,
-        latestCovers: this.latestCovers,
-        musicGenres: this.musicGenres,
-        bestArtistsOfMusicGenre: bestArtistsOfMusicGenre
-      });
+      this.result.bestArtistsOfMusicGenre = bestArtistsOfMusicGenre;
+      res.json(this.result);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -147,20 +133,15 @@ module.exports = function(router, app) {
       messages.respondWithNotFound(res);
     } else {
       var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE);
-      Promise.all([
-        coversPromise,
-        coverService.totalCovers(constants.WEEK_PERIOD)
-      ]).bind({
-      }).spread(function(coversRank, totalCoversRank) {
-        this.coversRank = coversRank;
-        this.totalCoversRank = totalCoversRank;
-        return coverService.artistsOfCovers(coversRank);
+      Promise.props({
+        coversRank: coversPromise,
+        totalCoversRank: coverService.totalCovers(constants.WEEK_PERIOD)
+      }).bind({}).then(function(result) {
+        this.result = result;
+        return coverService.artistsOfCovers(result.coversRank);
       }).then(function(artistsOfCovers) {
-        res.json({
-          coversRank: this.coversRank,
-          totalCoversRank: this.totalCoversRank,
-          artistsOfCovers: artistsOfCovers
-        });
+        this.result.artistsOfCovers = artistsOfCovers;
+        res.json(this.result);
       }).catch(function(err) {
         logger.error(err);
         messages.respondWithError(err, res);
@@ -178,24 +159,15 @@ module.exports = function(router, app) {
         return Promise.all([
           coverService.totalMusicsByArtist(artist),
           coverService.lastMusicsByArtist(artist, constants.FIRST_PAGE, constants.NUMBER_OF_MUSICS_BY_ARTIST)
-        ]).bind({
-        }).spread(function(totalMusicsByArtist, musicsByArtist) {
+        ]).bind({}).spread(function(totalMusicsByArtist, musicsByArtist) {
           this.totalMusicsByArtist = totalMusicsByArtist;
           this.musicsByArtist = musicsByArtist;
-          var coversOfMusics;
-          if(rank === 'best') {
-            coversOfMusics = coverService.bestCoversOfMusics;
-          } else {
-            coversOfMusics = coverService.latestCoversOfMusics;
-          }
+          var coversOfMusics = rank === 'best' ? coverService.bestCoversOfMusics : coverService.latestCoversOfMusics;
           return coversOfMusics(musicsByArtist, constants.NUMBER_OF_COVERS_OF_MUSIC);
         }).then(function(coversOfMusics) {
-          res.json({
-            artist: artist,
-            totalMusicsByArtist: this.totalMusicsByArtist,
-            musicsByArtist: this.musicsByArtist,
-            coversOfMusics: coversOfMusics
-          });
+          this.coversOfMusics = coversOfMusics;
+          this.artist = artist;
+          res.json(this);
         });
       }
     }).catch(function(err) {
@@ -306,18 +278,14 @@ module.exports = function(router, app) {
     Promise.all([
       coverService.searchArtists(query),
       coverService.searchMusics(query)
-    ]).bind({
-    }).spread(function(artists, musics) {
+    ]).bind({}).spread(function(artists, musics) {
       this.artists = artists;
       this.musics = musics;
       return Promise.all([coverService.bestCoversByArtists(artists, 6), coverService.bestCoversOfMusics(musics, 6)]);
     }).spread(function(coversByArtists, coversOfMusics) {
-      res.json({
-        artists: this.artists,
-        musics: this.musics,
-        coversByArtists: coversByArtists,
-        coversOfMusics: coversOfMusics
-      });
+      this.coversByArtists = coversByArtists;
+      this.coversOfMusics = coversOfMusics;
+      res.json(this);
     }).catch(function(err) {
       logger.error(err);
       messages.respondWithError(err, res);
@@ -327,7 +295,7 @@ module.exports = function(router, app) {
   router.get('/contest/:id/:slug', function(req, res, next) {
     var id = req.param('id');
     var slug = req.param('slug');
-    var rankType = req.param('rank') || 'random';
+    var rankType = req.param('rank');
     contestService.getContest(id).then(function(contest) {
       if(!contest) {
         messages.respondWithNotFound(res);
@@ -336,10 +304,14 @@ module.exports = function(router, app) {
       } else {
         if(contest.get('progress') === 'waiting') {
           rankType = 'latest';
-        } else if(contest.get('progress') === 'finished') {
-          rankType = 'best';
         }
-
+        if(!rankType) {
+          if(contest.get('progress') == 'finished') {
+            rankType = 'best';
+          } else {
+            rankType = 'random';
+          }
+        }
         var auditionsPromise;
         if(rankType === 'best') {
           auditionsPromise = contestService.bestAuditions(contest);
@@ -348,37 +320,25 @@ module.exports = function(router, app) {
         } else {
           auditionsPromise = contestService.randomAuditions(contest);
         }
-
-        var winnersPromise = contest.get('progress') === 'finished' ? contestService.getWinnerAuditions(contest) : null;
-        return Promise.all([
-          auditionsPromise,
-          contestService.totalAuditions(contest), contestService.getUserAudition(req.user, contest),
-          winnersPromise,
-          contestService.getUserVotes(req.user, contest),
-          contestService.countUserVotes(req.user, contest),
-        ]).bind({
-        }).spread(function(auditions, totalAuditions, audition, winnerAuditions, userVotes, totalUserVotes) {
-          this.auditions = auditions;
-          this.userVotes = userVotes;
-          this.totalUserVotes = totalUserVotes;
-          this.totalAuditions = totalAuditions;
-          this.audition = audition;
-          this.winnerAuditions = winnerAuditions;
-          return Promise.all([contestService.getScoreByAudition(auditions), contestService.getVotesByAudition(auditions)]);
+        var winnersPromise = contest.get('progress') === 'finished' ? contestService.listWinnerAuditions(contest) : null;
+        return Promise.props({
+          auditions: auditionsPromise,
+          totalAuditions: contestService.totalAuditions(contest),
+          audition: contestService.getUserAudition(req.user, contest),
+          winnerAuditions: winnersPromise,
+          userVotes: contestService.getUserVotes(req.user, contest),
+          totalUserVotes: contestService.countUserVotes(req.user, contest),
+          runningContests: contestService.listOtherRunningContests(contest)
+        }).bind({}).then(function(result) {
+          this.result = result;
+          return Promise.all([contestService.getScoreByAudition(result.auditions), contestService.getVotesByAudition(result.auditions)]);
         }).spread(function(scoreByAudition, votesByAudition) {
-          res.json({
-            contest: contest,
-            winnerAuditions: this.winnerAuditions,
-            auditions: this.auditions,
-            audition: this.audition,
-            userVotes: this.userVotes,
-            totalUserVotes: this.totalUserVotes,
-            totalAuditions: this.totalAuditions,
-            scoreByAudition: scoreByAudition,
-            votesByAudition: votesByAudition,
-            rankType: rankType,
-            voteLimit: constants.VOTE_LIMIT
-          });
+          this.result.scoreByAudition = scoreByAudition;
+          this.result.votesByAudition = votesByAudition;
+          this.result.contest = contest;
+          this.result.voteLimit = constants.VOTE_LIMIT;
+          this.result.rankType = rankType;
+          res.json(this.result);
         });
       }
     }).catch(function(err) {
@@ -411,7 +371,7 @@ module.exports = function(router, app) {
 
   router.get('/contests', function(req, res, next) {
     contestService.latestContests(constants.FIRST_PAGE, constants.NUMBER_OF_CONTESTS_IN_PAGE).then(function(contests) {
-      return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.getWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
+      return Promise.all([contestService.totalVotes(contests), contestService.totalAuditions(contests), contestService.listWinnerAuditions(contests)]).spread(function(totalVotes, totalAuditions, winnerAuditions) {
         res.json({
           contests: contests,
           totalVotes: totalVotes,
@@ -446,31 +406,20 @@ module.exports = function(router, app) {
         messages.respondWithMovedPermanently('audition', {id: audition.id, slug: audition.get('slug')}, res);
       } else {
         var contest = audition.related('contest');
-        return Promise.all([
-          contestService.countUserVotes(req.user, contest),
-          contestService.getUserVote(req.user, audition),
-          contestService.getAuditionVotes(audition),
-          contestService.getAuditionScore(audition),
-          contestService.bestAuditions(contest, 1, 8),
-          contestService.latestAuditions(contest, 1, 8),
-          contestService.totalAuditions(contest),
-          contestService.listComments(audition),
-          userService.isFan(req.user, audition.related('user'))
-        ]).spread(function(totalUserVotes, userVote, votes, score, bestAuditions, latestAuditions, totalAuditions, comments, fan) {
-          res.json({
-            contest: contest,
-            audition: audition,
-            userVote: userVote,
-            bestAuditions: bestAuditions,
-            latestAuditions: latestAuditions,
-            totalAuditions: totalAuditions,
-            totalUserVotes: totalUserVotes,
-            voteLimit: constants.VOTE_LIMIT,
-            votes: votes,
-            score: score,
-            comments: comments,
-            fan: fan
-          });
+        return Promise.props({
+          totalUserVotes: contestService.countUserVotes(req.user, contest),
+          userVote: contestService.getUserVote(req.user, audition),
+          votes: contestService.getAuditionVotes(audition),
+          score: contestService.getAuditionScore(audition),
+          otherAuditions: contestService.randomAuditions(contest, 10),
+          totalAuditions: contestService.totalAuditions(contest),
+          comments: contestService.listComments(audition),
+          fan: userService.isFan(req.user, audition.related('user'))
+        }).then(function(result) {
+          result.contest = contest;
+          result.audition = audition;
+          result.voteLimit = constants.VOTE_LIMIT;
+          res.json(result);
         });
       }
     }).catch(function(err) {
@@ -480,14 +429,14 @@ module.exports = function(router, app) {
   });
 
   var getUserInfos = function(user, req, res) {
-    return Promise.all([userService.isFan(req.user, user), userService.totalFans(user), userService.latestFans(user, constants.FIRST_PAGE, constants.NUMBER_OF_FANS_IN_PAGE), contestService.getUserAuditions(user)]).spread(function(fan, totalFans, fans, auditions) {
-      res.json({
-        user: user,
-        auditions: auditions,
-        fan: fan,
-        fans: fans,
-        totalFans: totalFans
-      });
+    return Promise.props({
+      fan: userService.isFan(req.user, user),
+      fans: userService.latestFans(user, constants.FIRST_PAGE, constants.NUMBER_OF_FANS_IN_PAGE),
+      totalFans: userService.totalFans(user),
+      auditions: contestService.getUserAuditions(user)
+    }).then(function(result) {
+      result.user = user;
+      res.json(result);
     });
   };
 
@@ -524,19 +473,13 @@ module.exports = function(router, app) {
   router.get('/verify', function(req, res, next) {
     var token = req.param('token');
     if(!token) {
-      messages.respondWithMovedPermanently('index', {}, res);
+      messages.respondWithMovedPermanently('home', {}, res);
     } else {
       userService.verifyEmail(token).then(function(user) {
-        if(!user) {
-          messages.respondWithMovedPermanently('index', {}, res);
-        } else {
-          res.json({
-            user: user
-          });
-        }
+        res.json({user: user});
       }).catch(function(err) {
         logger.error(err);
-        messages.respondWithMovedPermanently('index', {}, res);
+        messages.respondWithMovedPermanently('home', {}, res);
       });
     }
   });
@@ -544,23 +487,17 @@ module.exports = function(router, app) {
   router.get('/emails/disable', function(req, res, next) {
     var token = req.param('token');
     if(!token) {
-      messages.respondWithMovedPermanently('index', {}, res);
+      messages.respondWithMovedPermanently('home', {}, res);
     } else {
       userService.disableEmails(token).then(function(user) {
-        if(!user) {
-          messages.respondWithMovedPermanently('index', {}, res);
-        } else {
-          res.json({
-            user: user
-          });
-        }
+        res.json({user: user});
       }).catch(function(err) {
         logger.error(err);
-        messages.respondWithMovedPermanently('index', {}, res);
+        messages.respondWithMovedPermanently('home', {}, res);
       });
     }
   });
 
   app.use('/view', router);
 
-}
+};

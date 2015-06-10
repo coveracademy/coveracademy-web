@@ -1,0 +1,1077 @@
+@import url(http://fonts.googleapis.com/css?family=Dosis:400,200,300,500,600,700,800);
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+header {
+  height: 51px;
+}
+header.navbar-default {
+  background-color: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-brand {
+  font-weight: bold;
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-brand:hover {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-nav > li > a {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-nav > li > a:hover {
+  color: #9b9b9b;
+}
+header.navbar-default .navbar-form input {
+  width: 280px !important;
+}
+body {
+  font-family: 'Dosis', 'sans-serif';
+  margin-bottom: 514px;
+  font-size: 17px;
+}
+body.footer-margin {
+  margin-bottom: 540px;
+}
+main {
+  padding-top: 51px;
+}
+footer {
+  background-color: #363b3f;
+  bottom: 0;
+  min-height: 514px;
+  width: 100%;
+  position: absolute;
+}
+footer a, footer a:hover {
+  color: #aaa;
+  text-decoration: none;
+}
+footer .extra {
+  padding: 20px 0px 20px 0px;
+  background-color: #2a3034;
+}
+footer .info {
+  padding-top: 50px;
+}
+footer .info ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+footer .info ul li {
+  padding-bottom: 5px;
+}
+footer .social li {
+  color: #aaa;
+}
+footer .social .fa {
+  font-size: 30px;
+}
+footer .copyright {
+  border-top: 2px solid #aaa;
+  color: #aaa;
+  margin-top: 50px;
+  padding-top: 20px;
+}
+footer h1, footer h2, footer h3, footer h4, footer h5 {
+  color: #fff;
+}
+a {
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -o-transition: 300ms;
+  transition: 300ms;
+}
+a:focus, a:hover {
+  text-decoration: none;
+  outline: none;
+  color: #33333C;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  line-height: 1.5;
+}
+p, li {
+  line-height: 1.8;
+}
+img.brand {
+  max-height: 185px;
+  max-width: 222px;
+  margin: 10px;
+  border-radius: 5px;
+}
+button.break-line {
+  white-space: normal;
+}
+.adsense {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.text-bold {
+  font-weight: 500;
+}
+.font-small {
+  font-size: 15px !important;
+}
+.font-normal {
+  font-size: 17px !important;
+}
+.font-large {
+  font-size: 19px !important;
+}
+.font-big {
+  font-size: 21px !important;
+}
+.font-biggest {
+  font-size: 23px !important;
+}
+.padding {
+  padding: 10px;
+}
+.padding-top {
+  padding-top: 10px;
+}
+.padding-top20 {
+  padding-top: 20px;
+}
+.padding-bottom {
+  padding-bottom: 10px;
+}
+.padding-bottom20 {
+  padding-bottom: 20px;
+}
+.padding-bottom40 {
+  padding-bottom: 40px;
+}
+.padding-left {
+  padding-left: 10px;
+}
+.no-padding {
+  padding: 0px;
+}
+.no-padding-left {
+  padding-left: 0px;
+}
+.margin {
+  margin: 10px;
+}
+.margin-top {
+  margin-top: 10px;
+}
+.margin-top20 {
+  margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+.margin-bottom20 {
+  margin-bottom: 20px;
+}
+.no-margin {
+  margin: 0px;
+}
+.no-margin-top {
+  margin-top: 0px;
+}
+.no-border {
+  border: none;
+}
+.no-radius {
+  border-radius: 0px;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.thumbnail {
+  line-height: 1.5;
+}
+.navbar-logo {
+  float: left;
+  height: 64px;
+  padding: 10px 5px 10px 0px;
+}
+.languages.navbar-nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.languages.navbar-nav > li > a {
+  padding: 10px 5px;
+}
+.label-required {
+  color: #f00;
+}
+.page-header-background {
+  margin-top: -12px;
+  margin-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #f1f4f4;
+}
+.block-center {
+  margin: 0 auto;
+}
+.cover {
+  position: relative;
+}
+.cover .darken {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.3;
+}
+.cover .caption {
+  position: absolute;
+  bottom: 0px;
+  padding: 10px;
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  background-size: cover;
+  text-shadow: 2px 2px 5px #000000;
+}
+.cover .legend {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+.cover.small .caption {
+  font-size: 12px;
+}
+.cover.small .legend {
+  font-size: 20px;
+}
+.cover.large .caption {
+  font-size: 18px;
+}
+.cover.large .legend {
+  font-size: 26px;
+}
+.cover img {
+  width: 100%;
+}
+.section-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+.section-title .title {
+  font-size: 28px;
+}
+.profile-picture {
+  display: block;
+  background-color: transparent;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-decoration: none;
+  height: 160px;
+  width: 160px;
+  position: relative;
+}
+.profile-picture.small {
+  height: 80px;
+  width: 80px;
+}
+.profile-picture.medium {
+  height: 120px;
+  width: 120px;
+}
+.profile-picture.large {
+  height: 210px;
+  width: 210px;
+}
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1;
+}
+.embed-container {
+  height: 0;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  position: relative;
+}
+.embed-container iframe {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+img.medal {
+  height: 155px;
+}
+/* Page sections */
+.section {
+  padding: 30px 0px 30px 0px;
+}
+.section.white {
+  color: #fff;
+}
+.section.white a {
+  color: #fff;
+}
+.section .title {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.section h2.title {
+  font-size: 36px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+.section h1.title {
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+.section p.subtitle {
+  text-transform: none;
+  font-size: 28px;
+  font-weight: 300;
+}
+.section h3 {
+  font-size: 25px;
+}
+#contest {
+  background-color: #18967e;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-shadow: 2px 2px 5px #000000;
+}
+#contest.section {
+  padding: 30px 0px 0px 0px;
+}
+#contest .btn-primary {
+  border: 2px solid #fff;
+}
+#contest .title {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+#contest #description {
+  margin-top: 20px;
+  text-align: justify;
+}
+#contest #description .card {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+#contest #prizes {
+  margin-top: 20px;
+}
+#contest .prize .card {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+#contest .prize img {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 100%;
+}
+#contest .prize a {
+  text-decoration: underline !important;
+}
+#contest #show-details {
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  padding: 5px;
+  margin-top: 20px;
+}
+#auditions {
+  padding-bottom: 60px;
+}
+#infos {
+  background-color: #e27a3f;
+}
+#infos.warning {
+  background-color: #f7ab24;
+}
+#infos.section {
+  padding: 10px;
+}
+#other-contests {
+  background-color: #18967e;
+}
+#other-contests.section {
+  padding: 0px 0px 0px 0px;
+}
+#other-contests .contest {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-shadow: 2px 2px 5px #000000;
+  padding: 20px;
+}
+#other-contests .contest h2 {
+  font-size: 30px;
+  margin: 0px;
+}
+#intro {
+  padding: 20px 0px 20px 0px;
+  background-color: #333;
+}
+#intro h1 {
+  font-size: 30px;
+  font-weight: 200;
+}
+#intro h2 {
+  font-size: 25px;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+#intro img {
+  width: 100%;
+}
+#running-contests {
+  background-color: #18967e;
+}
+#running-contests.section {
+  padding: 0px 0px 30px 0px;
+}
+#running-contests.section h2 {
+  margin-bottom: 15px;
+}
+#running-contests .contest {
+  color: #555;
+  background-color: #fff;
+  border: 3px solid #1f737a;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+#running-contests .contest h2 {
+  font-size: 30px;
+  margin: 0px;
+}
+#running-contests .contest h2 a {
+  color: #555;
+}
+#running-contests .label {
+  font-size: 14px;
+  font-weight: 400;
+}
+#running-contests .more-auditions {
+  color: #555;
+  font-size: 25px;
+  margin-top: 15px;
+}
+#running-contests .btn {
+  font-size: 20px;
+  min-width: 130px;
+}
+#next-contests {
+  background-position: center;
+  background-size: cover;
+}
+#next-contests .contest {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px #000000;
+}
+#next-contests .contest h2 {
+  font-size: 30px;
+  margin: 0px;
+}
+#next-contests .card {
+  background-color: rgba(24, 150, 126, 0.8);
+}
+#past-winners {
+  background-color: #485bc5;
+}
+#covers {
+  background-color: #f7ab24;
+}
+#sponsors {
+  background-color: #1495e7;
+}
+/* Page sections */
+
+/* Extension of social buttons */
+.btn-youtube {
+  color: #fff;
+  background-color: #444;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active, .btn-youtube.active {
+  color: #fff;
+  background-color: #222;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-youtube:active, .btn-youtube.active {
+  background-image: none;
+}
+.btn-youtube.disabled, .btn-youtube[disabled], fieldset[disabled] .btn-youtube, .btn-youtube.disabled:hover, .btn-youtube[disabled]:hover, fieldset[disabled] .btn-youtube:hover, .btn-youtube.disabled:focus, .btn-youtube[disabled]:focus, fieldset[disabled] .btn-youtube:focus, .btn-youtube.disabled:active, .btn-youtube[disabled]:active, fieldset[disabled] .btn-youtube:active, .btn-youtube.disabled.active, .btn-youtube[disabled].active, fieldset[disabled] .btn-youtube.active {
+  background-color: #dd4b39;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+/* Extension of social buttons */
+
+/* Bootstrap custom components */
+.form-control {
+  font-size: 17px;
+}
+.form-control.input-lg {
+  font-size: 21px;
+}
+.btn {
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 0px;
+}
+.btn-largest {
+  font-size: 30px;
+  padding: 20px;
+}
+.btn-default {
+  color: #666666;
+  background-color: #ffffff;
+  border-color: #d3d3d3;
+}
+.btn-default:hover {
+  color: #666666;
+  background-color: #f0f0f0;
+  border-color: #d3d3d3;
+}
+.btn-primary {
+  background-color: #1495e7;
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background-color: #1495e7;
+  border-color: transparent;
+}
+.btn-info {
+  background-color: #e27a3f;
+  border-color: transparent;
+}
+.btn-info:hover {
+  background-color: #e27a3f;
+  border-color: transparent;
+}
+.btn-success {
+  background-color: #18967e;
+  border-color: transparent;
+}
+.btn-success:hover {
+  background-color: #18967e;
+  border-color: transparent;
+}
+.btn-warning {
+  background-color: #efc94c;
+  border-color: transparent;
+}
+.btn-warning:hover {
+  background-color: #efc94c;
+  border-color: transparent;
+}
+.btn-danger {
+  background-color: #df5a49;
+  border-color: transparent;
+}
+.btn-danger:hover {
+  background-color: #df5a49;
+  border-color: transparent;
+}
+.label {
+  padding: 7px;
+  display: inline-block;
+}
+.label-primary {
+  background-color: #1495e7;
+}
+.label-info {
+  background-color: #9c27b0;
+}
+.label-success {
+  background-color: #18967e;
+}
+.label-warning {
+  background-color: #efc94c;
+}
+.label-danger {
+  background-color: #df5a49;
+}
+.label-black {
+  background-color: #000;
+}
+.bg-primary {
+  background-color: #1495e7;
+}
+.bg-info {
+  background-color: #e27a3f;
+}
+.bg-success {
+  background-color: #18967e;
+}
+.bg-warning {
+  background-color: #efc94c;
+}
+.bg-danger {
+  background-color: #df5a49;
+}
+.alert {
+  border: none;
+  color: #fff;
+}
+.alert a, .alert a:hover, .alert a:active {
+  color: #fff;
+  text-decoration: underline;
+}
+.alert-success {
+  background-color: #18967e;
+}
+.alert-warning {
+  background-color: #efc94c;
+}
+.alert-danger {
+  background-color: #df5a49;
+}
+.alert-info {
+  background-color: #e27a3f;
+}
+.alert-dismissable, .alert-dismissible {
+  padding-right: 35px;
+}
+.alerts {
+  z-index: 999999;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+}
+.alerts .alert {
+  margin-bottom: 10px;
+  max-width: 500px;
+  position: relative;
+  font-size: 16px;
+}
+.fixed-alerts {
+  z-index: 999999;
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+}
+.fixed-alerts .alert {
+  margin-bottom: 10px;
+  max-width: 800px;
+  position: relative;
+  font-size: 14px;
+}
+#register-form .alert {
+  margin-bottom: 0px;
+}
+.callout {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-left-width: 3px;
+  border-radius: 15px;
+}
+.callout-primary {
+  border-left-color: #2196f3;;
+}
+.callout li {
+  list-style-type: circle;
+}
+.callout ul {
+  padding-left: 20px;
+}
+/* Bootstrap custom components */
+
+/* Contest components */
+.counter {
+  color: #fff;
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  width: 70px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #e27a3f;
+  text-align: center;
+}
+.countdown ul {
+  display: block;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  text-align: right;
+}
+.countdown li {
+  list-style: none;
+  display:inline-block;
+  margin-right: 4 0px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  position: relative;
+}
+.countdown li:last-child {
+  margin-right: 0
+}
+.countdown li span {
+  color: #fff;
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  width: 70px;
+  height: 40px;
+  line-height: 40px;
+}
+.countdown.large li span {
+  font-size: 40px;
+  width: 77px;
+  height: 52px;
+  line-height: 52px;
+}
+.countdown li .days {
+  background-color: #18967e;
+}
+.countdown li .hours {
+  background-color: #efc94c;
+}
+.countdown li .minutes {
+  background-color: #e27a3f;
+}
+.countdown li .seconds {
+  background-color: #df5a49;
+}
+.countdown li p {
+  font-size: 14px;
+  margin: 0px;
+}
+/* Contest components * /
+
+/* Custom loading bar */
+#loading-bar .bar {
+  height: 5px;
+  background: #2196f3;
+}
+#loading-bar-spinner .spinner-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 30px;
+}
+#loading-bar-spinner {
+  top: 13px;
+  left: 10px;
+}
+/* Custom loading bar */
+
+/* Comment box */
+.comments-comment .ta-scroll-window > .ta-bind, .comments-comment .ta-editor.ta-html, .ta-scroll-window.form-control {
+  min-height: 53px;
+}
+.comments-box {
+  margin-top: 20px;
+}
+.comment-user.profile-picture {
+  width: 45px;
+  height: 45px;
+}
+.comment-text p {
+  margin: 0;
+}
+.comment-date {
+  color: #888;
+}
+.comment-actions a {
+  color: #888;
+}
+.comment-input p {
+  margin: 0;
+  line-height: 1.5;
+}
+.comment-replies {
+  border-left: 5px solid #ddd;
+  padding-left: 10px;
+}
+.comment-replies .media:first-child {
+  margin-top: 15px;
+}
+/* Comments box */
+
+/* Tabs panel */
+.tabbable-panel {
+  border: none;
+}
+.tabbable-line .nav-tabs {
+  border: none;
+}
+.tabbable-line .nav-tabs > li {
+  margin-right: 2px;
+}
+.tabbable-line .nav-tabs > li > a {
+  background-color: #fff;
+  border: none;
+  color: #737373;
+  padding: 10px 20px 10px 20px;
+  font-size: 16px;
+}
+.tabbable-line .nav-tabs > li:hover > a {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #333333;
+  border-bottom: 4px solid #2196f3;
+}
+.tabbable-line .nav-tabs > li.active > a {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #333333;
+  border-bottom: 4px solid #2196f3;
+}
+.tabbable-line .nav-tabs > li:hover .dropdown-menu {
+  margin-top: 0px;
+}
+.tabbable-line .tab-content {
+  padding: 40px 0;
+  font-size: 16px;
+}
+/* Tabs panel */
+
+/* User settings */
+#user-menu .profile-picture {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .blur {
+  height: 160px;
+  width: 160px;
+}
+#user-menu .profile-overview figcaption .text {
+  width: 160px;
+  height: 160px;
+  top: 20px;
+}
+#user-menu ul {
+  padding-top: 20px;
+}
+#user-menu li {
+  min-width: 200px;
+  text-align: center
+}
+#settings .social-account .network-name {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 22px;
+}
+#settings .social-account .network-show {
+  display: inline-block;
+  margin-top: 10px;
+}
+#settings .social-account {
+  padding: 20px;
+}
+#primary-pictures .thumbnail {
+  width: 240px;
+  padding: 20px;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 14px;
+}
+#primary-pictures .thumbnail.selected {
+  background-color: #ecf3fa;
+}
+#primary-pictures .profile-picture {
+  margin: 0 auto;
+  height: 100px;
+  width: 100px;
+}
+/* User settings */
+
+/* Incentive vote modal */
+#incentive-vote {
+  padding: 0;
+}
+#incentive-vote #incentive {
+  padding: 0px 30px;
+}
+#incentive-vote #join-community {
+  background-color: #363b3f;
+  padding: 20px 0px 20px 0px;
+  color: #fff;
+}
+#incentive-vote #join-community .row {
+  padding: 0px 30px 0px 30px;
+}
+/* Incentive vote modal */
+
+/* Pretty Header */
+.pretty-header {
+  background-color: #000;
+  height: 250px;
+  margin-top: -13px; /* main element with class with-header has a 64px padding-top and it's needed to positioning pretty-header to 51px*/
+  padding-top: 40px;
+  padding-bottom: 40px;
+  overflow: hidden;
+  position: relative;
+}
+.pretty-header.background-style {
+  background-size: cover;
+  height: auto;
+  overflow: visible;
+  position: static;
+  min-height: 277px;
+}
+.pretty-header.background-style.small {
+  padding-top: 10px;
+  padding-bottom: 30px;
+  min-height: 139px;
+}
+.pretty-header a {
+  color: #fff;
+  text-decoration: underline;
+}
+.pretty-header p, .pretty-header h1, .pretty-header h2, .pretty-header h3, .pretty-header h4, .pretty-header h5, .pretty-header .form-control {
+  color: #fff;
+}
+.pretty-header h1.big {
+  font-size: 60px;
+}
+.pretty-header > .content {
+  position: absolute;
+  text-align: center;
+  text-shadow: 2px 2px 5px #000000;
+  width: 100%;
+  z-index: 500;
+}
+.pretty-header.background-style > .content {
+  position: static;
+}
+.pretty-header > .content .thumbnail {
+  position: absolute;
+  z-index: -1;
+}
+.pretty-header > .content .thumbnail > img {
+  height: 150px;
+}
+.pretty-header > img.background {
+  width: 100%;
+  opacity: 0.5;
+  margin-top: -200px;
+}
+/* Pretty Header */
+
+/* User components */
+.profile-overview figure:hover figcaption {
+  opacity: 1;
+}
+.profile-overview figure .profile-picture {
+  width: 262px;
+  height: 262px;
+  float: left;
+}
+.profile-overview figcaption {
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: all 0.45s ease-in-out;
+  -moz-transition: all 0.45s ease-in-out;
+  -o-transition: all 0.45s ease-in-out;
+  -ms-transition: all 0.45s ease-in-out;
+  transition: all 0.45s ease-in-out;
+}
+.profile-overview figcaption .blur {
+  position: absolute;
+  height: 262px;
+  width: 262px;
+  z-index: 5;
+  background-color: rgba(0,0,0,0.65);
+}
+.profile-overview figcaption .text {
+  position: absolute;
+  width: 262px;
+  height: 262px;
+  z-index: 10;
+  color: #fff;
+  text-align: center;
+  top: 100px;
+}
+.profile-overview figcaption h1 {
+  text-transform: uppercase;
+  font-size: 24px;
+}
+/* User components */
+
+/* User view */
+#user.pretty-header .container {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+#user.pretty-header .content {
+  text-align: left;
+}
+#user.pretty-header > img.background {
+  opacity: 0.2;
+}
+#user .label {
+ margin-bottom: 5px;
+}
+#user .actions {
+  margin-top: 20px;
+}
+/* User view */
+
+/* Audition view */
+#author .profile-picture {
+  width: 126px;
+  height: 126px;
+}
+#audition .votes-number {
+  font-size: 35px;
+}
+/* Audition view */
+
+/* Contest guideline */
+#guideline p, #guideline li {
+  font-size: 16px;
+  text-align: justify;
+}
+#guideline .callout {
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
+#guideline .callout .title {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+#guideline #index {
+  background-color: #f9f9f9;
+  margin-top: 40px;
+}
+/* Contest guideline */
+
+/* Contests view */
+#contests .contest {
+  background-color: #18967e;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-shadow: 2px 2px 5px #000000;
+  padding: 30px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+#contests .contest .contest-infos {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#contests a {
+  color: #fff;
+}
+#contests .btn {
+  font-size: 20px;
+  min-width: 130px;
+}
+/* Contests view */

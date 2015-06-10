@@ -7,7 +7,7 @@
             <img ng-src="/img/genres/{{ musicGenre.image }}">
           </div>
           <div>
-            <h1 class="bolder-text big">
+            <h1 class="text-bold big">
               <a ui-sref="app.musicGenre({locale: locale(), genre: musicGenre.slug})">{{ musicGenre.name }}</a>
             </h1>
           </div>
@@ -20,7 +20,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-title">
+      <div class="section-title">
         <div class="row">
           <div class="col-md-7">
             <h1>
@@ -32,7 +32,7 @@
               </span>
             </h1>
           </div>
-          <div class="col-md-5 align-right" style="padding-top: 36px;">
+          <div class="col-md-5 text-right" style="padding-top: 36px;">
             <h4>
               <a ng-if="isRanked('best')" ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">
                 {{ 'see_the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
@@ -46,11 +46,11 @@
           </div>
         </div>
       </div>
-      <div class="align-center">
+      <div class="text-center">
         <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
       </div>
       <cover-songs ng-model="coversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
-      <div class="align-center">
+      <div class="text-center">
         <pagination total-items="totalCoversOfMusicGenre" items-per-page="coversPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
       </div>
     </div>

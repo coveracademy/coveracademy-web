@@ -7,7 +7,7 @@
             <img ng-src="{{ artist.medium_thumbnail }}">
           </div>
           <div>
-            <h1 class="bolder-text">{{ artist.name }}</h1>
+            <h1 class="text-bold">{{ artist.name }}</h1>
             <h2>
               <span class="label label-danger">{{ artist.musicGenre.name }}</span>
               <span class="label label-primary">{{ totalMusicsByArtist }} {{ 'musics' | translate }}</span>
@@ -20,7 +20,7 @@
   <img class="background" ng-if="artist.large_thumbnail" ng-src="{{ artist.large_thumbnail }}">
 </div>
 <div class="container">
-  <div class="row padding">
+  <div class="row padding-top">
     <div class="col-md-12">
       <div class="pull-right">
         <div class="btn-group">
@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div class="page-section">
+  <div class="margin-top">
     <div ng-repeat="musicByArtist in musicsByArtist">
       <h2>
         <img ng-if="musicByArtist.small_thumbnail" class="medium-thumbnail" ng-src="{{ musicByArtist.small_thumbnail }}">

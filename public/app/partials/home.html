@@ -1,0 +1,207 @@
+<section id="intro" class="white section" ng-if="!isAuthenticated()">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9">
+        <h1 class="text-justify no-margin">Cover Academy é o primeiro website do Brasil a promover competições online de música.</h1>
+        <h2>Aqui você é o jurado. Ajude-nos a descobrir novos talentos! </h2>
+      </div>
+      <div class="col-md-3">
+        <a href="#" ng-click="openVideo()">
+          <img src="https://i.ytimg.com/vi/UyHqY7i_BEQ/maxresdefault.jpg"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="running-contests" class="white section" ng-if="hasContests(runningContests)">
+  <div class="container">
+    <adsense></adsense>
+    <h2 class="title">{{ 'contests_happening' | translate }}</h2>
+		<div ng-repeat="contest in runningContests" class="contest">
+			<div class="row margin-bottom">
+				<div class="col-md-8">
+					<h2 class="title">
+            <a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+            </a>
+          </h2>
+          <div class="padding-top">
+            <span class="label label-success">
+              {{ totalRunningAuditions(contest) }} {{ 'contestants' | translate }}
+            </span>
+            <span class="label label-success">
+              {{ 'prizes' | translate }}:
+              <span ng-repeat="prize in contest.prizes">{{ prize.name }} / </span>
+            </span>
+          </div>
+				</div>
+				<div class="col-md-4">
+          <contest-timer ng-model="contest"></contest-timer>
+				</div>
+			</div>
+			<div class="row margin-bottom">
+        <div ng-repeat="audition in latestRunningAuditions(contest)" class="col-md-4">
+          <audition ng-model="audition" locale="{{ locale() }}">
+          </audition>
+        </div>
+      </div>
+      <div class="row">
+      	<div class="col-md-12">
+	        <a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg">
+	          {{ 'vote' | translate }}
+	        </a>
+	        <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">
+	          {{ 'sign_up_my_video' | translate }}
+	        </a>
+	        <a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="pull-right more-auditions">
+	          {{ 'more_auditions' | translate }}
+	          <span class="glyphicon glyphicon-chevron-right"></span>
+	        </a>
+	      </div>
+      </div>
+		</div>
+	</div>
+</section>
+
+<section id="next-contests" class="white section" ng-if="hasContests(waitingContests)" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ nextContestsBackground() }}');">
+  <div class="container">
+    <h2 class="title">{{ 'next_contests' | translate }}</h2>
+    <div class="contest" ng-repeat="contest in waitingContests">
+      <div class="row">
+        <div class="col-md-8">
+          <h2 class="title">
+          	<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
+              {{ contest.name }}
+          	</a>
+          </h2>
+        </div>
+        <div class="col-md-4">
+          <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg btn-block">
+            {{ 'sign_up_my_video' | translate }}
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row margin-top20">
+            <div class="col-md-4 text-center" ng-repeat="prize in contest.prizes">
+              <div class="card padding">
+                <h3 ng-if="isPrizePlace(prize, 1)" class="text-uppercase text-bold no-margin">
+                  {{ 'first_place' | translate }}
+                </h3>
+                <h3 ng-if="isPrizePlace(prize, 2)" class="text-uppercase text-bold no-margin">
+                  {{ 'second_place' | translate }}
+                </h3>
+                <h3 ng-if="isPrizePlace(prize, 3)" class="text-uppercase text-bold no-margin">
+                  {{ 'third_place' | translate }}
+                </h3>
+                <h3 class="no-margin">
+                  {{ prize.name }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+      <div class="row" ng-if="hasAuditions(contest)">
+        <div class="col-md-12">
+          <h3 class="text-bold">
+            > {{ 'see_who_is_already_participating' | translate }}
+          </h3>
+          <div class="row">
+            <div ng-repeat="audition in latestWaitingAuditions(contest)" class="col-md-4">
+              <audition ng-model="audition" locale="{{ locale() }}">
+              </audition>
+            </div>
+          </div>
+        </div>
+      </div>
+		</div>
+	</div>
+</section>
+
+<section id="past-winners" class="white section">
+	<div class="container">
+    <div class="row">
+      <div class="col-md-8">
+    		<h2 class="title">
+          {{ 'past_winners' | translate }}
+          <p class="subtitle">
+            <a ui-sref="app.contest({id: latestContest.id, slug: latestContest.slug})">
+              {{ latestContest.name }}
+            </a>
+          </p>
+        </h2>
+      </div>
+      <div class="col-md-4 text-right">
+        <h2 class="no-margin">
+          <a ui-sref="app.contests()">
+            {{ 'see_more' | translate }}
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </h2>
+      </div>
+    </div>
+		<div class="row">
+      <div class="col-md-4" ng-repeat="winnerAudition in latestWinnerAuditions">
+        <a ui-sref="{{ userState(winnerAudition.user) }}">
+          <div profile-picture="winnerAudition.user" class="profile-picture large img-circle block-center">
+          </div>
+        </a>
+        <h3 class="text-center">
+          {{ winnerAudition.place }}º
+          <a ui-sref="{{ userState(winnerAudition.user) }}">
+            {{ winnerAudition.user.name }}
+          </a>
+        </h3>
+      </div>
+    </div>
+	</div>
+</section>
+
+<section id="covers" class="white section">
+	<div class="container">
+	  <div class="row">
+	    <div class="col-md-6">
+	      <h2 class="title">{{ 'best_covers' | translate }}</h2>
+	    </div>
+	    <div class="col-md-6 text-right">
+	      <h2 class="no-margin">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'best'})">
+            {{ 'more_covers' | translate }}
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+	      </h2>
+	    </div>
+	  </div>
+	  <cover-songs ng-model="bestCovers" locale="{{ locale() }}" thumb-size="large"></cover-songs>
+	  <div class="row margin-top20">
+	    <div class="col-md-6">
+	      <h2 class="title">{{ 'latest_covers' | translate }}</h2>
+	    </div>
+	    <div class="col-md-6 text-right">
+	      <h2 class="no-margin">
+          <a ui-sref="app.coversRank({locale: locale(), rank: 'latest'})">
+            {{ 'more_covers' | translate }}
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+	      </h2>
+	    </div>
+	  </div>
+	  <cover-songs ng-model="latestCovers" locale="{{ locale() }}" thumb-size="large"></cover-songs>
+	 </div>
+</section>
+
+<section id="sponsors" class="white section" ng-if="hasSponsors()">
+	<div class="container">
+    <h2 class="title">{{ 'partners' | translate }}</h2>
+    <div class="text-center">
+      <a ng-repeat="sponsor in sponsors" ng-href="{{ sponsor.website }}" title="{{ sponsor.name }}" target="_blank" rel="nofollow">
+       <img class="brand" ng-src="{{ sponsor.logo }}">
+      </a>
+    </div>
+  </div>
+</section>

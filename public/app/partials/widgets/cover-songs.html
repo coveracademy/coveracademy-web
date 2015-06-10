@@ -1,38 +1,12 @@
 <div class="row" ng-repeat="row in covers | partition: coversPerRow">
   <div ng-repeat="cover in row" class="col-md-{{ columnSize }}">
-    <div class="thumbnail">
+    <div class="margin-bottom">
       <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})">
-        <div ng-if="isThumbSize('medium')">
-          <div class="cover">
-            <div class="darken"></div>
-            <img ng-src="{{ cover.medium_thumbnail }}">
-            <div class="caption {{ fontSizeCss }}">
-              <!-- <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})"> -->
-                {{ cover.artist.name }} - {{ cover.music.title }}
-              <!-- </a> -->
-              <div>
-                {{ 'by' | translate }} {{ cover.author }}
-              </div>
-              <div class="video-date">
-                <span am-time-ago="cover.registration_date"></span>
-              </div>
-            </div>
-            <div class="legend">
-              <span class="label label-black">{{ cover.duration | inMinutes }} min</span>
-            </div>
-          </div>
-        </div>
-        <div ng-if="isThumbSize('small')">
-          <div class="cover">
-            <img ng-src="{{ cover.medium_thumbnail }}">
-            <div class="legend">
-              <span class="label label-black">{{ cover.duration | inMinutes }} min</span>
-            </div>
-          </div>
-          <div class="caption {{ fontSizeCss }}">
-            <a ui-sref="app.cover({locale: locale, id: cover.id, slug: cover.slug})">
-              {{ cover.artist.name }} - {{ cover.music.title }}
-            </a>
+        <div class="cover {{ fontSize }}">
+          <div class="darken"></div>
+          <img ng-src="{{ cover.medium_thumbnail }}">
+          <div class="caption">
+            {{ cover.artist.name }} - {{ cover.music.title }}
             <div>
               {{ 'by' | translate }} {{ cover.author }}
             </div>
@@ -40,8 +14,11 @@
               <span am-time-ago="cover.registration_date"></span>
             </div>
           </div>
-        </a>
-      </div>
+          <div class="legend">
+            <span class="label label-black">{{ cover.duration | inMinutes }} min</span>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </div>

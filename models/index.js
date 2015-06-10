@@ -21,15 +21,38 @@ Bookshelf.plugin(require('bookshelf-filteration').plugin);
 var User = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'user',
+  hasTimestamps: ['registration_date'],
   socialAccounts: function() {
     return this.hasMany(SocialAccount, 'user_id');
   },
   fans: function() {
     return this.hasMany(User).through(UserFan, 'fan_id');
   },
+  validations: {
+    name: {notBlank: true, length: {minimum: 3}},
+    email: {presence: true, email: true},
+    username: {presence: true, format: /^[a-z0-9.]{5,20}$/}
+  },
   filters: {
-    creation: ['name', 'email', 'username', 'gender', 'profile_picture', 'verified', 'permission'],
-    edition: ['name', 'email', 'username', 'gender', 'biography', 'city', 'state', 'profile_picture', 'verified']
+    creation: [
+      {name: 'name', required: true},
+      {name: 'email', required: true},
+      'verified',
+      'permission',
+      'username',
+      'gender',
+    ],
+    edition: [
+      'name',
+      'email',
+      'username',
+      'gender',
+      'biography',
+      'city',
+      'state',
+      'profile_picture',
+      'verified'
+    ]
   }
 });
 
@@ -49,6 +72,7 @@ var MusicGenre = Bookshelf.Model.extend({
 var Artist = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'artist',
+  hasTimestamps: ['registration_date'],
   musicGenre: function() {
     return this.belongsTo(MusicGenre, 'music_genre_id');
   }
@@ -57,6 +81,7 @@ var Artist = Bookshelf.Model.extend({
 var Music = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'music',
+  hasTimestamps: ['registration_date'],
   artist: function() {
     return this.belongsTo(Artist, 'artist_id');
   },
@@ -68,6 +93,7 @@ var Music = Bookshelf.Model.extend({
 var Cover = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'cover',
+  hasTimestamps: ['registration_date'],
   artist: function() {
     return this.belongsTo(Artist, 'artist_id');
   },
@@ -81,12 +107,14 @@ var Cover = Bookshelf.Model.extend({
 
 var PotentialCover = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'potential_cover'
+  tableName: 'potential_cover',
+  hasTimestamps: ['registration_date']
 });
 
 var Contest = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'contest',
+  hasTimestamps: ['registration_date'],
   prizes: function() {
     return this.hasMany(Prize, 'contest_id').query(function(qb) {
       qb.orderBy('place', 'asc');
@@ -94,12 +122,21 @@ var Contest = Bookshelf.Model.extend({
   },
   sponsorsInContest: function() {
     return this.hasMany(SponsorInContest, 'contest_id');
+  },
+  modality: function() {
+    return this.belongsTo(ContestModality, 'modality_id');
   }
+});
+
+var ContestModality = Bookshelf.Model.extend({
+  idAttribute: 'id',
+  tableName: 'contest_modality'
 });
 
 var Audition = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'audition',
+  hasTimestamps: ['registration_date'],
   user: function() {
     return this.belongsTo(User, 'user_id');
   },
@@ -111,6 +148,7 @@ var Audition = Bookshelf.Model.extend({
 var UserVote = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'user_vote',
+  hasTimestamps: ['registration_date'],
   user: function() {
     return this.belongsTo(User, 'user_id');
   },
@@ -122,6 +160,7 @@ var UserVote = Bookshelf.Model.extend({
 var UserComment = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'user_comment',
+  hasTimestamps: ['registration_date'],
   user: function() {
     return this.belongsTo(User, 'user_id');
   },
@@ -141,19 +180,12 @@ var UserComment = Bookshelf.Model.extend({
 var UserFan = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'user_fan',
+  hasTimestamps: ['registration_date'],
   user: function() {
     return this.belongsTo(User, 'user_id');
   },
   fan: function() {
     return this.belongsTo(User, 'fan_id');
-  }
-});
-
-var VerificationToken = Bookshelf.Model.extend({
-  idAttribute: 'token',
-  tableName: 'verification_token',
-  user: function() {
-    return this.belongsTo(User, 'user_id');
   }
 });
 
@@ -170,12 +202,14 @@ var Prize = Bookshelf.Model.extend({
 
 var Sponsor = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'sponsor'
+  tableName: 'sponsor',
+  hasTimestamps: ['registration_date']
 });
 
 var SponsorInContest = Bookshelf.Model.extend({
   idAttribute: 'id',
   tableName: 'sponsor_contest',
+  hasTimestamps: ['registration_date'],
   sponsor: function() {
     return this.belongsTo(Sponsor, 'sponsor_id');
   },
@@ -186,15 +220,16 @@ var SponsorInContest = Bookshelf.Model.extend({
 
 var ScheduledEmail = Bookshelf.Model.extend({
   idAttribute: 'id',
-  tableName: 'scheduled_email'
+  tableName: 'scheduled_email',
+  hasTimestamps: ['registration_date']
 });
 
 module.exports = {
-  VerificationToken: VerificationToken,
   Artist: Artist,
   Audition: Audition,
   Bookshelf: Bookshelf,
   Contest: Contest,
+  ContestModality: ContestModality,
   Cover: Cover,
   Music: Music,
   MusicGenre: MusicGenre,

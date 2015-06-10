@@ -1,0 +1,22 @@
+<div class="countdown {{ fontSize }}">
+  <timer end-time="contest.end_date">
+    <ul>
+      <li>
+        <span class="days time-font">{{ days }}</span>
+        <p>{{ 'days' | translate }}</p>
+      </li>
+      <li>
+        <span class="hours time-font">{{ hours }}</span>
+        <p>{{ 'hours' | translate }}</p>
+      </li>
+      <li>
+        <span class="minutes time-font">{{ minutes }}</span>
+        <p>{{ 'minutes' | translate }}</p>
+      </li>
+      <li>
+        <span class="seconds time-font">{{ seconds }}</span>
+        <p>{{ 'seconds' | translate }}</p>
+      </li>
+    </ul>
+  </timer>
+</div>

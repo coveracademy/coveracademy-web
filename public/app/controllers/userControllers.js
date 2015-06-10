@@ -232,14 +232,14 @@ angular
 }])
 .controller('verifyEmailController', ['$state', '$translate', 'alertService', 'authenticationService', function($state, $translate, alertService, authenticationService) {
   authenticationService.updateUser();
-  $state.go('app.index');
+  $state.go('app.home');
   $translate('alerts.email_verified').then(function(translation) {
     alertService.alert('success', translation);
   });
 }])
 .controller('disableEmailsController', ['$state', '$translate', 'alertService', 'authenticationService', function($state, $translate, alertService, authenticationService) {
   authenticationService.updateUser();
-  $state.go('app.index');
+  $state.go('app.home');
   $translate('alerts.emails_disabled').then(function(translation) {
     alertService.alert('success', translation);
   });

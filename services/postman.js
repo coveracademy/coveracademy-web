@@ -7,7 +7,7 @@ var settings       = require('../configs/settings'),
     contestService = require('../apis/contestService'),
     entities       = require('../utils/entities'),
     encrypt        = require('../utils/encrypt'),
-    PromiseWrapper = require('../utils/promises').PromiseWrapper,
+    PromiseWrapper = require('../utils/promise').PromiseWrapper,
     restify        = require('restify'),
     nunjucks       = require('nunjucks'),
     path           = require('path'),
@@ -39,7 +39,7 @@ env.addFilter('contestLink', function(contest) {
   return settings.siteUrl + '/pt-br/contest/' + contest.id + '/' + contest.slug;
 });
 env.addFilter('encryptEmail', function(user) {
-  return encrypt.encrypt(user.get('email'));
+  return encrypt.encrypt(user.email);
 });
 
 var userRegistrationTemplate = env.getTemplate('user_registration.tpl');
@@ -50,7 +50,7 @@ var auditionDisapprovedTemplate = env.getTemplate('audition_disapproved.tpl');
 var auditionCommentTemplate = env.getTemplate('audition_comment.tpl');
 var auditionReplyCommentTemplate = env.getTemplate('audition_reply_comment.tpl');
 var contestInscriptionTemplate = env.getTemplate('contest_inscription.tpl');
-var contestNextTemplate = env.getTemplate('contest_next.tpl');
+var contestIsNextTemplate = env.getTemplate('contest_next.tpl');
 var contestStartTemplate = env.getTemplate('contest_start.tpl');
 var contestStartToContestantTemplate = env.getTemplate('contest_start_contestant.tpl');
 var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
@@ -178,7 +178,7 @@ server.post('/user/verification', function(req, res, next) {
   if(req.body.registration === true) {
     userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
-      return renderPromise(userRegistrationTemplate, {user: user.toJSON(), token: req.body.token, verify: true});
+      return renderPromise(userRegistrationTemplate, {user: user.toJSON(), verify: true});
     }).then(function(email) {
       return send(this.user.get('email'), 'Bem-vindo ao Cover Academy!', email);
     }).then(function(emailResponse) {
@@ -190,7 +190,7 @@ server.post('/user/verification', function(req, res, next) {
   } else {
     userService.findById(req.body.user).bind({}).then(function(user) {
       this.user = user;
-      return renderPromise(userVerificationTemplate, {user: user.toJSON(), token: req.body.token});
+      return renderPromise(userVerificationTemplate, {user: user.toJSON()});
     }).then(function(email) {
       return send(this.user.get('email'), 'Confirme o seu email para participar do Cover Academy.', email);
     }).then(function(mailResponse) {
@@ -288,7 +288,7 @@ server.post('/audition/replyComment', function(req, res, next) {
 });
 
 server.post('/contest/inscription', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
+  Promise.all([contestService.getContest(req.body.contest), userService.listUsers()]).spread(function(contest, users) {
     return renderPromise(contestInscriptionTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
       return batchSend(users, 'Você já pode se inscrever na competição do Cover Academy.', email, ['name']);
     });
@@ -301,9 +301,11 @@ server.post('/contest/inscription', function(req, res, next) {
 });
 
 server.post('/contest/next', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listAllUsers()]).spread(function(contest, users) {
-    return renderPromise(contestNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
-      return batchSend(users, 'A competição vai começar em breve!', email, ['name']);
+  contestService.getContest(req.body.contest).then(function(contest) {
+    return Promise.all([contest, contestService.listContestants(contest)]);
+  }).spread(function(contest, contestants) {
+    return renderPromise(contestIsNextTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
+      return batchSend(contestants, 'A competição vai começar em breve!', email, ['name']);
     });
   }).then(function() {
     res.send(200);

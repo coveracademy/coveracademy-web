@@ -1,7 +1,7 @@
 'use strict';
 
 var contestService = require('../../apis/contestService'),
-    messages       = require('../../apis/messages'),
+    messages       = require('../../apis/internal/messages'),
     logger         = require('../../configs/logger'),
     later          = require('later');
 
@@ -12,7 +12,7 @@ var startContests = function() {
       contestService.startContest(contest).then(function(contest) {
         logger.info('Contest %d started successfully', contest.id);
       }).catch(function(err) {
-        if(!messages.isErrorKey(err, 'contest.notReady')) {
+        if(!messages.isErrorKey(err, 'contest.start.notReady')) {
           logger.error('Error starting contest %d.', contest.id, err);
         }
       });

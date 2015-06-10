@@ -305,11 +305,11 @@ angular
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'user.connect.alreadyConnected': 'errors.user_connect_already_connected',
-    'user.edit.invalidUsername': 'errors.user_edit_invalid_username',
+    'user.update.invalidUsername': 'errors.user_edit_invalid_username',
+    'user.new.invalidUsername': 'errors.user_edit_invalid_username',
     'user.verification.emailAlreadyVerified': 'errors.user_verification_email_already_verified',
-    'user.verification.errorSendingVerificationEmail': 'errors.user_verification_error_sending_verification_email',
+    'user.verification.errorSendingEmail': 'errors.user_verification_error_sending_verification_email',
     'youtube.videoURLNotValid': 'errors.youtube_video_url_not_valid',
-    'internalError': 'errors.unexpected_error',
     'unexpectedError': 'errors.unexpected_error',
     'status.400': 'errors.unexpected_error',
     'status.401': 'errors.authentication_required',
@@ -322,7 +322,7 @@ angular
       if(isError) {
         translationKey = errorKeys['status.' + err.status];
       } else {
-        translationKey = errorKeys['internalError'];
+        translationKey = errorKeys['unexpectedError'];
       }
     }
     var deferred = $q.defer();
@@ -476,8 +476,8 @@ angular
   };
 }])
 .service('viewService', ['$http', function($http) {
-  this.indexView = function() {
-    return $http.get('/view/index');
+  this.homeView = function() {
+    return $http.get('/view/home');
   };
   this.coversAdminView = function() {
     return $http.get('/view/covers/admin');

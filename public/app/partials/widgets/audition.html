@@ -1,6 +1,6 @@
-<div class="audition {{ thumbSizeFinal }}" ng-class="{'no-border': noBorderFinal}">
+<div class="audition">
   <a ui-sref="app.audition({locale: locale, id: audition.id, slug: audition.slug})" ng-click="auditionClick()">
-    <div class="cover">
+    <div class="cover {{ fontSize }}">
       <div class="darken"></div>
       <img ng-src="{{ audition.medium_thumbnail }}">
       <div class="caption">
@@ -12,8 +12,8 @@
           <span am-time-ago="audition.registration_date"></span>
         </div>
       </div>
-      <div class="legend">
-        <span class="label label-primary no-radius" ng-if="showScoreFinal">
+      <div class="legend" ng-if="isShowScore">
+        <span class="label label-primary no-radius">
           {{ scoreByAudition() }}
         </span>
       </div>

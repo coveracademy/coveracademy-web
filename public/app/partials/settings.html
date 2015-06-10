@@ -33,7 +33,7 @@
               </label>
               <div class="col-md-6" ng-class="{'has-error': profileForm.email.$dirty && profileForm.email.$invalid}">
                 <input ng-model="user.email" type="text" id="email" name="email" class="form-control" placeholder="{{ 'forms.email' | translate }}" required>
-                <span ng-if="isUnverifiedEmail()" class="help-block align-right font-normal">
+                <span ng-if="isUnverifiedEmail()" class="help-block text-right font-normal">
                   <a ng-click="resendVerificationEmail()">{{ 'forms.resend_verification_email' | translate }}</a>
                 </span>
                 <span class="help-block">
@@ -78,30 +78,30 @@
               </label>
               <div id="primary-pictures" class="col-md-10">
                 <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('facebook')" ng-click="selectProfilePicture('facebook')" ng-class="{selected: isProfilePicture('facebook')}">
-                  <div profile-picture="user" network="facebook" class="profile-picture img-circle align-center">
+                  <div profile-picture="user" network="facebook" class="profile-picture img-circle text-center">
                   </div>
-                  <div class="caption align-center">
+                  <div class="caption text-center">
                     <i ng-show="isProfilePicture('facebook')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_facebook_picture' | translate }}
                   </div>
                 </div>
                 <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('twitter')" ng-click="selectProfilePicture('twitter')" ng-class="{selected: isProfilePicture('twitter')}">
-                  <div profile-picture="user" network="twitter" class="profile-picture img-circle align-center">
+                  <div profile-picture="user" network="twitter" class="profile-picture img-circle text-center">
                   </div>
-                  <div class="caption align-center">
+                  <div class="caption text-center">
                     <i ng-show="isProfilePicture('twitter')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_twitter_picture' | translate }}
                   </div>
                 </div>
                 <div class="thumbnail pull-left" ng-if="isConnectedWithNetwork('google')" ng-click="selectProfilePicture('google')" ng-class="{selected: isProfilePicture('google')}">
-                  <div profile-picture="user" network="google" class="profile-picture img-circle align-center">
+                  <div profile-picture="user" network="google" class="profile-picture img-circle text-center">
                   </div>
-                  <div class="caption align-center">
+                  <div class="caption text-center">
                     <i ng-show="isProfilePicture('google')" class="glyphicon glyphicon-ok"></i> {{ 'forms.use_google_picture' | translate }}
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <div class="col-md-6 col-md-offset-2 align-right">
+              <div class="col-md-6 col-md-offset-2 text-right">
                 <button ng-disabled="profileForm.$invalid" ng-click="saveChanges()" type="button" class="btn btn-primary btn-block btn-lg">{{ 'forms.save_changes' | translate }}</button>
               </div>
             </div>

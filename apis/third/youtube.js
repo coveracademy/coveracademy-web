@@ -1,7 +1,7 @@
 'use strict';
 
 var settings   = require('../../configs/settings'),
-    messages   = require('../messages'),
+    messages   = require('../internal/messages'),
     youtubeAPI = require('youtube-api'),
     Promise    = require('bluebird'),
     _          = require('underscore'),

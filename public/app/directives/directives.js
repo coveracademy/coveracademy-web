@@ -11,20 +11,23 @@ angular
       locale: '@',
       showScore: '@',
       thumbSize: '@',
-      border: '@',
       audition: '=ngModel',
       scoreByAudition: '&',
       auditionClick: '&'
     },
-    controller: ['$scope', function($scope) {
-      $scope.isThumbSize = function(size) {
-        return $scope.thumbSizeFinal === size;
-      };
-    }],
     link: function(scope, element, attrs, ctrl) {
-      scope.showScoreFinal = scope.showScore === 'true' ? true : false;
-      scope.noBorderFinal = scope.border === 'false' ? true : false;
-      scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
+      scope.isShowScore = scope.showScore === 'true' ? true : false;
+      scope.fontSize = scope.thumbSize ? scope.thumbSize : 'medium';
+    }
+  };
+})
+.directive('adsense', function() {
+  return {
+    templateUrl: 'app/partials/widgets/adsense.html',
+    restrict: 'E', 
+    replace: true,
+    controller: function() {
+      (adsbygoogle = window.adsbygoogle || []).push({});
     }
   };
 })
@@ -38,20 +41,20 @@ angular
       locale: '@',
       covers: '=ngModel'
     },
-    controller: ['$scope', function($scope) {
-      $scope.isThumbSize = function(size) {
-        return $scope.thumbSizeFinal === size;
-      };
-    }],
     link: function(scope, element, attrs, ctrl) {
       scope.thumbSizeFinal = scope.thumbSize ? scope.thumbSize : 'medium';
-      if(scope.thumbSizeFinal === 'medium') {
-        scope.coversPerRow = 4;
-        scope.columnSize = 12/scope.coversPerRow;
-      } else if(scope.thumbSizeFinal === 'small') {
+      if(scope.thumbSizeFinal === 'small') {
         scope.coversPerRow = 6;
         scope.columnSize = 12/scope.coversPerRow;
-        scope.fontSizeCss = 'font-small';
+        scope.fontSize = 'small';
+      } else if(scope.thumbSizeFinal === 'medium') {
+        scope.coversPerRow = 4;
+        scope.columnSize = 12/scope.coversPerRow;
+        scope.fontSize = 'medium';
+      } else if(scope.thumbSizeFinal === 'large') {
+        scope.coversPerRow = 3;
+        scope.columnSize = 12/scope.coversPerRow;
+        scope.fontSize = 'large';
       }
     }
   };
@@ -127,6 +130,17 @@ angular
           'src': url
         });
       }
+    }
+  }
+}])
+.directive('contestTimer', [function() {
+  return {
+    templateUrl: 'app/partials/widgets/contest-timer.html',
+    restrict: 'E',
+    require: 'ngModel',
+    scope: {
+      contest: '=ngModel',
+      fontSize: '@'
     }
   }
 }]);

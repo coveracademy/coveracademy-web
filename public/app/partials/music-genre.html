@@ -7,7 +7,7 @@
             <img ng-src="/img/genres/{{ musicGenre.image }}">
           </div>
           <div>
-            <h1 class="bolder-text big">
+            <h1 class="text-bold big">
               {{ musicGenre.name }}
             </h1>
           </div>
@@ -18,12 +18,12 @@
   <img class="background" ng-src="/img/genres/{{ musicGenre.image }}">
 </div>
 <div class="container">
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
 
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.artists({locale: locale(), genre: musicGenre.slug})">
@@ -40,14 +40,14 @@
       <cover image="{{ artist.medium_thumbnail }}" link="app.artist({locale: '{{ locale() }}', artist: '{{ artist.slug }}'})" legend="{{ artist.name }}" height="155"></cover>
     </div>
   </div>
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">
           {{ 'the_best_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'best'})">
@@ -60,14 +60,14 @@
     </div>
   </div>
   <cover-songs ng-model="bestCoversOfMusicGenre" locale="{{ locale() }}"></cover-songs>
-  <div class="page-title">
+  <div class="section-title">
     <div class="row">
       <div class="col-md-8">
         <h3 class="title">
           {{ 'the_latest_music_genre_covers' | translate: {musicGenre: musicGenre.name} }}
         </h3>
       </div>
-      <div class="col-md-4 align-right">
+      <div class="col-md-4 text-right">
         <h3 class="title">
           <small>
             <a ui-sref="app.musicGenreRank({locale: locale(), genre: musicGenre.slug, rank: 'latest'})">

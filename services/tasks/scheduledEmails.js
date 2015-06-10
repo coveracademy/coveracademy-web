@@ -1,6 +1,6 @@
 'use strict';
 
-var mailService    = require('../../apis/mailService'),
+var mailService    = require('../../apis/internal/mailService'),
     logger         = require('../../configs/logger'),
     ScheduledEmail = require('../../models').ScheduledEmail,
     moment         = require('moment'),
