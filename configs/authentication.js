@@ -60,14 +60,10 @@ exports.configure = function(app, passport) {
     userService.findBySocialAccount('facebook', profileInfos.id).then(function(user) {
       return user;
     }).catch(messages.NotFoundError, function(err) {
-      if(!profileInfos.email) {
-        return userService.createTemporaryFacebookAccount(profileInfos.id, profileInfos.picture, profileInfos.name, profileInfos.gender);
-      } else {
-        return userService.create({facebook_account: profileInfos.id, facebook_picture: null, name: profileInfos.name, gender: profileInfos.gender, email: profileInfos.email, profile_picture: 'facebook'}).then(function(user) {
-          req.flash('newUser', true);
-          return user;
-        });
-      }
+      return userService.create(profileInfos.id, profileInfos.name, profileInfos.email, profileInfos.gender).then(function(user) {
+        req.flash('newUser', true);
+        return user;
+      });
     }).nodeify(new CustomDone(done).done);
   }));
 

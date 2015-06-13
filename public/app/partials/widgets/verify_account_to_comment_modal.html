@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <button ng-click="modalScope.cancel()" type="button" class="close" aria-hidden="true">
+    &times;
+  </button>
+  <h2 class="text-bold text-uppercase">
+    {{ 'you_can_not_comment_yet' | translate }}
+  </h2>
+</div>
+<div class="modal-body">
+  <h2 ng-if="!userAuthenticated().email" class="text-justify">
+    {{ 'you_dont_have_any_email_associated' | translate }}
+  </h2>
+  <h2 ng-if="userAuthenticated().email" class="text-justify">
+    {{ 'you_have_not_verified_your_account' | translate }}
+  </h2>
+  <h2 class="text-right">
+    <a ui-sref="app.settings()" ng-click="modalScope.confirm()">
+      {{ 'go_to_my_account_settings' | translate }}
+    </a>
+  </h2>
+</div>

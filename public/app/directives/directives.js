@@ -24,7 +24,7 @@ angular
 .directive('adsense', function() {
   return {
     templateUrl: 'app/partials/widgets/adsense.html',
-    restrict: 'E', 
+    restrict: 'E',
     replace: true,
     controller: function() {
       (adsbygoogle = window.adsbygoogle || []).push({});
@@ -33,7 +33,7 @@ angular
 })
 .directive('coverSongs', function() {
   return {
-    templateUrl: 'app/partials/widgets/cover-songs.html',
+    templateUrl: 'app/partials/widgets/cover_songs.html',
     restrict: 'E',
     require: 'ngModel',
     scope: {
@@ -135,7 +135,7 @@ angular
 }])
 .directive('contestTimer', [function() {
   return {
-    templateUrl: 'app/partials/widgets/contest-timer.html',
+    templateUrl: 'app/partials/widgets/contest_timer.html',
     restrict: 'E',
     require: 'ngModel',
     scope: {

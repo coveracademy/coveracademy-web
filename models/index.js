@@ -30,13 +30,14 @@ var User = Bookshelf.Model.extend({
   },
   validations: {
     name: {notBlank: true, length: {minimum: 3}},
-    email: {presence: true, email: true},
-    username: {presence: true, format: /^[a-z0-9.]{5,20}$/}
+    email: {notBlank: true, email: true},
+    username: {notBlank: true, format: /^[a-z0-9.]{5,20}$/}
   },
   filters: {
     creation: [
+      {name: 'facebook_account', required: true},
       {name: 'name', required: true},
-      {name: 'email', required: true},
+      'email',
       'verified',
       'permission',
       'username',

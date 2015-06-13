@@ -90,7 +90,7 @@ angular
     // Admin level states
     .state('app.contestsAdmin', {
       url: '/contests/admin',
-      templateUrl: '/app/partials/contests-admin.html',
+      templateUrl: '/app/partials/contests_admin.html',
       controller: 'contestsAdminController',
       accessLevel: accessLevel.ADMIN,
       resolve: {
@@ -102,7 +102,7 @@ angular
     })
     .state('app.coversAdmin', {
       url: '/covers/admin',
-      templateUrl: '/app/partials/covers-admin.html',
+      templateUrl: '/app/partials/covers_admin.html',
       controller: 'coversAdminController',
       accessLevel: accessLevel.ADMIN,
       resolve: {
@@ -114,7 +114,7 @@ angular
     })
     .state('app.addCover', {
       url: '/add-cover',
-      templateUrl: '/app/partials/add-cover.html',
+      templateUrl: '/app/partials/add_cover.html',
       controller: 'addCoverController',
       accessLevel: accessLevel.ADMIN,
       resolve: {
@@ -182,7 +182,7 @@ angular
     })
     .state('app.coversRank', {
       url: '/covers/:rank',
-      templateUrl: '/app/partials/covers-rank.html',
+      templateUrl: '/app/partials/covers_rank.html',
       controller: 'coversRankController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
@@ -230,7 +230,7 @@ angular
     })
     .state('app.musicGenre', {
       url: '/genre/:genre',
-      templateUrl: '/app/partials/music-genre.html',
+      templateUrl: '/app/partials/music_genre.html',
       controller: 'musicGenreController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
@@ -242,7 +242,7 @@ angular
     })
     .state('app.musicGenreRank', {
       url: '/genre/:genre/:rank',
-      templateUrl: '/app/partials/music-genre-rank.html',
+      templateUrl: '/app/partials/music_genre_rank.html',
       controller: 'musicGenreRankController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
@@ -302,7 +302,7 @@ angular
     })
     .state('app.joinContest', {
       url: '/contest/:id/:slug/join',
-      templateUrl: '/app/partials/join-contest.html',
+      templateUrl: '/app/partials/join_contest.html',
       controller: 'joinContestController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
@@ -362,7 +362,7 @@ angular
     })
     .state('app.disableEmails', {
       url: '/emails/disable?token',
-      templateUrl: '/app/partials/disable-emails.html',
+      templateUrl: '/app/partials/disable_emails.html',
       controller: 'disableEmailsController',
       accessLevel: accessLevel.PUBLIC,
       resolve: {
@@ -374,19 +374,19 @@ angular
     })
     .state('app.contestGuideline', {
       url: '/contest/guideline',
-      templateUrl: '/app/partials/contest-guideline.html',
+      templateUrl: '/app/partials/contest_guideline.html',
       controller: 'guidelineController',
       accessLevel: accessLevel.PUBLIC
     })
     .state('app.privacyPolicy', {
       url: '/privacy',
-      templateUrl: '/app/partials/privacy-policy.html',
+      templateUrl: '/app/partials/privacy_policy.html',
       controller: 'privacyPolicyController',
       accessLevel: accessLevel.PUBLIC
     })
     .state('app.termsOfUse', {
       url: '/terms',
-      templateUrl: '/app/partials/terms-of-use.html',
+      templateUrl: '/app/partials/terms_of_use.html',
       controller: 'termsOfUseController',
       accessLevel: accessLevel.PUBLIC
     })

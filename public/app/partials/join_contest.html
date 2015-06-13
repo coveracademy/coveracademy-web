@@ -6,7 +6,7 @@
           <a ui-sref="app.contest({locale: locale(), id: contest.id, slug: contest.slug})">
             {{ contest.name }}
           </a>
-        </h1>        
+        </h1>
       </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
@@ -32,7 +32,7 @@
             <i class="fa fa-google-plus"></i>
           </a>
         </h3>
-      </div>      
+      </div>
     </div>
     <div id="prizes">
       <div class="row margin-bottom20" ng-repeat="row in contest.prizes | partition: 3">
@@ -50,11 +50,11 @@
             <h2 class="no-margin">
               {{ prize.name }}
               <small ng-if="hasPrizeDetails(prize)">
-                <a ng-click="showPrizeDetails(prize)">
+                <a href="#" ng-click="showPrizeDetails(prize)">
                   <i class="glyphicon glyphicon-question-sign"></i>
                 </a>
               </small>
-            </h2>            
+            </h2>
             <div ng-show="isShowPrizeDetails(prize)">
               <img ng-if="prize.image" ng-src="{{ prize.image }}">
               <h4 ng-if="prize.full_name">{{ prize.full_name }}</h4>
@@ -97,69 +97,89 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <a ng-click="login('facebook')" class="btn btn-lg btn-block btn-social btn-facebook">
+          <a href="#" ng-click="login('facebook')" class="btn btn-lg btn-block btn-social btn-facebook">
             <i class="fa fa-facebook"></i> {{ 'sign_in_with' | translate }} Facebook
           </a>
         </div>
       </div>
     </div>
-    <div ng-if="isAuthenticated() && !userAuthenticated().youtube_account">
-      <h1 class="text-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
-      <h2 class="text-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
-      <div class="row padding-top">
-        <div class="col-md-6 col-md-offset-3">
-          <a ng-click="login('youtube')" class="btn btn-lg btn-block btn-social btn-youtube">
-            <i class="fa fa-youtube"></i> Youtube
+    <div ng-if="isAuthenticated() && !isVerified()">
+      <div class="jumbotron white">
+        <h2 class="text-bold text-uppercase">
+          {{ 'join_contest_can_not_enter' | translate }}
+        </h2>
+        <h2 ng-if="!userAuthenticated().email">
+          {{ 'you_dont_have_any_email_associated' | translate }}
+        </h2>
+        <h2 ng-if="userAuthenticated().email">
+          {{ 'you_have_not_verified_your_account' | translate }}
+        </h2>
+        <h2>
+          <a ui-sref="app.settings()">
+            {{ 'go_to_my_account_settings' | translate }}
           </a>
-        </div>
+        </h2>
       </div>
     </div>
-    <form ng-if="isAuthenticated() && userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal" novalidate>
-      <h2 class="text-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <alert type="info">
-            <p class="font-big no-margin">
-              {{ 'the_publish_date_must_be_since' | translate }}
-              <b class="font-biggest">
-                {{ contest.acceptance_date | amDateFormat: 'LL' }}
-              </b>
-            </p>
-          </alert>
+    <div ng-if="isAuthenticated() && isVerified()">
+      <div ng-if="!userAuthenticated().youtube_account">
+        <h1 class="text-center">{{ 'join_contest_signin_youtube_account_title' | translate }}</h1>
+        <h2 class="text-center">{{ 'join_contest_signin_youtube_account' | translate }}</h2>
+        <div class="row padding-top">
+          <div class="col-md-6 col-md-offset-3">
+            <a href="#" ng-click="login('youtube')" class="btn btn-lg btn-block btn-social btn-youtube">
+              <i class="fa fa-youtube"></i> Youtube
+            </a>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <div class="form-group" ng-class="{'has-error': auditionForm.url.$invalid && !auditionForm.url.$pristine}">
-            <div class="input-group">
-              <input ng-paste="videoUrlPasted($event)" ng-model="url" type="url" name="url" class="form-control input-lg" placeholder="{{ 'paste_here_the_video_url' | translate }}" required/>
-              <span class="input-group-btn">
-                <button ng-click="showVideo(url)" class="btn btn-primary btn-lg" type="submit">
-                  <i class="glyphicon glyphicon-ok"></i>
+      <form ng-if="userAuthenticated().youtube_account" name="auditionForm" class="form-horizontal" novalidate>
+        <h2 class="text-center">{{ 'join_contest_paste_video_url' | translate }}</h2>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <alert type="info">
+              <p class="font-big no-margin">
+                {{ 'the_publish_date_must_be_since' | translate }}
+                <b class="font-biggest">
+                  {{ contest.acceptance_date | amDateFormat: 'LL' }}
+                </b>
+              </p>
+            </alert>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="form-group" ng-class="{'has-error': auditionForm.url.$invalid && !auditionForm.url.$pristine}">
+              <div class="input-group">
+                <input ng-paste="videoUrlPasted($event)" ng-model="url" type="url" name="url" class="form-control input-lg" placeholder="{{ 'paste_here_the_video_url' | translate }}" required/>
+                <span class="input-group-btn">
+                  <button ng-click="showVideo(url)" class="btn btn-primary btn-lg" type="submit">
+                    <i class="glyphicon glyphicon-ok"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div ng-if="audition.url">
+              <div class="form-group embed-container">
+                <embed-video ng-href="{{ audition.url }}"></embed-video>
+              </div>
+              <div class="form-group" ng-class="{'has-error': auditionForm.title.$invalid}">
+                <input ng-model="audition.title" type="text" name="title" placeholder="{{ 'the_audition_title' | translate }}" class="form-control" required>
+              </div>
+              <div class="form-group" ng-class="{'has-error': auditionForm.description.$invalid}">
+                <textarea ng-model="audition.description" name="description" placeholder="{{ 'the_audition_description' | translate }}" class="form-control" rows="3" required>
+                </textarea>
+              </div>
+              <div class="form-group">
+                <button ng-click="joinContest()" ng-disabled="auditionForm.$invalid" class="btn btn-primary btn-block btn-lg">
+                  {{ 'join_contest' | translate }}
                 </button>
-              </span>
-            </div>
-          </div>
-          <div ng-if="audition.url">
-            <div class="form-group embed-container">
-              <embed-video ng-href="{{ audition.url }}"></embed-video>
-            </div>
-            <div class="form-group" ng-class="{'has-error': auditionForm.title.$invalid}">
-              <input ng-model="audition.title" type="text" name="title" placeholder="{{ 'the_audition_title' | translate }}" class="form-control" required>
-            </div>
-            <div class="form-group" ng-class="{'has-error': auditionForm.description.$invalid}">
-              <textarea ng-model="audition.description" name="description" placeholder="{{ 'the_audition_description' | translate }}" class="form-control" rows="3" required>
-              </textarea>
-            </div>
-            <div class="form-group">
-              <button ng-click="joinContest()" ng-disabled="auditionForm.$invalid" class="btn btn-primary btn-block btn-lg">
-                {{ 'join_contest' | translate }}
-              </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </section>
 <div ng-if="isContestProgress('finished') || isContestant()" class="container">

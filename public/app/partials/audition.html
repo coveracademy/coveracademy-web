@@ -111,11 +111,11 @@
                     <form name="commentForm" class="form-horizontal">
                       <div class="form-group">
                         <div class="col-md-9">
-                          <div text-angular name="comment" ng-model="message" ta-toolbar="[]" class="comment-input" placeholder="{{ 'write_a_comment' | translate }}" required>
+                          <div class="comment-input" ng-click="checkVerifiedToComment()" text-angular name="comment" ng-model="message" ta-toolbar="[]" placeholder="{{ 'write_a_comment' | translate }}" required>
                           </div>
                         </div>
                         <div class="col-md-3">
-                          <button ng-disabled="commentForm.comment.$pristine || commentForm.comment.$invalid" ng-click="comment(message); message = '';" type="button" class="btn btn-info btn-block">
+                          <button ng-disabled="!canComment || commentForm.comment.$pristine || commentForm.comment.$invalid" ng-click="comment(message); message = '';" type="button" class="btn btn-info btn-block">
                             {{ 'comment' | translate }}
                           </button>
                         </div>
@@ -145,13 +145,13 @@
                       <div ta-bind ng-model="comment.message" class="comment-text"></div>
                       <div class="comment-actions">
                         <span>
-                          <a ng-click="openReplyCommentForm(comment)">
+                          <a href="#" ng-click="openReplyCommentForm(comment)">
                             {{ 'reply' | translate }}
                           </a>
                         </span>
                         <span ng-if="canRemoveComment(comment)">
                           ·
-                          <a ng-click="removeComment(comment)">
+                          <a href="#" ng-click="removeComment(comment)">
                             {{ 'delete' | translate }}
                           </a>
                         </span>
@@ -173,13 +173,13 @@
                             <div ta-bind ng-model="reply.message" class="comment-text"></div>
                             <div class="comment-actions">
                               <span>
-                                <a ng-click="openReplyCommentForm(comment)">
+                                <a href="#" ng-click="openReplyCommentForm(comment)">
                                   {{ 'reply' | translate }}
                                 </a>
                               </span>
                               <span ng-if="canRemoveComment(reply)">
                                 ·
-                                <a ng-click="removeComment(reply, comment)">
+                                <a href="#" ng-click="removeComment(reply, comment)">
                                   {{ 'delete' | translate }}
                                 </a>
                               </span>

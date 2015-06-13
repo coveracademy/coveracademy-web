@@ -2,7 +2,7 @@
 <html lang="pt" ng-app="coverAcademy" ng-controller="applicationController">
   <head>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-    </script>    
+    </script>
     <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -103,7 +103,7 @@
                   </a>
                 </li>
                 <li>
-                  <a ng-click="logout()">
+                  <a href="#" ng-click="logout()">
                     <i class="glyphicon glyphicon-off"></i> {{ 'menus.logout' | translate }}
                   </a>
                 </li>
@@ -235,12 +235,7 @@
       </alert>
     </div>
     <div class="fixed-alerts">
-      <div ng-if="isAuthenticated() && !isUserVerified()" class="alert alert-warning alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p class="no-margin">{{ 'alerts.user_not_verified' | translate: {user: userAuthenticated()} }}</p>
-        <p class="no-margin">{{ 'alerts.user_not_verified_change_email' | translate }}</p>
-      </div>
-      <div ng-if="isAuthenticated() && isUserVerified() && userAuthenticated().new" class="alert alert-info alert-dismissible" role="alert">
+      <div ng-if="isAuthenticated() && isVerified() && userAuthenticated().new" class="alert alert-info alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p class="no-margin">{{ 'alerts.use_the_email_to_receive_updates' | translate: {user: userAuthenticated()} }}</p>
         <p class="no-margin">

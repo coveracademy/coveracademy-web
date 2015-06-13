@@ -655,7 +655,6 @@ img.medal {
   margin-bottom: 10px;
   max-width: 500px;
   position: relative;
-  font-size: 16px;
 }
 .fixed-alerts {
   z-index: 999999;
@@ -817,7 +816,6 @@ img.medal {
   border: none;
   color: #737373;
   padding: 10px 20px 10px 20px;
-  font-size: 16px;
 }
 .tabbable-line .nav-tabs > li:hover > a {
   -webkit-box-shadow: none;
@@ -837,7 +835,6 @@ img.medal {
 }
 .tabbable-line .tab-content {
   padding: 40px 0;
-  font-size: 16px;
 }
 /* Tabs panel */
 
@@ -891,7 +888,13 @@ img.medal {
 }
 /* User settings */
 
-/* Incentive vote modal */
+/* Modals */
+.modal-header {
+  text-align: center;
+}
+.modal-header .close {
+  font-size: 30px;
+}
 #incentive-vote {
   padding: 0;
 }
@@ -906,7 +909,7 @@ img.medal {
 #incentive-vote #join-community .row {
   padding: 0px 30px 0px 30px;
 }
-/* Incentive vote modal */
+/* Modals */
 
 /* Pretty Header */
 .pretty-header {
@@ -1035,7 +1038,6 @@ img.medal {
 
 /* Contest guideline */
 #guideline p, #guideline li {
-  font-size: 16px;
   text-align: justify;
 }
 #guideline .callout {

@@ -12,13 +12,7 @@ module.exports = function(router, app, passport) {
   });
 
   router.get('/success', function(req, res) {
-    if(req.user && !req.user.id) {
-      authorization.setTemporaryUser(req, req.user);
-      req.logout();
-      res.render('/auth/auth-must-register.html');
-    } else {
-      res.render('/auth/auth-success.html');
-    }
+    res.render('/auth/auth-success.html');
   });
 
   router.get('/fail', function(req, res) {

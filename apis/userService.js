@@ -43,37 +43,25 @@ var getFindUserOptions = function(relations) {
   return options;
 };
 
-exports.createTemporaryFacebookAccount = function(facebookAccount, facebookPicture, name, gender) {
-  var temporary = User.forge({
-    name: name,
-    gender: gender,
-    profile_picture: 'facebook',
-    facebook_account: facebookAccount,
-    facebook_picture: facebookPicture
-  });
-  return temporary;
-};
-
-exports.create = function(data) {
+exports.create = function(facebookAccount, name, email, gender) {
   return new Promise(function(resolve, reject) {
-    var user = User.forge(data);
+    var user = User.forge();
+    user.set('facebook_account', facebookAccount);
+    user.set('name', name);
+    user.set('email', email);
+    user.set('gender', gender);
     user.set('permission', 'user');
-    user.set('verified', 1);
-    if(data.verifyEmail === true) {
+    if(user.get('email')) {
+      user.set('verified', 1);
+    } else {
       user.set('verified', 0);
     }
     user.save(null, {scenario: 'creation'}).then(function(user) {
-      return $.connectNetwork(user, 'facebook', data.facebook_account, data.facebook_picture);
+      return $.connectNetwork(user, 'facebook', facebookAccount, null);
     }).then(function(user) {
-      if(user.get('verified') === 0) {
-        mailService.userVerification(user, true).catch(function(err) {
-          logger.error('Error sending "user verification" email to user %d.', user.id, err);
-        });
-      } else {
-        mailService.userRegistration(user).catch(function(err) {
-          logger.error('Error sending "user registration" email to user %d.', user.id, err);
-        });
-      }
+      mailService.userRegistration(user).catch(function(err) {
+        logger.error('Error sending "user registration" email to user %d.', user.id, err);
+      });
       resolve(user);
     }).catch(messages.APIError, function(err) {
       reject(err);
@@ -267,7 +255,7 @@ exports.resendVerificationEmail = function(user) {
       }
       return mailService.userVerification(user, false);
     }).then(function() {
-      resolve();      
+      resolve();
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {

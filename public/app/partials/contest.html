@@ -4,7 +4,7 @@
       <div class="col-md-8">
         <h1 class="title">
           {{ contest.name }}
-        </h1>        
+        </h1>
       </div>
       <div class="col-md-4" ng-if="isContestProgress('running')">
         <contest-timer ng-model="contest"></contest-timer>
@@ -54,7 +54,7 @@
               <h2 class="no-margin">
                 {{ prize.name }}
                 <small ng-if="hasPrizeDetails(prize)">
-                  <a ng-click="showPrizeDetails(prize)">
+                  <a href="#" ng-click="showPrizeDetails(prize)">
                     <i class="glyphicon glyphicon-question-sign"></i>
                   </a>
                 </small>
@@ -89,13 +89,13 @@
     </div>
   </div>
   <div id="show-details">
-    <a ng-click="showDetails()">
+    <a href="#" ng-click="showDetails()">
       <span ng-show="hideDetails">
-        <span class="glyphicon glyphicon-plus"></span> 
+        <span class="glyphicon glyphicon-plus"></span>
         {{ 'show_details' | translate }}
       </span>
       <span ng-show="!hideDetails">
-        <span class="glyphicon glyphicon-minus"></span> 
+        <span class="glyphicon glyphicon-minus"></span>
         {{ 'hide_details' | translate }}
       </span>
     </a>
@@ -168,15 +168,14 @@
     </div>
   </div>
   <div ng-if="isContestProgress('finished')" class="container margin-top">
-    <div ng-if="hasWinners()">
-      <h1 class="text-center">{{ 'winners' | translate }}</h1>
+    <div ng-if="hasWinners()" class="margin-bottom20">
+      <h1 class="text-center text-uppercase">{{ 'winners' | translate }}</h1>
       <div ng-repeat="row in winnerAuditions | partition: 3" class="winner row padding-top">
         <div ng-repeat="audition in row" class="col-md-4 block-center">
           <a ui-sref="{{ userState(audition.user) }}">
             <div profile-picture="audition.user" class="profile-picture large img-circle block-center"></div>
           </a>
-          <h3 class="text-center text-bold">
-            {{ audition.place }}º
+          <h3 class="text-center text-uppercase">
             <a ui-sref="{{ userState(audition.user) }}">
               {{ audition.user.name }}
             </a>

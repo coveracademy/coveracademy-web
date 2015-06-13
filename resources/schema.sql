@@ -1,7 +1,7 @@
 create table user (
   id                 int not null auto_increment,
   name               varchar(100) not null,
-  email              varchar(255) not null,
+  email              varchar(255) default null,
   permission         enum('user', 'admin') default 'user',
   gender             enum('male', 'female') default 'male',
   biography          varchar(255) default null,

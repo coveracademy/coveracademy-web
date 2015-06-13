@@ -705,12 +705,7 @@ exports.totalVotes = function(contests) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve().then(function() {
-      if(user.get('verified') === 0) {
-        throw messages.apiError('audition.vote.userNotVerified', 'The user can not vote because he is not verified');
-      }
-      return audition.fetch(auditionWithContestAndUserRelated);
-    }).then(function(audition) {
+    audition.fetch(auditionWithContestAndUserRelated).then(function(audition) {
       var contest = audition.related('contest');
       if(contest.get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');

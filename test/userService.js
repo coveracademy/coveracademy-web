@@ -19,11 +19,13 @@ describe('userService', function() {
 
   describe('#create', function() {
     it('should create an user', function() {
-      return userService.create({name: 'Sandro Simas', email: 'sandro@email.com', facebook_account: '31312312423'}).then(function(user) {
+      return userService.create('31312312423', 'Sandro Simas', 'sandro@email.com', 'male').then(function(user) {
+        assert.strictEqual(user.get('facebook_account'), '31312312423');
         assert.strictEqual(user.get('name'), 'Sandro Simas');
         assert.strictEqual(user.get('email'), 'sandro@email.com');
-        assert.strictEqual(user.get('facebook_account'), '31312312423');
+        assert.strictEqual(user.get('gender'), 'male');
         assert.strictEqual(user.get('profile_picture'), 'facebook');
+        assert.strictEqual(user.get('permission'), 'user');
         assert.strictEqual(user.get('verified'), 1);
         return Promise.all([user, models.SocialAccount.collection().fetch()]);
       }).spread(function(user, socialAccounts) {
@@ -37,27 +39,11 @@ describe('userService', function() {
       });
     });
 
-    it('should set verified field to zero when verifyEmail flag is true', function() {
-      return userService.create({name: 'Sandro Simas', email: 'sandro@email.com', facebook_account: '31312312423', verifyEmail: true}).then(function(user) {
-        return user.fetch();
+    it('should set verified to false when email are not provided', function() {
+      return userService.create('31312312424', 'Maday Avila', null, 'famale').then(function(user) {
+        return models.User.forge({id: user.id}).fetch();
       }).then(function(user) {
         assert.strictEqual(user.get('verified'), 0);
-      });
-    });
-
-    it('should not create an user when email are not provided', function() {
-      return userService.create({name: 'Sandro Simas', facebook_account: '31312312423'}).then(function(user) {
-        throw new Error('It should not create an user when email are not provided');
-      }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.new.email.required');
-      });
-    });
-
-    it('should not create an user when username is invalid', function() {
-      return userService.create({name: 'Sandro Simas', username: 'sandro|simas', email: 'sandro@email.com', facebook_account: '31312312423'}).then(function(user) {
-        throw new Error('It should not create an user when username is invalid');
-      }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.new.username.invalid');
       });
     });
   });
@@ -403,7 +389,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByEmail('sandro@email.com');
       }).then(function(user) {
-        assert.strictEqual(user.get('email'), 'sandro@email.com');        
+        assert.strictEqual(user.get('email'), 'sandro@email.com');
         assert.deepEqual(user.relations, {});
       });
     });
@@ -412,7 +398,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByEmail('sandro@email.com', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('email'), 'sandro@email.com');        
+        assert.strictEqual(user.get('email'), 'sandro@email.com');
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -431,7 +417,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByUsername('sandro.csimas');
       }).then(function(user) {
-        assert.strictEqual(user.get('username'), 'sandro.csimas');        
+        assert.strictEqual(user.get('username'), 'sandro.csimas');
         assert.deepEqual(user.relations, {});
       });
     });
@@ -440,7 +426,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByUsername('sandro.csimas', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('username'), 'sandro.csimas');        
+        assert.strictEqual(user.get('username'), 'sandro.csimas');
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -459,7 +445,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findBySocialAccount('twitter', '259214308');
       }).then(function(user) {
-        assert.strictEqual(user.get('twitter_account'), '259214308');        
+        assert.strictEqual(user.get('twitter_account'), '259214308');
         assert.deepEqual(user.relations, {});
       });
     });
@@ -468,7 +454,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findBySocialAccount('twitter', '259214308', true);
       }).then(function(user) {
-        assert.strictEqual(user.get('twitter_account'), '259214308');        
+        assert.strictEqual(user.get('twitter_account'), '259214308');
         assert.deepEqual(user.related('socialAccounts').size(), 5);
       });
     });
@@ -484,7 +470,7 @@ describe('userService', function() {
 
   describe('#verifyEmail', function() {
     it('should set verified to true', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {        
+      return datasets.load(userFixtures.oneUser).then(function() {
         return userService.verifyEmail('27e77df78e9459c4a918ca3a40961ba3');
       }).then(function(user) {
         assert.strictEqual(user.get('verified'), 1);
@@ -530,7 +516,7 @@ describe('userService', function() {
 
   describe('#disableEmails', function() {
     it('should set emails_enabled to false', function() {
-      return datasets.load(userFixtures.oneUser).then(function() {        
+      return datasets.load(userFixtures.oneUser).then(function() {
         return userService.disableEmails('27e77df78e9459c4a918ca3a40961ba3');
       }).then(function(user) {
         assert.strictEqual(user.get('emails_enabled'), 0);
@@ -548,7 +534,7 @@ describe('userService', function() {
 
   describe('#listUsers', function() {
     it('should return all users in database', function() {
-      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {        
+      return datasets.load(userFixtures.twoUsersAndOneAdmin).then(function() {
         return userService.listUsers();
       }).then(function(users) {
         assert.strictEqual(users.size(), 3);

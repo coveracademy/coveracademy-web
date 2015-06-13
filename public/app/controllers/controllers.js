@@ -66,7 +66,7 @@ angular
   $scope.isRedirectionStatusCode = function() {
     return $scope.statusCode === 301;
   };
-  $scope.isUserVerified = function() {
+  $scope.isVerified = function() {
     return $scope.isAuthenticated() && $scope.userAuthenticated().verified === 1;
   };
 }])

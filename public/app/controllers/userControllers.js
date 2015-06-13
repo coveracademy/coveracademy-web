@@ -2,35 +2,6 @@
 
 angular
 .module('coverAcademy.controllers')
-.controller('registerController', ['$scope', '$modalInstance', '$translate', 'constants', 'temporaryUser', 'translationService', 'alertService', 'userService', function($scope, $modalInstance, $translate, constants, temporaryUser, translationService, alertService, userService) {
-  $scope.temporaryUser = temporaryUser;
-  $scope.siteUrl = constants.SITE_URL;
-  $scope.locale = $translate.use();
-  $scope.close = function(result) {
-    $modalInstance.close(result);
-  };
-  $scope.cancel = function(reason) {
-    $modalInstance.dismiss(reason || 'cancel');
-  };
-  $scope.sampleUsername = function() {
-    if(!$scope.temporaryUser.username || $scope.temporaryUser.username.length === 0) {
-      return '<username>';
-    }
-    return $scope.temporaryUser.username.toLowerCase();
-  };
-  $scope.confirm = function() {
-    userService.create($scope.temporaryUser).then(function(response) {
-      $scope.close(true);
-      $translate('alerts.confirm_your_email').then(function(translation) {
-        alertService.alert('success', translation)
-      });
-    }).catch(function(err) {
-      translationService.translateError(err).then(function(translation) {
-        alertService.alert('danger', translation);
-      });
-    });
-  };
-}])
 .controller('loginController', ['$scope', '$modalInstance', 'authenticationService', function($scope, $modalInstance, authenticationService) {
   $scope.close = function(result) {
     $modalInstance.close(result);
@@ -182,10 +153,12 @@ angular
   };
   $scope.saveChanges = function() {
     userService.update($scope.user).then(function(response) {
-      $scope.setUser(response.data);
       $translate('alerts.changes_saved_successfully').then(function(translation) {
         alertService.alert('success', translation);
       });
+      return authenticationService.updateUser();
+    }).then(function(user) {
+      $scope.setUser(user);
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {
         alertService.alert('danger', translation);

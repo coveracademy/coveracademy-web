@@ -22,7 +22,7 @@ angular
 
   var videoModalOptions = {
     size: 'lg',
-    templateUrl: '/app/partials/widgets/video-modal.html',
+    templateUrl: '/app/partials/widgets/video_modal.html',
     resolve: {
       url: function() {
         return 'https://www.youtube.com/embed/UyHqY7i_BEQ?autoplay=1';
@@ -142,7 +142,7 @@ angular
   });
 
   var disapproveModalOptions = {
-    templateUrl: '/app/partials/widgets/disapprove-audition-modal.html',
+    templateUrl: '/app/partials/widgets/disapprove_audition_modal.html',
     controller: function($scope, $modalInstance) {
       $scope.disapprove = function() {
         $modalInstance.close($scope.reason);
@@ -491,6 +491,7 @@ angular
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
   $scope.isFan = backendResponse.data.fan;
+  $scope.verifiedToComment = true;
   $scope.comments = backendResponse.data.comments;
   $scope.replyCommentFormOpened = {};
 
@@ -512,6 +513,37 @@ angular
     $scope.userVote = null;
     $scope.totalUserVotes = 0;
   });
+
+  var verifyAccountToCommentModalOptions = {
+    templateUrl: '/app/partials/widgets/verify_account_to_comment_modal.html',
+    size: 'lg'
+  };
+  var incentiveVoteModalOptions = {
+    templateUrl: '/app/partials/widgets/incentive_vote_modal.html',
+    size: 'lg',
+    resolve: {
+      remainingVotes: function() {
+        return $scope.remainingVotes();
+      },
+      randomAuditions: function() {
+        return contestService.randomAuditions($scope.contest, 6).then(function(response) {
+          return response.data;
+        });
+      },
+      locale: function() {
+        return $scope.locale();
+      }
+    },
+    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
+      $scope.remainingVotes = remainingVotes;
+      $scope.randomAuditions = randomAuditions;
+      $scope.locale = locale;
+      $scope.close = function() {
+        $modalInstance.dismiss();
+      };
+    }
+  };
+
   $scope.showFanButtons = function() {
     return !$scope.userAuthenticated() || ($scope.userAuthenticated().id !== $scope.audition.user.id);
   };
@@ -592,33 +624,6 @@ angular
   $scope.voted = function() {
     return Boolean($scope.userVote && angular.isDefined($scope.userVote.id));
   };
-
-  var incentiveVoteModalOptions = {
-    size: 'lg',
-    templateUrl: '/app/partials/widgets/incentive-vote-modal.html',
-    resolve: {
-      remainingVotes: function() {
-        return $scope.remainingVotes();
-      },
-      randomAuditions: function() {
-        return contestService.randomAuditions($scope.contest, 6).then(function(response) {
-          return response.data;
-        });
-      },
-      locale: function() {
-        return $scope.locale();
-      }
-    },
-    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
-      $scope.remainingVotes = remainingVotes;
-      $scope.randomAuditions = randomAuditions;
-      $scope.locale = locale;
-      $scope.close = function() {
-        $modalInstance.dismiss();
-      };
-    }
-  };
-
   $scope.vote = function(audition) {
     contestService.vote(audition).then(function(response) {
       $scope.userVote = response.data;
@@ -653,31 +658,46 @@ angular
       });
     });
   };
+  $scope.checkVerifiedToComment = function() {
+    var verified = true;
+    if($scope.userAuthenticated().verified === 0) {
+      verified = false;
+      $scope.verifiedToComment = false;
+      modalService.show(verifyAccountToCommentModalOptions);
+    };
+    return verified;
+  };
   $scope.comment = function(message) {
-    contestService.comment($scope.audition, message).then(function(response) {
-      $scope.comments.unshift(response.data);
-      $scope.closeReplyCommentForm(response.data);
-      message = '';
-    }).catch(function(err) {
-      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
-        alertService.alert('danger', translation);
+    if($scope.checkVerifiedToComment() === true) {
+      contestService.comment($scope.audition, message).then(function(response) {
+        $scope.comments.unshift(response.data);
+        $scope.closeReplyCommentForm(response.data);
+        message = '';
+      }).catch(function(err) {
+        translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
+          alertService.alert('danger', translation);
+        });
       });
-    });
+    }
   };
   $scope.replyComment = function(comment, message) {
-    contestService.replyComment(comment, message).then(function(response) {
-      comment.replies.push(response.data);
-      $scope.closeReplyCommentForm(comment);
-    }).catch(function(err) {
-      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
-        alertService.alert('danger', translation);
+    if($scope.checkVerifiedToComment() === true) {
+      contestService.replyComment(comment, message).then(function(response) {
+        comment.replies.push(response.data);
+        $scope.closeReplyCommentForm(comment);
+      }).catch(function(err) {
+        translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
+          alertService.alert('danger', translation);
+        });
       });
-    });
+    }
   };
   $scope.openReplyCommentForm = function(comment) {
-    authenticationService.ensureAuthentication().then(function() {
-      $scope.replyCommentFormOpened[comment.id] = true;
-    });
+    if($scope.checkVerifiedToComment() === true) {
+      authenticationService.ensureAuthentication().then(function() {
+        $scope.replyCommentFormOpened[comment.id] = true;
+      });
+    }
   };
   $scope.closeReplyCommentForm = function(comment) {
     $scope.replyCommentFormOpened[comment.id] = false;

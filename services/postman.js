@@ -97,13 +97,17 @@ var receive = function(fromName, from, subject, text) {
 
 var send = function(to, subject, text) {
   return new Promise(function(resolve, reject) {
-    mailgun.messages().send({from: 'Cover Academy <' + contact + '>', to: to, subject: subject, html: text}, function(err, body) {
-      if(err) {
-        reject(err);
-      } else {
-        resolve(body);
-      }
-    });
+    if(!to) {
+      resolve();
+    } else {
+      mailgun.messages().send({from: 'Cover Academy <' + contact + '>', to: to, subject: subject, html: text}, function(err, body) {
+        if(err) {
+          reject(err);
+        } else {
+          resolve(body);
+        }
+      });
+    }
   });
 };
 
@@ -115,14 +119,15 @@ var batchSend = function(users, subject, text, variables) {
       var emails = [];
       var recipientVariables = {};
       partition.forEach(function(user) {
-        if(user.get('emails_enabled') === 1) {
-          emails.push(user.get('email'));
-          recipientVariables[user.get('email')] = {};
+        var email = user.get('email');
+        if(email && user.get('emails_enabled') === 1) {
+          emails.push(email);
+          recipientVariables[email] = {};
           if(variables) {
             variables.forEach(function(variable) {
-              recipientVariables[user.get('email')][variable] = user.get(variable);
+              recipientVariables[email][variable] = user.get(variable);
             });
-            recipientVariables[user.get('email')]['encryptedEmail'] = encrypt.encrypt(user.get('email'));
+            recipientVariables[email]['encryptedEmail'] = encrypt.encrypt(email);
           }
         }
       });

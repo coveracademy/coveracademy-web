@@ -176,36 +176,23 @@ angular
   $.updateUser();
 
   var loginModalOptions = {
-    templateUrl: '/app/partials/widgets/login-modal.html',
+    templateUrl: '/app/partials/widgets/login_modal.html',
     controller: 'loginController'
-  };
-  var registerModalOptions = {
-    size: 'lg',
-    templateUrl: '/app/partials/widgets/register-modal.html',
-    resolve: {
-      temporaryUser: function(userService) {
-        return userService.getTemporaryUser().then(function(response) {
-          return response.data;
-        });
-      }
-    },
-    controller: 'registerController'
   };
   var joinCommunityModalOptions = {
     size: 'lg',
-    templateUrl: '/app/partials/widgets/join-community-modal.html'
-    // controller: 'joinCommunityController'
+    templateUrl: '/app/partials/widgets/join_community_modal.html'
   };
   this.isAuthenticated = function() {
     return user ? true : false;
-  };
-  this.getUser = function() {
-    return $.isAuthenticated() ? user : null;
   };
   this.isAuthorized = function (accessLevel) {
     var authenticatedUser = $.getUser();
     var userRole = authenticatedUser && authenticatedUser.permission ? authenticatedUser.permission : 'public';
     return !accessLevel || $underscore.contains(accessLevel.roles, userRole);
+  };
+  this.getUser = function() {
+    return $.isAuthenticated() ? user : null;
   };
   this.login = function(provider) {
     var deferred = $q.defer();
@@ -215,47 +202,24 @@ angular
       var win = $window.open(userService.loginEndpoint(provider), 'SignIn', 'width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=' + left + ',top=' + top);
       win.focus();
       $window.authResult = function(result, message) {
-        if(result === 'must-register') {
-          win.close();
-          modalService.show(registerModalOptions).then(function(registered) {
-            if(registered === true) {
-              $.updateUser().then(function(userUpdated) {
-                deferred.resolve(userUpdated);
-                $rootScope.$broadcast(authEvents.USER_REGISTERED);
-                if(userUpdated.new && userUpdated.new === true) {
-                  $timeout(function() {
-                    modalService.show(joinCommunityModalOptions);
-                  }, 4000);
-                }
-              }).catch(function(err) {
-                deferred.reject(err);
-                $rootScope.$broadcast(authEvents.FAIL_REGISTERING_USER);
-              });
-            } else {
-              deferred.reject();
-              $rootScope.$broadcast(authEvents.FAIL_REGISTERING_USER);
+        if(result === 'success') {
+          $.updateUser().then(function(userUpdated) {
+            deferred.resolve(userUpdated);
+            $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);
+            if(userUpdated.new && userUpdated.new === true) {
+              $timeout(function() {
+                modalService.show(joinCommunityModalOptions);
+              }, 4000);
             }
+          }).catch(function(err) {
+            deferred.reject(err);
+            $rootScope.$broadcast(authEvents.LOGIN_FAILED, provider);
           });
-        } else {
-          if(result === 'success') {
-            $.updateUser().then(function(userUpdated) {
-              deferred.resolve(userUpdated);
-              $rootScope.$broadcast(authEvents.LOGIN_SUCCESS, provider);
-              if(userUpdated.new && userUpdated.new === true) {
-                $timeout(function() {
-                  modalService.show(joinCommunityModalOptions);
-                }, 4000);
-              }
-            }).catch(function(err) {
-              deferred.reject(err);
-              $rootScope.$broadcast(authEvents.LOGIN_FAILED, provider);
-            });
-          } else if(result === 'fail') {
-            deferred.reject();
-            $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
-          }
-          win.close();
+        } else if(result === 'fail') {
+          deferred.reject();
+          $rootScope.$broadcast(authEvents.LOGIN_FAILED, message);
         }
+        win.close();
       }
       return deferred.promise;
     } else {
