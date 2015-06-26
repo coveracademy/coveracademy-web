@@ -1,5 +1,5 @@
-- Install MySQL database version 5.6+
-- Configure database
+1. Install MySQL database version 5.6+
+2. Configure database
     $ sudo vim /etc/mysql/my.cnf
       > Change from key_buffer property to key_buffer_size
       > Change from myisam-recover to myisam-recover-options
@@ -9,7 +9,7 @@
         > character_set_server            = utf8
         > skip-character-set-client-handshake
 
-- Set up database
+3. Set up database
     $ cd cover-academy
     $ mysql -u <user> -p
       > create database cover_academy character set utf8 collate utf8_general_ci;
@@ -17,7 +17,7 @@
     $ mysql -u <user> -p cover_academy < resources/schema.sql
     $ mysql -u <user> -p cover_academy < resources/data.sql
 
-- Install and set up Redis
+4. Install and set up Redis
     $ wget http://download.redis.io/releases/redis-2.8.17.tar.gz
     $ tar -xvf installers/redis-2.8.17.tar.gz
     $ cd redis-2.8.17
@@ -25,10 +25,10 @@
     $ sudo utils/install_server.sh
     $ sudo service redis_6379 start
 
-- Install Nginx
+5. Install Nginx
     $ sudo apt-get install nginx
 
-- Configure Nginx sites availables
+6. Configure Nginx sites availables
 
     server {
       listen       80;
@@ -39,7 +39,6 @@
     server {
       listen       80;
       server_name  www.coveracademy.com;
-
       location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -50,10 +49,10 @@
       }
     }
 
-- Edit /etc/hosts and add www.coveracademy.com pointing to localhost
-- Creates a copy of config.properties located in resources/samples and change the properties according to environment
-- Set the environment variable with name CONFIG_FILE referencing the absolute path of the config.properties copy (Defaults to './config.properties')
-- Install cover-academy dependencies
+7. Edit /etc/hosts and add www.coveracademy.com pointing to localhost
+8. Creates a copy of config.properties located in resources/samples and change the properties according to environment
+9. Set the environment variable with name CONFIG_FILE referencing the absolute path of the config.properties copy (Defaults to './config.properties')
+10. Install cover-academy dependencies
     $ npm install
-- Start cover-academy server
+11. Start cover-academy server
     $ npm start
