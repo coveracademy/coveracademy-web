@@ -184,18 +184,20 @@ exports.finishContest = function(contest) {
           });
         });
       }
-    }).then(function(draw) {
-      if(draw === true) {
-        mailService.contestDraw(contest).catch(function(err) {
-          logger.error('Error sending "contest draw" email.', err);
-        });
-      } else {
-        mailService.contestFinish(contest).catch(function(err) {
-          logger.error('Error sending "contest finish" email.', err);
-        });
-      }
-      return;
     });
+  }).then(function(draw) {
+    if(draw === true) {
+      mailService.contestDraw(contest).catch(function(err) {
+        logger.error('Error sending "contest draw" email.', err);
+      });
+    } else {
+      mailService.contestFinish(contest).catch(function(err) {
+        logger.error('Error sending "contest finish" email.', err);
+      });
+    }
+    resolve();
+  }).catch(function(err) {
+    reject(err);
   });
 };
 
