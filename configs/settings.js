@@ -11,7 +11,6 @@ try {
       _nodePort = properties.getValue('app.port', 3000),
       _publicPath = path.join(__dirname, '../public'),
       _viewsPath = path.join(__dirname, '../views'),
-      _tmpUploadPath = path.join(__dirname, '../tmp'),
       _oembedAPIKey = '0d7e9ac5890d98a8fa0c47',
       _lastfmKey = '33623b4ad36e7ce8591b5247c2c51f72',
       _lastfmSecret = '06bb829a0c65fdd087fc0d89f1f7e9f3',
@@ -89,7 +88,6 @@ try {
   exports.nodeIP = _nodeIP;
   exports.publicPath = _publicPath;
   exports.viewsPath = _viewsPath;
-  exports.tmpUploadPath = _tmpUploadPath;
   exports.oembedApiKey = _oembedAPIKey;
   exports.lastfmKey = _lastfmKey;
   exports.lastfmSecret = _lastfmSecret;
