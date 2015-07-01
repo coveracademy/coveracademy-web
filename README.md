@@ -1,5 +1,7 @@
-- Install MySQL database version 5.6+
-- Configure database
+# Follow this instructions to install Cover Academy server #
+### Install MySQL database version 5.6+ ###
+### Configure database ###
+```
     $ sudo vim /etc/mysql/my.cnf
       > Change from key_buffer property to key_buffer_size
       > Change from myisam-recover to myisam-recover-options
@@ -8,28 +10,31 @@
         > collation_server                = utf8_unicode_ci
         > character_set_server            = utf8
         > skip-character-set-client-handshake
-
-- Set up database
+```
+### Set up database ###
+```
     $ cd cover-academy
     $ mysql -u <user> -p
       > create database cover_academy character set utf8 collate utf8_general_ci;
       > exit
     $ mysql -u <user> -p cover_academy < resources/schema.sql
     $ mysql -u <user> -p cover_academy < resources/data.sql
-
-- Install and set up Redis
+```
+### Install and set up Redis ###
+```
     $ wget http://download.redis.io/releases/redis-2.8.17.tar.gz
     $ tar -xvf installers/redis-2.8.17.tar.gz
     $ cd redis-2.8.17
     $ make; make test; sudo make install;
     $ sudo utils/install_server.sh
     $ sudo service redis_6379 start
-
-- Install Nginx
+```
+### Install Nginx ###
+```   
     $ sudo apt-get install nginx
-
-- Configure Nginx sites availables
-
+```
+### Configure Nginx sites availables ###
+```
     server {
       listen       80;
       server_name  coveracademy.com;
@@ -39,7 +44,6 @@
     server {
       listen       80;
       server_name  www.coveracademy.com;
-
       location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -49,11 +53,16 @@
         proxy_redirect off;
       }
     }
-
-- Edit /etc/hosts and add www.coveracademy.com pointing to localhost
-- Creates a copy of config.properties located in resources/samples and change the properties according to environment
-- Set the environment variable with name CONFIG_FILE referencing the absolute path of the config.properties copy (Defaults to './config.properties')
-- Install cover-academy dependencies
+```
+### Configure environment ###
+* Edit /etc/hosts and add www.coveracademy.com pointing to localhost
+* Creates a copy of config.properties located in resources/samples and change the properties according to environment
+* Set the environment variable with name CONFIG_FILE referencing the absolute path of the config.properties copy (Defaults to './config.properties')
+### Install cover-academy dependencies ###
+```
     $ npm install
-- Start cover-academy server
+```
+### Start Cover Academy server ###
+```
     $ npm start
+```
