@@ -639,12 +639,12 @@ exports.getUsersVotes = function(auditions) {
   }).fetch(userVoteWithUserRelated);
 };
 
-exports.getUserVote = function(user, audition) {
+exports.getUserVote = function(user, audition, related) {
   return new Promise(function(resolve, reject) {
     if(!user) {
       resolve();
     } else {
-      resolve(UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch());
+      resolve(UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch(related ? {withRelated: related} : null));
     }
   });
 };
@@ -707,14 +707,14 @@ exports.totalVotes = function(contests) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    audition.fetch(auditionWithContestAndUserRelated).then(function(audition) {
-      var contest = audition.related('contest');
-      if(contest.get('progress') === 'finished') {
+    Promise.resolve(audition.fetch(auditionWithContestAndUserRelated)).bind({}).then(function(audition) {
+      this.contest = audition.related('contest');
+      if(this.contest.get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
       }
-      return Promise.all([audition, $.countUserVotes(user, contest)]);
-    }).spread(function(audition, totalAuditionsVotes) {
-      if(totalAuditionsVotes >= constants.VOTE_LIMIT) {
+      return Promise.all([audition, $.countUserVotes(user, this.contest)]);
+    }).spread(function(audition, totalUserVotes) {
+      if(totalUserVotes >= constants.VOTE_LIMIT) {
         throw messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT);
       }
       if(user.id === audition.related('user').id) {
@@ -723,8 +723,24 @@ exports.vote = function(user, audition) {
       if(audition.get('approved') === 0) {
         throw messages.apiError('audition.vote.auditionNotApproved', 'The user can not vote in audition not approved');
       }
-      var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, voting_power: user.get('voting_power')});
-      return userVote.save();
+      var that = this;
+      return Bookshelf.transaction(function(transaction) {
+        totalUserVotes++;
+        var valid = totalUserVotes < constants.MINIMUM_VOTES ? false : true;
+        var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, valid: valid, voting_power: user.get('voting_power')});
+        return Promise.bind(that).then(function() {
+          return userVote.save(null, {transacting: transaction});
+        }).then(function(userVote) {
+          that = this;
+          this.userVote = userVote;
+          return UserVote.query(function(qb) {
+            qb.where('user_id', user.id);
+            qb.whereIn('audition_id', Bookshelf.knex('audition').select('id').where({contest_id: that.contest.id}));
+          }).save({valid: this.userVote.get('valid')}, {patch: true, require: false, method: 'update', transacting: transaction});
+        }).then(function() {
+          return this.userVote;
+        });
+      });
     }).then(function(userVote) {
       resolve(userVote);
     }).catch(messages.APIError, function(err) {
@@ -741,16 +757,33 @@ exports.vote = function(user, audition) {
 
 exports.removeVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch(userVoteWithAuditionAndContestRelated).then(function(userVote) {
+    Promise.resolve($.getAudition(audition.id, auditionWithContestRelated.withRelated)).bind({}).then(function(audition) {
+      this.audition = audition;
+      this.contest = audition.related('contest');
+      return Promise.all([$.getUserVote(user, this.audition), $.countUserVotes(user, this.contest)]);
+    }).spread(function(userVote, totalUserVotes) {
       if(!userVote) {
         throw messages.apiError('audition.removeVote.userHasNotVoted', 'The user has not voted');
       }
-      if(userVote.related('audition').related('contest').get('progress') === 'finished') {
+      if(this.contest.get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
       }
-      var clone = userVote.clone();
-      return userVote.destroy().then(function() {
-        return clone;
+      var that = this;
+      return Bookshelf.transaction(function(transaction) {
+        return Promise.bind(that).then(function() {
+          this.userVote = userVote.clone();
+          return userVote.destroy({transacting: transaction});
+        }).then(function() {
+          that = this;
+          totalUserVotes--;
+          var valid = totalUserVotes < constants.MINIMUM_VOTES ? false : true;
+          return UserVote.query(function(qb) {
+            qb.where('user_id', user.id);
+            qb.whereIn('audition_id', Bookshelf.knex('audition').select('id').where({contest_id: that.contest.id}));
+          }).save({valid: valid}, {patch: true, require: false, method: 'update', transacting: transaction});
+        }).then(function() {
+          return this.userVote;
+        });
       });
     }).then(function(userVote) {
       resolve(userVote);

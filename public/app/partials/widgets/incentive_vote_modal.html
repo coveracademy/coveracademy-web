@@ -12,11 +12,11 @@
           {{ 'you_can_still_vote_for_other_contestants' | translate: {remainingVotes: remainingVotes} }}
         </h3>
         <div class="alert alert-info margin-top">
-          <h4>{{ 'incentive_vote_modal_description' | translate }}</h4>
+          <h4 class="no-margin">{{ 'incentive_vote_modal_description' | translate }}</h4>
         </div>
       </div>
     </div>
-    <div class="row margin-bottom" ng-repeat="row in randomAuditions | partition: 3">
+    <div class="row margin-bottom20" ng-repeat="row in randomAuditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
         <audition ng-model="audition" locale="{{ locale }}" thumb-size="small" audition-click="close()">
         </audition>
@@ -28,8 +28,10 @@
       <div class="col-md-12">
         <h3 class="no-margin">{{ 'lets_create_the_largest_community' | translate }}</h3>
         <h2 class="no-margin text-center">{{ 'like_on_facebook' | translate }}</h2>
-        <fb-like-box link="https://www.facebook.com/coveracademy" width="820" height="190" faces="true" theme="dark">
-        </fb-like-box>
+        <div class="margin-top20">
+          <fb-like-box link="https://www.facebook.com/coveracademy" width="500" height="190" faces="true" theme="dark">
+          </fb-like-box>
+        </div>
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 'use strict';
 
-var Bookshelf = require('../models').Bookshelf;
+var Bookshelf = require('../models').Bookshelf,
+    Promise   = require('bluebird');
 
 exports.getIds = function(collection) {
   var ids = [];
@@ -16,4 +17,12 @@ exports.isCollection = function(obj) {
 
 exports.isModel = function(obj) {
   return obj instanceof Bookshelf.Model;
+};
+
+exports.requestTransaction = function(transaction, callback) {
+  if(transaction) {
+    return callback(transaction);
+  } else {
+    return Bookshelf.transaction(callback);
+  }
 };
