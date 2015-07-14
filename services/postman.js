@@ -293,7 +293,7 @@ server.post('/audition/replyComment', function(req, res, next) {
 });
 
 server.post('/contest/inscription', function(req, res, next) {
-  Promise.all([contestService.getContest(req.body.contest), userService.listUsers()]).spread(function(contest, users) {
+  Promise.all([contestService.getContest(req.body.contest), contestService.latestContestants()]).spread(function(contest, users) {
     return renderPromise(contestInscriptionTemplate, {contest: contest.toJSON(), permitDisableEmails: true}).then(function(email) {
       return batchSend(users, 'Você já pode se inscrever na competição do Cover Academy.', email, ['name']);
     });

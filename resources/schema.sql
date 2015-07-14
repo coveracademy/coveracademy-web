@@ -259,7 +259,7 @@ create table prize (
   place       tinyint not null,
   name        varchar(100) not null,
   full_name   varchar(100) default null,
-  description varchar(255) default null,
+  description text default null,
   image       varchar(255) default null,
   link        varchar(255) default null,
   primary key (id),
