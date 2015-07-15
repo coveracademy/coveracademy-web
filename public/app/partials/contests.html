@@ -9,11 +9,11 @@
 			<div class="col-md-12">
 				<a ui-sref="app.contest({id: contest.id, slug: contest.slug})">
 					<h1 class="text-uppercase text-bold no-margin">
-            {{ contest.name }} 
+            {{ contest.name }}
             <i class="glyphicon glyphicon-link"></i>
           </h1>
 				</a>
-				<div class="contest-infos">
+				<div ng-if="isContestProgress(contest, 'running')" class="contest-infos">
 					<h3 class="no-margin">
 						{{ 'total_contestants_and_votes' | translate: {totalVotes: getTotalVotes(contest), totalAuditions: getTotalAuditions(contest)} }}
 						<span ng-if="contest.start_date">
@@ -26,7 +26,7 @@
 						</span>
 					</h3>
 				</div>
-				<div ng-if="hasWinnerAuditions(contest)">
+				<div ng-if="isContestProgress(contest, 'finished') && hasWinnerAuditions(contest)">
 			    <h3 class="text-uppercase text-center">{{ 'winners' | translate }}</h3>
 			    <div ng-repeat="row in getWinnerAuditions(contest) | partition: 3" class="winner row padding-top">
 			      <div ng-repeat="audition in row" class="col-md-4">
@@ -35,8 +35,8 @@
 			      </div>
 			    </div>
 			  </div>
-			  <div ng-if="!hasWinnerAuditions(contest) && !isContestFinished(contest)" class="text-center">
-		  		<a ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg">
+			  <div ng-if="!isContestProgress(contest, 'finished')" class="text-center">
+		  		<a ng-if="isContestProgress(contest, 'running')" ui-sref="app.contest({id: contest.id, slug: contest.slug})" class="btn btn-success btn-lg">
 	          {{ 'vote' | translate }}
 	        </a>
 	        <a ui-sref="app.joinContest({locale: locale(), id: contest.id, slug: contest.slug})" class="btn btn-primary btn-lg">

@@ -12,11 +12,11 @@ module.exports = function(router, app, passport) {
   });
 
   router.get('/success', function(req, res) {
-    res.render('/auth/auth-success.html');
+    res.render('auth/auth-success.html');
   });
 
   router.get('/fail', function(req, res) {
-    res.render('/auth/auth-fail.html', {message: req.flash('error')});
+    res.render('auth/auth-fail.html', {message: req.flash('error')});
   });
 
   router.get('/facebook', passport.authenticate('facebook'));

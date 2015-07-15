@@ -28,9 +28,9 @@ app.set('views', settings.viewsPath);
 app.set('public', settings.publicPath);
 
 app.use(favicon(settings.publicPath + '/img/favicon.ico'));
-app.use(morgan({format: 'tiny', stream: serverLogger.stream}));
+app.use(morgan('tiny', {stream: serverLogger.stream}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(flash());
 app.use(session({

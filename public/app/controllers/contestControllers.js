@@ -98,8 +98,8 @@ angular
   $scope.getWinnerAuditions = function(contest) {
     return $scope.winnerAuditions[contest.id]
   };
-  $scope.isContestFinished = function(contest) {
-    return contest.progress === 'finished';
+  $scope.isContestProgress = function(contest, progress) {
+    return contest.progress === progress;
   };
 }])
 .controller('contestantsController', ['$scope', '$translate', 'backendResponse', 'seoService', 'contestService', function($scope, $translate, backendResponse, seoService, contestService) {
@@ -522,6 +522,9 @@ angular
     templateUrl: '/app/partials/widgets/incentive_vote_modal.html',
     size: 'lg',
     resolve: {
+      validVote: function() {
+        return $scope.totalUserVotes > 1;
+      },
       remainingVotes: function() {
         return $scope.remainingVotes();
       },
@@ -534,7 +537,8 @@ angular
         return $scope.locale();
       }
     },
-    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
+    controller: function($scope, $modalInstance, validVote, remainingVotes, randomAuditions, locale) {
+      $scope.validVote = validVote;
       $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
       $scope.locale = locale;
