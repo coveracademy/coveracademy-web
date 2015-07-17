@@ -336,6 +336,9 @@ angular
   $scope.hasRemainingVotes = function() {
     return $scope.remainingVotes() > 0;
   };
+  $scope.validVote = function() {
+    return $scope.totalUserVotes !== 1;
+  };
   $scope.remainingVotes = function() {
     return $scope.voteLimit - $scope.totalUserVotes;
   };
@@ -523,7 +526,7 @@ angular
     size: 'lg',
     resolve: {
       validVote: function() {
-        return $scope.totalUserVotes > 1;
+        return $scope.validVote();
       },
       remainingVotes: function() {
         return $scope.remainingVotes();
@@ -568,6 +571,9 @@ angular
         alertService.alert('danger', translation);
       });
     });
+  };
+  $scope.validVote = function() {
+    return $scope.totalUserVotes !== 1;
   };
   $scope.remainingVotes = function() {
     return $scope.voteLimit - $scope.totalUserVotes;
