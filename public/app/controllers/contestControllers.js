@@ -241,7 +241,6 @@ angular
   $scope.audition = backendResponse.data.audition;
   $scope.auditions = backendResponse.data.auditions;
   $scope.userVotes = backendResponse.data.userVotes;
-  $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.totalUserVotes = backendResponse.data.totalUserVotes;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.votesByAudition = backendResponse.data.votesByAudition;
@@ -340,7 +339,7 @@ angular
     return $scope.totalUserVotes !== 1;
   };
   $scope.remainingVotes = function() {
-    return $scope.voteLimit - $scope.totalUserVotes;
+    return constants.MAXIMUM_VOTES - $scope.totalUserVotes;
   };
   $scope.isMedal = function(audition, expected) {
     return $scope.getMedal(audition) === expected;
@@ -384,14 +383,14 @@ angular
   $scope.isRanked = function(type) {
     return $scope.rankType === type;
   };
-  $scope.getVotesByAudition = function(audition) {
+  $scope.totalVotesByAudition = function(audition) {
     var votes = $scope.votesByAudition[audition.id];
     if(!votes) {
       votes = 0;
     }
     return votes;
   };
-  $scope.getScoreByAudition = function(audition) {
+  $scope.totalScoreByAudition = function(audition) {
     var score = $scope.scoreByAudition[audition.id];
     if(!score) {
       score = 0;
@@ -490,7 +489,6 @@ angular
   $scope.otherAuditions = backendResponse.data.otherAuditions;
   $scope.totalAuditions = backendResponse.data.totalAuditions;
   $scope.totalUserVotes = backendResponse.data.totalUserVotes;
-  $scope.voteLimit = backendResponse.data.voteLimit;
   $scope.votes = backendResponse.data.votes || 0;
   $scope.score = backendResponse.data.score || 0;
   $scope.isFan = backendResponse.data.fan;
@@ -576,7 +574,7 @@ angular
     return $scope.totalUserVotes !== 1;
   };
   $scope.remainingVotes = function() {
-    return $scope.voteLimit - $scope.totalUserVotes;
+    return constants.MAXIMUM_VOTES - $scope.totalUserVotes;
   };
   $scope.hasRemainingVotes = function() {
     return $scope.remainingVotes() > 0;
@@ -638,9 +636,11 @@ angular
     contestService.vote(audition).then(function(response) {
       $scope.userVote = response.data;
       $scope.totalUserVotes++;
-      $scope.votes++;
-      $scope.score += $scope.userVote.voting_power;
-      $scope.score = Number($scope.score.toFixed(3));
+      if($scope.totalUserVotes >= constants.MINIMUM_VOTES) {
+        $scope.votes++;
+        $scope.score += $scope.userVote.voting_power;
+        $scope.score = Number($scope.score.toFixed(3));
+      }
       $translate('alerts.thank_you_for_voting', {user: $scope.audition.user.name}).then(function(translation) {
         alertService.alert('success', translation);
       });
@@ -657,10 +657,12 @@ angular
   };
   $scope.removeVote = function(audition) {
     contestService.removeVote(audition).then(function(response) {
+      if($scope.totalUserVotes >= constants.MINIMUM_VOTES) {
+        $scope.votes--;
+        $scope.score -= response.data.voting_power;
+        $scope.score = Number($scope.score.toFixed(3));
+      }
       $scope.totalUserVotes--;
-      $scope.votes--;
-      $scope.score -= response.data.voting_power;
-      $scope.score = Number($scope.score.toFixed(3));
       $scope.userVote = null;
     }).catch(function(err) {
       translationService.translateError(err).then(function(translation) {

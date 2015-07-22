@@ -261,7 +261,7 @@ angular
     'audition.comment.userNotVerified': 'errors.audition_comment_user_not_verified',
     'audition.vote.canNotVoteForYourself': 'errors.audition_vote_can_not_vote_for_yourself',
     'audition.vote.contestWasFinished': 'errors.audition_vote_contest_was_finished',
-    'audition.vote.reachVoteLimit': 'errors.audition_vote_reach_vote_limit',
+    'audition.vote.reachMaximumVotes': 'errors.audition_vote_reach_maximum_votes',
     'audition.vote.userNotVerified': 'errors.audition_vote_user_not_verified',
     'contest.join.alreadyFinished': 'errors.join_contest_already_finished',
     'contest.join.userAlreadyInContest': 'errors.join_contest_user_already_in_contest',

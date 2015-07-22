@@ -200,7 +200,7 @@
       <h1 class="text-center text-bold">{{ 'your_audition' | translate }}</h1>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
+          <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="totalScoreByAudition(audition)">
           </audition>
         </div>
       </div>
@@ -272,7 +272,7 @@
     </div>
     <div class="row padding-bottom" ng-repeat="row in auditions | partition: 3">
       <div ng-repeat="audition in row" class="col-md-4">
-        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="getScoreByAudition(audition)">
+        <audition ng-model="audition" locale="{{ locale() }}" thumb-size="large" show-score="true" score-by-audition="totalScoreByAudition(audition)">
         </audition>
       </div>
     </div>

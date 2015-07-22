@@ -331,12 +331,11 @@ module.exports = function(router, app) {
           runningContests: contestService.listOtherRunningContests(contest)
         }).bind({}).then(function(result) {
           this.result = result;
-          return Promise.all([contestService.getScoreByAudition(result.auditions), contestService.getVotesByAudition(result.auditions)]);
+          return Promise.all([contestService.totalScoreByAudition(result.auditions), contestService.totalVotesByAudition(result.auditions)]);
         }).spread(function(scoreByAudition, votesByAudition) {
           this.result.scoreByAudition = scoreByAudition;
           this.result.votesByAudition = votesByAudition;
           this.result.contest = contest;
-          this.result.voteLimit = constants.VOTE_LIMIT;
           this.result.rankType = rankType;
           res.json(this.result);
         });
@@ -409,8 +408,8 @@ module.exports = function(router, app) {
         return Promise.props({
           totalUserVotes: contestService.countUserVotes(req.user, contest),
           userVote: contestService.getUserVote(req.user, audition),
-          votes: contestService.getAuditionVotes(audition),
-          score: contestService.getAuditionScore(audition),
+          votes: contestService.totalAuditionVotes(audition),
+          score: contestService.totalAuditionScore(audition),
           otherAuditions: contestService.randomAuditions(contest, 10),
           totalAuditions: contestService.totalAuditions(contest),
           comments: contestService.listComments(audition),
@@ -418,7 +417,6 @@ module.exports = function(router, app) {
         }).then(function(result) {
           result.contest = contest;
           result.audition = audition;
-          result.voteLimit = constants.VOTE_LIMIT;
           res.json(result);
         });
       }
