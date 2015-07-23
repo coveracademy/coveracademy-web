@@ -23,7 +23,7 @@
     "user": [
       {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook", "permission": "admin"},
       {"id": 2, "name": "Pedro Forbrig", "email": "pedro@email.com", "facebook_account": "718788641524584", "profile_picture": "facebook", "permission": "user"},
-      {"id": 3, "name": "Leirson Barretos", "email": "leirson@email.com", "facebook_account": "718788641524585", "profile_picture": "facebook", "permission": "user"}
+      {"id": 3, "name": "Leirson Barreto", "email": "leirson@email.com", "facebook_account": "718788641524585", "profile_picture": "facebook", "permission": "user"}
     ],
     "social_account": [
       {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0},

@@ -540,7 +540,7 @@ describe('userService', function() {
         assert.strictEqual(users.size(), 3);
         assert.strictEqual(users.at(0).get('name'), 'Sandro Simas');
         assert.strictEqual(users.at(1).get('name'), 'Pedro Forbrig');
-        assert.strictEqual(users.at(2).get('name'), 'Leirson Barretos');
+        assert.strictEqual(users.at(2).get('name'), 'Leirson Barreto');
       });
     });
   });

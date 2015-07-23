@@ -7,6 +7,10 @@ var knex           = require('../../models').Bookshelf.knex,
 
 exports.clean = function() {
   return new Promise(function(resolve, reject) {
+    if(settings.database.host !== 'localhost') {
+      reject(new Error('Cannot clean tables of external environment.'));
+      return;
+    }
     var wrappers = [];
     tables.forEach(function(table) {
       wrappers.push(new PromiseWrapper(knex(table).del()));
@@ -22,6 +26,10 @@ exports.clean = function() {
 
 exports.load = function(fixtures) {
   return new Promise(function(resolve, reject) {
+    if(settings.database.host !== 'localhost') {
+      reject(new Error('Cannot load fixtures in external environment.'));
+      return;
+    }
     var wrappers = [];
     if(_.isArray(fixtures)) {
       fixtures.forEach(function(fixture) {

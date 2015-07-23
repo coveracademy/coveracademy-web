@@ -1,0 +1,54 @@
+{
+  "severalUsers": {
+    "user": [
+      {"id": 1, "name": "Sandro Simas", "email": "sandro@email.com", "facebook_account": "718788641524583", "profile_picture": "facebook", "permission": "admin"},
+      {"id": 2, "name": "Pedro Forbrig", "email": "pedro@email.com", "facebook_account": "718788641524584", "profile_picture": "facebook", "permission": "user"},
+      {"id": 3, "name": "Leirson Barretos", "email": "leirson@email.com", "facebook_account": "718788641524585", "profile_picture": "facebook", "permission": "user"},
+      {"id": 4, "name": "Maria Silva", "email": "maria@email.com", "facebook_account": "818788641524583", "profile_picture": "facebook", "permission": "user"},
+      {"id": 5, "name": "Sandra Ribeiro", "email": "sandra@email.com", "facebook_account": "918788641524584", "profile_picture": "facebook", "permission": "user"},
+      {"id": 6, "name": "Rafael Costa", "email": "rafael@email.com", "facebook_account": "108788641524585", "profile_picture": "facebook", "permission": "user"},
+      {"id": 7, "name": "Marcos Passos", "email": "marcos@email.com", "facebook_account": "118788641524583", "profile_picture": "facebook", "permission": "user"},
+      {"id": 8, "name": "Maday Avila", "email": "maday@email.com", "facebook_account": "128788641524584", "profile_picture": "facebook", "permission": "user"},
+      {"id": 9, "name": "Larissa Santana", "email": "larissa@email.com", "facebook_account": "138788641524585", "profile_picture": "facebook", "permission": "user"}
+    ],
+    "social_account": [
+      {"id": 1, "user_id": 1, "network": "facebook", "show_link": 0},
+      {"id": 2, "user_id": 2, "network": "facebook", "show_link": 0},
+      {"id": 3, "user_id": 3, "network": "facebook", "show_link": 0},
+      {"id": 4, "user_id": 4, "network": "facebook", "show_link": 0},
+      {"id": 5, "user_id": 5, "network": "facebook", "show_link": 0},
+      {"id": 6, "user_id": 6, "network": "facebook", "show_link": 0},
+      {"id": 7, "user_id": 7, "network": "facebook", "show_link": 0},
+      {"id": 8, "user_id": 8, "network": "facebook", "show_link": 0},
+      {"id": 9, "user_id": 9, "network": "facebook", "show_link": 0}
+    ]
+  },
+  "finishContestState": {
+    "contest": [
+      {"id": 1, "name": "O melhor do Sertanejo", "description": null, "slug": "o-melhor-do-sertanejo", "image": "https://raw.githubusercontent.com/coveracademy/coveracademy.github.io/master/contests/melhor-sertanejo.jpg", "minimum_contestants": 3, "acceptance_date": "2014-01-01", "start_date": "2015-07-16 09:00:00", "end_date": "2015-07-22 21:00:00", "registration_date": "2015-07-01 13:40:51", "duration": 21, "draw": 0, "active": 1, "progress": "running", "modality_id": null, "rules": null}
+    ],
+    "audition": [       
+      {"id": 1, "contest_id": 1, "user_id": 1, "slug": "ser-humano-ou-anjo-matheus-e-kauan-guto-silva-cover-guto-silva", "url": "https://www.youtube.com/watch?v=LQ0T3Hfy34M", "embed_url": "https://www.youtube.com/embed/LQ0T3Hfy34M", "video_id": "LQ0T3Hfy34M", "title": "Ser humano ou anjo - Matheus e Kauan - Guto Silva (cover)", "description": "E aí galera sou Guto e faço covers de sertanejo , e esta música é uma música que gosto muito e espero que gostem também ! acessem ai ! Muito obrigado!", "small_thumbnail": "https://i.ytimg.com/vi/LQ0T3Hfy34M/default.jpg", "medium_thumbnail": "https://i.ytimg.com/vi/LQ0T3Hfy34M/mqdefault.jpg", "large_thumbnail": "https://i.ytimg.com/vi/LQ0T3Hfy34M/hqdefault.jpg", "place": null, "approved": 1, "registration_date": "2015-07-22 01:02:08"},
+      {"id": 2, "contest_id": 1, "user_id": 2, "slug": "que-sorte-a-nossa-matheus-e-kauan-cover-lucas-w-gomes-lucas-wellington-gomes", "url": "https://www.youtube.com/watch?v=AtqLcgj8lhM", "embed_url": "https://www.youtube.com/embed/AtqLcgj8lhM", "video_id": "AtqLcgj8lhM", "title": "Que sorte a Nossa - matheus e kauan ( cover lucas w gomes)", "description": "Dae galera to aqui pra agradecer  a todos os inscritos no canal! obrigado a todos e quem gostar deixa um curtir e se inscreve no canal quem ainda não e inscrito valeu! assistam o canal do meu brother willian.", "small_thumbnail": "https://i.ytimg.com/vi/AtqLcgj8lhM/default.jpg", "medium_thumbnail": "https://i.ytimg.com/vi/AtqLcgj8lhM/mqdefault.jpg", "large_thumbnail": "https://i.ytimg.com/vi/AtqLcgj8lhM/hqdefault.jpg", "place": null, "approved": 1, "registration_date": "2015-07-22 11:27:36"},
+      {"id": 3, "contest_id": 1, "user_id": 3, "slug": "que-sorte-a-nossa-matheus-and-kauan-matheus-veiga-cover-matheus-veiga", "url": "https://www.youtube.com/watch?v=crNZC9eEuwQ", "embed_url": "https://www.youtube.com/embed/crNZC9eEuwQ", "video_id": "crNZC9eEuwQ", "title": "Que sorte A Nossa - Matheus & Kauan (Matheus Veiga Cover)", "description": "Falaaa galera, Essa é minha versão da música \"Que Sorte A Nossa\" da dupla Matheus & Kauan, espero que gostem!! Obrigado por todo o apoio! Bjaoo. Facebook: https://www.facebook.com/Veiga.MatheusF, Instagram: https://instagram.com/matheus__veiga/", "small_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/default.jpg", "medium_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/mqdefault.jpg", "large_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/hqdefault.jpg", "place": null, "approved": 1, "registration_date": "2015-07-22 13:36:25"}
+    ],
+    "user_vote": [
+      {"id": 1, "user_id": 9, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 2, "user_id": 8, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 3, "user_id": 7, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 4, "user_id": 6, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 5, "user_id": 5, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 6, "user_id": 4, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 7, "user_id": 3, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 8, "user_id": 1, "audition_id": 2, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 9, "user_id": 9, "audition_id": 3, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 10, "user_id": 8, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 11, "user_id": 7, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 12, "user_id": 6, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 13, "user_id": 5, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 14, "user_id": 4, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 15, "user_id": 3, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 16, "user_id": 2, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"}
+    ]
+  }
+}

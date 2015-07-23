@@ -20,6 +20,7 @@ var models          = require('../models'),
     UserComment     = models.UserComment,
     User            = models.User,
     Bookshelf       = models.Bookshelf,
+    NotFoundError   = Bookshelf.NotFoundError,
     $               = this;
 
 _.str = require('underscore.string');
@@ -144,6 +145,13 @@ exports.getContest = function(id) {
   return Contest.forge({id: id}).fetch(contestWithSponsorsAndPrizesRelated);
 };
 
+exports.loadContest = function(contest) {
+  return Contest.forge({id: contest.id}).fetch({require: true}).then(function(contestLoaded) {
+    contest.set(contestLoaded.attributes);
+    return;
+  });
+};
+
 exports.getContestFromAudition = function(audition) {
   if(audition.related('contest') && audition.related('contest').id) {
     return Promise.resolve(audition.related('contest'));
@@ -211,43 +219,48 @@ exports.listOtherRunningContests = function(contest, related) {
 };
 
 exports.finishContest = function(contest) {
-  return Bookshelf.transaction(function(transaction) {
-    if(contest.get('progress') !== 'running') {
-      throw messages.apiError('contest.notReadyToFinish', 'The contest is not ready to finish');
-    }
-    if(new Date() < contest.get('end_date')) {
-      throw messages.apiError('contest.notReadyToFinish', 'The contest is not ready to finish');
-    }
-    return listPotentialWinners(contest).then(function(potentialWinners) {
+  return new Promise(function(resolve, reject) {
+    Promise.resolve($.loadContest(contest)).bind({}).then(function() {
+      if(contest.get('progress') !== 'running') {
+        throw messages.apiError('contest.finish.isNotRunning', 'The contest is not ready to finish because is not in running progress.');
+      }
+      if(new Date() < contest.get('end_date')) {
+        throw messages.apiError('contest.finish.notReady', 'The contest is not ready to finish.');
+      }
+      return listPotentialWinners(contest);
+    }).then(function(potentialWinners) {
       if(hasDraw(potentialWinners)) {
-        contest.set('end_date', moment(contest.get('end_date')).add(constants.HOURS_TO_ADD_WHEN_CONTEST_DRAW, 'hours').toDate());
-        contest.set('draw', 1);
-        return contest.save({end_date: contest.get('end_date'), draw: contest.get('draw')}, {patch: true, transacting: transaction}).then(function(contest) {
+        var endDate = moment(contest.get('end_date')).add(constants.HOURS_TO_ADD_WHEN_CONTEST_DRAW, 'hours').toDate();
+        return contest.save({end_date: endDate, draw: 1}, {patch: true, transacting: transaction}).then(function(contest) {
           return true;
         });
       } else {
-        contest.set('progress', 'finished');
-        contest.set('draw', 0);
-        return contest.save({progress: contest.get('progress'), draw: contest.get('draw')}, {patch: true, transacting: transaction}).then(function(contest) {
-          return chooseWinners(contest, transaction).then(function(winners) {
-            return false;
+        return Bookshelf.transaction(function(transaction) {
+          return contest.save({progress: 'finished', draw: 0}, {patch: true, transacting: transaction}).then(function(contest) {
+            return chooseWinners(contest, transaction).then(function(winners) {
+              return false;
+            });
           });
         });
       }
+    }).then(function(draw) {
+      if(draw === true) {
+        mailService.contestDraw(contest).catch(function(err) {
+          logger.error('Error sending "contest draw" email.', err);
+        });
+      } else {
+        mailService.contestFinish(contest).catch(function(err) {
+          logger.error('Error sending "contest finish" email.', err);
+        });
+      }
+      resolve(contest);
+    }).catch(messages.APIError, function(err) {
+      reject(err);
+    }).catch(NotFoundError, function(err) {
+      reject(messages.apiError('contest.notFound', 'The contest does not exists.', err));
+    }).catch(function(err) {
+      reject(messages.apiError('contest.finish.error', 'Error finishing contest.', err));
     });
-  }).then(function(draw) {
-    if(draw === true) {
-      mailService.contestDraw(contest).catch(function(err) {
-        logger.error('Error sending "contest draw" email.', err);
-      });
-    } else {
-      mailService.contestFinish(contest).catch(function(err) {
-        logger.error('Error sending "contest finish" email.', err);
-      });
-    }
-    resolve();
-  }).catch(function(err) {
-    reject(err);
   });
 };
 
