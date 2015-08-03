@@ -283,6 +283,8 @@ exports.startContest = function(contest) {
               return startContestNow(contest);
             } else if(!start || now >= start) {
               return prepareContest(contest);
+            } else {
+              throw messages.apiError('contest.start.notReady', 'The contest is not ready to start.');
             }
           } else {
             throw messages.apiError('contest.start.notReady', 'The contest is not ready to start.');
