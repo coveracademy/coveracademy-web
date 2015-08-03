@@ -267,24 +267,34 @@ exports.finishContest = function(contest) {
 exports.startContest = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.get('progress') === 'waiting') {
-      $.totalAuditions(contest).then(function(totalAuditions) {
-        var start = contest.get('start_date');
-        var end = contest.get('end_date');
-        var now = new Date();
-        if(totalAuditions >= contest.get('minimum_contestants')) {
-          if(start && end && now >= start) {
-            return startContestNow(contest);
-          } else if(!start || now >= start) {
-            return prepareContest(contest);
-          }
+      var now = new Date();
+      var start = contest.get('start_date');
+      var end = contest.get('end_date');
+      if(!contest.get('minimum_contestants')) {
+        if(start && end && now >= start) {
+          resolve(startContestNow(contest));
         } else {
-          throw messages.apiError('contest.start.notReady', 'The contest is not ready to start.');
+          reject(messages.apiError('contest.start.notReady', 'The contest is not ready to start.'));
         }
-      }).then(function(contest) {
-        resolve(contest);
-      }).catch(function(err) {
-        reject(messages.unexpectedError('contest.start.error', 'Error starting the contest.', err));
-      });
+      } else {
+        $.totalAuditions(contest).then(function(totalAuditions) {
+          if(totalAuditions >= contest.get('minimum_contestants')) {
+            if(start && end && now >= start) {
+              return startContestNow(contest);
+            } else if(!start || now >= start) {
+              return prepareContest(contest);
+            }
+          } else {
+            throw messages.apiError('contest.start.notReady', 'The contest is not ready to start.');
+          }
+        }).then(function(contest) {
+          resolve(contest);
+        }).catch(messages.APIError, function(err) {
+          reject(err);
+        }).catch(function(err) {
+          reject(messages.unexpectedError('contest.start.error', 'Error starting the contest.', err));
+        });
+      }
     } else if(contest.get('progress') === 'running') {
       reject(messages.apiError('contest.start.alreadyStarted', 'The contest was already started.'));
     } else {

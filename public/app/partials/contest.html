@@ -101,10 +101,18 @@
     </a>
   </div>
 </section>
-<section id="infos" class="warning white section no-margin" ng-if="isContestProgress('waiting')">
+<section id="infos" class="warning white section no-margin" ng-if="isContestProgress('waiting') && contest.minimum_contestants">
   <div class="container">
     <h2 class="text-center no-margin">
       {{ 'we_need_more_contestants_to_begin_the_contest' | translate: {contestantsRemaining: contestantsRemaining()} }}
+    </h2>
+  </div>
+</section>
+<section id="infos" class="warning white section no-margin" ng-if="isContestProgress('waiting') && !contest.minimum_contestants">
+  <div class="container">
+    <h2 class="text-center no-margin">
+      {{ 'voting_will_begin_at' | translate }}
+      <span class="text-lowercase">{{ contest.start_date | amCalendar }}</span>.
     </h2>
   </div>
 </section>

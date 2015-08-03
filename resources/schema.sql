@@ -143,7 +143,7 @@ create table contest (
   description         text default null,
   slug                varchar(255) not null,
   image               varchar(255) not null,
-  minimum_contestants tinyint not null,
+  minimum_contestants tinyint default null,
   acceptance_date     date not null,
   start_date          timestamp null default null,
   end_date            timestamp null default null,
