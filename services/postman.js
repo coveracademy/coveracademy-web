@@ -182,7 +182,7 @@ server.post('/user/registration', function(req, res, next) {
 server.post('/user/verification', function(req, res, next) {
   userService.findById(req.body.user).bind({}).then(function(user) {
     this.user = user;
-    return renderPromise(userVerificationTemplate, {user: user.toJSON());
+    return renderPromise(userVerificationTemplate, {user: user.toJSON()});
   }).then(function(email) {
     return send(this.user.get('email'), 'Confirme o seu email para participar do Cover Academy.', email);
   }).then(function(mailResponse) {
