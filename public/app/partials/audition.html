@@ -57,7 +57,7 @@
     <adsense></adsense>
     <div ng-if="(isContestProgress('running') || isContestProgress('finished')) && isAuditionApproved()">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9 col-sm-9">
           <div class="embed-container">
             <embed-video ng-href="{{ audition.embed_url }}"></embed-video>
           </div>
@@ -232,7 +232,7 @@
           </div>
           <!-- Comments end -->
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3">
           <div class="text-center">
             <img ng-if="isWinner()" class="medal" ng-src="/img/badges/{{ getMedal(audition) }}-medal.png">
             <div class="votes-number">
