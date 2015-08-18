@@ -89,7 +89,7 @@ describe('userService', function() {
       }).then(function(user) {
         throw new Error('It should not update an user when is not the same user editing');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.noPermission');
+        assert.strictEqual(err.key, 'user.update.noPermission');
       });
     });
 
@@ -104,7 +104,7 @@ describe('userService', function() {
       }).then(function(edited) {
         throw new Error('It should not update the user when he tries to change email more then once');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.username.cannotEditAnymore');
+        assert.strictEqual(err.key, 'user.update.username.cannotEditAnymore');
       });
     });
 
@@ -116,7 +116,7 @@ describe('userService', function() {
       }).then(function(user) {
         throw new Error('It should not update an user when username is invalid');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.username.invalid');
+        assert.strictEqual(err.key, 'user.update.username.invalid');
       });
     });
 
@@ -128,7 +128,7 @@ describe('userService', function() {
       }).then(function() {
         throw new Error('It should not update an user when attribute is not elegible for update');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.update.nothingToSave');
+        assert.strictEqual(err.key, 'user.update.nothingToSave');
       });
     });
 
@@ -140,7 +140,7 @@ describe('userService', function() {
       }).then(function() {
         throw new Error('It should not update an unexistent user');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
 
@@ -152,7 +152,7 @@ describe('userService', function() {
       }).then(function() {
         throw new Error('It should not update an user with an unexistent user');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -233,7 +233,7 @@ describe('userService', function() {
         var user = models.User.forge({id: 1});
         return userService.connectNetwork(user, 'twoo', '88462312', null, 'sandro-csimas');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.connectNetwork.unsupportedNetwork');
+        assert.strictEqual(err.key, 'user.connectNetwork.unsupportedNetwork');
       });
     });
   });
@@ -304,7 +304,7 @@ describe('userService', function() {
         var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'twoo');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
+        assert.strictEqual(err.key, 'user.disconnectNetwork.unsupportedNetwork');
       });
     });
 
@@ -313,7 +313,7 @@ describe('userService', function() {
         var user = models.User.forge({id: 1});
         return userService.disconnectNetwork(user, 'facebook');
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.disconnectNetwork.unsupportedNetwork');
+        assert.strictEqual(err.key, 'user.disconnectNetwork.unsupportedNetwork');
       });
     });
   });
@@ -342,7 +342,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
         return userService.showNetwork(user, 'twitter', true);
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.showNetwork.userNotConnected');
+        assert.strictEqual(err.key, 'user.showNetwork.userNotConnected');
       });
     });
 
@@ -351,7 +351,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUser).then(function() {
         return userService.showNetwork(user, 'twoo', true);
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.showNetwork.unsupportedNetwork');
+        assert.strictEqual(err.key, 'user.showNetwork.unsupportedNetwork');
       });
     });
   });
@@ -379,7 +379,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findById(3);
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -407,7 +407,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByEmail('sandro.csimas@email.com');
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -435,7 +435,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findByUsername('sandro-csimas');
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -463,7 +463,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.findBySocialAccount('twitter', '25921450000000', true);
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -481,7 +481,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.verifyEmail('27e77df78e9459e12h31nk3j12');
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -500,7 +500,7 @@ describe('userService', function() {
         var user = models.User.forge({id: 2});
         return userService.resendVerificationEmail(user);
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
 
@@ -509,7 +509,7 @@ describe('userService', function() {
         var user = models.User.forge({id: 1});
         return userService.resendVerificationEmail(user);
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.verification.emailAlreadyVerified');
+        assert.strictEqual(err.key, 'user.verification.emailAlreadyVerified');
       });
     });
   });
@@ -527,7 +527,7 @@ describe('userService', function() {
       return datasets.load(userFixtures.oneUserConnectedToAllNetworks).then(function() {
         return userService.disableEmails('27e77df78e9459e12h31nk3j12');
       }).catch(messages.NotFoundError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.notFound');
+        assert.strictEqual(err.key, 'user.notFound');
       });
     });
   });
@@ -583,7 +583,7 @@ describe('userService', function() {
         var fan = models.User.forge({id: 1});
         return userService.fan(fan, user);
       }).catch(messages.APIError, function(err) {
-        assert.strictEqual(err.errorKey, 'user.fan.canNotFanYourself');
+        assert.strictEqual(err.key, 'user.fan.canNotFanYourself');
       });
     });
   });

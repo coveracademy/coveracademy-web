@@ -281,7 +281,7 @@ angular
   };
   this.translateError = function(err, vars) {
     var isError = Boolean(angular.isObject(err) && err.data && err.status);
-    var translationKey = errorKeys[isError ? err.data.errorKey : err];
+    var translationKey = errorKeys[isError ? err.data.key : err];
     if(!translationKey) {
       if(isError) {
         translationKey = errorKeys['status.' + err.status];
