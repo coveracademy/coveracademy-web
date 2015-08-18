@@ -89,7 +89,7 @@ exports.update = function(user, edited) {
       return edited.save(null, {scenario: 'edition'});
     }).then(function(userEdited) {
       if(userEdited.get('verified') === 0) {
-        mailService.userVerification(user, false).catch(function(err) {
+        mailService.userVerification(user).catch(function(err) {
           logger.error('Error sending "user verification" email to user %d.', userEdited.id, err);
         });
       }
@@ -252,7 +252,7 @@ exports.resendVerificationEmail = function(user) {
       if(user.get('verified') === 1) {
         throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
       }
-      return mailService.userVerification(user, false);
+      return mailService.userVerification(user);
     }).then(function() {
       resolve();
     }).catch(messages.APIError, function(err) {

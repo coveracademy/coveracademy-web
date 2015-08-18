@@ -48,9 +48,9 @@ exports.userRegistration = function(user) {
   });
 };
 
-exports.userVerification = function(user, registration) {
+exports.userVerification = function(user) {
   return new Promise(function(resolve, reject) {
-    mailClient.post('/user/verification', {user: user.id, registration: registration}, function(err, req, res, obj) {
+    mailClient.post('/user/verification', {user: user.id}, function(err, req, res, obj) {
       if(err) {
         reject(err);
       } else {
