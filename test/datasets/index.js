@@ -24,6 +24,12 @@ exports.clean = function() {
   });
 };
 
+var addLoadWrapper = function(fixture, wrappers) {
+  for(var key in fixture) {
+    wrappers.push(new PromiseWrapper(knex(key).insert(fixture[key])));
+  }
+}
+
 exports.load = function(fixtures) {
   return new Promise(function(resolve, reject) {
     if(settings.database.host !== 'localhost') {
@@ -33,14 +39,10 @@ exports.load = function(fixtures) {
     var wrappers = [];
     if(_.isArray(fixtures)) {
       fixtures.forEach(function(fixture) {
-        for(var key in fixture) {
-          wrappers.push(new PromiseWrapper(knex(key).insert(fixture[key])));
-        }
+        addLoadWrapper(fixture, wrappers);
       });
     } else {
-      for(var key in fixtures) {
-        wrappers.push(new PromiseWrapper(knex(key).insert(fixtures[key])));
-      }
+      addLoadWrapper(fixtures, wrappers);
     }
     Promise.resolve(wrappers).each(function(wrapper) {
       return wrapper.value();

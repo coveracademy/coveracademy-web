@@ -4,13 +4,7 @@
   <h3>%recipient.name%, prepare-se!</h3>
   <div style="color: #555; font-size: 16px;">
     <p>
-      Em breve mais uma competição online de música do Cover Academy vai começar.
-    </p>
-    <p>
-      Se você está competindo, prepare-se para ser visto pelo Brasil inteiro. Conquiste votos da comunidade com o seu talento e aproveite para divulgar ainda mais o seu trabalho.
-    </p>
-    <p>
-      Se você não está competindo, continue apoiando os competidores com o seu voto. Acredite, o seu voto é muito importante. Ahhhhhhh, lembre-se que você pode votar em até 5 competidores!
+      Falta muito pouco para iniciar a competição. Prepare-se para ser visto pelo Brasil inteiro e conquistar votos da comunidade Cover Academy com o seu talento. Aproveite para divulgar ainda mais o seu trabalho e trocar experiência com os demais competidores.
     </p>
     <p style="text-align: center; font-weight: bold;">
       <a href="{{ contest | contestLink }}" target="_blank" style="text-decoration: none;">
@@ -18,7 +12,7 @@
       </a>
     </p>
     <p>
-      Confira os prêmios da competição:
+      Confira novamente os prêmios da competição:
     </p>
     {% for prize in contest.prizes %}
       <div>

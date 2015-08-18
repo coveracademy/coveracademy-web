@@ -1,22 +1,21 @@
 'use strict';
 
-var settings    = require('../../configs/settings'),
-    util        = require('util'),
-    Filteration = require('bookshelf-filteration');
+var settings        = require('../../configs/settings'),
+    util            = require('util'),
+    ValidationError = require('bookshelf-filteration').ValidationError;
 
-function APIError(statusCode, errorKey, errorMessage, cause) {
+function APIError(status, key, message, cause) {
   if (APIError.super_.captureStackTrace) {
     APIError.super_.captureStackTrace(this, this.constructor);
   }
   this.name = this.constructor.name;
-  this.statusCode = statusCode;
-  this.errorKey = errorKey;
-  this.errorMessage = errorMessage;
+  this.status = status;
+  this.key = key;
+  this.message = message;
   this.cause = cause;
-  this.message = '[statusCode: ' + statusCode + ', errorKey: ' + errorKey + ', errorMessage: "' + errorMessage + '", cause: ' + cause + ']';
 
   this.json = function() {
-    var json = {statusCode: this.statusCode, errorKey: this.errorKey, errorMessage: this.errorMessage};
+    var json = {status: this.status, key: this.key, message: this.message};
     if(settings.debug === true) {
       json.cause = cause;
     }
@@ -28,14 +27,14 @@ function APIError(statusCode, errorKey, errorMessage, cause) {
 }
 util.inherits(APIError, Error);
 
-function NotFoundError(errorKey, errorMessage, cause) {
-  NotFoundError.super_.call(this, 404, errorKey, errorMessage, cause);
+function NotFoundError(key, message, cause) {
+  NotFoundError.super_.call(this, 404, key, message, cause);
 }
 util.inherits(NotFoundError, APIError);
 
 function getErrorKey(err) {
   if(err instanceof APIError) {
-    return err.errorKey;
+    return err.key;
   } else {
     return 'unexpectedError';
   }
@@ -49,20 +48,20 @@ function isDupEntryError(err) {
   return err.code === 'ER_DUP_ENTRY';
 }
 
-function apiError(errorKey, errorMessage, cause) {
-  return new APIError(400, errorKey, errorMessage, cause);
+function apiError(key, message, cause) {
+  return new APIError(400, key, message, cause);
 }
 
-function unexpectedError(errorKey, errorMessage, cause) {
-  return new APIError(500, errorKey, errorMessage, cause);
+function unexpectedError(key, message, cause) {
+  return new APIError(500, key, message, cause);
 }
 
-function notFoundError(errorKey, errorMessage, cause) {
-  return new NotFoundError(errorKey, errorMessage, cause);
+function notFoundError(key, message, cause) {
+  return new NotFoundError(key, message, cause);
 }
 
 function validationError(prefix, err) {
-  if(err instanceof Filteration.ValidationError) {
+  if(err instanceof ValidationError) {
     var error = null;
     var firstError = err.errors[0];
     if(firstError.type === 'scenario.notfound' || firstError.type === 'nothingToSave') {
@@ -78,10 +77,10 @@ function validationError(prefix, err) {
 
 function respondWithError(err, res) {
   if(err instanceof APIError) {
-    res.json(err.statusCode, err.json());
+    res.json(err.status, err.json());
   } else {
     var internal = unexpectedError('unexpected_error', err.message, err);
-    res.json(internal.statusCode, internal.json());
+    res.json(internal.status, internal.json());
   }
 }
 
