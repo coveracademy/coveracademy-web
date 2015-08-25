@@ -64,7 +64,7 @@ module.exports = function(router, app) {
 
   router.get('/latest', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.latestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
+    coverService.latestCovers(constants.WEEK_DAYS, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);
@@ -74,7 +74,7 @@ module.exports = function(router, app) {
 
   router.get('/best', function(req, res, next) {
     var page = req.param('page') || constants.FIRST_PAGE;
-    coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
+    coverService.bestCovers(constants.WEEK_DAYS, page, constants.NUMBER_OF_COVERS_IN_PAGE).then(function(covers) {
       res.json(covers);
     }).catch(function(err) {
       logger.error(err);

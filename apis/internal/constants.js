@@ -4,7 +4,7 @@ module.exports = {
   TIME_TO_FINISH_THE_CONTEST: 21,
   TIMES_TO_START_THE_CONTEST: [9, 10, 20, 21],
   HOURS_TO_ADD_WHEN_CONTEST_DRAW: 1,
-  WEEK_PERIOD: 7,
+  WEEK_DAYS: 7,
   FIRST_PAGE: 1,
   NUMBER_OF_FANS_IN_PAGE: 30,
   NUMBER_OF_CONTESTS_IN_PAGE: 5,
@@ -22,15 +22,17 @@ module.exports = {
   POWER_VOTING_INCREMENT_FOR_THE_BRONZE_MEDAL_VOTER: 0.025,
   MINIMUM_VOTES: 2,
   MAXIMUM_VOTES: 5,
-  incentiveVote: {
+  incentiveVoteEmail: {
     firstEmail: {
       DAYS_BEFORE_THE_END: 7,
     },
     secondEmail: {
       DAYS_BEFORE_THE_END: 3,
     },
-    HOUR_TO_SEND_EMAIL: 14,
-    MINUTE_TO_SEND_EMAIL: 0,
-    SECOND_TO_SEND_EMAIL: 0
+    HOUR_TO_SEND: 14
+  },
+  invalidVoteEmail: {
+    WEEK_DAY: 5,
+    HOUR_TO_SEND: 16
   }
 }

@@ -57,6 +57,8 @@ var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
 var contestDrawToContestantTemplate = env.getTemplate('contest_draw_contestant.tpl');
 var contestIncentiveVoteTemplate = env.getTemplate('contest_incentive_vote.tpl');
 var contestIncentiveVoteToContestantTemplate = env.getTemplate('contest_incentive_vote_contestant.tpl');
+var contestInvalidVoteTemplate = env.getTemplate('contest_invalid_vote.tpl');
+var contestInvalidVoteToContestantTemplate = env.getTemplate('contest_invalid_vote_contestant.tpl');
 var contestJoinContestantFansTemplate = env.getTemplate('contest_join_contestant_fans.tpl');
 var contestJoinFansTemplate = env.getTemplate('contest_join_fans.tpl');
 var contestFinishTemplate = env.getTemplate('contest_finish.tpl');
@@ -367,6 +369,36 @@ server.post('/contest/incentiveVote', function(req, res, next) {
   });
 });
 
+server.post('/contest/invalidVote', function(req, res, next) {
+  contestService.getContest(req.body.contest).then(function(contest) {
+    return Promise.all([contest, contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
+  }).spread(function(contest, auditions, nonContestants) {
+    var remainingTime = moment.duration({days: req.body.daysBeforeTheEnd}).humanize();
+    auditions.forEach(function(audition) {
+      var user = audition.related('user');
+      Promise.all([user, renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime})]).spread(function(contestant, email) {
+        return send(contestant.get('email'), remainingTime + ' para terminar a competição, é hora de ganhar mais votos!', email).catch(function(err) {
+          logger.error('Error sending "contest incentive vote" email to contestant %d.', contestant.id, err);
+        });
+      }).catch(function(err) {
+        logger.error('Error rendering template', err);
+      });
+    });
+
+    if(!nonContestants.isEmpty()) {
+      renderPromise(contestIncentiveVoteTemplate, {contest: contest.toJSON(), remainingTime: remainingTime, permitDisableEmails: true}).then(function(email) {
+        return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
+      }).catch(function(err) {
+        logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
+      });
+    }
+
+    res.send(200);
+  }).catch(function(err) {
+    logger.error('Error sending "contest incentive vote" emails.', err);
+    res.send(500);
+  });
+});
 
 server.post('/contest/draw', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {

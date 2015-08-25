@@ -229,19 +229,31 @@ exports.contestJoinFans = function(contest) {
   });
 };
 
+exports.contestInvalidVote = function(contest) {
+  return new Promise(function(resolve, reject) {
+    mailClient.post('/contest/invalidVote', {contest: contest.id}, function(err, req, res, obj) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(obj);
+      }
+    });
+  });
+};
+
 exports.scheduleIncentiveVote = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.get('progress') === 'running') {
-      var daysBeforeTheEnd = [constants.incentiveVote.firstEmail.DAYS_BEFORE_THE_END, constants.incentiveVote.secondEmail.DAYS_BEFORE_THE_END]
+      var daysBeforeTheEnd = [constants.incentiveVoteEmail.firstEmail.DAYS_BEFORE_THE_END, constants.incentiveVoteEmail.secondEmail.DAYS_BEFORE_THE_END]
       var promises = [];
       daysBeforeTheEnd.forEach(function(daysBefore) {
         var parameters = {contest: contest.id, daysBeforeTheEnd: daysBefore};
         var now = moment();
         var end = moment(contest.get('end_date'));
         var date = moment(end).subtract(daysBefore, 'days');
-        date.hour(constants.incentiveVote.HOUR_TO_SEND_EMAIL);
-        date.minute(constants.incentiveVote.MINUTE_TO_SEND_EMAIL);
-        date.second(constants.incentiveVote.SECOND_TO_SEND_EMAIL);
+        date.hour(constants.incentiveVoteEmail.HOUR_TO_SEND);
+        date.minute(0);
+        date.second(0);
         date.millisecond(0);
         var scheduledEmail = ScheduledEmail.forge({
           schedule_date: date.toDate(),
@@ -269,6 +281,49 @@ exports.scheduleContestJoinFans = function(contest) {
         status: 'none'
       });
       resolve(scheduledEmail.save());
+    } else {
+      resolve();
+    }
+  });
+};
+
+exports.scheduleInvalidVote = function(contest) {
+  return new Promise(function(resolve, reject) {
+    if(contest.get('progress') === 'running') {
+      var day = constants.invalidVoteEmail.WEEK_DAY;
+      var current = moment()
+        .day(constants.invalidVoteEmail.WEEK_DAY)
+        .hour(constants.invalidVoteEmail.HOUR_TO_SEND)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      var end = moment(contest.get('end_date'));
+      var dates = []; 
+      while(current.isBefore(end, 'day')) {     
+        dates.push(current.clone())
+        day = day + constants.WEEK_DAYS;
+        current.day(day);
+      }
+      end.subtract(1, 'day')
+        .hour(constants.invalidVoteEmail.HOUR_TO_SEND)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      if(dates.length == 0 || dates[0].isBefore(end, 'day')) {
+        dates.push(end.clone())
+      }
+      var parameters = {contest: contest.id};
+      var promises = [];
+      dates.forEach(function(date) {
+        var scheduledEmail = ScheduledEmail.forge({
+          schedule_date: date.toDate(),
+          parameters: JSON.stringify(parameters),
+          type: 'InvalidVote',
+          status: 'none'
+        });
+        promises.push(scheduledEmail.save());
+      });
+      resolve(Promise.all(promises));
     } else {
       resolve();
     }
@@ -304,6 +359,9 @@ exports.sendScheduledEmail = function(scheduledEmail) {
         break;
       case 'JoinContest':
         promise = $.contestJoinFans({id: parameters.contest});
+        break;
+      case 'InvalidVote':
+        promise = $.contestInvalidVote({id: parameters.contest});
         break;
     }
     if(promise) {

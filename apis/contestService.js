@@ -99,10 +99,13 @@ var startContestNow = function(contest) {
         logger.error('Error sending "contest start" email.', err);
       });
       mailService.scheduleIncentiveVote(contest).catch(function(err) {
-        logger.error('Error scheduling "contest incentive vote" emails.', err);
+        logger.error('Error scheduling "incentive vote" emails.', err);
       });
       mailService.scheduleContestJoinFans(contest).catch(function(err) {
-        logger.error('Error scheduling "contest join fans" emails.', err);
+        logger.error('Error scheduling "join fans" emails.', err);
+      });
+      mailService.scheduleInvalidVote(contest).catch(function(err) {
+        logger.error('Error scheduling "invalid votes" emails.', err);
       });
       resolve(contest);
     }).catch(function(err) {

@@ -110,8 +110,8 @@ module.exports = function(router, app) {
   router.get('/covers', function(req, res, next) {
     Promise.props({
       topCover: coverService.topCover(),
-      bestCovers: coverService.bestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
-      latestCovers: coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      bestCovers: coverService.bestCovers(constants.WEEK_DAYS, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
+      latestCovers: coverService.latestCovers(constants.WEEK_DAYS, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_SUMMARIZED_LIST),
       musicGenres: coverService.musicGenres()
     }).bind({}).then(function(result) {
       this.result = result;
@@ -132,10 +132,10 @@ module.exports = function(router, app) {
     if(!validRankType(rank)) {
       messages.respondWithNotFound(res);
     } else {
-      var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_PERIOD, page, constants.NUMBER_OF_COVERS_IN_PAGE) : coverService.latestCovers(constants.WEEK_PERIOD, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE);
+      var coversPromise = rank === 'best' ? coverService.bestCovers(constants.WEEK_DAYS, page, constants.NUMBER_OF_COVERS_IN_PAGE) : coverService.latestCovers(constants.WEEK_DAYS, constants.FIRST_PAGE, constants.NUMBER_OF_COVERS_IN_PAGE);
       Promise.props({
         coversRank: coversPromise,
-        totalCoversRank: coverService.totalCovers(constants.WEEK_PERIOD)
+        totalCoversRank: coverService.totalCovers(constants.WEEK_DAYS)
       }).bind({}).then(function(result) {
         this.result = result;
         return coverService.artistsOfCovers(result.coversRank);
