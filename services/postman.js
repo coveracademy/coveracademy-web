@@ -113,6 +113,21 @@ var send = function(to, subject, text) {
   });
 };
 
+var addToRecipientVariables = function(recipientVariables, variables) {
+  if(variables) {
+    if(_.isArray(variables)) {
+      variables.forEach(function(variable) {
+        recipientVariables[variable] = user.get(variable);
+      });
+    } else {
+      var userVariables = variables[user.id];
+      if(userVariables) {
+        _.assign(recipientVariables, userVariables);
+      }
+    }
+  }
+};
+
 var batchSend = function(users, subject, text, variables) {
   return new Promise(function(resolve, reject) {
     var promises = [];
@@ -125,12 +140,8 @@ var batchSend = function(users, subject, text, variables) {
         if(email && user.get('emails_enabled') === 1) {
           emails.push(email);
           recipientVariables[email] = {};
-          if(variables) {
-            variables.forEach(function(variable) {
-              recipientVariables[email][variable] = user.get(variable);
-            });
-            recipientVariables[email]['encryptedEmail'] = encrypt.encrypt(email);
-          }
+          recipientVariables[email].encryptedEmail = encrypt.encrypt(email);
+          addToRecipientVariables(recipientVariables[email], variables)
         }
       });
       promises.push(new Promise(function(resolve, reject) {
@@ -371,31 +382,47 @@ server.post('/contest/incentiveVote', function(req, res, next) {
 
 server.post('/contest/invalidVote', function(req, res, next) {
   contestService.getContest(req.body.contest).then(function(contest) {
-    return Promise.all([contest, contestService.latestAuditions(contest), contestService.listNonContestants(contest)]);
-  }).spread(function(contest, auditions, nonContestants) {
-    var remainingTime = moment.duration({days: req.body.daysBeforeTheEnd}).humanize();
-    auditions.forEach(function(audition) {
-      var user = audition.related('user');
-      Promise.all([user, renderPromise(contestIncentiveVoteToContestantTemplate, {user: user.toJSON(), contest: contest.toJSON(), audition: audition.toJSON(), remainingTime: remainingTime})]).spread(function(contestant, email) {
-        return send(contestant.get('email'), remainingTime + ' para terminar a competição, é hora de ganhar mais votos!', email).catch(function(err) {
-          logger.error('Error sending "contest incentive vote" email to contestant %d.', contestant.id, err);
-        });
-      }).catch(function(err) {
-        logger.error('Error rendering template', err);
-      });
+    return Promise.all([contest, contestService.listInvalidVotes(contest)]);
+  }).spread(function(contest, invalidVotes) {
+    var usersWithInvalidVotesVariables = {};
+    var usersWithInvalidVotes = [];
+    var contestantsWithInvalidVotesVariables = {};
+    var contestantsWithInvalidVotes = [];
+    invalidVotes.forEach(function(invalidVote) {
+      var audition = invalidVote.related('audition');
+      var contestant = audition.related('user');
+      var user = invalidVote.related('user');
+      usersWithInvalidVotesVariables[user.id] = {};
+      usersWithInvalidVotesVariables[user.id].name = user.get('name');
+      usersWithInvalidVotesVariables[user.id].contestant = contestant.get('name');
+      usersWithInvalidVotesVariables[user.id].audition = audition.toJSON();
+      usersWithInvalidVotes.push(user);
+
+      if(!contestantsWithInvalidVotesVariables[contestant.id]) {
+        contestantsWithInvalidVotesVariables[contestant.id] = {};
+        contestantsWithInvalidVotesVariables[contestant.id].name = contestant.get('name');
+        contestantsWithInvalidVotesVariables[contestant.id].audition = audition.toJSON();
+        contestantsWithInvalidVotesVariables[contestant.id].totalUsers = 1;
+        contestantsWithInvalidVotes.push(contestant);
+      } else {
+        contestantsWithInvalidVotesVariables[contestant.id].totalUsers = contestantsWithInvalidVotesVariables[contestant.id].totalUsers + 1;
+      }
+    });
+    renderPromise(contestInvalidVoteTemplate, {contest: contest.toJSON()}).then(function(email) {
+      return batchSend(usersWithInvalidVotes, 'Seu voto em %recipient.contestant% ainda não é válido!!!', email, usersWithInvalidVotesVariables);
+    }).catch(function(err) {
+      logger.error('Error sending "contest invalid vote" email to users with invalid votes.', err);
     });
 
-    if(!nonContestants.isEmpty()) {
-      renderPromise(contestIncentiveVoteTemplate, {contest: contest.toJSON(), remainingTime: remainingTime, permitDisableEmails: true}).then(function(email) {
-        return batchSend(nonContestants, remainingTime + ' para terminar a competição, apoie os competidores com o seu voto!', email, ['name']);
-      }).catch(function(err) {
-        logger.error('Error sending "contest incentive vote" email to non contestant users.', err);
-      });
-    }
+    renderPromise(contestInvalidVoteToContestantTemplate, {contest: contest.toJSON()}).then(function(email) {
+      return batchSend(contestantsWithInvalidVotes, 'Você possui %recipient.totalUsers% votos inválidos!!!', email, contestantsWithInvalidVotesVariables);
+    }).catch(function(err) {
+      logger.error('Error sending "contest invalid vote" email to contestants with invalid votes.', err);
+    });
 
     res.send(200);
   }).catch(function(err) {
-    logger.error('Error sending "contest incentive vote" emails.', err);
+    logger.error('Error sending "contest invalid vote" emails.', err);
     res.send(500);
   });
 });

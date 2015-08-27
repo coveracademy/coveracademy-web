@@ -35,6 +35,7 @@ var userCommentWithAuditionAndRepliesRelated = {withRelated: ['user', 'audition'
 var userVoteWithUserRelated = {withRelated: ['user']};
 var userVoteWithAuditionAndContestRelated = {withRelated: ['audition', 'audition.contest']};
 var userVoteWithAuditionUserRelated = {withRelated: ['audition', 'audition.user']};
+var userVoteWithRelated = {withRelated: ['user', 'audition', 'audition.user']};
 
 var listPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
@@ -1004,4 +1005,12 @@ exports.latestContestants = function(page, pageSize) {
       qb.limit(pageSize);
     }
   }).fetch();
+};
+
+exports.listInvalidVotes = function(contest) {
+  return UserVote.collection().query(function(qb) {
+    qb.join('audition', 'user_vote.audition_id', 'audition.id');
+    qb.where('audition.contest_id', contest.id);
+    qb.where('user_vote.valid', 0);
+  }).fetch(userVoteWithRelated);
 };
