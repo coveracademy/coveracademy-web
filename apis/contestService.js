@@ -516,8 +516,10 @@ var listAuditions = function(rankType, contest, page, pageSize) {
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {
-      qb.leftJoin('user_vote', 'audition.id', '=', 'user_vote.audition_id');
-      qb.where('user_vote.valid', 1);
+      qb.leftJoin('user_vote', function() {
+        this.on('audition.id', 'user_vote.audition_id');
+        this.andOn('user_vote.valid', 1);
+      });
       qb.groupBy('audition.id');
       qb.orderBy(Bookshelf.knex.raw('sum(user_vote.voting_power)'), 'desc');
     }
