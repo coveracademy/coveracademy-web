@@ -114,7 +114,7 @@ var send = function(to, subject, text) {
   });
 };
 
-var addToRecipientVariables = function(recipientVariables, variables) {
+var addToRecipientVariables = function(user, recipientVariables, variables) {
   if(variables) {
     if(_.isArray(variables)) {
       variables.forEach(function(variable) {
@@ -142,7 +142,7 @@ var batchSend = function(users, subject, text, variables) {
           emails.push(email);
           recipientVariables[email] = {};
           recipientVariables[email].encryptedEmail = encrypt.encrypt(email);
-          addToRecipientVariables(recipientVariables[email], variables)
+          addToRecipientVariables(user, recipientVariables[email], variables);
         }
       });
       promises.push(new Promise(function(resolve, reject) {
