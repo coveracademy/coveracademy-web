@@ -14,6 +14,7 @@ var settings       = require('../configs/settings'),
     moment         = require('moment'),
     Promise        = require('bluebird'),
     Mailgun        = require('mailgun-js'),
+    _              = require('lodash'),
     contact        = settings.postman.contact,
     domain         = settings.domain,
     mailgun        = new Mailgun({apiKey: settings.postman.apiKey, domain: domain});

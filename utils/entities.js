@@ -21,7 +21,7 @@ exports.isModel = function(obj) {
 
 exports.requestTransaction = function(transaction, callback) {
   if(transaction) {
-    return callback(transaction);
+    return Promise.resolve(callback(transaction));
   } else {
     return Bookshelf.transaction(callback);
   }
