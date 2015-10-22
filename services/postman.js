@@ -396,13 +396,13 @@ server.post('/contest/invalidVote', function(req, res, next) {
       usersWithInvalidVotesVariables[user.id] = {};
       usersWithInvalidVotesVariables[user.id].name = user.get('name');
       usersWithInvalidVotesVariables[user.id].contestant = contestant.get('name');
-      usersWithInvalidVotesVariables[user.id].audition = audition.toJSON();
       usersWithInvalidVotes.push(user);
 
       if(!contestantsWithInvalidVotesVariables[contestant.id]) {
         contestantsWithInvalidVotesVariables[contestant.id] = {};
         contestantsWithInvalidVotesVariables[contestant.id].name = contestant.get('name');
-        contestantsWithInvalidVotesVariables[contestant.id].audition = audition.toJSON();
+        contestantsWithInvalidVotesVariables[contestant.id].auditionTitle = audition.get('title');
+        contestantsWithInvalidVotesVariables[contestant.id].auditionUrl = env.getFilter('auditionLink')(audition.toJSON());
         contestantsWithInvalidVotesVariables[contestant.id].totalUsers = 1;
         contestantsWithInvalidVotes.push(contestant);
       } else {
@@ -416,7 +416,7 @@ server.post('/contest/invalidVote', function(req, res, next) {
     });
 
     renderPromise(contestInvalidVoteToContestantTemplate, {contest: contest.toJSON()}).then(function(email) {
-      return batchSend(contestantsWithInvalidVotes, 'Você possui %recipient.totalUsers% votos inválidos!!!', email, contestantsWithInvalidVotesVariables);
+      return batchSend(contestantsWithInvalidVotes, 'Você possui %recipient.totalUsers% votos inválidos na competição!!!', email, contestantsWithInvalidVotesVariables);
     }).catch(function(err) {
       logger.error('Error sending "contest invalid vote" email to contestants with invalid votes.', err);
     });
