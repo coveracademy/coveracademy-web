@@ -189,6 +189,7 @@ create table user_vote (
   id                int not null auto_increment,
   user_id           int not null,
   audition_id       int not null,
+  valid             tinyint default 0,
   voting_power      decimal(6, 3) default 1.000,
   registration_date timestamp not null default current_timestamp,
   primary key (id),

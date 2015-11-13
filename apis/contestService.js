@@ -39,8 +39,8 @@ var userVoteWithRelated = {withRelated: ['user', 'audition', 'audition.user']};
 
 var listPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
-    var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');
-    var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).groupBy('audition_id');
+    var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).where('user_vote.valid', 1).groupBy('audition.id');
+    var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).where('user_vote.valid', 1).groupBy('audition_id');
     var topScores = Bookshelf.knex.distinct('score').from(scores.as('scores')).orderBy('score', 'desc').limit(3);
     var winners = Bookshelf.knex.select('*').from(auditionWithScore.as('audition_with_score')).join(topScores.as('top_scores'), 'audition_with_score.score', 'top_scores.score').orderBy('audition_with_score.score', 'desc');
 
@@ -513,7 +513,10 @@ var listAuditions = function(rankType, contest, page, pageSize) {
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {
-      qb.leftJoin('user_vote', 'audition.id', '=', 'user_vote.audition_id');
+      qb.leftJoin('user_vote', function() {
+        this.on('audition.id', 'user_vote.audition_id');
+        this.andOn('user_vote.valid', 1);
+      });
       qb.groupBy('audition.id');
       qb.orderBy(Bookshelf.knex.raw('sum(user_vote.voting_power)'), 'desc');
     }
@@ -604,6 +607,7 @@ exports.totalScoreByAudition = function(auditions) {
       Bookshelf.knex('user_vote')
       .select(Bookshelf.knex.raw('audition_id, sum(voting_power) as score'))
       .whereIn('audition_id', entities.getIds(auditions))
+      .where('valid', 1)
       .groupBy('audition_id')
       .then(function(scoreCounts) {
         var scoreByAudition = {};
@@ -627,6 +631,7 @@ exports.totalVotesByAudition = function(auditions) {
       .select('audition_id')
       .count('id as votes')
       .whereIn('audition_id', entities.getIds(auditions))
+      .where('valid', 1)
       .groupBy('audition_id')
       .then(function(votesCounts) {
         var votesByAudition = {};
@@ -749,7 +754,7 @@ exports.vote = function(user, audition) {
       if(audition.get('approved') === 0) {
         throw messages.apiError('audition.vote.auditionNotApproved', 'The user can not vote in audition not approved');
       }
-      var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, voting_power: user.get('voting_power')});
+      var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, valid: 1, voting_power: user.get('voting_power')});
       return userVote.save();
     }).then(function(userVote) {
       resolve(userVote);
