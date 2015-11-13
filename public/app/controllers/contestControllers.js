@@ -335,9 +335,6 @@ angular
   $scope.hasRemainingVotes = function() {
     return $scope.remainingVotes() > 0;
   };
-  $scope.validVote = function() {
-    return $scope.totalUserVotes !== 1;
-  };
   $scope.remainingVotes = function() {
     return constants.MAXIMUM_VOTES - $scope.totalUserVotes;
   };
@@ -401,7 +398,7 @@ angular
     return $scope.runningContests.length > 0;
   };
 }])
-.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', 'userService', function($scope, $state, $stateParams, $translate, constants, authEvents, backendResponse, seoService, authenticationService, alertService, translationService, contestService, userService) {
+.controller('joinContestController', ['$scope', '$state', '$stateParams', '$translate', 'constants', 'authEvents', 'moment', 'backendResponse', 'seoService', 'authenticationService', 'alertService', 'translationService', 'contestService', 'userService', function($scope, $state, $stateParams, $translate, constants, authEvents, moment, backendResponse, seoService, authenticationService, alertService, translationService, contestService, userService) {
   $scope.siteUrl = constants.SITE_URL;
   $scope.contest = backendResponse.data.contest;
   $scope.audition = {contest_id: $scope.contest.id};
@@ -475,7 +472,7 @@ angular
         alertService.alert('info', translation)
       });
     }).catch(function(err) {
-      translationService.translateError(err, {user: $scope.userAuthenticated()}).then(function(translation) {
+      translationService.translateError(err, {user: $scope.userAuthenticated(), acceptanceDate: moment($scope.contest.acceptance_date).format('LL')}).then(function(translation) {
         alertService.alert('danger', translation);
       });
     });
@@ -523,9 +520,6 @@ angular
     templateUrl: '/app/partials/widgets/incentive_vote_modal.html',
     size: 'lg',
     resolve: {
-      validVote: function() {
-        return $scope.validVote();
-      },
       remainingVotes: function() {
         return $scope.remainingVotes();
       },
@@ -538,8 +532,7 @@ angular
         return $scope.locale();
       }
     },
-    controller: function($scope, $modalInstance, validVote, remainingVotes, randomAuditions, locale) {
-      $scope.validVote = validVote;
+    controller: function($scope, $modalInstance, remainingVotes, randomAuditions, locale) {
       $scope.remainingVotes = remainingVotes;
       $scope.randomAuditions = randomAuditions;
       $scope.locale = locale;
@@ -569,9 +562,6 @@ angular
         alertService.alert('danger', translation);
       });
     });
-  };
-  $scope.validVote = function() {
-    return $scope.totalUserVotes !== 1;
   };
   $scope.remainingVotes = function() {
     return constants.MAXIMUM_VOTES - $scope.totalUserVotes;

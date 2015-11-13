@@ -18,7 +18,7 @@ describe('contestService', function() {
   });
 
   describe.only('#finishContest', function() {
-    it('should finish the contest and select the winners according to valid votes', function() {
+    it('should finish the contest and select the winners', function() {
       return datasets.load([contestFixtures.severalUsers, contestFixtures.finishContestState]).then(function() {
         var contest = models.Contest.forge({id: 1});
         return contestService.finishContest(contest);

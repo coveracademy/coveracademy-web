@@ -2,18 +2,13 @@
   <button ng-click="close()" type="button" class="close" aria-hidden="true">
     &times;
   </button>
-  <h2 ng-if="validVote" class="no-margin">{{ 'incentive_vote_modal_header' | translate }}</h2>
-  <h2 ng-if="!validVote" class="no-margin">{{ 'your_vote_is_not_valid_yet' | translate }}</h2>
-</div>
+  <h2 class="no-margin">
+    {{ 'incentive_vote_modal_header' | translate }}
+  </h2>
 <div id="incentive-vote" class="modal-body">
   <div id="incentive">
     <div class="row">
-      <div ng-if="!validVote" class="col-md-12">
-        <div class="alert alert-warning margin-top">
-          <h3 class="no-margin">{{ 'you_must_vote_in_at_least_two_contestants' | translate }}</h3>
-        </div>
-      </div>
-      <div ng-if="validVote" class="col-md-12">
+      <div class="col-md-12">
         <div class="alert alert-success margin-top">
           <h4 class="no-margin">
             {{ 'incentive_vote_modal_description' | translate: {remainingVotes: remainingVotes} }}

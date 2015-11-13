@@ -58,8 +58,6 @@ var contestDrawTemplate = env.getTemplate('contest_draw.tpl');
 var contestDrawToContestantTemplate = env.getTemplate('contest_draw_contestant.tpl');
 var contestIncentiveVoteTemplate = env.getTemplate('contest_incentive_vote.tpl');
 var contestIncentiveVoteToContestantTemplate = env.getTemplate('contest_incentive_vote_contestant.tpl');
-var contestInvalidVoteTemplate = env.getTemplate('contest_invalid_vote.tpl');
-var contestInvalidVoteToContestantTemplate = env.getTemplate('contest_invalid_vote_contestant.tpl');
 var contestJoinContestantFansTemplate = env.getTemplate('contest_join_contestant_fans.tpl');
 var contestJoinFansTemplate = env.getTemplate('contest_join_fans.tpl');
 var contestFinishTemplate = env.getTemplate('contest_finish.tpl');
@@ -377,53 +375,6 @@ server.post('/contest/incentiveVote', function(req, res, next) {
     res.send(200);
   }).catch(function(err) {
     logger.error('Error sending "contest incentive vote" emails.', err);
-    res.send(500);
-  });
-});
-
-server.post('/contest/invalidVote', function(req, res, next) {
-  contestService.getContest(req.body.contest).then(function(contest) {
-    return Promise.all([contest, contestService.listInvalidVotes(contest)]);
-  }).spread(function(contest, invalidVotes) {
-    var usersWithInvalidVotesVariables = {};
-    var usersWithInvalidVotes = [];
-    var contestantsWithInvalidVotesVariables = {};
-    var contestantsWithInvalidVotes = [];
-    invalidVotes.forEach(function(invalidVote) {
-      var audition = invalidVote.related('audition');
-      var contestant = audition.related('user');
-      var user = invalidVote.related('user');
-      usersWithInvalidVotesVariables[user.id] = {};
-      usersWithInvalidVotesVariables[user.id].name = user.get('name');
-      usersWithInvalidVotesVariables[user.id].contestant = contestant.get('name');
-      usersWithInvalidVotes.push(user);
-
-      if(!contestantsWithInvalidVotesVariables[contestant.id]) {
-        contestantsWithInvalidVotesVariables[contestant.id] = {};
-        contestantsWithInvalidVotesVariables[contestant.id].name = contestant.get('name');
-        contestantsWithInvalidVotesVariables[contestant.id].auditionTitle = audition.get('title');
-        contestantsWithInvalidVotesVariables[contestant.id].auditionUrl = env.getFilter('auditionLink')(audition.toJSON());
-        contestantsWithInvalidVotesVariables[contestant.id].totalUsers = 1;
-        contestantsWithInvalidVotes.push(contestant);
-      } else {
-        contestantsWithInvalidVotesVariables[contestant.id].totalUsers = contestantsWithInvalidVotesVariables[contestant.id].totalUsers + 1;
-      }
-    });
-    renderPromise(contestInvalidVoteTemplate, {contest: contest.toJSON()}).then(function(email) {
-      return batchSend(usersWithInvalidVotes, 'Seu voto em %recipient.contestant% ainda não é válido!!!', email, usersWithInvalidVotesVariables);
-    }).catch(function(err) {
-      logger.error('Error sending "contest invalid vote" email to users with invalid votes.', err);
-    });
-
-    renderPromise(contestInvalidVoteToContestantTemplate, {contest: contest.toJSON()}).then(function(email) {
-      return batchSend(contestantsWithInvalidVotes, 'Você possui %recipient.totalUsers% votos inválidos na competição!!!', email, contestantsWithInvalidVotesVariables);
-    }).catch(function(err) {
-      logger.error('Error sending "contest invalid vote" email to contestants with invalid votes.', err);
-    });
-
-    res.send(200);
-  }).catch(function(err) {
-    logger.error('Error sending "contest invalid vote" emails.', err);
     res.send(500);
   });
 });

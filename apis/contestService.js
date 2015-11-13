@@ -39,8 +39,8 @@ var userVoteWithRelated = {withRelated: ['user', 'audition', 'audition.user']};
 
 var listPotentialWinners = function(contest) {
   return new Promise(function(resolve, reject) {
-    var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).where('user_vote.valid', 1).groupBy('audition.id');
-    var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).where('user_vote.valid', 1).groupBy('audition_id');
+    var auditionWithScore = Bookshelf.knex.select('audition.*', Bookshelf.knex.raw('sum(user_vote.voting_power) as score')).from('audition').join('user_vote', 'audition.id', 'user_vote.audition_id').where('audition.contest_id', contest.id).groupBy('audition.id');
+    var scores = Bookshelf.knex.sum('user_vote.voting_power as score').from('user_vote').join('audition', 'user_vote.audition_id', 'audition.id').join('contest', 'audition.contest_id', 'contest.id').where('contest.id', contest.id).groupBy('audition_id');
     var topScores = Bookshelf.knex.distinct('score').from(scores.as('scores')).orderBy('score', 'desc').limit(3);
     var winners = Bookshelf.knex.select('*').from(auditionWithScore.as('audition_with_score')).join(topScores.as('top_scores'), 'audition_with_score.score', 'top_scores.score').orderBy('audition_with_score.score', 'desc');
 
@@ -104,9 +104,6 @@ var startContestNow = function(contest) {
       });
       mailService.scheduleContestJoinFans(contest).catch(function(err) {
         logger.error('Error scheduling "join fans" emails.', err);
-      });
-      mailService.scheduleInvalidVote(contest).catch(function(err) {
-        logger.error('Error scheduling "invalid votes" emails.', err);
       });
       resolve(contest);
     }).catch(function(err) {
@@ -516,10 +513,7 @@ var listAuditions = function(rankType, contest, page, pageSize) {
     if(rankType === 'latest') {
       qb.orderBy('registration_date', 'desc');
     } else {
-      qb.leftJoin('user_vote', function() {
-        this.on('audition.id', 'user_vote.audition_id');
-        this.andOn('user_vote.valid', 1);
-      });
+      qb.leftJoin('user_vote', 'audition.id', '=', 'user_vote.audition_id');
       qb.groupBy('audition.id');
       qb.orderBy(Bookshelf.knex.raw('sum(user_vote.voting_power)'), 'desc');
     }
@@ -610,7 +604,6 @@ exports.totalScoreByAudition = function(auditions) {
       Bookshelf.knex('user_vote')
       .select(Bookshelf.knex.raw('audition_id, sum(voting_power) as score'))
       .whereIn('audition_id', entities.getIds(auditions))
-      .where('valid', 1)
       .groupBy('audition_id')
       .then(function(scoreCounts) {
         var scoreByAudition = {};
@@ -634,7 +627,6 @@ exports.totalVotesByAudition = function(auditions) {
       .select('audition_id')
       .count('id as votes')
       .whereIn('audition_id', entities.getIds(auditions))
-      .where('valid', 1)
       .groupBy('audition_id')
       .then(function(votesCounts) {
         var votesByAudition = {};
@@ -741,15 +733,15 @@ exports.totalVotes = function(contests) {
 
 exports.vote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve($.getAudition(audition.id)).bind({}).then(function(audition) {
-      this.contest = audition.related('contest');
-      if(this.contest.get('progress') === 'finished') {
+    $.getAudition(audition.id).then(function(audition) {
+      var contest = audition.related('contest');
+      if(contest.get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
       }
-      return Promise.all([audition, $.countUserVotes(user, this.contest)]);
-    }).spread(function(audition, totalUserVotes) {
-      if(totalUserVotes >= constants.MAXIMUM_VOTES) {
-        throw messages.apiError('audition.vote.reachMaximumVotes', 'The user reached the maximum votes of ' + constants.MAXIMUM_VOTES);
+      return Promise.all([audition, $.countUserVotes(user, contest)]);
+    }).spread(function(audition, totalVotes) {
+      if(totalVotes >= constants.VOTE_LIMIT) {
+        throw messages.apiError('audition.vote.reachVoteLimit', 'The user reached the vote limit of ' + constants.VOTE_LIMIT);
       }
       if(user.id === audition.related('user').id) {
         throw messages.apiError('audition.vote.canNotVoteForYourself', 'The user can not vote for yourself');
@@ -757,24 +749,8 @@ exports.vote = function(user, audition) {
       if(audition.get('approved') === 0) {
         throw messages.apiError('audition.vote.auditionNotApproved', 'The user can not vote in audition not approved');
       }
-      var that = this;
-      return Bookshelf.transaction(function(transaction) {
-        totalUserVotes++;
-        var valid = totalUserVotes < constants.MINIMUM_VOTES ? false : true;
-        var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, valid: valid, voting_power: user.get('voting_power')});
-        return Promise.bind(that).then(function() {
-          return userVote.save(null, {transacting: transaction});
-        }).then(function(userVote) {
-          that = this;
-          this.userVote = userVote;
-          return UserVote.query(function(qb) {
-            qb.where('user_id', user.id);
-            qb.whereIn('audition_id', Bookshelf.knex('audition').select('id').where({contest_id: that.contest.id}));
-          }).save({valid: this.userVote.get('valid')}, {patch: true, require: false, method: 'update', transacting: transaction});
-        }).then(function() {
-          return this.userVote;
-        });
-      });
+      var userVote = UserVote.forge({user_id: user.id, audition_id: audition.id, voting_power: user.get('voting_power')});
+      return userVote.save();
     }).then(function(userVote) {
       resolve(userVote);
     }).catch(messages.APIError, function(err) {
@@ -791,33 +767,16 @@ exports.vote = function(user, audition) {
 
 exports.removeVote = function(user, audition) {
   return new Promise(function(resolve, reject) {
-    Promise.resolve($.getAudition(audition.id, auditionWithContestRelated.withRelated)).bind({}).then(function(audition) {
-      this.audition = audition;
-      this.contest = audition.related('contest');
-      return Promise.all([$.getUserVote(user, this.audition), $.countUserVotes(user, this.contest)]);
-    }).spread(function(userVote, totalUserVotes) {
+    UserVote.forge({user_id: user.id, audition_id: audition.id}).fetch(userVoteWithAuditionAndContestRelated).then(function(userVote) {
       if(!userVote) {
         throw messages.apiError('audition.removeVote.userHasNotVoted', 'The user has not voted');
       }
-      if(this.contest.get('progress') === 'finished') {
+      if(userVote.related('audition').related('contest').get('progress') === 'finished') {
         throw messages.apiError('audition.vote.contestWasFinished', 'The user can not vote anymore because the contest was finished');
       }
-      var that = this;
-      return Bookshelf.transaction(function(transaction) {
-        return Promise.bind(that).then(function() {
-          this.userVote = userVote.clone();
-          return userVote.destroy({transacting: transaction});
-        }).then(function() {
-          that = this;
-          totalUserVotes--;
-          var valid = totalUserVotes < constants.MINIMUM_VOTES ? false : true;
-          return UserVote.query(function(qb) {
-            qb.where('user_id', user.id);
-            qb.whereIn('audition_id', Bookshelf.knex('audition').select('id').where({contest_id: that.contest.id}));
-          }).save({valid: valid}, {patch: true, require: false, method: 'update', transacting: transaction});
-        }).then(function() {
-          return this.userVote;
-        });
+      var clone = userVote.clone();
+      return userVote.destroy().then(function() {
+        return clone;
       });
     }).then(function(userVote) {
       resolve(userVote);
@@ -1007,12 +966,4 @@ exports.latestContestants = function(page, pageSize) {
       qb.limit(pageSize);
     }
   }).fetch();
-};
-
-exports.listInvalidVotes = function(contest) {
-  return UserVote.collection().query(function(qb) {
-    qb.join('audition', 'user_vote.audition_id', 'audition.id');
-    qb.where('audition.contest_id', contest.id);
-    qb.where('user_vote.valid', 0);
-  }).fetch(userVoteWithRelated);
 };

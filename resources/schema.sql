@@ -190,7 +190,6 @@ create table user_vote (
   user_id           int not null,
   audition_id       int not null,
   voting_power      decimal(6, 3) default 1.000,
-  valid             tinyint default 0,
   registration_date timestamp not null default current_timestamp,
   primary key (id),
   unique key `uq_user_vote_user_id_audition_id` (`user_id`, `audition_id`),

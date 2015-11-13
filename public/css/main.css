@@ -891,9 +891,11 @@ img.medal {
 /* Modals */
 .modal-header {
   text-align: center;
+  padding: 15px 0px 0px 0px;
 }
 .modal-header .close {
   font-size: 30px;
+  margin-right: 15px;
 }
 #incentive-vote {
   padding: 0;

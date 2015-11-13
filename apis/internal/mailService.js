@@ -229,18 +229,6 @@ exports.contestJoinFans = function(contest) {
   });
 };
 
-exports.contestInvalidVote = function(contest) {
-  return new Promise(function(resolve, reject) {
-    mailClient.post('/contest/invalidVote', {contest: contest.id}, function(err, req, res, obj) {
-      if(err) {
-        reject(err);
-      } else {
-        resolve(obj);
-      }
-    });
-  });
-};
-
 exports.scheduleIncentiveVote = function(contest) {
   return new Promise(function(resolve, reject) {
     if(contest.get('progress') === 'running') {
@@ -287,49 +275,6 @@ exports.scheduleContestJoinFans = function(contest) {
   });
 };
 
-exports.scheduleInvalidVote = function(contest) {
-  return new Promise(function(resolve, reject) {
-    if(contest.get('progress') === 'running') {
-      var day = constants.invalidVoteEmail.WEEK_DAY;
-      var current = moment()
-        .day(constants.invalidVoteEmail.WEEK_DAY)
-        .hour(constants.invalidVoteEmail.HOUR_TO_SEND)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
-      var end = moment(contest.get('end_date'));
-      var dates = []; 
-      while(current.isBefore(end, 'day')) {     
-        dates.push(current.clone())
-        day = day + constants.WEEK_DAYS;
-        current.day(day);
-      }
-      end.subtract(1, 'day')
-        .hour(constants.invalidVoteEmail.HOUR_TO_SEND)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
-      if(dates.length == 0 || dates[0].isBefore(end, 'day')) {
-        dates.push(end.clone())
-      }
-      var parameters = {contest: contest.id};
-      var promises = [];
-      dates.forEach(function(date) {
-        var scheduledEmail = ScheduledEmail.forge({
-          schedule_date: date.toDate(),
-          parameters: JSON.stringify(parameters),
-          type: 'InvalidVote',
-          status: 'none'
-        });
-        promises.push(scheduledEmail.save());
-      });
-      resolve(Promise.all(promises));
-    } else {
-      resolve();
-    }
-  });
-};
-
 exports.listNonScheduledEmails = function() {
   return ScheduledEmail.query({where: {status: 'none'}}).fetchAll();
 };
@@ -359,9 +304,6 @@ exports.sendScheduledEmail = function(scheduledEmail) {
         break;
       case 'JoinContest':
         promise = $.contestJoinFans({id: parameters.contest});
-        break;
-      case 'InvalidVote':
-        promise = $.contestInvalidVote({id: parameters.contest});
         break;
     }
     if(promise) {

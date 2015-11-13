@@ -33,22 +33,22 @@
       {"id": 3, "contest_id": 1, "user_id": 3, "slug": "que-sorte-a-nossa-matheus-and-kauan-matheus-veiga-cover-matheus-veiga", "url": "https://www.youtube.com/watch?v=crNZC9eEuwQ", "embed_url": "https://www.youtube.com/embed/crNZC9eEuwQ", "video_id": "crNZC9eEuwQ", "title": "Que sorte A Nossa - Matheus & Kauan (Matheus Veiga Cover)", "description": "Falaaa galera, Essa é minha versão da música \"Que Sorte A Nossa\" da dupla Matheus & Kauan, espero que gostem!! Obrigado por todo o apoio! Bjaoo. Facebook: https://www.facebook.com/Veiga.MatheusF, Instagram: https://instagram.com/matheus__veiga/", "small_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/default.jpg", "medium_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/mqdefault.jpg", "large_thumbnail": "https://i.ytimg.com/vi/crNZC9eEuwQ/hqdefault.jpg", "place": null, "approved": 1, "registration_date": "2015-07-22 13:36:25"}
     ],
     "user_vote": [
-      {"id": 1, "user_id": 9, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 2, "user_id": 8, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 3, "user_id": 7, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 4, "user_id": 6, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 5, "user_id": 5, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 6, "user_id": 4, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 7, "user_id": 3, "audition_id": 2, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 8, "user_id": 1, "audition_id": 2, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 9, "user_id": 9, "audition_id": 3, "voting_power": 1.0, "valid": 0, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 10, "user_id": 8, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 11, "user_id": 7, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 12, "user_id": 6, "audition_id": 3, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 13, "user_id": 5, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 14, "user_id": 4, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 15, "user_id": 3, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"},
-      {"id": 16, "user_id": 2, "audition_id": 1, "voting_power": 1.0, "valid": 1, "registration_date": "2015-07-23 13:42:28"}
+      {"id": 1, "user_id": 9, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 2, "user_id": 8, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 3, "user_id": 7, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 4, "user_id": 6, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 5, "user_id": 5, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 6, "user_id": 4, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 7, "user_id": 3, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 8, "user_id": 1, "audition_id": 2, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 9, "user_id": 9, "audition_id": 3, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 10, "user_id": 8, "audition_id": 3, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 11, "user_id": 7, "audition_id": 3, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 12, "user_id": 6, "audition_id": 3, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 13, "user_id": 5, "audition_id": 1, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 14, "user_id": 4, "audition_id": 1, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 15, "user_id": 3, "audition_id": 1, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"},
+      {"id": 16, "user_id": 2, "audition_id": 1, "voting_power": 1.0, "registration_date": "2015-07-23 13:42:28"}
     ]
   }
 }

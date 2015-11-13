@@ -30,9 +30,5 @@ module.exports = {
       DAYS_BEFORE_THE_END: 3,
     },
     HOUR_TO_SEND: 14
-  },
-  invalidVoteEmail: {
-    WEEK_DAY: 5,
-    HOUR_TO_SEND: 16
   }
 }
