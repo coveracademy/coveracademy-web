@@ -67,7 +67,7 @@ exports.create = function(facebookAccount, name, email, gender) {
     }).catch(ValidationError, function(err) {
       reject(messages.validationError('user.new', err));
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.new.error', 'Error creating user account.', err));
+      reject(messages.unexpectedError('user.new.error', 'Error creating user account', err));
     });
   });
 };
@@ -76,12 +76,12 @@ exports.update = function(user, edited) {
   return new Promise(function(resolve, reject) {
     Promise.all([$.findById(user.id), $.findById(edited.id)]).spread(function(userFetched, editedFetched) {
       if(userFetched.id !== editedFetched.id && userFetched.get('permission') !== 'admin') {
-        throw messages.apiError('user.update.noPermission', 'The user account cannot be updated because user has no permission.');
+        throw messages.apiError('user.update.noPermission', 'The user account cannot be updated because user has no permission');
       }
       return editedFetched;
     }).then(function(editedFetched) {
       if(editedFetched.get('username') && editedFetched.get('username') !== edited.get('username')) {
-        throw messages.apiError('user.update.username.cannotEditAnymore', 'The user can not update username anymore.');
+        throw messages.apiError('user.update.username.cannotEditAnymore', 'The user can not update username anymore');
       }
       if(edited.get('email') && edited.get('email') !== editedFetched.get('email')) {
         edited.set('verified', 0);
@@ -99,7 +99,11 @@ exports.update = function(user, edited) {
     }).catch(ValidationError, function(err) {
       reject(messages.validationError('user.update', err));
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.update.error', 'Error updating user account,', err));
+      if(messages.isDupEntryError(err)) {
+        reject(messages.apiError('user.update.emailOrUsernameAlreadyExists', 'Already exists an user with the email or username', err));
+      } else {
+        reject(messages.unexpectedError('user.update.error', 'Error updating user account', err));
+      }
     });
   });
 };
@@ -109,7 +113,7 @@ exports.connectNetwork = function(user, network, account, picture, url) {
     Bookshelf.transaction(function(transaction) {
       var accountAttribute = getAccountAttribute(network);
       if(!accountAttribute) {
-        throw messages.apiError('user.connectNetwork.unsupportedNetwork', 'Connection with this network is not supported.');
+        throw messages.apiError('user.connectNetwork.unsupportedNetwork', 'Connection with this network is not supported');
       }
       var updatedAttributes = {};
       updatedAttributes[accountAttribute] = account;
@@ -130,7 +134,7 @@ exports.connectNetwork = function(user, network, account, picture, url) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.connectNetwork.error', 'Error connecting user with network.', err));
+      reject(messages.unexpectedError('user.connectNetwork.error', 'Error connecting user with network', err));
     });
   });
 };
@@ -159,7 +163,7 @@ exports.disconnectNetwork = function(user, network) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.disconnectNetwork.error', 'Error disconnecting user of network.', err));
+      reject(messages.unexpectedError('user.disconnectNetwork.error', 'Error disconnecting user of network', err));
     });
   });
 };
@@ -167,7 +171,7 @@ exports.disconnectNetwork = function(user, network) {
 exports.showNetwork = function(user, network, show) {
   return new Promise(function(resolve, reject) {
     if(!_.contains(networksToConnect, network)) {
-      reject(messages.apiError('user.showNetwork.unsupportedNetwork', 'This network is not supported.'));
+      reject(messages.apiError('user.showNetwork.unsupportedNetwork', 'This network is not supported'));
       return;
     }
     SocialAccount.forge({user_id: user.id, network: network}).fetch({require: true}).then(function(socialAccount) {
@@ -177,7 +181,7 @@ exports.showNetwork = function(user, network, show) {
     }).catch(NotFoundError, function(err) {
       reject(messages.notFoundError('user.showNetwork.userNotConnected', 'The user is not connected to this network', err));
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.showNetwork.error', 'Error setting network to show user link.', err));
+      reject(messages.unexpectedError('user.showNetwork.error', 'Error setting network to show user link', err));
     });
   });
 };
@@ -202,7 +206,7 @@ exports.findByUsername = function(username, relations) {
 
 exports.findBySocialAccount = function(network, account, relations) {
   if(!_.contains(networksToConnect, network)) {
-    reject(messages.apiError('user.find.unsupportedNetwork', 'This network is not supported.'));
+    reject(messages.apiError('user.find.unsupportedNetwork', 'This network is not supported'));
   }
   var accountAttribute = getAccountAttribute(network);
   if(accountAttribute) {
@@ -226,7 +230,7 @@ exports.disableEmails = function(token) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.disableEmails.error', 'Error disabling periodic emails.', err));
+      reject(messages.unexpectedError('user.disableEmails.error', 'Error disabling periodic emails', err));
     });
   });
 };
@@ -241,7 +245,7 @@ exports.verifyEmail = function(token) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.verifyEmail.error', 'Error verifying email.', err));
+      reject(messages.unexpectedError('user.verifyEmail.error', 'Error verifying email', err));
     });
   });
 };
@@ -250,7 +254,7 @@ exports.resendVerificationEmail = function(user) {
   return new Promise(function(resolve, reject) {
     $.findById(user.id).then(function(user) {
       if(user.get('verified') === 1) {
-        throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified.');
+        throw messages.apiError('user.verification.emailAlreadyVerified', 'The user is already verified');
       }
       return mailService.userVerification(user);
     }).then(function() {
@@ -258,7 +262,7 @@ exports.resendVerificationEmail = function(user) {
     }).catch(messages.APIError, function(err) {
       reject(err);
     }).catch(function(err) {
-      reject(messages.unexpectedError('user.verification.errorSendingEmail', 'Error sending verification email.', err));
+      reject(messages.unexpectedError('user.verification.errorSendingEmail', 'Error sending verification email', err));
     });
   });
 };
@@ -294,7 +298,7 @@ exports.fan = function(fan, user) {
   return new Promise(function(resolve, reject) {
     Promise.resolve().bind({}).then(function() {
       if(fan.id === user.id) {
-        throw messages.apiError('user.fan.canNotFanYourself', 'You can not fan yourself.');
+        throw messages.apiError('user.fan.canNotFanYourself', 'You can not fan yourself');
       }
       var userFan = UserFan.forge({user_id: user.id, fan_id: fan.id});
       this.userFan = userFan;
@@ -307,7 +311,7 @@ exports.fan = function(fan, user) {
       if(messages.isDupEntryError(err) === true) {
         resolve(this.userFan);
       } else {
-        reject(messages.unexpectedError('user.fan.error', 'Error adding user as a fan.', err));
+        reject(messages.unexpectedError('user.fan.error', 'Error adding user as a fan', err));
       }
     });
   });
