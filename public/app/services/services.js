@@ -269,7 +269,7 @@ angular
     'contest.join.videoDateIsNotValid': 'errors.join_contest_video_date_is_not_valid',
     'contest.join.videoNotOwnedByUser': 'errors.join_contest_video_not_owned_by_user',
     'user.connect.alreadyConnected': 'errors.user_connect_already_connected',
-    'user.update.invalidUsername': 'errors.user_edit_invalid_username',
+    'user.update.username.invalid': 'errors.user_edit_invalid_username',
     'user.update.emailOrUsernameAlreadyExists': 'errors.user_edit_email_or_username_already_exists',
     'user.new.invalidUsername': 'errors.user_edit_invalid_username',
     'user.verification.emailAlreadyVerified': 'errors.user_verification_email_already_verified',

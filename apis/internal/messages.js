@@ -12,8 +12,10 @@ function APIError(status, key, message, cause) {
   this.status = status;
   this.key = key;
   this.message = message;
-  this.cause = cause;
-
+  if(cause) {
+    this.cause = cause;
+    this.stack = cause.stack;
+  }
   this.json = function() {
     var json = {status: this.status, key: this.key, message: this.message};
     if(settings.debug === true) {
